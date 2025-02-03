@@ -15,6 +15,7 @@ import Icon from "react-native-vector-icons/Ionicons";
 import { Colors } from "../theme/color";
 import style from "../theme/style";
 import { useRouter } from "expo-router";
+import AppButton from "../components/AppButton";
 
 const width = Dimensions.get("screen").width;
 const height = Dimensions.get("screen").height;
@@ -84,14 +85,11 @@ export default function Login() {
               </TouchableOpacity>
             </View>
 
-            <View style={{ paddingVertical: 50 }}>
-              <TouchableOpacity
-                onPress={() => router.push("/home")}
-                style={style.btn}
-              >
-                <Text style={style.btntxt}>SIGN IN</Text>
-              </TouchableOpacity>
-            </View>
+            <AppButton
+              title="SIGN IN" 
+              onPress={() => router.push("/home")}
+              style={style}
+            />
 
             <Text
               style={[

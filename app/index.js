@@ -12,6 +12,7 @@ import style from "./theme/style";
 import { Colors } from "./theme/color";
 import IntroItem from "./components/IntroItem";
 import Slides from "./Constants/Slides";
+import AppButton from "./components/AppButton";
 
 const width = Dimensions.get("screen").width;
 
@@ -58,18 +59,17 @@ export default function Introduction() {
       </View>
 
       {/* Continue Button */}
-      <View style={{ paddingVertical: 20 }}>
-        <TouchableOpacity
-          style={style.btn}
-          onPress={
-            currentSlideIndex === Slides.length - 1
-              ? () => router.push("/screens/Onboarding")
-              : goNextSlide
-          }
-        >
-          <Text style={style.btntxt}>Continue</Text>
-        </TouchableOpacity>
-      </View>
+      <AppButton
+        title="Continue"
+        onPress={
+          currentSlideIndex === Slides.length - 1
+            ? () => router.push("/screens/Onboarding")
+            : goNextSlide
+        }
+        style={style}
+        paddingVertical={20}
+      />
+   
     </View>
   );
 

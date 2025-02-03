@@ -15,6 +15,7 @@ import { useRouter } from "expo-router"; // Import useRouter from expo-router
 import Icon from "react-native-vector-icons/Ionicons";
 import { Colors } from "../theme/color";
 import style from "../theme/style";
+import AppButton from "../components/AppButton";
 
 const width = Dimensions.get("screen").width;
 const height = Dimensions.get("screen").height;
@@ -111,14 +112,11 @@ export default function Signup() {
           </Text>
 
           {/* Sign Up Button */}
-          <View style={{ paddingVertical: 40 }}>
-            <TouchableOpacity
-              onPress={() => router.push("/screens/Verify2")}
-              style={style.btn}
-            >
-              <Text style={style.btntxt}>SIGN UP</Text>
-            </TouchableOpacity>
-          </View>
+          <AppButton
+            title="SIGN UP"
+            onPress={() => router.push("/screens/Verify2")}
+            style={style}
+          />
 
           {/* Social Login Options */}
           <Text

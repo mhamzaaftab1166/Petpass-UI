@@ -11,6 +11,7 @@ import React from "react";
 import { useRouter } from "expo-router";
 import style from "../theme/style";
 import { Colors } from "../theme/color";
+import AppButton from "../components/AppButton";
 
 const width = Dimensions.get("screen").width;
 const height = Dimensions.get("screen").height;
@@ -63,21 +64,18 @@ export default function Onboarding() {
             </View>
           </ImageBackground>
         </ImageBackground>
-        <View
-          style={{
+        <AppButton
+          title="Get Started"
+          onPress={() => router.push("/screens/Login")}
+          style={style}
+          parentStyle={{
             flex: 1,
             justifyContent: "flex-end",
             marginBottom: 20,
             marginHorizontal: 20,
           }}
-        >
-          <TouchableOpacity
-            style={style.btn}
-            onPress={() => router.push("/screens/Login")}
-          >
-            <Text style={style.btntxt}>Get Started</Text>
-          </TouchableOpacity>
-        </View>
+          paddingVertical={0}
+        />
       </View>
     </SafeAreaView>
   );

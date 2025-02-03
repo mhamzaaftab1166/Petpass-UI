@@ -13,6 +13,7 @@ import { Colors } from "../theme/color";
 import Icon from "react-native-vector-icons/Ionicons";
 import { AppBar } from "@react-native-material/core";
 import OtpInputs from "react-native-otp-textinput"; // Changed to expo-compatible OTP input
+import AppButton from "../components/AppButton";
 
 const width = Dimensions.get("screen").width;
 const height = Dimensions.get("screen").height;
@@ -77,14 +78,11 @@ export default function Verify2() {
               Click Resend.
             </Text>
           </TouchableOpacity>
-          <View style={{ paddingVertical: 20 }}>
-            <TouchableOpacity
-              //   onPress={() => navigation.navigate("Signup")}
-              style={style.btn}
-            >
-              <Text style={style.btntxt}>CONTINUE</Text>
-            </TouchableOpacity>
-          </View>
+          <AppButton
+            title="CONTINUE"
+            //   onPress={() => navigation.navigate("Signup")}
+            style={style}
+          />
         </ScrollView>
       </View>
     </SafeAreaView>
