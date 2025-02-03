@@ -16,6 +16,8 @@ import { Colors } from "../theme/color";
 import style from "../theme/style";
 import { useRouter } from "expo-router";
 import AppButton from "../components/AppButton";
+import AppTitle from "../components/AppTitle";
+import AppInput from "../components/AppInput";
 
 const width = Dimensions.get("screen").width;
 const height = Dimensions.get("screen").height;
@@ -37,45 +39,24 @@ export default function Login() {
       >
         <View style={{ flex: 1, marginHorizontal: 20 }}>
           <ScrollView showsVerticalScrollIndicator={false}>
-            <Text style={[style.title, { marginTop: 50 }]}>Sign In</Text>
+            <AppTitle title={"Sign In"} style={style} />
 
-            <View style={[style.txtinput, { marginTop: 30 }]}>
-              <TextInput
-                placeholder="EMAIL"
-                selectionColor={Colors.primary}
-                placeholderTextColor={Colors.lable}
-                style={[style.r16, { color: Colors.active, flex: 1 }]}
-              />
-            </View>
-
-            <View
-              style={[
-                style.txtinput,
-                {
-                  flexDirection: "row",
-                  justifyContent: "space-between",
-                  alignItems: "center",
-                  marginTop: 20,
-                },
-              ]}
-            >
-              <TextInput
-                placeholder="PASSWORD"
-                selectionColor={Colors.primary}
-                secureTextEntry={!isPasswordVisible}
-                placeholderTextColor={Colors.lable}
-                style={[style.r16, { color: Colors.active, flex: 1 }]}
-              />
-              <TouchableOpacity
-                onPress={() => setIsPasswordVisible(!isPasswordVisible)}
-              >
-                <Icon
-                  name={isPasswordVisible ? "eye-off" : "eye"}
-                  color={Colors.disable}
-                  size={20}
-                />
-              </TouchableOpacity>
-            </View>
+            <AppInput
+              placeholder="EMAIL"
+              // onChangeText={(text) => setEmail(text)}
+              style={style}
+            />
+            <AppInput 
+              placeholder="PASSWORD"
+              style={style}
+              isPassword={true}
+              parentStyles={{
+                flexDirection: "row",
+                justifyContent: "space-between",
+                alignItems: "center",
+                marginTop: 20,
+              }}
+            />
 
             <View style={{ alignItems: "flex-end", marginTop: 10 }}>
               <TouchableOpacity onPress={() => router.push("/forgot-password")}>
@@ -86,7 +67,7 @@ export default function Login() {
             </View>
 
             <AppButton
-              title="SIGN IN" 
+              title="SIGN IN"
               onPress={() => router.push("/home")}
               style={style}
             />

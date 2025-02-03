@@ -14,6 +14,7 @@ import Icon from "react-native-vector-icons/Ionicons";
 import { AppBar } from "@react-native-material/core";
 import OtpInputs from "react-native-otp-textinput"; // Changed to expo-compatible OTP input
 import AppButton from "../components/AppButton";
+import AppTitle from "../components/AppTitle";
 
 const width = Dimensions.get("screen").width;
 const height = Dimensions.get("screen").height;
@@ -28,18 +29,7 @@ export default function Verify2() {
       ]}
     >
       <View style={[style.main, { backgroundColor: Colors.secondary }]}>
-        <AppBar
-          color={Colors.secondary}
-          title="Phone Verification"
-          titleStyle={[style.apptitle, { color: Colors.active }]}
-          centerTitle={true}
-          elevation={0}
-          leading={
-            <TouchableOpacity onPress={() => navigation.navigate("Verify1")}>
-              <Icon name="chevron-back" color={Colors.active} size={25} />
-            </TouchableOpacity>
-          }
-        />
+        <AppTitle title={"Email Verification"} style={style}/>
         <ScrollView showsVerticalScrollIndicator={false}>
           <Text style={[style.r14, { color: Colors.disable1, marginTop: 15 }]}>
             Enter your OTP code here

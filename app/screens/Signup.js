@@ -16,6 +16,8 @@ import Icon from "react-native-vector-icons/Ionicons";
 import { Colors } from "../theme/color";
 import style from "../theme/style";
 import AppButton from "../components/AppButton";
+import AppTitle from "../components/AppTitle";
+import AppInput from "../components/AppInput";
 
 const width = Dimensions.get("screen").width;
 const height = Dimensions.get("screen").height;
@@ -39,67 +41,40 @@ export default function Signup() {
           showsVerticalScrollIndicator={false}
           style={{ flex: 1, marginHorizontal: 20 }}
         >
-          <Text style={[style.title, { marginTop: 50 }]}>Sign Up</Text>
+          <AppTitle title={"Sign Up"} style={style} />
 
-          {/* Username Input */}
-          <View style={[style.txtinput, { marginTop: 30 }]}>
-            <TextInput
-              placeholder="USERNAME"
-              selectionColor={Colors.primary}
-              placeholderTextColor={Colors.lable}
-              style={[style.r16, { color: Colors.active, flex: 1 }]}
-            />
-          </View>
+          <AppInput
+            placeholder="USERNAME"
+            // onChangeText={(text) => setEmail(text)}
+            style={style}
+            parentStyles={{ marginTop: 20 }}
+          />
 
-          {/* Email Input */}
-          <View style={[style.txtinput, { marginTop: 20 }]}>
-            <TextInput
-              placeholder="EMAIL"
-              selectionColor={Colors.primary}
-              placeholderTextColor={Colors.lable}
-              style={[style.r16, { color: Colors.active, flex: 1 }]}
-            />
-          </View>
+          <AppInput
+            placeholder="EMAIL"
+            // onChangeText={(text) => setEmail(text)}
+            style={style}
+            parentStyles={{ marginTop: 20 }}
+          />
 
-          {/* Password Input */}
-          <View
-            style={[
-              style.txtinput,
-              {
-                flexDirection: "row",
-                justifyContent: "space-between",
-                alignItems: "center",
-                marginTop: 20,
-              },
-            ]}
-          >
-            <TextInput
-              placeholder="PASSWORD"
-              selectionColor={Colors.primary}
-              secureTextEntry={!isPasswordVisible}
-              placeholderTextColor={Colors.lable}
-              style={[style.r16, { color: Colors.active, flex: 1 }]}
-            />
-            <TouchableOpacity
-              onPress={() => setIsPasswordVisible(!isPasswordVisible)}
-            >
-              <Icon
-                name={isPasswordVisible ? "eye" : "eye-off"}
-                color={Colors.disable}
-                size={20}
-              />
-            </TouchableOpacity>
-          </View>
+          <AppInput
+            placeholder="PASSWORD"
+            style={style}
+            isPassword={true}
+            parentStyles={{
+              flexDirection: "row",
+              justifyContent: "space-between",
+              alignItems: "center",
+              marginTop: 20,
+            }}
+          />
 
-          {/* Phone Input */}
-          <View style={[style.txtinput, { marginTop: 20 }]}>
-            <TextInput
-              placeholder="PHONE"
-              selectionColor={Colors.primary}
-              placeholderTextColor={Colors.lable}
-              style={[style.r16, { color: Colors.active, flex: 1 }]}
-            />
-          </View>
+          <AppInput
+            placeholder="PHONE"
+            // onChangeText={(text) => setEmail(text)}
+            style={style}
+            parentStyles={{ marginTop: 20 }}
+          />
 
           {/* Terms and Conditions Text */}
           <Text style={[style.r14, { color: Colors.disable, marginTop: 20 }]}>
@@ -114,7 +89,7 @@ export default function Signup() {
           {/* Sign Up Button */}
           <AppButton
             title="SIGN UP"
-            onPress={() => router.push("/screens/Verify2")}
+            onPress={() => router.push("/screens/EmailVerify")}
             style={style}
           />
 
