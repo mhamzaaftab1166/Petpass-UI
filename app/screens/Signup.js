@@ -18,6 +18,7 @@ import style from "../theme/style";
 import AppButton from "../components/AppButton";
 import AppTitle from "../components/AppTitle";
 import AppInput from "../components/AppInput";
+import AppPhoneInput from "../components/AppPhoneInput";
 
 const width = Dimensions.get("screen").width;
 const height = Dimensions.get("screen").height;
@@ -69,11 +70,15 @@ export default function Signup() {
             }}
           />
 
-          <AppInput
+          {/* <AppInput
             placeholder="PHONE"
             // onChangeText={(text) => setEmail(text)}
             style={style}
             parentStyles={{ marginTop: 20 }}
+          /> */}
+          <AppPhoneInput
+            placeholder="PHONE"
+            style={style}
           />
 
           {/* Terms and Conditions Text */}
