@@ -18,13 +18,13 @@ import { useRouter } from "expo-router";
 import AppButton from "../components/AppButton";
 import AppTitle from "../components/AppTitle";
 import AppInput from "../components/AppInput";
+import { useThemeStore } from "../store/useStore";
 
 const width = Dimensions.get("screen").width;
 const height = Dimensions.get("screen").height;
 
 export default function Login() {
   const router = useRouter();
-  const [isPasswordVisible, setIsPasswordVisible] = useState(false);
 
   return (
     <SafeAreaView

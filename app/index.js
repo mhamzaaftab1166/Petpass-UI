@@ -11,7 +11,7 @@ import { useRouter } from "expo-router";
 import style from "./theme/style";
 import { Colors } from "./theme/color";
 import IntroItem from "./components/IntroItem";
-import Slides from "./Constants/Slides";
+import Slides from "./constants/Slides";
 import AppButton from "./components/AppButton";
 
 const width = Dimensions.get("screen").width;
