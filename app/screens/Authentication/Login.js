@@ -12,13 +12,13 @@ import {
 } from "react-native";
 import React, { useState } from "react";
 import Icon from "react-native-vector-icons/Ionicons";
-import { Colors } from "../theme/color";
-import style from "../theme/style";
+import { Colors } from "../../theme/color";
+import style from "../../theme/style";
 import { useRouter } from "expo-router";
-import AppButton from "../components/AppButton";
-import AppTitle from "../components/AppTitle";
-import AppInput from "../components/AppInput";
-import { useThemeStore } from "../store/useStore";
+import AppButton from "../../components/AppButton";
+import AppTitle from "../../components/AppTitle";
+import AppInput from "../../components/AppInput";
+import { useThemeStore } from "../../store/useStore";
 
 const width = Dimensions.get("screen").width;
 const height = Dimensions.get("screen").height;
@@ -46,7 +46,7 @@ export default function Login() {
               // onChangeText={(text) => setEmail(text)}
               style={style}
             />
-            <AppInput 
+            <AppInput
               placeholder="PASSWORD"
               style={style}
               isPassword={true}
@@ -59,7 +59,11 @@ export default function Login() {
             />
 
             <View style={{ alignItems: "flex-end", marginTop: 10 }}>
-              <TouchableOpacity onPress={() => router.push("/forgot-password")}>
+              <TouchableOpacity
+                onPress={() =>
+                  router.push("/screens/Authentication/ForgotPassword")
+                }
+              >
                 <Text style={[style.r14, { color: Colors.disable }]}>
                   Forgot Password?
                 </Text>
@@ -89,7 +93,7 @@ export default function Login() {
                 ]}
               >
                 <Image
-                  source={require("../../assets/images/authentication/Google.png")}
+                  source={require("../../../assets/images/authentication/Google.png")}
                   resizeMode="stretch"
                   style={{ width: width / 11, height: height / 35 }}
                 />
@@ -105,7 +109,7 @@ export default function Login() {
                 ]}
               >
                 <Image
-                  source={require("../../assets/images/authentication/facebook.png")}
+                  source={require("../../../assets/images/authentication/facebook.png")}
                   resizeMode="stretch"
                   style={{ width: width / 25, height: height / 37 }}
                 />
@@ -126,7 +130,9 @@ export default function Login() {
               <Text style={[style.r14, { color: Colors.lable }]}>
                 Don't have an account?
               </Text>
-              <TouchableOpacity onPress={() => router.push("/screens/Signup")}>
+              <TouchableOpacity
+                onPress={() => router.push("/screens/Authentication/Signup")}
+              >
                 <Text style={[style.b14, { color: Colors.primary }]}>
                   {" "}
                   Sign Up

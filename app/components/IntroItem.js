@@ -8,8 +8,8 @@ import {
   ImageBackground,
   StatusBar,
 } from "react-native";
-import React, { useState, useContext } from "react";
-import { useNavigation } from "@react-navigation/native";
+import React from "react";
+import { useRouter } from "expo-router";
 import style from "../theme/style";
 import { Colors } from "../theme/color";
 
@@ -17,7 +17,8 @@ const height = Dimensions.get("screen").height;
 const width = Dimensions.get("screen").width;
 
 export default function IntroItem({ item }) {
-  const navigation = useNavigation();
+  const router = useRouter();
+
   return (
     <SafeAreaView style={{ width: width, backgroundColor: Colors.secondary }}>
       <StatusBar backgroundColor="transparent" translucent={true} />
@@ -40,7 +41,9 @@ export default function IntroItem({ item }) {
               }}
             >
               <TouchableOpacity
-                onPress={() => navigation.navigate("screens/Onboarding")}
+                onPress={() =>
+                  router.push("/screens/Authentication/Onboarding")
+                }
               >
                 <Text style={[style.r16, { color: Colors.secondary }]}>
                   Skip

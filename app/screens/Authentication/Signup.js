@@ -13,12 +13,12 @@ import {
 } from "react-native";
 import { useRouter } from "expo-router"; // Import useRouter from expo-router
 import Icon from "react-native-vector-icons/Ionicons";
-import { Colors } from "../theme/color";
-import style from "../theme/style";
-import AppButton from "../components/AppButton";
-import AppTitle from "../components/AppTitle";
-import AppInput from "../components/AppInput";
-import AppPhoneInput from "../components/AppPhoneInput";
+import { Colors } from "../../theme/color";
+import style from "../../theme/style";
+import AppButton from "../../components/AppButton";
+import AppTitle from "../../components/AppTitle";
+import AppInput from "../../components/AppInput";
+import AppPhoneInput from "../../components/AppPhoneInput";
 
 const width = Dimensions.get("screen").width;
 const height = Dimensions.get("screen").height;
@@ -69,13 +69,6 @@ export default function Signup() {
               marginTop: 20,
             }}
           />
-
-          {/* <AppInput
-            placeholder="PHONE"
-            // onChangeText={(text) => setEmail(text)}
-            style={style}
-            parentStyles={{ marginTop: 20 }}
-          /> */}
           <AppPhoneInput
             placeholder="PHONE"
             style={style}
@@ -112,7 +105,7 @@ export default function Signup() {
               ]}
             >
               <Image
-                source={require("../../assets/images/authentication/Google.png")}
+                source={require("../../../assets/images/authentication/Google.png")}
                 resizeMode="stretch"
                 style={{ width: width / 11, height: height / 35 }}
               />
@@ -128,7 +121,7 @@ export default function Signup() {
               ]}
             >
               <Image
-                source={require("../../assets/images/authentication/facebook.png")}
+                source={require("../../../assets/images/authentication/facebook.png")}
                 resizeMode="stretch"
                 style={{ width: width / 25, height: height / 37 }}
               />

@@ -29,7 +29,7 @@ export default function Verify2() {
       ]}
     >
       <View style={[style.main, { backgroundColor: Colors.secondary }]}>
-        <AppTitle title={"Email Verification"} style={style}/>
+        <AppTitle title={"Email Verification"} style={style} />
         <ScrollView showsVerticalScrollIndicator={false}>
           <Text style={[style.r14, { color: Colors.disable1, marginTop: 15 }]}>
             Enter your OTP code here
@@ -70,7 +70,9 @@ export default function Verify2() {
           </TouchableOpacity>
           <AppButton
             title="CONTINUE"
-            //   onPress={() => navigation.navigate("Signup")}
+            onPress={() =>
+              navigation.navigate("screens/Authentication/NewPassword")
+            }
             style={style}
           />
         </ScrollView>

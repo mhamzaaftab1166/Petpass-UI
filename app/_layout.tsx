@@ -13,13 +13,27 @@ export default function RootLayout() {
     <Stack>
       <Stack.Screen name="index" options={{ headerShown: false }} />
       <Stack.Screen
-        name="screens/Onboarding"
+        name="screens/Authentication/Onboarding"
         options={{ headerShown: false }}
       />
-      <Stack.Screen name="screens/Login" options={{ headerShown: false }} />
-      <Stack.Screen name="screens/Signup" options={{ headerShown: false }} />
+      <Stack.Screen
+        name="screens/Authentication/Login"
+        options={{ headerShown: false }}
+      />
+      <Stack.Screen
+        name="screens/Authentication/Signup"
+        options={{ headerShown: false }}
+      />
       <Stack.Screen
         name="screens/EmailVerify"
+        options={{ headerShown: false }}
+      />
+      <Stack.Screen
+        name="screens/Authentication/ForgotPassword"
+        options={{ headerShown: false }}
+      />
+      <Stack.Screen
+        name="screens/Authentication/NewPassword"
         options={{ headerShown: false }}
       />
     </Stack>

@@ -63,13 +63,12 @@ export default function Introduction() {
         title="Continue"
         onPress={
           currentSlideIndex === Slides.length - 1
-            ? () => router.push("/screens/Onboarding")
+            ? () => router.push("/screens/Authentication/Onboarding")
             : goNextSlide
         }
         style={style}
         paddingVertical={20}
       />
-   
     </View>
   );
 
