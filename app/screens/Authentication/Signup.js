@@ -19,6 +19,7 @@ import AppButton from "../../components/AppButton";
 import AppTitle from "../../components/AppTitle";
 import AppInput from "../../components/AppInput";
 import AppPhoneInput from "../../components/AppPhoneInput";
+import RoleCard from "../../components/RoleCard";
 
 const width = Dimensions.get("screen").width;
 const height = Dimensions.get("screen").height;
@@ -70,6 +71,32 @@ export default function Signup() {
             }}
           />
           <AppPhoneInput placeholder="PHONE" style={style} />
+          <View
+            style={{
+              flexDirection: "row",
+              alignItems: "center",
+              padding: 5,
+              marginTop: 20,
+            }}
+          >
+            <RoleCard
+              title="Owner"
+              imageSrc={require("../../../assets/images/authentication/d3.png")}
+              // onPress={() => navigation.navigate("Shop")}
+            />
+            <View style={{ margin: 10 }}></View>
+            <RoleCard
+              title="Breeder"
+              imageSrc={require("../../../assets/images/authentication/breeder.png")}
+              // onPress={() => navigation.navigate("Shop")}
+            />
+            <View style={{ margin: 10 }}></View>
+            <RoleCard
+              title="Shop"
+              imageSrc={require("../../../assets/images/authentication/d2.png")}
+              // onPress={() => navigation.navigate("Shop")}
+            />
+          </View>
 
           {/* Terms and Conditions Text */}
           <Text style={[style.r14, { color: Colors.disable, marginTop: 20 }]}>
