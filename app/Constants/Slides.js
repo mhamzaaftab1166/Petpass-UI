@@ -13,4 +13,11 @@ export default [
     bg: require("../../assets/images/authentication/Onbor2.png"),
     img: require("../../assets/images/authentication/onbg.png"),
   },
+  {
+    id: 3,
+    title1: "Booking is easy and simple",
+    subtitle: " Easy booking doesn’t cost you much time",
+    bg: require("../../assets/images/authentication/Onbor3.png"),
+    img: require("../../assets/images/authentication/onbg.png"),
+  },
 ];

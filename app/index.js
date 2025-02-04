@@ -36,41 +36,39 @@ export default function Introduction() {
     }
   };
 
-  const Footer = () => (
-    <View style={{ paddingHorizontal: 20, backgroundColor: Colors.secondary }}>
-      {/* Indicator Dots */}
-      <View style={{ flexDirection: "row", alignSelf: "center" }}>
-        {Slides.map((_, index) => (
-          <View
-            key={index}
-            style={[
-              style.indicator,
-              currentSlideIndex === index && {
-                borderColor: Colors.primary,
-                borderWidth: 1,
-                paddingHorizontal: 12,
-                borderRadius: 10,
-                backgroundColor: Colors.primary,
-                alignItems: "center",
-              },
-            ]}
-          />
-        ))}
-      </View>
+ const Footer = () => (
+   <View style={{ paddingHorizontal: 20, backgroundColor: Colors.secondary }}>
+     {/* Indicator Dots */}
+     <View style={{ flexDirection: "row", alignSelf: "center" }}>
+       {Slides.map((_, index) => (
+         <View
+           key={index}
+           style={[
+             style.indicator,
+             currentSlideIndex === index && {
+               borderColor: Colors.primary,
+               borderWidth: 1,
+               paddingHorizontal: 12,
+               borderRadius: 10,
+               backgroundColor: Colors.primary,
+               alignItems: "center",
+             },
+           ]}
+         />
+       ))}
+     </View>
 
-      {/* Continue Button */}
-      <AppButton
-        title="Continue"
-        onPress={
-          currentSlideIndex === Slides.length - 1
-            ? () => router.push("/screens/Authentication/Onboarding")
-            : goNextSlide
-        }
-        style={style}
-        paddingVertical={20}
-      />
-    </View>
-  );
+
+     {currentSlideIndex === Slides.length - 1 && (
+       <AppButton
+         title="Continue"
+         onPress={() => router.push("/screens/Authentication/Login")}
+         style={style}
+         paddingVertical={20}
+       />
+     )}
+   </View>
+ );
 
   return (
     <SafeAreaView style={{ flex: 1 }}>
