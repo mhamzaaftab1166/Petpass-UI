@@ -17,7 +17,7 @@ const AppPhoneInput = ({
       <PhoneInput
         ref={phone}
         value={value}
-        onChangeText={onChangeText}
+        onChangePhoneNumber={onChangeText}
         initialCountry="ae"
         style={[style.r16, { color: Colors.active, flex: 1, paddingLeft: 10 }]}
         textProps={{

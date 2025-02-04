@@ -10,6 +10,7 @@ const AppInput = ({
   style,
   isPassword,
   parentStyles,
+  ...otherProps
 }) => {
   const [isPasswordVisible, setIsPasswordVisible] = useState(false);
   return (
@@ -22,6 +23,7 @@ const AppInput = ({
         placeholderTextColor={Colors.lable}
         secureTextEntry={isPassword && !isPasswordVisible}
         style={[style.r16, { color: Colors.active, flex: 1 }]}
+        {...otherProps}
       />
       {isPassword && (
         <TouchableOpacity

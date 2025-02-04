@@ -15,16 +15,24 @@ import Icon from "react-native-vector-icons/Ionicons";
 import { Colors } from "../../theme/color";
 import style from "../../theme/style";
 import { useRouter } from "expo-router";
-import AppButton from "../../components/AppButton";
 import AppTitle from "../../components/AppTitle";
-import AppInput from "../../components/AppInput";
-import { useThemeStore } from "../../store/useStore";
+import AppFormField from "../../components/forms/AppFormFeild";
+import AppForm from "../../components/forms/AppForm";
+import * as Yup from "yup";
+import SubmitButton from "../../components/forms/SubmitButton";
+import AppErrorMessage from "../../components/forms/AppErrorMessage";
 
 const width = Dimensions.get("screen").width;
 const height = Dimensions.get("screen").height;
+const validationSchema = Yup.object({
+  email: Yup.string().required().email().label("Email"),
+  password: Yup.string().required().min(4).label("Password"),
+});
 
 export default function Login() {
   const router = useRouter();
+  const [error, setError] = useState();
+  const [errorVisible, setErrorVisible] = useState(false);
 
   return (
     <SafeAreaView
@@ -39,43 +47,46 @@ export default function Login() {
       >
         <View style={{ flex: 1, marginHorizontal: 20 }}>
           <ScrollView showsVerticalScrollIndicator={false}>
-            <AppTitle title={"Sign In"} style={style} />
+            <AppForm
+              initialValues={{ email: "", password: "" }}
+              onSubmit={(values) => console.log(values)}
+              validationSchema={validationSchema}
+            >
+              <AppErrorMessage error={error} visible={errorVisible} />
+              <AppTitle title={"Sign In"} style={style} />
 
-            <AppInput
-              placeholder="EMAIL"
-              // onChangeText={(text) => setEmail(text)}
-              style={style}
-            />
-            <AppInput
-              placeholder="PASSWORD"
-              style={style}
-              isPassword={true}
-              parentStyles={{
-                flexDirection: "row",
-                justifyContent: "space-between",
-                alignItems: "center",
-                marginTop: 20,
-              }}
-            />
+              <AppFormField
+                name={"email"}
+                placeholder="EMAIL"
+                style={style}
+              />
+              <AppFormField
+                name={"password"}
+                placeholder="PASSWORD"
+                style={style}
+                isPassword={true}
+                parentStyles={{
+                  flexDirection: "row",
+                  justifyContent: "space-between",
+                  alignItems: "center",
+                  marginTop: 20,
+                }}
+              />
 
-            <View style={{ alignItems: "flex-end", marginTop: 10 }}>
-              <TouchableOpacity
-                onPress={() =>
-                  router.push("/screens/Authentication/ForgotPassword")
-                }
-              >
-                <Text style={[style.r14, { color: Colors.disable }]}>
-                  Forgot Password?
-                </Text>
-              </TouchableOpacity>
-            </View>
+              <View style={{ alignItems: "flex-end", marginTop: 10 }}>
+                <TouchableOpacity
+                  onPress={() =>
+                    router.push("/screens/Authentication/ForgotPassword")
+                  }
+                >
+                  <Text style={[style.r14, { color: Colors.disable }]}>
+                    Forgot Password?
+                  </Text>
+                </TouchableOpacity>
+              </View>
 
-            <AppButton
-              title="SIGN IN"
-              onPress={() => router.push("/home")}
-              style={style}
-            />
-
+              <SubmitButton title="SIGN IN" style={style} />
+            </AppForm>
             <Text
               style={[
                 style.r14,

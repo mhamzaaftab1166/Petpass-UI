@@ -3,7 +3,6 @@ import {
   SafeAreaView,
   Dimensions,
   TouchableOpacity,
-  TextInput,
   Image,
   ScrollView,
   KeyboardAvoidingView,
@@ -11,22 +10,35 @@ import {
   Text,
   View,
 } from "react-native";
-import { useRouter } from "expo-router"; // Import useRouter from expo-router
-import Icon from "react-native-vector-icons/Ionicons";
+import { useRouter } from "expo-router";
 import { Colors } from "../../theme/color";
 import style from "../../theme/style";
-import AppButton from "../../components/AppButton";
 import AppTitle from "../../components/AppTitle";
-import AppInput from "../../components/AppInput";
 import AppPhoneInput from "../../components/AppPhoneInput";
 import RoleCard from "../../components/RoleCard";
+import * as Yup from "yup";
+import AppForm from "../../components/forms/AppForm";
+import AppErrorMessage from "../../components/forms/AppErrorMessage";
+import AppFormField from "../../components/forms/AppFormFeild";
+import SubmitButton from "../../components/forms/SubmitButton";
+import AppFormPhoneField from "../../components/forms/AppFormPhoneFeild";
+import AppFormRoleSelector from "../../components/forms/AppFormRoleSelector";
 
 const width = Dimensions.get("screen").width;
 const height = Dimensions.get("screen").height;
 
+const validationSchema = Yup.object({
+  username: Yup.string().required().label("Username"),
+  email: Yup.string().required().email().label("Email"),
+  password: Yup.string().required().min(4).label("Password"),
+  phone: Yup.string().required().min(8).max(15).label("Phone"),
+  role:Yup.string().required().label("Role")
+});
+
 export default function Signup() {
-  const [isPasswordVisible, setIsPasswordVisible] = useState(false);
-  const router = useRouter(); // Initialize router
+  const [error, setError] = useState();
+  const [errorVisible, setErrorVisible] = useState(false);
+  const router = useRouter();
 
   return (
     <SafeAreaView
@@ -44,76 +56,53 @@ export default function Signup() {
           style={{ flex: 1, marginHorizontal: 20 }}
         >
           <AppTitle title={"Sign Up"} style={style} />
-
-          <AppInput
-            placeholder="USERNAME"
-            // onChangeText={(text) => setEmail(text)}
-            style={style}
-            parentStyles={{ marginTop: 20 }}
-          />
-
-          <AppInput
-            placeholder="EMAIL"
-            // onChangeText={(text) => setEmail(text)}
-            style={style}
-            parentStyles={{ marginTop: 20 }}
-          />
-
-          <AppInput
-            placeholder="PASSWORD"
-            style={style}
-            isPassword={true}
-            parentStyles={{
-              flexDirection: "row",
-              justifyContent: "space-between",
-              alignItems: "center",
-              marginTop: 20,
-            }}
-          />
-          <AppPhoneInput placeholder="PHONE" style={style} />
-          <View
-            style={{
-              flexDirection: "row",
-              alignItems: "center",
-              padding: 5,
-              marginTop: 20,
-            }}
+          <AppForm
+            initialValues={{ email: "", password: "", username: "", phone: "" ,role:""}}
+            onSubmit={(values) => console.log(values)}
+            validationSchema={validationSchema}
           >
-            <RoleCard
-              title="Owner"
-              imageSrc={require("../../../assets/images/authentication/d3.png")}
-              // onPress={() => navigation.navigate("Shop")}
+            <AppErrorMessage error={error} visible={errorVisible} />
+            <AppFormField
+              name={"username"}
+              placeholder="USERNAME"
+              style={style}
+              parentStyles={{ marginTop: 20 }}
             />
-            <View style={{ margin: 10 }}></View>
-            <RoleCard
-              title="Breeder"
-              imageSrc={require("../../../assets/images/authentication/breeder.png")}
-              // onPress={() => navigation.navigate("Shop")}
+            <AppFormField
+              name={"email"}
+              placeholder="EMAIL"
+              style={style}
+              parentStyles={{ marginTop: 20 }}
             />
-            <View style={{ margin: 10 }}></View>
-            <RoleCard
-              title="Shop"
-              imageSrc={require("../../../assets/images/authentication/d2.png")}
-              // onPress={() => navigation.navigate("Shop")}
+            <AppFormField
+              name={"password"}
+              placeholder="PASSWORD"
+              style={style}
+              parentStyles={{
+                flexDirection: "row",
+                justifyContent: "space-between",
+                alignItems: "center",
+                marginTop: 20,
+              }}
+              isPassword={true}
             />
-          </View>
 
-          {/* Terms and Conditions Text */}
-          <Text style={[style.r14, { color: Colors.disable, marginTop: 20 }]}>
-            By clicking Sign up you agree to the following
-            <Text style={[style.b14, { color: Colors.primary }]}>
-              {" "}
-              Terms and Conditions{" "}
-            </Text>{" "}
-            without reservation
-          </Text>
+            <AppFormPhoneField style={style} name={"phone"} />
 
-          {/* Sign Up Button */}
-          <AppButton
-            title="SIGN UP"
-            onPress={() => router.push("/screens/Authentication/EmailVerify")}
-            style={style}
-          />
+            <AppFormRoleSelector name={"role"}/>
+
+            <Text style={[style.r14, { color: Colors.disable, marginTop: 20 }]}>
+              By clicking Sign up you agree to the following
+              <Text style={[style.b14, { color: Colors.primary }]}>
+                {" "}
+                Terms and Conditions{" "}
+              </Text>{" "}
+              without reservation
+            </Text>
+
+
+            <SubmitButton title="SIGN UP" style={style} />
+          </AppForm>
 
           {/* Social Login Options */}
           <Text
