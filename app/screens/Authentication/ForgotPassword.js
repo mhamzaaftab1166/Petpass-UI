@@ -51,7 +51,7 @@ export default function ForgotPass() {
             />
             <AppButton
               title="SEND"
-              onPress={() => router.push("/screens/EmailVerify")}
+              onPress={() => router.push("/screens/Authentication/EmailVerify")}
               style={style}
             />
           </ScrollView>

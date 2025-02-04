@@ -7,20 +7,19 @@ import {
   Dimensions,
 } from "react-native";
 import React from "react";
-import { useNavigation } from "@react-navigation/native";
-import style from "../theme/style";
-import { Colors } from "../theme/color";
-import Icon from "react-native-vector-icons/Ionicons";
-import { AppBar } from "@react-native-material/core";
-import OtpInputs from "react-native-otp-textinput"; // Changed to expo-compatible OTP input
-import AppButton from "../components/AppButton";
-import AppTitle from "../components/AppTitle";
+import { useRouter } from "expo-router";
+import style from "../../theme/style";
+import { Colors } from "../../theme/color";
+import OtpInputs from "react-native-otp-textinput"; // Expo-compatible OTP input
+import AppButton from "../../components/AppButton";
+import AppTitle from "../../components/AppTitle";
 
 const width = Dimensions.get("screen").width;
 const height = Dimensions.get("screen").height;
 
 export default function Verify2() {
-  const navigation = useNavigation();
+  const router = useRouter();
+
   return (
     <SafeAreaView
       style={[
@@ -55,10 +54,7 @@ export default function Verify2() {
           <Text style={[style.r14, { color: Colors.disable1, marginTop: 50 }]}>
             Didn't you receive any code?
           </Text>
-          <TouchableOpacity
-            style={{ marginTop: 5 }}
-            // onPress={() => navigation.navigate("Verify1")}
-          >
+          <TouchableOpacity style={{ marginTop: 5 }}>
             <Text
               style={[
                 style.r14,
@@ -70,9 +66,7 @@ export default function Verify2() {
           </TouchableOpacity>
           <AppButton
             title="CONTINUE"
-            onPress={() =>
-              navigation.navigate("screens/Authentication/NewPassword")
-            }
+            onPress={() => router.push("/screens/Authentication/NewPassword")}
             style={style}
           />
         </ScrollView>

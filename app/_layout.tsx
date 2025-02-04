@@ -25,7 +25,7 @@ export default function RootLayout() {
         options={{ headerShown: false }}
       />
       <Stack.Screen
-        name="screens/EmailVerify"
+        name="screens/Authentication/EmailVerify"
         options={{ headerShown: false }}
       />
       <Stack.Screen

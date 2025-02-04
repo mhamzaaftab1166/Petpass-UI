@@ -69,10 +69,7 @@ export default function Signup() {
               marginTop: 20,
             }}
           />
-          <AppPhoneInput
-            placeholder="PHONE"
-            style={style}
-          />
+          <AppPhoneInput placeholder="PHONE" style={style} />
 
           {/* Terms and Conditions Text */}
           <Text style={[style.r14, { color: Colors.disable, marginTop: 20 }]}>
@@ -87,7 +84,7 @@ export default function Signup() {
           {/* Sign Up Button */}
           <AppButton
             title="SIGN UP"
-            onPress={() => router.push("/screens/EmailVerify")}
+            onPress={() => router.push("/screens/Authentication/EmailVerify")}
             style={style}
           />
 
@@ -143,7 +140,9 @@ export default function Signup() {
             <Text style={[style.r14, { color: Colors.lable }]}>
               Don't have an account?
             </Text>
-            <TouchableOpacity onPress={() => router.push("/screens/Login")}>
+            <TouchableOpacity
+              onPress={() => router.push("/screens/Authentication/Login")}
+            >
               <Text style={[style.b14, { color: Colors.primary }]}>
                 {" "}
                 Sign In
