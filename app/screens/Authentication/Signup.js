@@ -32,7 +32,7 @@ const validationSchema = Yup.object({
   email: Yup.string().required().email().label("Email"),
   password: Yup.string().required().min(4).label("Password"),
   phone: Yup.string().required().min(8).max(15).label("Phone"),
-  role:Yup.string().required().label("Role")
+  role: Yup.string().required().label("Role"),
 });
 
 export default function Signup() {
@@ -57,8 +57,16 @@ export default function Signup() {
         >
           <AppTitle title={"Sign Up"} style={style} />
           <AppForm
-            initialValues={{ email: "", password: "", username: "", phone: "" ,role:""}}
-            onSubmit={(values) => console.log(values)}
+            initialValues={{
+              email: "",
+              password: "",
+              username: "",
+              phone: "",
+              role: "",
+            }}
+            onSubmit={(values) =>
+              router.push("/screens/Authentication/EmailVerify")
+            }
             validationSchema={validationSchema}
           >
             <AppErrorMessage error={error} visible={errorVisible} />
@@ -89,7 +97,7 @@ export default function Signup() {
 
             <AppFormPhoneField style={style} name={"phone"} />
 
-            <AppFormRoleSelector name={"role"}/>
+            <AppFormRoleSelector name={"role"} />
 
             <Text style={[style.r14, { color: Colors.disable, marginTop: 20 }]}>
               By clicking Sign up you agree to the following
@@ -99,7 +107,6 @@ export default function Signup() {
               </Text>{" "}
               without reservation
             </Text>
-
 
             <SubmitButton title="SIGN UP" style={style} />
           </AppForm>
