@@ -1,4 +1,5 @@
 {
   "registrationSuccess": "User registered successfully. OTP sent to email.",
-  "otpVerify": "OTP verified successfully!"
+  "otpVerify": "OTP verified successfully!",
+  "loginSuccess": "Login successful"
 }

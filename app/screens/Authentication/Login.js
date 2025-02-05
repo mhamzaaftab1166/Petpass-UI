@@ -21,7 +21,9 @@ import AppForm from "../../components/forms/AppForm";
 import * as Yup from "yup";
 import SubmitButton from "../../components/forms/SubmitButton";
 import AppErrorMessage from "../../components/forms/AppErrorMessage";
-
+import authService from "../../services/authService";
+import Loader from "../../components/Loader";
+import AuthenticationSuccess from "../../ESB/success/authentication.json";
 const width = Dimensions.get("screen").width;
 const height = Dimensions.get("screen").height;
 const validationSchema = Yup.object({
@@ -33,6 +35,22 @@ export default function Login() {
   const router = useRouter();
   const [error, setError] = useState();
   const [errorVisible, setErrorVisible] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+
+  const handleSubmit = async (userInfo) => {
+    try {
+      setIsLoading(true);
+      const data = await authService.login(userInfo);
+      if (data?.message === AuthenticationSuccess.loginSuccess) {
+        await authService.storeToken(data?.accessToken);
+      }
+    } catch (error) {
+      setErrorVisible(true);
+      setError(error.message);
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
   return (
     <SafeAreaView
@@ -45,21 +63,18 @@ export default function Login() {
         behavior={Platform.OS === "ios" ? "padding" : undefined}
         style={{ flex: 1 }}
       >
+        <Loader isLoad={isLoading} />
         <View style={{ flex: 1, marginHorizontal: 20 }}>
           <ScrollView showsVerticalScrollIndicator={false}>
             <AppForm
               initialValues={{ email: "", password: "" }}
-              onSubmit={(values) => console.log(values)}
+              onSubmit={handleSubmit}
               validationSchema={validationSchema}
             >
               <AppErrorMessage error={error} visible={errorVisible} />
               <AppTitle title={"Sign In"} style={style} />
 
-              <AppFormField
-                name={"email"}
-                placeholder="EMAIL"
-                style={style}
-              />
+              <AppFormField name={"email"} placeholder="EMAIL" style={style} />
               <AppFormField
                 name={"password"}
                 placeholder="PASSWORD"

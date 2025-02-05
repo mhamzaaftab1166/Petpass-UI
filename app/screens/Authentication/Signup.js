@@ -53,7 +53,7 @@ export default function Signup() {
       if (data?.message === AuthenticationSuccess.registrationSuccess) {
       router.push(
         `/screens/Authentication/EmailVerify?email=${formattedPayload.email}&username=${formattedPayload.username}`
-      );
+      ); 
 
       }
     } catch (error) {
