@@ -7,7 +7,7 @@ import {
   Dimensions,
 } from "react-native";
 import React from "react";
-import { useRouter } from "expo-router";
+import { useLocalSearchParams, useRouter } from "expo-router";
 import style from "../../theme/style";
 import { Colors } from "../../theme/color";
 import OtpInputs from "react-native-otp-textinput"; // Expo-compatible OTP input
@@ -18,7 +18,10 @@ const width = Dimensions.get("screen").width;
 const height = Dimensions.get("screen").height;
 
 export default function Verify2() {
+  const { email } = useLocalSearchParams();
+  
   const router = useRouter();
+  
 
   return (
     <SafeAreaView

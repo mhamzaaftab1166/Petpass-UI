@@ -65,7 +65,8 @@ export default function Signup() {
               role: "",
             }}
             onSubmit={(values) =>
-              router.push("/screens/Authentication/EmailVerify")
+                router.push(`/screens/Authentication/EmailVerify?email=${values.email}`)
+
             }
             validationSchema={validationSchema}
           >
