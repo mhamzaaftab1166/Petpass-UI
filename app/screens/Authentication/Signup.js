@@ -9,13 +9,13 @@ import {
   Platform,
   Text,
   View,
+  ActivityIndicator,
+  StyleSheet
 } from "react-native";
 import { useRouter } from "expo-router";
 import { Colors } from "../../theme/color";
 import style from "../../theme/style";
 import AppTitle from "../../components/AppTitle";
-import AppPhoneInput from "../../components/AppPhoneInput";
-import RoleCard from "../../components/RoleCard";
 import * as Yup from "yup";
 import AppForm from "../../components/forms/AppForm";
 import AppErrorMessage from "../../components/forms/AppErrorMessage";
@@ -23,6 +23,10 @@ import AppFormField from "../../components/forms/AppFormFeild";
 import SubmitButton from "../../components/forms/SubmitButton";
 import AppFormPhoneField from "../../components/forms/AppFormPhoneFeild";
 import AppFormRoleSelector from "../../components/forms/AppFormRoleSelector";
+import userService from "../../services/userService";
+import { formatRegisterPayload } from "../../utils/authenticationUtils";
+import AuthenticationSuccess from "../../ESB/success/authentication.json";
+import Loader from "../../components/Loader";
 
 const width = Dimensions.get("screen").width;
 const height = Dimensions.get("screen").height;
@@ -31,14 +35,33 @@ const validationSchema = Yup.object({
   username: Yup.string().required().label("Username"),
   email: Yup.string().required().email().label("Email"),
   password: Yup.string().required().min(4).label("Password"),
-  phone: Yup.string().required().min(8).max(15).label("Phone"),
-  role: Yup.string().required().label("Role"),
+  phone_number: Yup.string().required().min(8).max(15).label("Phone"),
+  profile_type: Yup.string().required().label("Role"),
 });
 
 export default function Signup() {
+  const router = useRouter();
   const [error, setError] = useState();
   const [errorVisible, setErrorVisible] = useState(false);
-  const router = useRouter();
+  const [isLoading, setIsLoading] = useState(false);
+
+  const handleSubmit = async (userInfo) => {
+    try {
+      setIsLoading(true);
+      const formattedPayload = formatRegisterPayload(userInfo);
+      const data = await userService.register(formattedPayload);
+      if (data?.message === AuthenticationSuccess.registrationSuccess) {
+        router.push(
+          `/screens/Authentication/EmailVerify?email=${formattedPayload.email}`
+        );
+      }
+    } catch (error) {
+      setErrorVisible(true);
+      setError(error.message);
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
   return (
     <SafeAreaView
@@ -51,6 +74,7 @@ export default function Signup() {
         behavior={Platform.OS === "ios" ? "padding" : null}
         style={{ flex: 1 }}
       >
+        <Loader isLoad={isLoading} />
         <ScrollView
           showsVerticalScrollIndicator={false}
           style={{ flex: 1, marginHorizontal: 20 }}
@@ -61,13 +85,10 @@ export default function Signup() {
               email: "",
               password: "",
               username: "",
-              phone: "",
-              role: "",
+              phone_number: "",
+              profile_type: "",
             }}
-            onSubmit={(values) =>
-                router.push(`/screens/Authentication/EmailVerify?email=${values.email}`)
-
-            }
+            onSubmit={(values) => handleSubmit(values)}
             validationSchema={validationSchema}
           >
             <AppErrorMessage error={error} visible={errorVisible} />
@@ -96,9 +117,9 @@ export default function Signup() {
               isPassword={true}
             />
 
-            <AppFormPhoneField style={style} name={"phone"} />
+            <AppFormPhoneField style={style} name={"phone_number"} />
 
-            <AppFormRoleSelector name={"role"} />
+            <AppFormRoleSelector name={"profile_type"} />
 
             <Text style={[style.r14, { color: Colors.disable, marginTop: 20 }]}>
               By clicking Sign up you agree to the following
@@ -178,3 +199,7 @@ export default function Signup() {
     </SafeAreaView>
   );
 }
+
+const styles = StyleSheet.create({
+ 
+});

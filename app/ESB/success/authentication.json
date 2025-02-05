@@ -1,0 +1,4 @@
+{
+  "registrationSuccess": "User registered successfully. OTP sent to email.",
+  "otpVerify": "OTP verified successfully!"
+}

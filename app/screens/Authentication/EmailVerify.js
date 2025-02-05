@@ -6,22 +6,51 @@ import {
   TouchableOpacity,
   Dimensions,
 } from "react-native";
-import React from "react";
+import React, { useState } from "react";
 import { useLocalSearchParams, useRouter } from "expo-router";
 import style from "../../theme/style";
 import { Colors } from "../../theme/color";
-import OtpInputs from "react-native-otp-textinput"; // Expo-compatible OTP input
+import OtpInputs from "react-native-otp-textinput";
 import AppButton from "../../components/AppButton";
 import AppTitle from "../../components/AppTitle";
+import userService from "../../services/userService";
+import AuthenticationSuccess from "../../ESB/success/authentication.json";
+import AppErrorMessage from "../../components/forms/AppErrorMessage";
+import Loader from "../../components/Loader";
 
 const width = Dimensions.get("screen").width;
 const height = Dimensions.get("screen").height;
 
 export default function Verify2() {
+  const [error, setError] = useState();
+  const [errorVisible, setErrorVisible] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
   const { email } = useLocalSearchParams();
-  
   const router = useRouter();
-  
+  const [otp, setOtp] = useState("");
+
+  const handleOtpChange = (otpCode) => {
+    setOtp(otpCode);
+  };
+
+  const handleVerify = async () => {
+    setIsLoading(true);
+    try {
+      if (email) {
+        const data = await userService.emailVerify({ email, otp });
+        if (AuthenticationSuccess.otpVerify === data?.message) {
+          router.push("/screens/Authentication/Login");
+        }
+      } else {
+        router.push("/screens/Authentication/NewPassword");
+      }
+    } catch (error) {
+      setErrorVisible(true);
+      setError(error.message);
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
   return (
     <SafeAreaView
@@ -30,17 +59,20 @@ export default function Verify2() {
         { backgroundColor: Colors.secondary, paddingTop: "15%" },
       ]}
     >
+      <Loader isLoad={isLoading} />
       <View style={[style.main, { backgroundColor: Colors.secondary }]}>
         <AppTitle title={"Email Verification"} style={style} />
         <ScrollView showsVerticalScrollIndicator={false}>
           <Text style={[style.r14, { color: Colors.disable1, marginTop: 15 }]}>
             Enter your OTP code here
           </Text>
+          <AppErrorMessage error={error} visible={errorVisible} />
           <View style={{ paddingTop: 20 }}>
             <OtpInputs
               tintColor={Colors.primary}
               offTintColor={Colors.secondary}
               inputCount={6}
+              handleTextChange={(code) => handleOtpChange(code)}
               keyboardType="numeric"
               textInputStyle={{
                 borderBottomColor: Colors.primary,
@@ -69,7 +101,8 @@ export default function Verify2() {
           </TouchableOpacity>
           <AppButton
             title="CONTINUE"
-            onPress={() => router.push("/screens/Authentication/NewPassword")}
+            disable={otp.length < 6}
+            onPress={handleVerify}
             style={style}
           />
         </ScrollView>

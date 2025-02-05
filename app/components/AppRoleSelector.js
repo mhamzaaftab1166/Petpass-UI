@@ -6,14 +6,17 @@ const AppRoleSelector = ({ value, onSelect, parentStyles }) => {
   const roles = [
     {
       title: "Owner",
+      role:"pet_owner",
       imageSrc: require("../../assets/images/authentication/d3.png"),
     },
     {
       title: "Breeder",
+      role:"pet_breeder",
       imageSrc: require("../../assets/images/authentication/breeder.png"),
     },
     {
       title: "Shop",
+      role:"pet_shop",
       imageSrc: require("../../assets/images/authentication/d2.png"),
     },
   ];
@@ -23,10 +26,10 @@ const AppRoleSelector = ({ value, onSelect, parentStyles }) => {
       {roles.map((role, index) => (
         <RoleCard
           key={index}
-          onPress={() => onSelect(role.title)}
+          onPress={() => onSelect(role.role)}
           title={role.title}
           imageSrc={role.imageSrc}
-          isSelected={value === role.title}
+          isSelected={value === role.role}
         />
       ))}
     </View>
