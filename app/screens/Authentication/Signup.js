@@ -51,9 +51,10 @@ export default function Signup() {
       const formattedPayload = formatRegisterPayload(userInfo);
       const data = await userService.register(formattedPayload);
       if (data?.message === AuthenticationSuccess.registrationSuccess) {
-        router.push(
-          `/screens/Authentication/EmailVerify?email=${formattedPayload.email}`
-        );
+      router.push(
+        `/screens/Authentication/EmailVerify?email=${formattedPayload.email}&username=${formattedPayload.username}`
+      );
+
       }
     } catch (error) {
       setErrorVisible(true);

@@ -18,6 +18,7 @@ function AppFormField({
         onBlur={() => setFieldTouched(name)}
         onChangeText={(text) => setFieldValue(name, text)}
         value={values[name]}
+        isPassword={isPassword}
         parentStyles={parentStyles}
         style={style}
         {...otherProps}

@@ -25,12 +25,24 @@ export default function Verify2() {
   const [error, setError] = useState();
   const [errorVisible, setErrorVisible] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
-  const { email } = useLocalSearchParams();
+  const { email, username } = useLocalSearchParams();
   const router = useRouter();
   const [otp, setOtp] = useState("");
 
   const handleOtpChange = (otpCode) => {
     setOtp(otpCode);
+  };
+
+  const handleResend = async () => {
+    try {
+      setIsLoading(true);
+      await userService.resend({ email, username, verification_type: "email" });
+    } catch (error) {
+      setErrorVisible(true);
+      setError(error.message);
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   const handleVerify = async () => {
@@ -89,7 +101,7 @@ export default function Verify2() {
           <Text style={[style.r14, { color: Colors.disable1, marginTop: 50 }]}>
             Didn't you receive any code?
           </Text>
-          <TouchableOpacity style={{ marginTop: 5 }}>
+          <TouchableOpacity style={{ marginTop: 5 }} onPress={handleResend}>
             <Text
               style={[
                 style.r14,
