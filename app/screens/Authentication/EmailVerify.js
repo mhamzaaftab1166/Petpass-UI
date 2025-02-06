@@ -25,7 +25,7 @@ export default function Verify2() {
   const [error, setError] = useState();
   const [errorVisible, setErrorVisible] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
-  const { email, username } = useLocalSearchParams();
+  const { email, username, newPass } = useLocalSearchParams();
   const router = useRouter();
   const [otp, setOtp] = useState("");
 
@@ -33,34 +33,45 @@ export default function Verify2() {
     setOtp(otpCode);
   };
 
-  const handleResend = async () => {
-    try {
-      setIsLoading(true);
-      await userService.resend({ email, username, verification_type: "email" });
-    } catch (error) {
-      setErrorVisible(true);
-      setError(error.message);
-    } finally {
-      setIsLoading(false);
-    }
-  };
+ const handleResend = async () => {
+   try {
+     setIsLoading(true);
+
+     const requestData = {
+       email,
+       verification_type: newPass ? "password" : "email",
+     };
+
+     if (!newPass) {
+       requestData.username = username;
+     }
+
+     await userService.resend(requestData);
+   } catch (error) {
+     setErrorVisible(true);
+     setError(error.message);
+   } finally {
+     setIsLoading(false);
+   }
+ };
+
 
   const handleVerify = async () => {
     setIsLoading(true);
     try {
-      if (email) {
+      if (email&&!newPass) {
         const data = await userService.emailVerify({ email, otp });
         if (AuthenticationSuccess.otpVerify === data?.message) {
           router.push("/screens/Authentication/Login");
         }
       } else {
-        router.push("/screens/Authentication/NewPassword");
+        router.push(`/screens/Authentication/NewPassword?email=${email}`);
       }
     } catch (error) {
       setErrorVisible(true);
       setError(error.message);
     } finally {
-      setIsLoading(false);
+      setIsLoading(false); 
     }
   };
 

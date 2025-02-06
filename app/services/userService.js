@@ -12,8 +12,19 @@ const resend = (payload) => {
   return _axios("post", "/auth/resend-otp", payload);
 };
 
+const forgotPassword = (payload) => {
+  return _axios("post", "/auth/forgot-password", payload);
+}; 
+
+const resetPassword = (payload) => {
+  return _axios("post", "/auth/reset-password", payload);
+}; 
+
+
 export default {
   register,
   emailVerify,
   resend,
+  forgotPassword,
+  resetPassword,
 };

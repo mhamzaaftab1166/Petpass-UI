@@ -9,19 +9,50 @@ import {
   KeyboardAvoidingView,
   Platform,
 } from "react-native";
-import React from "react";
+import React, { useState } from "react";
 import { Colors } from "../../theme/color";
 import style from "../../theme/style";
 import { useRouter } from "expo-router";
 import AppInput from "../../components/AppInput";
 import AppButton from "../../components/AppButton";
 import AppTitle from "../../components/AppTitle";
+import AppForm from "../../components/forms/AppForm";
+import AppErrorMessage from "../../components/forms/AppErrorMessage";
+import AppFormField from "../../components/forms/AppFormFeild";
+import * as Yup from "yup";
+import SubmitButton from "../../components/forms/SubmitButton";
+import userService from "../../services/userService";
+import Loader from "../../components/Loader";
 
 const width = Dimensions.get("screen").width;
 const height = Dimensions.get("screen").height;
+const validationSchema = Yup.object({
+  email: Yup.string().required().email().label("Email"),
+});
 
 export default function ForgotPass() {
+  const [error, setError] = useState();
+  const [errorVisible, setErrorVisible] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
   const router = useRouter();
+
+  const handleSend = async (userInfo) => {
+    console.log(userInfo);
+    try {
+      setIsLoading(true);
+      await userService.forgotPassword({ email: userInfo?.email });
+      router.push(
+        `/screens/Authentication/EmailVerify?email=${
+          userInfo?.email
+        }&newPass=${true}`
+      );
+    } catch (error) {
+      setError(error.message);
+      setErrorVisible(true);
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
   return (
     <SafeAreaView
@@ -34,6 +65,7 @@ export default function ForgotPass() {
         behavior={Platform.OS === "ios" ? "padding" : null}
         style={{ flex: 1 }}
       >
+        <Loader isLoad={isLoading} />
         <View style={[style.main, { backgroundColor: Colors.secondary }]}>
           <AppTitle title={"Forgot Password"} style={style} />
           <ScrollView showsVerticalScrollIndicator={false}>
@@ -43,17 +75,16 @@ export default function ForgotPass() {
               Please enter your email address . You will receive a code to
               create a new password via email.
             </Text>
+            <AppForm
+              initialValues={{ email: "" }}
+              onSubmit={handleSend}
+              validationSchema={validationSchema}
+            >
+              <AppErrorMessage error={error} visible={errorVisible} />
 
-            <AppInput
-              placeholder="EMAIL"
-              // onChangeText={(text) => setEmail(text)}
-              style={style}
-            />
-            <AppButton
-              title="SEND"
-              onPress={() => router.push("/screens/Authentication/EmailVerify")}
-              style={style}
-            />
+              <AppFormField name={"email"} placeholder="EMAIL" style={style} />
+              <SubmitButton title="SEND" style={style} />
+            </AppForm>
           </ScrollView>
         </View>
       </KeyboardAvoidingView>
