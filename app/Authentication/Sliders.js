@@ -8,11 +8,11 @@ import {
 } from "react-native";
 import React, { useState, useRef } from "react";
 import { useRouter } from "expo-router";
-import style from "../../theme/style";
-import { Colors } from "../../theme/color";
-import IntroItem from "../../components/IntroItem";
-import Slides from "../../constants/Slides";
-import AppButton from "../../components/AppButton";
+import style from "../theme/style";
+import { Colors } from "../theme/color";
+import IntroItem from "../components/IntroItem";
+import Slides from "../constants/Slides";
+import AppButton from "../components/AppButton";
 
 const width = Dimensions.get("screen").width;
 
@@ -61,7 +61,7 @@ const Sliders = () => {
       {currentSlideIndex === Slides.length - 1 && (
         <AppButton
           title="Continue"
-          onPress={() => router.push("/screens/Authentication/Login")}
+          onPress={() => router.push("/Authentication/Login")}
           style={style}
           paddingVertical={20}
         />

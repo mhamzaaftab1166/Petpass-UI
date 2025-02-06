@@ -8,15 +8,15 @@ import {
 } from "react-native";
 import React, { useState } from "react";
 import { useLocalSearchParams, useRouter } from "expo-router";
-import style from "../../theme/style";
-import { Colors } from "../../theme/color";
+import style from "../theme/style";
+import { Colors } from "../theme/color";
 import OtpInputs from "react-native-otp-textinput";
-import AppButton from "../../components/AppButton";
-import AppTitle from "../../components/AppTitle";
-import userService from "../../services/userService";
-import AuthenticationSuccess from "../../ESB/success/authentication.json";
-import AppErrorMessage from "../../components/forms/AppErrorMessage";
-import Loader from "../../components/Loader";
+import AppButton from "../components/AppButton";
+import AppTitle from "../components/AppTitle";
+import userService from "../services/userService";
+import AuthenticationSuccess from "../ESB/success/authentication.json";
+import AppErrorMessage from "../components/forms/AppErrorMessage";
+import Loader from "../components/Loader";
 
 const width = Dimensions.get("screen").width;
 const height = Dimensions.get("screen").height;
@@ -62,10 +62,10 @@ export default function Verify2() {
       if (email&&!newPass) {
         const data = await userService.emailVerify({ email, otp });
         if (AuthenticationSuccess.otpVerify === data?.message) {
-          router.push("/screens/Authentication/Login");
+          router.push("/Authentication/Login");
         }
       } else {
-        router.push(`/screens/Authentication/NewPassword?email=${email}`);
+        router.push(`/Authentication/NewPassword?email=${email}`);
       }
     } catch (error) {
       setErrorVisible(true);

@@ -1,12 +1,23 @@
-import {
-  Dimensions,
-} from "react-native";
-import React, {  } from "react";
-import Sliders from "./screens/Authentication/Sliders";
+import { Dimensions } from "react-native";
+import React, { useEffect, useState } from "react";
+import authServices from "./services/authService";
+import HomeIndex from "./(home)/index";
+import Sliders from "./Authentication/Sliders";
 
 const width = Dimensions.get("screen").width;
 
 export default function Introduction() {
-  
- return <Sliders/>
+  const [token, setToken] = useState();
+
+  useEffect(() => {
+    const fetchToken = async () => {
+      const token = await authServices.getToken();
+      setToken(token);
+      console.log(token, "tjdh");
+    };
+
+    fetchToken();
+  }, []);
+
+  return token ? <HomeIndex /> : <Sliders />;
 }

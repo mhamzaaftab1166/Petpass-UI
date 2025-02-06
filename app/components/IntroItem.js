@@ -41,7 +41,7 @@ export default function IntroItem({ item }) {
               }}
             >
               <TouchableOpacity
-                onPress={() => router.push("/screens/Authentication/Login")}
+                onPress={() => router.push("/Authentication/Login")}
               >
                 <Text style={[style.r16, { color: Colors.secondary }]}>
                   Skip

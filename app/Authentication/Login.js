@@ -12,18 +12,18 @@ import {
 } from "react-native";
 import React, { useState } from "react";
 import Icon from "react-native-vector-icons/Ionicons";
-import { Colors } from "../../theme/color";
-import style from "../../theme/style";
+import { Colors } from "../theme/color";
+import style from "../theme/style";
 import { useRouter } from "expo-router";
-import AppTitle from "../../components/AppTitle";
-import AppFormField from "../../components/forms/AppFormFeild";
-import AppForm from "../../components/forms/AppForm";
+import AppTitle from "../components/AppTitle";
+import AppFormField from "../components/forms/AppFormFeild";
+import AppForm from "../components/forms/AppForm";
 import * as Yup from "yup";
-import SubmitButton from "../../components/forms/SubmitButton";
-import AppErrorMessage from "../../components/forms/AppErrorMessage";
-import authService from "../../services/authService";
-import Loader from "../../components/Loader";
-import AuthenticationSuccess from "../../ESB/success/authentication.json";
+import SubmitButton from "../components/forms/SubmitButton";
+import AppErrorMessage from "../components/forms/AppErrorMessage";
+import authService from "../services/authService";
+import Loader from "../components/Loader";
+import AuthenticationSuccess from "../ESB/success/authentication.json";
 const width = Dimensions.get("screen").width;
 const height = Dimensions.get("screen").height;
 const validationSchema = Yup.object({
@@ -44,6 +44,7 @@ export default function Login() {
       if (data?.message === AuthenticationSuccess.loginSuccess) {
         await authService.storeToken(data?.accessToken);
       }
+      router.replace("(home)");
     } catch (error) {
       setErrorVisible(true);
       setError(error.message);
@@ -91,7 +92,7 @@ export default function Login() {
               <View style={{ alignItems: "flex-end", marginTop: 10 }}>
                 <TouchableOpacity
                   onPress={() =>
-                    router.push("/screens/Authentication/ForgotPassword")
+                    router.push("/Authentication/ForgotPassword")
                   }
                 >
                   <Text style={[style.r14, { color: Colors.disable }]}>
@@ -119,7 +120,7 @@ export default function Login() {
                 ]}
               >
                 <Image
-                  source={require("../../../assets/images/authentication/Google.png")}
+                  source={require("../../assets/images/authentication/Google.png")}
                   resizeMode="stretch"
                   style={{ width: width / 11, height: height / 35 }}
                 />
@@ -135,7 +136,7 @@ export default function Login() {
                 ]}
               >
                 <Image
-                  source={require("../../../assets/images/authentication/facebook.png")}
+                  source={require("../../assets/images/authentication/facebook.png")}
                   resizeMode="stretch"
                   style={{ width: width / 25, height: height / 37 }}
                 />
@@ -157,7 +158,7 @@ export default function Login() {
                 Don't have an account?
               </Text>
               <TouchableOpacity
-                onPress={() => router.push("/screens/Authentication/Signup")}
+                onPress={() => router.push("/Authentication/Signup")}
               >
                 <Text style={[style.b14, { color: Colors.primary }]}>
                   {" "}

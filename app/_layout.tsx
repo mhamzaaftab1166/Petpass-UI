@@ -1,16 +1,35 @@
 import { useEffect } from "react";
-import AuthNavigator from "./layouts/AuthNavigator";
-import authServices from "./services/authService";
+import { Stack } from "expo-router";
 
 export default function RootLayout() {
-  useEffect(() => {
-    const fetchToken = async () => {
-      const token = await authServices.getToken();
-      console.log(token,"tjdh");
-    };
 
-    fetchToken();
-  }, []);
-
-  return <AuthNavigator />;
+  return (
+    <Stack>
+      <Stack.Screen name="index" options={{ headerShown: false }} />
+      <Stack.Screen
+        name="Authentication/Login"
+        options={{ headerShown: false }}
+      />
+      <Stack.Screen
+        name="Authentication/Signup"
+        options={{ headerShown: false }}
+      />
+      <Stack.Screen
+        name="Authentication/EmailVerify"
+        options={{ headerShown: false }}
+      />
+      <Stack.Screen
+        name="Authentication/ForgotPassword"
+        options={{ headerShown: false }}
+      />
+      <Stack.Screen
+        name="Authentication/NewPassword"
+        options={{ headerShown: false }}
+      />
+      <Stack.Screen
+        name="(home)"
+        options={{ headerShown: false }}
+      />
+    </Stack>
+  );
 }
