@@ -3,8 +3,6 @@ import {
   Text,
   SafeAreaView,
   Dimensions,
-  TouchableOpacity,
-  TextInput,
   ScrollView,
   KeyboardAvoidingView,
   Platform,
@@ -13,8 +11,6 @@ import React, { useState } from "react";
 import { Colors } from "../../theme/color";
 import style from "../../theme/style";
 import { useRouter } from "expo-router";
-import AppInput from "../../components/AppInput";
-import AppButton from "../../components/AppButton";
 import AppTitle from "../../components/AppTitle";
 import AppForm from "../../components/forms/AppForm";
 import AppErrorMessage from "../../components/forms/AppErrorMessage";
