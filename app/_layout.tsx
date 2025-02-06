@@ -7,6 +7,10 @@ export default function RootLayout() {
     <Stack>
       <Stack.Screen name="index" options={{ headerShown: false }} />
       <Stack.Screen
+        name="Authentication/Sliders"
+        options={{ headerShown: false }}
+      />
+      <Stack.Screen
         name="Authentication/Login"
         options={{ headerShown: false }}
       />
@@ -26,10 +30,7 @@ export default function RootLayout() {
         name="Authentication/NewPassword"
         options={{ headerShown: false }}
       />
-      <Stack.Screen
-        name="(home)"
-        options={{ headerShown: false }}
-      />
+      <Stack.Screen name="(home)" options={{ headerShown: false }} />
     </Stack>
   );
 }

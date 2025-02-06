@@ -6,9 +6,9 @@ const useUserStore = create((set) => ({
   token: null,
   setUser: (userData) => set({ user: userData }),
   setToken: (tokenData) => set({ token: tokenData }),
-  clearUser: () => {
+  clearUser: async() => {
     set({ user: null, token: null });
-    authService.removeToken();
+    await authService.removeToken();
   },
 }));
 

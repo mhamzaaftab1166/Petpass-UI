@@ -1,9 +1,9 @@
 import { Dimensions } from "react-native";
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import authServices from "./services/authService";
-import HomeIndex from "./(home)/index";
 import Sliders from "./Authentication/Sliders";
 import { useUserStore } from "./store/useStore";
+import { Redirect } from "expo-router";
 
 const width = Dimensions.get("screen").width;
 
@@ -12,12 +12,12 @@ export default function Introduction() {
 
   useEffect(() => {
     const fetchToken = async () => {
-      const token = await authServices.getToken();
-      setToken(token);
+      const storedToken = await authServices.getToken();
+      setToken(storedToken);
     };
 
     fetchToken();
   }, []);
 
-  return token ? <HomeIndex /> : <Sliders />;
+  return token ? <Redirect href="(home)" /> : <Sliders />;
 }

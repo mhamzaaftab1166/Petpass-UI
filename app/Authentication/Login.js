@@ -24,6 +24,8 @@ import AppErrorMessage from "../components/forms/AppErrorMessage";
 import authService from "../services/authService";
 import Loader from "../components/Loader";
 import AuthenticationSuccess from "../ESB/success/authentication.json";
+import { useUserStore } from "../store/useStore";
+
 const width = Dimensions.get("screen").width;
 const height = Dimensions.get("screen").height;
 const validationSchema = Yup.object({
@@ -32,6 +34,7 @@ const validationSchema = Yup.object({
 });
 
 export default function Login() {
+  const { setToken } = useUserStore();
   const router = useRouter();
   const [error, setError] = useState();
   const [errorVisible, setErrorVisible] = useState(false);
@@ -44,6 +47,7 @@ export default function Login() {
       if (data?.message === AuthenticationSuccess.loginSuccess) {
         await authService.storeToken(data?.accessToken);
       }
+      setToken(data?.accessToken);
       router.replace("(home)");
     } catch (error) {
       setErrorVisible(true);
@@ -91,9 +95,7 @@ export default function Login() {
 
               <View style={{ alignItems: "flex-end", marginTop: 10 }}>
                 <TouchableOpacity
-                  onPress={() =>
-                    router.push("/Authentication/ForgotPassword")
-                  }
+                  onPress={() => router.push("/Authentication/ForgotPassword")}
                 >
                   <Text style={[style.r14, { color: Colors.disable }]}>
                     Forgot Password?
