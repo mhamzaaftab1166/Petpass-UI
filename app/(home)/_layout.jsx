@@ -2,25 +2,21 @@
 import React, { useRef, useEffect } from "react";
 import { Animated, View } from "react-native";
 import { Tabs } from "expo-router";
-import { MaterialCommunityIcons, Ionicons, Feather } from "@expo/vector-icons"; // Import from Expo Vector Icons
+import { MaterialCommunityIcons, Ionicons, Feather } from "@expo/vector-icons";
 import { Colors } from "../theme/color"; // Adjust the path as needed
 
-// AnimatedTabIcon component: Adds a scale animation on the icon and a popping bubble effect behind it.
 const AnimatedTabIcon = ({ focused, children }) => {
   const iconScale = useRef(new Animated.Value(1)).current;
   const bubbleScale = useRef(new Animated.Value(0)).current;
 
   useEffect(() => {
     if (focused) {
-      // When focused, animate both the icon scale and the background bubble.
       Animated.parallel([
-        // Animate the icon to scale up
         Animated.spring(iconScale, {
           toValue: 1.3,
           friction: 4,
           useNativeDriver: true,
         }),
-        // Animate a bubble pop: scale up quickly then back down.
         Animated.sequence([
           Animated.timing(bubbleScale, {
             toValue: 1,
@@ -77,7 +73,7 @@ export default function TabLayout() {
           position: "absolute",
           left: 16,
           right: 16,
-          height: 65,
+          height: 75,
           elevation: 0,
           backgroundColor: "white",
           borderRadius: 16,
