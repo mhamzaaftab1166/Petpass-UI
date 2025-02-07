@@ -155,7 +155,7 @@ export default function MyAccount() {
         </View>
 
         <View
-          style={[style.divider, { marginTop: 20, marginBottom: 30 }]}
+          style={[style.divider, { marginTop: 20, marginBottom: 50 }]}
         ></View>
 
         <ScrollView showsVerticalScrollIndicator={false}>
@@ -189,43 +189,48 @@ export default function MyAccount() {
               materialIcon: true,
               isRed: true,
             },
-          ].map((item, index) => (
-            <TouchableOpacity
-              key={index}
-              onPress={() => item.route && router.push(item.route)}
-              style={{
-                flexDirection: "row",
-                alignItems: "center",
-                marginBottom: 20,
-              }}
-            >
-              {item.materialIcon ? (
-                <MaterialCommunityIcons
-                  name={item.icon}
-                  size={25}
-                  color={Colors.active}
-                />
-              ) : (
-                <Ionicons name={item.icon} size={25} color={Colors.active} />
+          ].map((item, index, array) => (
+            <View key={index}>
+              <TouchableOpacity
+                onPress={() => item.route && router.push(item.route)}
+                style={{
+                  flexDirection: "row",
+                  alignItems: "center",
+                  marginBottom: 20,
+                }}
+              >
+                {item.materialIcon ? (
+                  <MaterialCommunityIcons
+                    name={item.icon}
+                    size={25}
+                    color={Colors.active}
+                  />
+                ) : (
+                  <Ionicons name={item.icon} size={25} color={Colors.active} />
+                )}
+                <View style={{ marginLeft: 10 }}>
+                  <Text
+                    style={[
+                      style.s16,
+                      { color: item.isRed ? "red" : Colors.active },
+                    ]}
+                  >
+                    {item.name}
+                  </Text>
+                </View>
+                <View style={{ alignItems: "flex-end", flex: 1 }}>
+                  <Ionicons
+                    name="chevron-forward"
+                    size={20}
+                    color={Colors.disable}
+                  />
+                </View>
+              </TouchableOpacity>
+
+              {index !== array.length - 1 && (
+                <View style={[style.divider, { marginBottom: 20 }]} />
               )}
-              <View style={{ marginLeft: 10 }}>
-                <Text
-                  style={[
-                    style.s16,
-                    { color: item.isRed ? "red" : Colors.active },
-                  ]}
-                >
-                  {item.name}
-                </Text>
-              </View>
-              <View style={{ alignItems: "flex-end", flex: 1 }}>
-                <Ionicons
-                  name="chevron-forward"
-                  size={20}
-                  color={Colors.disable}
-                />
-              </View>
-            </TouchableOpacity>
+            </View>
           ))}
         </ScrollView>
       </View>
