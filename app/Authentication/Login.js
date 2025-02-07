@@ -9,6 +9,7 @@ import {
   ScrollView,
   KeyboardAvoidingView,
   Platform,
+  StyleSheet,
 } from "react-native";
 import React, { useState } from "react";
 import Icon from "react-native-vector-icons/Ionicons";
@@ -26,8 +27,8 @@ import authService from "../services/authService";
 import Loader from "../components/Loader/Loader";
 import AuthenticationSuccess from "../ESB/success/authentication.json";
 import { useUserStore } from "../store/useStore";
-import { Checkbox } from "react-native-paper";
 import { localStorageConst } from "../constants/storageConstant";
+import Checkbox from "expo-checkbox";
 
 const width = Dimensions.get("screen").width;
 const height = Dimensions.get("screen").height;
@@ -108,18 +109,17 @@ export default function Login() {
                   marginTop: 10,
                 }}
               >
-                <TouchableOpacity
-                  style={{ flexDirection: "row", alignItems: "center" }}
-                  onPress={() => setRememberMe(!rememberMe)}
-                >
+                <View style={{ flexDirection: "row", alignItems: "center" }}>
                   <Checkbox
-                    status={rememberMe ? "checked" : "unchecked"}
-                    color={Colors.primary}
+                  style={styles.checkbox}
+                    value={rememberMe}
+                    onValueChange={setRememberMe}
+                    color={rememberMe ? Colors?.primary : Colors?.border}
                   />
                   <Text style={[style.r14, { color: Colors.disable }]}>
                     Remember Me
                   </Text>
-                </TouchableOpacity>
+                </View>
                 <TouchableOpacity
                   onPress={() => router.push("/Authentication/ForgotPassword")}
                 >
@@ -200,3 +200,11 @@ export default function Login() {
     </SafeAreaView>
   );
 }
+
+const styles = StyleSheet.create({
+  checkbox: {
+    margin: 6,
+    borderRadius: 10,
+    fontFamily: "Avenir-bold"
+  }
+});
