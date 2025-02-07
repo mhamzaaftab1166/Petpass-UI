@@ -1,5 +1,6 @@
 import { create } from "zustand";
 import storeage from "../helper/localStorage";
+import { localStorageConst } from "../constants/storageConstant";
 
 const useUserStore = create((set) => ({
   user: null,
@@ -8,7 +9,7 @@ const useUserStore = create((set) => ({
   setToken: (tokenData) => set({ token: tokenData }),
   clearUser: async() => {
     set({ user: null, token: null });
-    await storeage.removeToken();
+    await storeage.removeToken(localStorageConst.JWTUSER);
   },
 }));
 

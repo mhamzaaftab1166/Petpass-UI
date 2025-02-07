@@ -1,10 +1,11 @@
 import { ActivityIndicator, Dimensions } from "react-native";
 import { useFonts } from "expo-font";
 import React, { useEffect } from "react";
-import authServices from "./services/authService";
+import storage from "./helper/localStorage";
 import Sliders from "./Authentication/Sliders";
 import { useUserStore } from "./store/useStore";
 import { Redirect } from "expo-router";
+import { localStorageConst } from "./constants/storageConstant";
 
 const width = Dimensions.get("screen").width;
 
@@ -21,12 +22,13 @@ export default function Introduction() {
 
   useEffect(() => {
     const fetchToken = async () => {
-      const storedToken = await authServices.getToken();
+      const storedToken = await storage.getToken(localStorageConst.JWTUSER);
       setToken(storedToken);
     };
 
     fetchToken();
   }, []);
+console.log(token);
 
 
   if (!fontsLoaded) {

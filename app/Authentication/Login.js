@@ -21,12 +21,13 @@ import AppForm from "../components/forms/AppForm";
 import * as Yup from "yup";
 import SubmitButton from "../components/forms/SubmitButton";
 import AppErrorMessage from "../components/forms/AppErrorMessage";
-import storeage from "../helper/localStorage"
+import storeage from "../helper/localStorage";
 import authService from "../services/authService";
 import Loader from "../components/Loader/Loader";
 import AuthenticationSuccess from "../ESB/success/authentication.json";
 import { useUserStore } from "../store/useStore";
 import { Checkbox } from "react-native-paper";
+import { localStorageConst } from "../constants/storageConstant";
 
 const width = Dimensions.get("screen").width;
 const height = Dimensions.get("screen").height;
@@ -47,8 +48,11 @@ export default function Login() {
     try {
       setIsLoading(true);
       const data = await authService.login(userInfo);
-      if (data?.message === AuthenticationSuccess.loginSuccess) {        
-        await storeage.storeToken(rememberMe ? data?.refreshToken : data?.accessToken);
+      if (data?.message === AuthenticationSuccess.loginSuccess) {
+        await storeage.storeToken(
+          localStorageConst.JWTUSER,
+          rememberMe ? data?.refreshToken : data?.accessToken
+        );
       }
       setToken(rememberMe ? data?.refreshToken : data?.accessToken);
       router.replace("(home)");
@@ -100,7 +104,7 @@ export default function Login() {
                 style={{
                   flexDirection: "row",
                   justifyContent: "space-between",
-                  alignItems: 'center',
+                  alignItems: "center",
                   marginTop: 10,
                 }}
               >
@@ -108,13 +112,11 @@ export default function Login() {
                   style={{ flexDirection: "row", alignItems: "center" }}
                   onPress={() => setRememberMe(!rememberMe)}
                 >
-                  <Checkbox status={rememberMe ? "checked" : "unchecked"} color={Colors.primary}/>
-                  <Text
-                    style={[
-                      style.r14,
-                      { color: Colors.disable },
-                    ]}
-                  >
+                  <Checkbox
+                    status={rememberMe ? "checked" : "unchecked"}
+                    color={Colors.primary}
+                  />
+                  <Text style={[style.r14, { color: Colors.disable }]}>
                     Remember Me
                   </Text>
                 </TouchableOpacity>
