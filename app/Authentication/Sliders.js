@@ -10,9 +10,9 @@ import React, { useState, useRef } from "react";
 import { useRouter } from "expo-router";
 import style from "../theme/style";
 import { Colors } from "../theme/color";
-import IntroItem from "../components/IntroItem";
-import Slides from "../constants/Slides";
-import AppButton from "../components/AppButton";
+import IntroItem from "../components/IntroItem/IntroItem";
+import AppButton from "../components/AppButton/AppButton";
+import { sliders } from "../constants/slidersContant";
 
 const width = Dimensions.get("screen").width;
 
@@ -37,10 +37,10 @@ const Sliders = () => {
   };
 
   const Footer = () => (
-    <View style={{ paddingHorizontal: 20, backgroundColor: Colors.secondary }}>
+    <View style={{ paddingHorizontal: 20,  paddingVertical: 20, backgroundColor: Colors.secondary }}>
       {/* Indicator Dots */}
       <View style={{ flexDirection: "row", alignSelf: "center" }}>
-        {Slides.map((_, index) => (
+        {sliders.map((_, index) => (
           <View
             key={index}
             style={[
@@ -57,10 +57,9 @@ const Sliders = () => {
           />
         ))}
       </View>
-
-      {currentSlideIndex === Slides.length - 1 && (
+      {currentSlideIndex === sliders.length - 1 && (
         <AppButton
-          title="Continue"
+          title="Get Started"
           onPress={() => router.push("/Authentication/Login")}
           style={style}
           paddingVertical={20}
@@ -72,7 +71,7 @@ const Sliders = () => {
   return (
     <SafeAreaView style={{ flex: 1 }}>
       <FlatList
-        data={Slides}
+        data={sliders}
         ref={ref}
         renderItem={({ item }) => <IntroItem item={item} />}
         horizontal

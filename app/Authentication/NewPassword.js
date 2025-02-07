@@ -10,14 +10,14 @@ import React, { useState } from "react";
 import { Colors } from "../theme/color";
 import style from "../theme/style";
 import { useLocalSearchParams, useRouter } from "expo-router";
-import AppTitle from "../components/AppTitle";
+import AppTitle from "../components/AppTitle/AppTitle";
 import AppErrorMessage from "../components/forms/AppErrorMessage";
 import AppForm from "../components/forms/AppForm";
 import AppFormField from "../components/forms/AppFormFeild";
 import SubmitButton from "../components/forms/SubmitButton";
 import * as Yup from "yup";
-import userService from "../services/userService";
-import Loader from "../components/Loader";
+import authService from "../services/authService";
+import Loader from "../components/Loader/Loader";
 
 const width = Dimensions.get("screen").width;
 const height = Dimensions.get("screen").height;
@@ -39,7 +39,7 @@ export default function NewPass() {
   const handleSubmit = async (userInfo) => {
     try {
       setIsLoading(true);
-      await userService.resetPassword({ email, password: userInfo.password });
+      await authService.resetPassword({ email, password: userInfo.password });
       router.push("/Authentication/Login");
     } catch (error) {
       setErrorVisible(true);

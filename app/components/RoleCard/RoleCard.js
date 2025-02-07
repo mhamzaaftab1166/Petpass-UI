@@ -1,7 +1,7 @@
 import React from "react";
 import { View, Text, TouchableOpacity, Image, Dimensions } from "react-native";
-import style from "../theme/style";
-import { Colors } from "../theme/color";
+import style from "../../theme/style";
+import { Colors } from "../../theme/color";
 
 const { width, height } = Dimensions.get("screen");
 

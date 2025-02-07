@@ -1,6 +1,6 @@
 import React from "react";
 import { useFormikContext } from "formik";
-import AppRoleSelector from "../AppRoleSelector";
+import AppRoleSelector from "../AppRoleSelector/AppRoleSelector";
 import AppErrorMessage from "./AppErrorMessage";
 
 const AppFormRoleSelector = ({ name, parentStyles }) => {

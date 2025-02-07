@@ -1,40 +1,37 @@
-import { _axios } from "./httpService";
-import * as SecureStore from "expo-secure-store";
+import { _axios } from "../helper/httpService";
 
 const key= "authToken";
 const login = (user) => {  
   return _axios("post", "/auth/login", user);
 };
 
-const storeToken = async (authToken) => {
-  try {
-    await SecureStore.setItemAsync(key, authToken);
-  } catch (error) {
-    console.log("error storing auth token", error);
-  }
+const register = (user) => {  
+  return _axios('post',  "/auth/register", user);
 };
 
-const getToken = async () => {
-  try {
-    return await SecureStore.getItemAsync(key);
-  } catch (error) {
-    console.log("error getting auth token", error);
-  }
+const emailVerify = (payload) => {
+  return _axios("post", "/auth/verify-otp", payload);
 };
 
-
-const removeToken = async () => {
-  try {
-    await SecureStore.deleteItemAsync(key);
-  } catch (error) {
-    console.log("error deleting auth token", error);
-  }
+const resend = (payload) => {
+  return _axios("post", "/auth/resend-otp", payload);
 };
+
+const forgotPassword = (payload) => {
+  return _axios("post", "/auth/forgot-password", payload);
+}; 
+
+const resetPassword = (payload) => {
+  return _axios("post", "/auth/reset-password", payload);
+}; 
 
 
 export default {
   login,
-  removeToken,
-  storeToken,
-  getToken,
+  register,
+  emailVerify,
+  resend,
+  forgotPassword,
+  resetPassword,
 };
+

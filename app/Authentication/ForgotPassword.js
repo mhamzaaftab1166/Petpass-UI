@@ -11,14 +11,14 @@ import React, { useState } from "react";
 import { Colors } from "../theme/color";
 import style from "../theme/style";
 import { useRouter } from "expo-router";
-import AppTitle from "../components/AppTitle";
+import AppTitle from "../components/AppTitle/AppTitle";
 import AppForm from "../components/forms/AppForm";
 import AppErrorMessage from "../components/forms/AppErrorMessage";
 import AppFormField from "../components/forms/AppFormFeild";
 import * as Yup from "yup";
 import SubmitButton from "../components/forms/SubmitButton";
-import userService from "../services/userService";
-import Loader from "../components/Loader";
+import authService from "../services/authService";
+import Loader from "../components/Loader/Loader";
 
 const width = Dimensions.get("screen").width;
 const height = Dimensions.get("screen").height;
@@ -36,7 +36,7 @@ export default function ForgotPass() {
     console.log(userInfo);
     try {
       setIsLoading(true);
-      await userService.forgotPassword({ email: userInfo?.email });
+      await authService.forgotPassword({ email: userInfo?.email });
       router.push(
         `/Authentication/EmailVerify?email=${
           userInfo?.email

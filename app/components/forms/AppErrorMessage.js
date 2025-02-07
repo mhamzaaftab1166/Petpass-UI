@@ -1,6 +1,6 @@
 import React from "react";
 import { StyleSheet } from "react-native";
-import AppText from "../AppText";
+import AppText from "../AppText/AppText";
 
 function AppErrorMessage({ error, visible }) {
   return error && visible ? (
@@ -10,7 +10,9 @@ function AppErrorMessage({ error, visible }) {
 
 const styles = StyleSheet.create({
   error: {
+    marginTop: 10,
     color: "red",
+    fontFamily: "Avenir-Bold"
   },
 });
 

@@ -1,4 +1,4 @@
-export default [
+export const sliders = [
   {
     id: 1,
     title1: "Share useful tips",

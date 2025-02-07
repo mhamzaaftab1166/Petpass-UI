@@ -15,7 +15,7 @@ import {
 import { useRouter } from "expo-router";
 import { Colors } from "../theme/color";
 import style from "../theme/style";
-import AppTitle from "../components/AppTitle";
+import AppTitle from "../components/AppTitle/AppTitle";
 import * as Yup from "yup";
 import AppForm from "../components/forms/AppForm";
 import AppErrorMessage from "../components/forms/AppErrorMessage";
@@ -23,10 +23,10 @@ import AppFormField from "../components/forms/AppFormFeild";
 import SubmitButton from "../components/forms/SubmitButton";
 import AppFormPhoneField from "../components/forms/AppFormPhoneFeild";
 import AppFormRoleSelector from "../components/forms/AppFormRoleSelector";
-import userService from "../services/userService";
+import authService from "../services/authService";
 import { formatRegisterPayload } from "../utils/authenticationUtils";
 import AuthenticationSuccess from "../ESB/success/authentication.json";
-import Loader from "../components/Loader";
+import Loader from "../components/Loader/Loader";
 
 const width = Dimensions.get("screen").width;
 const height = Dimensions.get("screen").height;
@@ -49,7 +49,7 @@ export default function Signup() {
     try {
       setIsLoading(true);
       const formattedPayload = formatRegisterPayload(userInfo);
-      const data = await userService.register(formattedPayload);
+      const data = await authService.register(formattedPayload);
       if (data?.message === AuthenticationSuccess.registrationSuccess) {
       router.push(
         `/Authentication/EmailVerify?email=${formattedPayload.email}&username=${formattedPayload.username}`

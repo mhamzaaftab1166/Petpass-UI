@@ -11,7 +11,7 @@ import React from "react";
 import { useRouter } from "expo-router";
 import style from "../theme/style";
 import { Colors } from "../theme/color";
-import AppButton from "../components/AppButton";
+import AppButton from "../components/AppButton/AppButton";
 
 const width = Dimensions.get("screen").width;
 const height = Dimensions.get("screen").height;

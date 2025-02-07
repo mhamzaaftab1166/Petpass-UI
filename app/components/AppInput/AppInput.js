@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { TextInput, View, StyleSheet, TouchableOpacity } from "react-native";
-import { Colors } from "../theme/color";
+import { Colors } from "../../theme/color";
 import Icon from "react-native-vector-icons/Ionicons";
 
 const AppInput = ({

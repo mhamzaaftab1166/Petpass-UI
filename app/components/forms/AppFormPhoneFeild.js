@@ -1,7 +1,7 @@
 import React from "react";
 import { useFormikContext } from "formik";
 import AppErrorMessage from "./AppErrorMessage";
-import AppPhoneInput from "../AppPhoneInput";
+import AppPhoneInput from "../AppPhoneInput/AppPhoneInput";
 
 function AppFormPhoneField({ name, parentStyles, style, ...otherProps }) {
   const { touched, setFieldTouched, errors, values, setFieldValue } =

@@ -15,16 +15,18 @@ import Icon from "react-native-vector-icons/Ionicons";
 import { Colors } from "../theme/color";
 import style from "../theme/style";
 import { useRouter } from "expo-router";
-import AppTitle from "../components/AppTitle";
+import AppTitle from "../components/AppTitle/AppTitle";
 import AppFormField from "../components/forms/AppFormFeild";
 import AppForm from "../components/forms/AppForm";
 import * as Yup from "yup";
 import SubmitButton from "../components/forms/SubmitButton";
 import AppErrorMessage from "../components/forms/AppErrorMessage";
+import storeage from "../helper/localStorage"
 import authService from "../services/authService";
-import Loader from "../components/Loader";
+import Loader from "../components/Loader/Loader";
 import AuthenticationSuccess from "../ESB/success/authentication.json";
 import { useUserStore } from "../store/useStore";
+import { Checkbox } from "react-native-paper";
 
 const width = Dimensions.get("screen").width;
 const height = Dimensions.get("screen").height;
@@ -34,20 +36,21 @@ const validationSchema = Yup.object({
 });
 
 export default function Login() {
-  const { setToken } = useUserStore();
   const router = useRouter();
+  const { setToken } = useUserStore();
   const [error, setError] = useState();
   const [errorVisible, setErrorVisible] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+  const [rememberMe, setRememberMe] = useState(false);
 
   const handleSubmit = async (userInfo) => {
     try {
       setIsLoading(true);
       const data = await authService.login(userInfo);
-      if (data?.message === AuthenticationSuccess.loginSuccess) {
-        await authService.storeToken(data?.accessToken);
+      if (data?.message === AuthenticationSuccess.loginSuccess) {        
+        await storeage.storeToken(rememberMe ? data?.refreshToken : data?.accessToken);
       }
-      setToken(data?.accessToken);
+      setToken(rememberMe ? data?.refreshToken : data?.accessToken);
       router.replace("(home)");
     } catch (error) {
       setErrorVisible(true);
@@ -76,8 +79,8 @@ export default function Login() {
               onSubmit={handleSubmit}
               validationSchema={validationSchema}
             >
-              <AppErrorMessage error={error} visible={errorVisible} />
               <AppTitle title={"Sign In"} style={style} />
+              <AppErrorMessage error={error} visible={errorVisible} />
 
               <AppFormField name={"email"} placeholder="EMAIL" style={style} />
               <AppFormField
@@ -93,7 +96,28 @@ export default function Login() {
                 }}
               />
 
-              <View style={{ alignItems: "flex-end", marginTop: 10 }}>
+              <View
+                style={{
+                  flexDirection: "row",
+                  justifyContent: "space-between",
+                  alignItems: 'center',
+                  marginTop: 10,
+                }}
+              >
+                <TouchableOpacity
+                  style={{ flexDirection: "row", alignItems: "center" }}
+                  onPress={() => setRememberMe(!rememberMe)}
+                >
+                  <Checkbox status={rememberMe ? "checked" : "unchecked"} color={Colors.primary}/>
+                  <Text
+                    style={[
+                      style.r14,
+                      { color: Colors.disable },
+                    ]}
+                  >
+                    Remember Me
+                  </Text>
+                </TouchableOpacity>
                 <TouchableOpacity
                   onPress={() => router.push("/Authentication/ForgotPassword")}
                 >

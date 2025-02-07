@@ -1,7 +1,7 @@
 import React, { useRef, useState } from "react";
 import { View, StyleSheet } from "react-native";
 import PhoneInput from "react-native-phone-input";
-import { Colors } from "../theme/color";
+import { Colors } from "../../theme/color";
 
 const AppPhoneInput = ({
   placeholder,

@@ -1,4 +1,5 @@
-import { Dimensions } from "react-native";
+import { ActivityIndicator, Dimensions } from "react-native";
+import { useFonts } from "expo-font";
 import React, { useEffect } from "react";
 import authServices from "./services/authService";
 import Sliders from "./Authentication/Sliders";
@@ -9,6 +10,14 @@ const width = Dimensions.get("screen").width;
 
 export default function Introduction() {
   const { token, setToken } = useUserStore();
+  const [fontsLoaded] = useFonts({
+    "Avenir-Regular": require("../assets/fonts/AvenirLTStd-Roman.otf"),
+    "Avenir-SemiBold": require("../assets/fonts/AvenirLTStd-Medium.otf"),
+    "Avenir-Bold": require("../assets/fonts/AvenirLTStd-Black.otf"),
+    "OpenSans-Regular": require("../assets/fonts/OpenSans-Regular.ttf"),
+    "OpenSans-SemiBold": require("../assets/fonts/OpenSans-Semibold.ttf"),
+    "OpenSans-Bold": require("../assets/fonts/OpenSans-Bold.ttf"),
+  });
 
   useEffect(() => {
     const fetchToken = async () => {
@@ -18,6 +27,11 @@ export default function Introduction() {
 
     fetchToken();
   }, []);
+
+
+  if (!fontsLoaded) {
+    return <ActivityIndicator size="large" />;
+  }
 
   return token ? <Redirect href="(home)" /> : <Sliders />;
 }

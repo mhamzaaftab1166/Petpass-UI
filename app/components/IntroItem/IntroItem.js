@@ -10,8 +10,8 @@ import {
 } from "react-native";
 import React from "react";
 import { useRouter } from "expo-router";
-import style from "../theme/style";
-import { Colors } from "../theme/color";
+import style from "../../theme/style";
+import { Colors } from "../../theme/color";
 
 const height = Dimensions.get("screen").height;
 const width = Dimensions.get("screen").width;
@@ -68,7 +68,7 @@ export default function IntroItem({ item }) {
                 <Text
                   style={[
                     style.r16,
-                    { color: Colors.active, textAlign: "center" },
+                    { color: Colors.active, textAlign: "center", fontFamily: "Avenir-Regular", padding: "20px"},
                   ]}
                 >
                   {item.subtitle}

@@ -1,7 +1,7 @@
 import React from "react";
 import { useFormikContext } from "formik";
 import AppErrorMessage from "./AppErrorMessage";
-import AppInput from "../AppInput";
+import AppInput from "../AppInput/AppInput";
 
 function AppFormField({
   name,

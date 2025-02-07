@@ -1,5 +1,5 @@
 import { create } from "zustand";
-import authService from "../services/authService";
+import storeage from "../helper/localStorage";
 
 const useUserStore = create((set) => ({
   user: null,
@@ -8,7 +8,7 @@ const useUserStore = create((set) => ({
   setToken: (tokenData) => set({ token: tokenData }),
   clearUser: async() => {
     set({ user: null, token: null });
-    await authService.removeToken();
+    await storeage.removeToken();
   },
 }));
 
