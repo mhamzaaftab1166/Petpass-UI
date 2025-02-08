@@ -4,15 +4,20 @@ import storage from "./localStorage";
 import { localStorageConst } from "../constants/storageConstant";
 
 
-const token =
-"Bearer " + storage.getAppData(localStorageConst.JWTUSER);
+const getStoredToken = async () => {
+  const storedToken = await storage.getAppData(localStorageConst.JWTUSER);
+  console.log(storedToken, 'storedToken11111');
+  return storedToken;
+};
 
-export const _axios = async (method, url, body, contentType) => {
+
+export const _axios = async (method, url, body, contentType) => {  
   try {
+    const token = await getStoredToken();    
     const response = await axios({
       headers: {
         "Content-Type": contentType || "application/json",
-        Authorization: token,
+        Authorization: token ? `Bearer ${token}` : "",
       },
       method: method,
       url: config.baseUrl + url,

@@ -1,4 +1,4 @@
-import { ActivityIndicator, Dimensions, useColorScheme } from "react-native";
+import { ActivityIndicator, Dimensions } from "react-native";
 import { useFonts } from "expo-font";
 import React, { useEffect, useState } from "react";
 import storage from "./helper/localStorage";
@@ -20,11 +20,7 @@ export default function Introduction() {
     "OpenSans-Bold": require("../assets/fonts/OpenSans-Bold.ttf"),
   });
 
-  const colorScheme = useColorScheme(); // Get system theme (dark or light)
-  const isDarkMode = colorScheme === "dark";
-
   useEffect(() => {
-    storage.storeAppData(localStorageConst.THEME, isDarkMode ? "dark" : "light")
     const fetchToken = async () => {
       const storedToken = await storage.getAppData(localStorageConst.JWTUSER);
       setToken(storedToken);
@@ -33,11 +29,9 @@ export default function Introduction() {
     fetchToken();
   }, []);
 
-  console.log(token);
-
   if (!fontsLoaded) {
-    return <ActivityIndicator size="large" color={isDarkMode ? "#FFF" : "#000"} />;
+    return <ActivityIndicator size="large" />;
   }
 
-  return token ? <Redirect href="(home)" /> : <Sliders theme={isDarkMode ? "dark" : "light"} />;
+  return token ? <Redirect href="(home)" /> : <Sliders />;
 }

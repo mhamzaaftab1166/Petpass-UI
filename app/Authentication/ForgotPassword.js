@@ -19,6 +19,7 @@ import * as Yup from "yup";
 import SubmitButton from "../components/forms/SubmitButton";
 import authService from "../services/authService";
 import Loader from "../components/Loader/Loader";
+import { useTheme } from "../helper/themeProvider";
 
 const width = Dimensions.get("screen").width;
 const height = Dimensions.get("screen").height;
@@ -27,13 +28,13 @@ const validationSchema = Yup.object({
 });
 
 export default function ForgotPass() {
+  const { isDarkMode } = useTheme();
   const [error, setError] = useState();
   const [errorVisible, setErrorVisible] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const router = useRouter();
 
   const handleSend = async (userInfo) => {
-    console.log(userInfo);
     try {
       setIsLoading(true);
       await authService.forgotPassword({ email: userInfo?.email });
@@ -54,7 +55,7 @@ export default function ForgotPass() {
     <SafeAreaView
       style={[
         style.area,
-        { backgroundColor: Colors.secondary, paddingTop: 10 },
+        { backgroundColor: isDarkMode ? Colors.active : Colors.secondary, paddingTop: 10 },
       ]}
     >
       <KeyboardAvoidingView
@@ -62,11 +63,11 @@ export default function ForgotPass() {
         style={{ flex: 1 }}
       >
         <Loader isLoad={isLoading} />
-        <View style={[style.main, { backgroundColor: Colors.secondary }]}>
+        <View style={[style.main, { backgroundColor: isDarkMode ? Colors.active : Colors.secondary }]}>
           <AppTitle title={"Forgot Password"} style={style} />
           <ScrollView showsVerticalScrollIndicator={false}>
             <Text
-              style={[style.r14, { color: Colors.disable1, marginTop: 20 }]}
+              style={[style.r14, { color: isDarkMode ? Colors.secondary : Colors.disable1, marginTop: 20 }]}
             >
               Please enter your email address . You will receive a code to
               create a new password via email.

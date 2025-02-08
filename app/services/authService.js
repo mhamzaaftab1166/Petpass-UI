@@ -26,8 +26,8 @@ const resetPassword = (payload) => {
   return _axios("post", "/auth/reset-password", payload);
 }; 
 
-const validateToken = (payload) => {
-  return _axios("get", "/auth/validate-token", payload);
+const validateToken = () => {
+  return _axios("get", "/auth/validate-token");
 }; 
 
 

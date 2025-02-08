@@ -20,6 +20,7 @@ import logoutIcon from "../../../assets/images/profile/logout.png";
 import style from "../../theme/style";
 import { useRouter } from "expo-router";
 import { useUserStore } from "../../store/useStore";
+import { useTheme } from "../../helper/themeProvider";
 
 const { width, height } = Dimensions.get("screen");
 const iconMap = {
@@ -31,19 +32,20 @@ const iconMap = {
 };
 
 export default function MyAccount() {
-  const {  clearUser } = useUserStore();
   const router = useRouter();
+  const { isDarkMode } = useTheme();
+  const {  clearUser } = useUserStore();
 
   return (
-    <SafeAreaView style={[style.area, { backgroundColor: Colors.secondary }]}>
+    <SafeAreaView style={[style.area, { backgroundColor: isDarkMode ? Colors.active : Colors.secondary }]}>
       <View
         style={[
           style.main,
-          { backgroundColor: Colors.secondary, marginTop: 10 },
+          { backgroundColor: isDarkMode ? Colors.active : Colors.secondary, marginTop: 10 },
         ]}
       >
         <AppBar
-          color={Colors.secondary}
+          color={isDarkMode ? Colors.active : Colors.secondary}
           elevation={0}
           trailing={
             <View style={{ flexDirection: "row", alignItems: "center" }}>
@@ -52,7 +54,7 @@ export default function MyAccount() {
               >
                 <Ionicons
                   name="notifications-outline"
-                  color={Colors.active}
+                  color={isDarkMode ? Colors.secondary : Colors.active}
                   size={30}
                 />
               </TouchableOpacity>
@@ -72,10 +74,10 @@ export default function MyAccount() {
               style={{ backgroundColor: Colors.secondary }}
             />
             <View style={{ marginLeft: 10 }}>
-              <Text style={[style.apptitle, { color: Colors.active }]}>
+              <Text style={[style.apptitle, { color: isDarkMode ? Colors.secondary : Colors.active }]}>
                 Anita Rose
               </Text>
-              <Text style={[style.r14, { color: Colors.disable }]}>
+              <Text style={[style.r14, { color: isDarkMode ? Colors.secondary : Colors.disable }]}>
                 anitarose@gmail.com
               </Text>
             </View>
@@ -83,7 +85,7 @@ export default function MyAccount() {
               <Ionicons
                 name="chevron-forward"
                 size={20}
-                color={Colors.disable}
+                color={isDarkMode ? Colors.secondary : Colors.disable}
               />
             </View>
           </TouchableOpacity>
@@ -101,7 +103,7 @@ export default function MyAccount() {
             style={[
               style.shadow,
               {
-                backgroundColor: Colors.secondary,
+                backgroundColor: isDarkMode ? Colors.secondary : Colors.active,
                 justifyContent: "center",
                 alignItems: "center",
                 height: height / 9,
@@ -205,7 +207,7 @@ export default function MyAccount() {
                 onPress={() => {
                   if (item.name === "Log Out") {
                     clearUser();
-                    router.replace("/Authentication/Sliders");
+                    router.replace("/Authentication/Login");
                   } else if (item.route) {
                     router.push(item.route);
                   }
@@ -225,7 +227,7 @@ export default function MyAccount() {
                   <Text
                     style={[
                       style.s16,
-                      { color: item.isRed ? "red" : Colors.active },
+                      { color: item.isRed ? "red" : isDarkMode ? Colors.secondary : Colors.active },
                     ]}
                   >
                     {item.name}
@@ -235,7 +237,7 @@ export default function MyAccount() {
                   <Ionicons
                     name="chevron-forward"
                     size={20}
-                    color={Colors.disable}
+                    color={isDarkMode ? Colors.secondary : Colors.disable}
                   />
                 </View>
               </TouchableOpacity>

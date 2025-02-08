@@ -2,6 +2,7 @@ import React, { useRef, useState } from "react";
 import { View, StyleSheet } from "react-native";
 import PhoneInput from "react-native-phone-input";
 import { Colors } from "../../theme/color";
+import { useTheme } from "../../helper/themeProvider";
 
 const AppPhoneInput = ({
   placeholder,
@@ -11,7 +12,7 @@ const AppPhoneInput = ({
   parentStyles,
 }) => {
   const phone = useRef(null);
-
+  const { isDarkMode } = useTheme();
   const handlePhoneChange = (number) => {
     if (phone.current) {
       const countryCode = "+" + phone.current.getCountryCode();
@@ -28,7 +29,8 @@ const AppPhoneInput = ({
         value={value}
         onChangePhoneNumber={handlePhoneChange}
         initialCountry="ae"
-        style={[style.r16, { color: Colors.active, flex: 1, paddingLeft: 10 }]}
+        textStyle={{color: isDarkMode ? Colors.secondary : Colors.active,}}
+        style={[style.r16, { color:  isDarkMode ? Colors.secondary : Colors.active, flex: 1, paddingLeft: 10 }]}
         textProps={{
           placeholder: placeholder,
         }}

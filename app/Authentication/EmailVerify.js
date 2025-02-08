@@ -17,11 +17,13 @@ import authService from "../services/authService";
 import AuthenticationSuccess from "../ESB/success/authentication.json";
 import AppErrorMessage from "../components/forms/AppErrorMessage";
 import Loader from "../components/Loader/Loader";
+import { useTheme } from "../helper/themeProvider";
 
 const width = Dimensions.get("screen").width;
 const height = Dimensions.get("screen").height;
 
 export default function Verify2() {
+  const { isDarkMode } = useTheme();
   const [error, setError] = useState();
   const [errorVisible, setErrorVisible] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
@@ -79,37 +81,39 @@ export default function Verify2() {
     <SafeAreaView
       style={[
         style.area,
-        { backgroundColor: Colors.secondary, paddingTop: "15%" },
+        { backgroundColor: isDarkMode ? Colors.active : Colors.secondary, paddingTop: "15%" },
       ]}
     >
       <Loader isLoad={isLoading} />
-      <View style={[style.main, { backgroundColor: Colors.secondary }]}>
+      <View style={[style.main, { backgroundColor: isDarkMode ? Colors.active : Colors.secondary }]}>
         <AppTitle title={"Email Verification"} style={style} />
         <ScrollView showsVerticalScrollIndicator={false}>
-          <Text style={[style.r14, { color: Colors.disable1, marginTop: 15 }]}>
+          <Text style={[style.r14, { color: isDarkMode ? Colors.secondary : Colors.disable1, marginTop: 15 }]}>
             Enter your OTP code here
           </Text>
           <AppErrorMessage error={error} visible={errorVisible} />
           <View style={{ paddingTop: 20 }}>
             <OtpInputs
               tintColor={Colors.primary}
-              offTintColor={Colors.secondary}
+              offTintColor={isDarkMode ? Colors.active : Colors.secondary}
               inputCount={6}
               handleTextChange={(code) => handleOtpChange(code)}
               keyboardType="numeric"
               textInputStyle={{
+                fontFamily: "Avenir-SemiBold",
                 borderBottomColor: Colors.primary,
-                backgroundColor: Colors.secondary,
+                backgroundColor: isDarkMode ? Colors.disable : Colors.secondary,
                 textAlign: "center",
-                height: 50,
+                height: 55,
                 fontSize: 28,
                 borderBottomWidth: 1,
-                color: Colors.active,
+                borderRadius: 10,
+                color: isDarkMode ? Colors.secondary : Colors.active,
                 fontWeight: "bold",
               }}
             />
           </View>
-          <Text style={[style.r14, { color: Colors.disable1, marginTop: 50 }]}>
+          <Text style={[style.r14, { color: isDarkMode ? Colors.secondary : Colors.disable1, marginTop: 50 }]}>
             Didn't you receive any code?
           </Text>
           <TouchableOpacity style={{ marginTop: 5 }} onPress={handleResend}>

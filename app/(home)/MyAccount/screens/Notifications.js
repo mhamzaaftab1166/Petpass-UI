@@ -13,6 +13,7 @@ import style from "../../../theme/style";
 import { Colors } from "../../../theme/color";
 import Icon from "react-native-vector-icons/Ionicons";
 import { AppBar } from "@react-native-material/core";
+import { useTheme } from "../../../helper/themeProvider"
 
 const width = Dimensions.get("screen").width;
 const height = Dimensions.get("screen").height;
@@ -71,20 +72,21 @@ const notifications = [
 
 export default function Notification() {
   const router = useRouter();
+  const { isDarkMode } = useTheme();
 
   return (
-    <SafeAreaView style={[style.area, { backgroundColor: Colors.secondary }]}>
+    <SafeAreaView style={[style.area, { backgroundColor: isDarkMode ? Colors.active : Colors.secondary }]}>
       {/* App Bar */}
       <AppBar
-        color={Colors.secondary}
+        color={isDarkMode ? Colors.active : Colors.secondary}
         title="Notification"
-        titleStyle={[style.apptitle, { color: Colors.active }]}
+        titleStyle={[style.apptitle, { color: isDarkMode ? Colors.secondary : Colors.active }]}
         centerTitle={true}
         elevation={0}
         style={{ marginHorizontal: 20, marginTop: 10 }}
         leading={
           <TouchableOpacity onPress={() => router.back()}>
-            <Icon name="chevron-back" color={Colors.active} size={30} />
+            <Icon name="chevron-back" color={isDarkMode ? Colors.secondary : Colors.active} size={30} />
           </TouchableOpacity>
         }
       />
@@ -114,11 +116,11 @@ export default function Notification() {
                 }}
               />
               <View style={{ marginLeft: 10, flex: 1 }}>
-                <Text style={[style.r16, { color: Colors.active }]}>
+                <Text style={[style.r16, { color: isDarkMode ? Colors.secondary : Colors.active }]}>
                   {item.message}
                 </Text>
                 <Text
-                  style={[style.r12, { color: Colors.disable, marginTop: 10 }]}
+                  style={[style.r12, { color: isDarkMode ? Colors.secondary : Colors.disable, marginTop: 10 }]}
                 >
                   {item.time}
                 </Text>

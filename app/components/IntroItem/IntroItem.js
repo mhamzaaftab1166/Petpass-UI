@@ -16,7 +16,7 @@ import { Colors } from "../../theme/color";
 const height = Dimensions.get("screen").height;
 const width = Dimensions.get("screen").width;
 
-export default function IntroItem({ item, theme }) {
+export default function IntroItem({ item }) {
   const router = useRouter();
 
   return (

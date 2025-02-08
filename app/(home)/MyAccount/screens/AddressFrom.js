@@ -21,6 +21,7 @@ import AppForm from "../../../components/forms/AppForm";
 import AppFormPicker from "../../../components/forms/AppFormPicker";
 import * as Yup from "yup";
 import SubmitButton from "../../../components/forms/SubmitButton";
+import { useTheme } from "../../../helper/themeProvider";
 
 const validationSchema = Yup.object({
   full_name: Yup.string().required().min(2).max(50),
@@ -32,8 +33,9 @@ const validationSchema = Yup.object({
 
 export default function AddressFrom() {
   const router = useRouter();
+  const { isDarkMode } = useTheme();
   return (
-    <SafeAreaView style={[style.area, { backgroundColor: Colors.secondary }]}>
+    <SafeAreaView style={[style.area, { backgroundColor: isDarkMode ? Colors.active : Colors.secondary }]}>
       <KeyboardAvoidingView
         behavior={Platform.OS === "ios" ? "padding" : null}
         style={{ flex: 1 }}
@@ -41,18 +43,18 @@ export default function AddressFrom() {
         <View
           style={[
             style.main,
-            { backgroundColor: Colors.secondary, marginTop: 10 },
+            { backgroundColor: isDarkMode ? Colors.active : Colors.secondary, marginTop: 10 },
           ]}
         >
           <AppBar
-            color={Colors.secondary}
+            color={isDarkMode ? Colors.active : Colors.secondary}
             title="New Address"
-            titleStyle={[style.b18, { color: Colors.active }]}
+            titleStyle={[style.b18, { color: isDarkMode ? Colors.secondary : Colors.active }]}
             centerTitle={true}
             elevation={0}
             leading={
               <TouchableOpacity onPress={() => router.back()}>
-                <Icon name="chevron-back" color={Colors.active} size={30} />
+                <Icon name="chevron-back" color={isDarkMode ? Colors.secondary : Colors.active} size={30} />
               </TouchableOpacity>
             }
           />

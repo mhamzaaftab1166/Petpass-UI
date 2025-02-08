@@ -18,6 +18,7 @@ import SubmitButton from "../components/forms/SubmitButton";
 import * as Yup from "yup";
 import authService from "../services/authService";
 import Loader from "../components/Loader/Loader";
+import { useTheme } from "../helper/themeProvider";
 
 const width = Dimensions.get("screen").width;
 const height = Dimensions.get("screen").height;
@@ -31,6 +32,7 @@ const validationSchema = Yup.object({
 
 export default function NewPass() {
   const router = useRouter();
+  const { isDarkMode } = useTheme();
   const [error, setError] = useState();
   const [errorVisible, setErrorVisible] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
@@ -53,7 +55,7 @@ export default function NewPass() {
     <SafeAreaView
       style={[
         style.area,
-        { backgroundColor: Colors.secondary, paddingTop: 10 },
+        { backgroundColor: isDarkMode ? Colors.active : Colors.secondary, paddingTop: 10 },
       ]}
     >
       <KeyboardAvoidingView
@@ -61,7 +63,7 @@ export default function NewPass() {
         style={{ flex: 1 }}
       >
         <Loader isLoad={isLoading} />
-        <View style={[style.main, { backgroundColor: Colors.secondary }]}>
+        <View style={[style.main, { backgroundColor: isDarkMode ? Colors.active : Colors.secondary }]}>
           <AppTitle title={"New Password"} style={style} />
 
           <ScrollView showsVerticalScrollIndicator={false}>

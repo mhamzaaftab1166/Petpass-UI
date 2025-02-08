@@ -24,7 +24,7 @@ const AppInput = ({
         selectionColor={Colors.primary}
         placeholderTextColor={isDarkMode? Colors.secondary: Colors.lable}
         secureTextEntry={isPassword && !isPasswordVisible}
-        style={[style.r16, { color: Colors.active, flex: 1 }]}
+        style={[style.r16, { color: isDarkMode? Colors.secondary: Colors.active, flex: 1 }]}
         {...otherProps}
       />
       {isPassword && (

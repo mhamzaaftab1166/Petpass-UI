@@ -5,7 +5,6 @@ const HomeIndex = () => {
 
   return (
     <Pressable
-    
     >
       <Text>Home</Text>
     </Pressable>

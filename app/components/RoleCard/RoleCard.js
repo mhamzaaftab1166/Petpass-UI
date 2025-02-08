@@ -16,7 +16,7 @@ export default function RoleCard({ title, imageSrc, onPress, isSelected }) {
           height: height / 10,
           flex: 1,
           borderRadius: 10,
-          borderWidth: isSelected ? 2 : 0, // Apply border only if selected
+          borderWidth: isSelected ? 2 : 0,
           borderColor: isSelected ? Colors.primary : "transparent",
         },
       ]}

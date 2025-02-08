@@ -13,12 +13,14 @@ import { Colors } from "../theme/color";
 import IntroItem from "../components/IntroItem/IntroItem";
 import AppButton from "../components/AppButton/AppButton";
 import { sliders } from "../constants/slidersConstant";
+import {useTheme} from "../helper/themeProvider"
 
 const width = Dimensions.get("screen").width;
 
-const Sliders = ({ theme }) => {
+const Sliders = () => {
   const ref = useRef(null);
   const router = useRouter();
+  const { isDarkMode } = useTheme()
   const [currentSlideIndex, setCurrentSlideIndex] = useState(0);
 
   const updateCurrentSlideIndex = (e) => {
@@ -37,7 +39,7 @@ const Sliders = ({ theme }) => {
   };
 
   const Footer = () => (
-    <View style={{paddingHorizontal: 20,  paddingVertical: 20, backgroundColor: Colors.secondary,  backgroundColor: theme === "dark" ? "#000" : "#fff" }}>
+    <View style={{paddingHorizontal: 20,  paddingVertical: 20, backgroundColor: isDarkMode ? Colors.active : Colors.secondary }}>
       {/* Indicator Dots */}
       <View style={{ flexDirection: "row", alignSelf: "center" }}>
         {sliders.map((_, index) => (
@@ -73,7 +75,7 @@ const Sliders = ({ theme }) => {
       <FlatList
         data={sliders}
         ref={ref}
-        renderItem={({ item }) => <IntroItem item={item} theme={theme} />}
+        renderItem={({ item }) => <IntroItem item={item} />}
         horizontal
         showsHorizontalScrollIndicator={false}
         pagingEnabled

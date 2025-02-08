@@ -14,12 +14,14 @@ import { Colors } from "../../../theme/color";
 import style from "../../../theme/style";
 import { useRouter } from "expo-router";
 import { SwipeListView } from "react-native-swipe-list-view";
+import { useTheme } from "../../../helper/themeProvider";
 
 const width = Dimensions.get("screen").width;
 const height = Dimensions.get("screen").height;
 
 export default function Address() {
   const router = useRouter();
+  const { isDarkMode } = useTheme();
 
   // Sample Address Data
   const [addresses, setAddresses] = useState([
@@ -50,17 +52,17 @@ export default function Address() {
   };
 
   return (
-    <SafeAreaView style={[style.area, { backgroundColor: Colors.secondary }]}>
-      <View style={[style.main, { backgroundColor: Colors.secondary }]}>
+    <SafeAreaView style={[style.area, { backgroundColor: isDarkMode ? Colors.active : Colors.secondary }]}>
+      <View style={[style.main, { backgroundColor: isDarkMode ? Colors.active : Colors.secondary }]}>
         <AppBar
-          color={Colors.secondary}
+          color={isDarkMode ? Colors.active : Colors.secondary}
           title="Address"
-          titleStyle={[style.b18, { color: Colors.active }]}
+          titleStyle={[style.b18, { color: isDarkMode ? Colors.secondary : Colors.active }]}
           centerTitle={true}
           elevation={0}
           leading={
             <TouchableOpacity onPress={() => router.back()}>
-              <Icon name="chevron-back" color={Colors.active} size={30} />
+              <Icon name="chevron-back" color={isDarkMode ? Colors.secondary : Colors.active} size={30} />
             </TouchableOpacity>
           }
           trailing={
@@ -80,19 +82,19 @@ export default function Address() {
               style={{
                 padding: 10,
                 borderWidth: 1,
-                borderColor: Colors.lable,
+                borderColor: isDarkMode ? Colors.active : Colors.lable,
                 borderRadius: 10,
                 marginTop: 20,
-                backgroundColor: Colors.secondary,
+                backgroundColor: isDarkMode ? Colors.disable : Colors.secondary,
               }}
             >
-              <Text style={[style.b16, { color: Colors.active }]}>
+              <Text style={[style.b16, { color: isDarkMode ? Colors.secondary : Colors.active }]}>
                 {item.name}
               </Text>
-              <Text style={[style.r14, { color: Colors.lable, marginTop: 5 }]}>
+              <Text style={[style.r14, { color: isDarkMode ? Colors.secondary : Colors.lable, marginTop: 5 }]}>
                 {item.address}
               </Text>
-              <Text style={[style.r14, { color: Colors.lable, marginTop: 3 }]}>
+              <Text style={[style.r14, { color: isDarkMode ? Colors.secondary : Colors.lable, marginTop: 3 }]}>
                 {item.phone}
               </Text>
             </View>

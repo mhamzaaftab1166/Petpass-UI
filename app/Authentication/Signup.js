@@ -124,7 +124,7 @@ export default function Signup() {
 
             <AppFormRoleSelector name={"profile_type"} />
 
-            <Text style={[style.r14, { color: Colors.disable, marginTop: 20 }]}>
+            <Text style={[style.r14, { color: isDarkMode ?  Colors.secondary : Colors.disable, marginTop: 20 }]}>
               By clicking Sign up you agree to the following
               <Text style={[style.b14, { color: Colors.primary }]}>
                 {" "}
@@ -185,7 +185,7 @@ export default function Signup() {
               marginTop: 50,
             }}
           >
-            <Text style={[style.r14, { color: Colors.lable }]}>
+            <Text style={[style.r14, { color: isDarkMode ?  Colors.secondary : Colors.lable }]}>
               Don't have an account?
             </Text>
             <TouchableOpacity
