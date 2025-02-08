@@ -12,11 +12,23 @@ import { AppBar } from "@react-native-material/core";
 import { Avatar } from "react-native-paper";
 import { Colors } from "../../theme/color";
 import { MaterialCommunityIcons, Ionicons } from "@expo/vector-icons";
+import editProfileIcon from "../../../assets/images/profile/editProfile.png";
+import notyIcon from "../../../assets/images/profile/noty.png";
+import settingsIcon from "../../../assets/images/profile/settings.png";
+import helpIcon from "../../../assets/images/profile/help.png";
+import logoutIcon from "../../../assets/images/profile/logout.png";
 import style from "../../theme/style";
 import { useRouter } from "expo-router";
 import { useUserStore } from "../../store/useStore";
 
 const { width, height } = Dimensions.get("screen");
+const iconMap = {
+  "Edit Profile": editProfileIcon,
+  Notifications: notyIcon,
+  Settings: settingsIcon,
+  "Help Center": helpIcon,
+  "Log Out": logoutIcon,
+};
 
 export default function MyAccount() {
   const {  clearUser } = useUserStore();
@@ -160,36 +172,31 @@ export default function MyAccount() {
         <View
           style={[style.divider, { marginTop: 20, marginBottom: 50 }]}
         ></View>
-
         <ScrollView showsVerticalScrollIndicator={false}>
           {[
             {
               name: "Edit Profile",
-              icon: "account-edit",
-              materialIcon: true,
+              icon: "Edit Profile",
               route: "/MyAccount/screens/ProfileInfo",
             },
             {
               name: "Notifications",
-              icon: "notifications-outline",
+              icon: "Notifications",
               route: "/MyAccount/screens/Notifications",
             },
             {
               name: "Settings",
-              materialIcon: true,
-              icon: "cogs",
-              route: "/orderDetail",
+              icon: "Settings",
+              route: "/MyAccount/screens/Settings",
             },
             {
               name: "Help Center",
-              materialIcon: true,
-              icon: "help-circle-outline",
+              icon: "Help Center",
               route: "/setting",
             },
             {
               name: "Log Out",
-              icon: "logout",
-              materialIcon: true,
+              icon: "Log Out",
               isRed: true,
             },
           ].map((item, index, array) => (
@@ -197,8 +204,8 @@ export default function MyAccount() {
               <TouchableOpacity
                 onPress={() => {
                   if (item.name === "Log Out") {
-                     clearUser();
-                     router.replace("/Authentication/Sliders");
+                    clearUser();
+                    router.replace("/Authentication/Sliders");
                   } else if (item.route) {
                     router.push(item.route);
                   }
@@ -209,15 +216,11 @@ export default function MyAccount() {
                   marginBottom: 20,
                 }}
               >
-                {item.materialIcon ? (
-                  <MaterialCommunityIcons
-                    name={item.icon}
-                    size={25}
-                    color={Colors.active}
-                  />
-                ) : (
-                  <Ionicons name={item.icon} size={25} color={Colors.active} />
-                )}
+                <Image
+                  resizeMode="contain"
+                  source={iconMap[item.icon]} // Use the mapped image
+                  style={{ width: 25, height: 25 }} // Adjust the size as needed
+                />
                 <View style={{ marginLeft: 10 }}>
                   <Text
                     style={[
