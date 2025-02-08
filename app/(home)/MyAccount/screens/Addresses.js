@@ -59,12 +59,14 @@ export default function Address() {
           centerTitle={true}
           elevation={0}
           leading={
-            <TouchableOpacity onPress={() => router.push("/my-tabs")}>
+            <TouchableOpacity onPress={() => router.back()}>
               <Icon name="chevron-back" color={Colors.active} size={30} />
             </TouchableOpacity>
           }
           trailing={
-            <TouchableOpacity onPress={() => router.push("/new-address")}>
+            <TouchableOpacity
+              onPress={() => router.push("/MyAccount/screens/AddressFrom")}
+            >
               <Icon name="add" color={Colors.primary} size={30} />
             </TouchableOpacity>
           }
@@ -101,7 +103,7 @@ export default function Address() {
                 flexDirection: "row",
                 justifyContent: "flex-end",
                 alignItems: "center",
-                height: 80, 
+                height: 80,
                 backgroundColor: Colors.secondary,
                 paddingHorizontal: 10,
                 marginTop: 20,
@@ -109,7 +111,7 @@ export default function Address() {
               }}
             >
               <TouchableOpacity
-                onPress={() => router.push("/edit-address")}
+                onPress={() => router.push("/MyAccount/screens/AddressFrom")}
                 style={{
                   justifyContent: "center",
                   alignItems: "center",

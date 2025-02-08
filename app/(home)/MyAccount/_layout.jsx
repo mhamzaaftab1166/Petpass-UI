@@ -19,6 +19,10 @@ const ProfileLayout = () => {
           name="MyAccount/screens/Addresses"
           options={{ headerShown: false }}
         />
+        <Stack.Screen
+          name="MyAccount/screens/AddressFrom"
+          options={{ headerShown: false }}
+        />
       </Stack>
     </Slot>
   );
