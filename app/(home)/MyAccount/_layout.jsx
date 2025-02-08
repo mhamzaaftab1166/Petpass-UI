@@ -27,10 +27,6 @@ const ProfileLayout = () => {
           name="MyAccount/screens/Settings"
           options={{ headerShown: false }}
         />
-        <Stack.Screen
-          name="MyAccount/screens/DarkMode"
-          options={{ headerShown: false }}
-        />
       </Stack>
     </Slot>
   );

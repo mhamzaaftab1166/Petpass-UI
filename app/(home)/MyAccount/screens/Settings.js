@@ -1,5 +1,5 @@
 import { View, Text, ScrollView, Image, TouchableOpacity } from "react-native";
-import React from "react";
+import React, { useState } from "react";
 import { AppBar } from "@react-native-material/core";
 import Icon from "react-native-vector-icons/Ionicons";
 import { Colors } from "../../../theme/color";
@@ -7,9 +7,16 @@ import { Link, useRouter } from "expo-router";
 import MaterialIcons from "@expo/vector-icons/MaterialIcons";
 import style from "../../../theme/style";
 import { SafeAreaView } from "react-native-safe-area-context";
+import { Switch } from "react-native-paper";
 
 export default function Setting() {
   const router = useRouter();
+  const [isDarkMode, setIsDarkMode] = useState(false);
+
+  const toggleSwitch = () => {
+    setIsDarkMode((prevState) => !prevState);
+  };
+
   return (
     <SafeAreaView style={[style.area, { backgroundColor: Colors.secondary }]}>
       <View
@@ -74,7 +81,6 @@ export default function Setting() {
           </Link>
           <View style={[style.divider, { marginVertical: 15 }]}></View>
 
-          <Link href="/MyAccount/screens/DarkMode">
             <View style={{ flexDirection: "row", alignItems: "center" }}>
               <MaterialIcons
                 name="dark-mode"
@@ -86,9 +92,12 @@ export default function Setting() {
                   Dark Mode
                 </Text>
               </View>
-              <Icon name="chevron-forward" size={20} color={Colors.disable} />
+              <Switch
+                color={Colors.primary}
+                value={isDarkMode}
+                onValueChange={toggleSwitch}
+              />
             </View>
-          </Link>
           <View style={[style.divider, { marginVertical: 15 }]}></View>
         </ScrollView>
       </View>
