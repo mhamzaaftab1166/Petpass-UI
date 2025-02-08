@@ -14,11 +14,12 @@ import { Colors } from "../../theme/color";
 import { MaterialCommunityIcons, Ionicons } from "@expo/vector-icons";
 import style from "../../theme/style";
 import { useRouter } from "expo-router";
-import { navigate } from "expo-router/build/global-state/routing";
+import { useUserStore } from "../../store/useStore";
 
 const { width, height } = Dimensions.get("screen");
 
 export default function MyAccount() {
+  const {  clearUser } = useUserStore();
   const router = useRouter();
 
   return (
@@ -194,7 +195,14 @@ export default function MyAccount() {
           ].map((item, index, array) => (
             <View key={index}>
               <TouchableOpacity
-                onPress={() => item.route && router.push(item.route)}
+                onPress={() => {
+                  if (item.name === "Log Out") {
+                     clearUser();
+                     router.replace("/Authentication/Sliders");
+                  } else if (item.route) {
+                    router.push(item.route);
+                  }
+                }}
                 style={{
                   flexDirection: "row",
                   alignItems: "center",
