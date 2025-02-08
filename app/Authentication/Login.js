@@ -30,6 +30,7 @@ import { useUserStore } from "../store/useStore";
 import { localStorageConst } from "../constants/storageConstant";
 import Checkbox from "expo-checkbox";
 import AppAlert from "../components/AppAlert";
+import { useTheme } from "../helper/themeProvider";
 
 const width = Dimensions.get("screen").width;
 const height = Dimensions.get("screen").height;
@@ -40,6 +41,7 @@ const validationSchema = Yup.object({
 
 export default function Login() {
   const router = useRouter();
+  const { isDarkMode } = useTheme();
   const { setToken } = useUserStore();
   const [error, setError] = useState();
   const [errorVisible, setErrorVisible] = useState(false);
@@ -70,7 +72,7 @@ export default function Login() {
     <SafeAreaView
       style={[
         style.area,
-        { backgroundColor: Colors.secondary, paddingTop: 10 },
+        { backgroundColor: isDarkMode ? Colors.active : Colors.secondary, paddingTop: 10 },
       ]}
     >
       <KeyboardAvoidingView
@@ -117,14 +119,14 @@ export default function Login() {
                     onValueChange={setRememberMe}
                     color={rememberMe ? Colors?.primary : Colors?.border}
                   />
-                  <Text style={[style.r14, { color: Colors.disable }]}>
+                  <Text style={[style.r14, { color: isDarkMode? Colors.secondary : Colors.disable }]}>
                     Remember Me
                   </Text>
                 </View>
                 <TouchableOpacity
                   onPress={() => router.push("/Authentication/ForgotPassword")}
                 >
-                  <Text style={[style.r14, { color: Colors.disable }]}>
+                  <Text style={[style.r14, { color: isDarkMode? Colors.secondary : Colors.disable }]}>
                     Forgot Password?
                   </Text>
                 </TouchableOpacity>
@@ -135,7 +137,7 @@ export default function Login() {
             <Text
               style={[
                 style.r14,
-                { color: Colors.disable, textAlign: "center" },
+                { color: isDarkMode? Colors.secondary : Colors.disable, textAlign: "center" },
               ]}
             >
               Contact with
@@ -183,7 +185,7 @@ export default function Login() {
                 marginTop: 50,
               }}
             >
-              <Text style={[style.r14, { color: Colors.lable }]}>
+              <Text style={[style.r14, { color: isDarkMode? Colors.secondary : Colors.lable }]}>
                 Don't have an account?
               </Text>
               <TouchableOpacity

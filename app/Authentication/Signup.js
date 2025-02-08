@@ -27,6 +27,7 @@ import authService from "../services/authService";
 import { formatRegisterPayload } from "../utils/authenticationUtils";
 import AuthenticationSuccess from "../ESB/success/authentication.json";
 import Loader from "../components/Loader/Loader";
+import { useTheme } from "../helper/themeProvider";
 
 const width = Dimensions.get("screen").width;
 const height = Dimensions.get("screen").height;
@@ -42,6 +43,7 @@ const validationSchema = Yup.object({
 export default function Signup() {
   const router = useRouter();
   const [error, setError] = useState();
+  const { isDarkMode } = useTheme();
   const [errorVisible, setErrorVisible] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
 
@@ -68,7 +70,7 @@ export default function Signup() {
     <SafeAreaView
       style={[
         style.area,
-        { backgroundColor: Colors.secondary, paddingTop: 10 },
+        { backgroundColor: isDarkMode ? Colors.active : Colors.secondary, paddingTop: 10 },
       ]}
     >
       <KeyboardAvoidingView

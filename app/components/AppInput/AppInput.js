@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { TextInput, View, StyleSheet, TouchableOpacity } from "react-native";
 import { Colors } from "../../theme/color";
 import Icon from "react-native-vector-icons/Ionicons";
+import { useTheme } from "../../helper/themeProvider";
 
 const AppInput = ({
   placeholder,
@@ -12,6 +13,7 @@ const AppInput = ({
   parentStyles,
   ...otherProps
 }) => {
+    const { isDarkMode } = useTheme();
   const [isPasswordVisible, setIsPasswordVisible] = useState(false);
   return (
     <View style={[style.txtinput, { marginTop: 30 }, parentStyles]}>
@@ -20,7 +22,7 @@ const AppInput = ({
         value={value}
         onChangeText={onChangeText}
         selectionColor={Colors.primary}
-        placeholderTextColor={Colors.lable}
+        placeholderTextColor={isDarkMode? Colors.secondary: Colors.lable}
         secureTextEntry={isPassword && !isPasswordVisible}
         style={[style.r16, { color: Colors.active, flex: 1 }]}
         {...otherProps}
@@ -31,7 +33,7 @@ const AppInput = ({
         >
           <Icon
             name={isPasswordVisible ? "eye-off" : "eye"}
-            color={Colors.disable}
+            color={isDarkMode? Colors.secondary : Colors.disable}
             size={20}
           />
         </TouchableOpacity>

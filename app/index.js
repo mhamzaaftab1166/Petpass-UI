@@ -24,6 +24,7 @@ export default function Introduction() {
   const isDarkMode = colorScheme === "dark";
 
   useEffect(() => {
+    storage.storeAppData(localStorageConst.THEME, isDarkMode ? "dark" : "light")
     const fetchToken = async () => {
       const storedToken = await storage.getAppData(localStorageConst.JWTUSER);
       setToken(storedToken);
