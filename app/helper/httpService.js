@@ -6,7 +6,6 @@ import { localStorageConst } from "../constants/storageConstant";
 
 const getStoredToken = async () => {
   const storedToken = await storage.getAppData(localStorageConst.JWTUSER);
-  console.log(storedToken, 'storedToken11111');
   return storedToken;
 };
 

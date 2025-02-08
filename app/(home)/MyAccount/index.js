@@ -103,7 +103,7 @@ export default function MyAccount() {
             style={[
               style.shadow,
               {
-                backgroundColor: isDarkMode ? Colors.secondary : Colors.active,
+                backgroundColor: Colors.secondary,
                 justifyContent: "center",
                 alignItems: "center",
                 height: height / 9,
