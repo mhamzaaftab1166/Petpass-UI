@@ -14,6 +14,7 @@ import { Colors } from "../../theme/color";
 import { MaterialCommunityIcons, Ionicons } from "@expo/vector-icons";
 import style from "../../theme/style";
 import { useRouter } from "expo-router";
+import { navigate } from "expo-router/build/global-state/routing";
 
 const { width, height } = Dimensions.get("screen");
 
@@ -33,9 +34,7 @@ export default function MyAccount() {
           elevation={0}
           trailing={
             <View style={{ flexDirection: "row", alignItems: "center" }}>
-              <TouchableOpacity
-                onPress={() => router.push("/MyAccount/screens/Notifications")}
-              >
+              <TouchableOpacity onPress={() => router.back()}>
                 <Ionicons
                   name="notifications-outline"
                   color={Colors.active}
@@ -51,7 +50,7 @@ export default function MyAccount() {
         >
           <TouchableOpacity
             style={{ flexDirection: "row", alignItems: "center" }}
-            // onPress={() => router.push("/accountInfo")}
+            onPress={() => router.push("/MyAccount/screens/ProfileInfo")}
           >
             <Avatar.Image
               source={require("../../../assets/images/profile/profile.png")}
@@ -95,6 +94,7 @@ export default function MyAccount() {
                 borderRadius: 10,
               },
             ]}
+            onPress={() => router.push("/MyAccount/screens/Addresses")}
           >
             <Image
               source={require("../../../assets/images/profile/address.png")}
@@ -164,7 +164,7 @@ export default function MyAccount() {
               name: "Edit Profile",
               icon: "account-edit",
               materialIcon: true,
-              route: "",
+              route: "/MyAccount/screens/ProfileInfo",
             },
             {
               name: "Notifications",

@@ -11,6 +11,14 @@ const ProfileLayout = () => {
           name="MyAccount/screens/Notifications"
           options={{ headerShown: false }}
         />
+        <Stack.Screen
+          name="MyAccount/screens/ProfileInfo"
+          options={{ headerShown: false }}
+        />
+        <Stack.Screen
+          name="MyAccount/screens/Addresses"
+          options={{ headerShown: false }}
+        />
       </Stack>
     </Slot>
   );
