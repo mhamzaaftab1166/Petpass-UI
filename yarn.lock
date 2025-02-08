@@ -3436,15 +3436,7 @@ expo-clipboard@~7.0.1:
   resolved "https://registry.npmjs.org/expo-clipboard/-/expo-clipboard-7.0.1.tgz"
   integrity sha512-rqYk0+WoqitPcPKxmMxSpLonX1E5Ije3LBYfnYMbH3xU5Gr8EAH9QnOWOi4BgahUPvcot6nbFEnx+DqARrmxKQ==
 
-expo-constants@^17.0.5:
-  version "17.0.5"
-  resolved "https://registry.yarnpkg.com/expo-constants/-/expo-constants-17.0.5.tgz#b5deb4a4242cd6ef1f6c68e745664f69d41a0ffb"
-  integrity sha512-6SHXh32jCB+vrp2TRDNkoGoM421eOBPZIXX9ixI0hKKz71tIjD+LMr/P+rGUd/ks312MP3WK3j5vcYYPkCD8tQ==
-  dependencies:
-    "@expo/config" "~10.0.8"
-    "@expo/env" "~0.4.1"
-
-expo-constants@~17.0.5:
+expo-constants@^17.0.5, expo-constants@~17.0.5:
   version "17.0.5"
   resolved "https://registry.npmjs.org/expo-constants/-/expo-constants-17.0.5.tgz"
   integrity sha512-6SHXh32jCB+vrp2TRDNkoGoM421eOBPZIXX9ixI0hKKz71tIjD+LMr/P+rGUd/ks312MP3WK3j5vcYYPkCD8tQ==
@@ -6170,14 +6162,15 @@ react-native-flex-layout@^0.1.5:
   resolved "https://registry.npmjs.org/react-native-flex-layout/-/react-native-flex-layout-0.1.5.tgz"
   integrity sha512-DrLir5Wl0RhgJXHeDBSaa1Y1LdpNuoz0PEe5E1T1+xVWt2DAz/r+1N8bnhtVkTKJE6WrH6jIH2hoe8kogR0X+w==
 
-react-native-gesture-handler@^2.23.0:
-  version "2.23.0"
-  resolved "https://registry.yarnpkg.com/react-native-gesture-handler/-/react-native-gesture-handler-2.23.0.tgz#f0e77bc6bce94a976ae7917abc748b7b4ce6a490"
-  integrity sha512-xtkdIU4S4uc4J2WO4hy7AXxD/1M8Be2yOrLdPTuWKAOF3KyL0D0xSdvuaWhI+GdZCNQQisj9kvbnMQGGb9XZNQ==
+react-native-gesture-handler@~2.20.2:
+  version "2.20.2"
+  resolved "https://registry.yarnpkg.com/react-native-gesture-handler/-/react-native-gesture-handler-2.20.2.tgz#73844c8e9c417459c2f2981bc4d8f66ba8a5ee66"
+  integrity sha512-HqzFpFczV4qCnwKlvSAvpzEXisL+Z9fsR08YV5LfJDkzuArMhBu2sOoSPUF/K62PCoAb+ObGlTC83TKHfUd0vg==
   dependencies:
     "@egjs/hammerjs" "^2.0.17"
     hoist-non-react-statics "^3.3.0"
     invariant "^2.2.4"
+    prop-types "^15.7.2"
 
 react-native-helmet-async@2.0.4:
   version "2.0.4"

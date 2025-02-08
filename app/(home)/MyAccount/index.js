@@ -34,7 +34,9 @@ export default function MyAccount() {
           elevation={0}
           trailing={
             <View style={{ flexDirection: "row", alignItems: "center" }}>
-              <TouchableOpacity onPress={() => router.back()}>
+              <TouchableOpacity
+                onPress={() => router.push("/MyAccount/screens/Notifications")}
+              >
                 <Ionicons
                   name="notifications-outline"
                   color={Colors.active}
