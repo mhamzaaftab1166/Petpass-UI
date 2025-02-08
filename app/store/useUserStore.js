@@ -9,7 +9,7 @@ const useUserStore = create((set) => ({
   setToken: (tokenData) => set({ token: tokenData }),
   clearUser: async() => {
     set({ user: null, token: null });
-    await storeage.removeToken(localStorageConst.JWTUSER);
+    await storeage.removeAppData(localStorageConst.JWTUSER);
   },
 }));
 

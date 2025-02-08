@@ -1,6 +1,6 @@
 import * as SecureStore from "expo-secure-store";
 
-const storeToken = async (key, authToken) => {
+const storeAppData = async (key, authToken) => {
     try {
       await SecureStore.setItemAsync(key, authToken);
     } catch (error) {
@@ -8,7 +8,7 @@ const storeToken = async (key, authToken) => {
     }
   };
   
-  const getToken = async (key) => {
+  const getAppData = async (key) => {
     try {
       return await SecureStore.getItemAsync(key);
     } catch (error) {
@@ -17,7 +17,7 @@ const storeToken = async (key, authToken) => {
   };
   
   
-  const removeToken = async (key) => {
+  const removeAppData = async (key) => {
     try {
       await SecureStore.deleteItemAsync(key);
     } catch (error) {
@@ -27,7 +27,7 @@ const storeToken = async (key, authToken) => {
   
   
   export default {
-    removeToken,
-    storeToken,
-    getToken,
+    removeAppData,
+    storeAppData,
+    getAppData,
   };
