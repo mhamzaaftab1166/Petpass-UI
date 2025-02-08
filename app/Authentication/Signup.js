@@ -32,7 +32,7 @@ const width = Dimensions.get("screen").width;
 const height = Dimensions.get("screen").height;
 
 const validationSchema = Yup.object({
-  username: Yup.string().required().label("Username"),
+  username: Yup.string().required().label("FULLNAME"),
   email: Yup.string().required().email().label("Email"),
   password: Yup.string().required().min(4).label("Password"),
   phone_number: Yup.string().required().min(8).max(15).label("Phone"),
@@ -95,7 +95,7 @@ export default function Signup() {
             <AppErrorMessage error={error} visible={errorVisible} />
             <AppFormField
               name={"username"}
-              placeholder="USERNAME"
+              placeholder="FULLNAME"
               style={style}
               parentStyles={{ marginTop: 20 }}
             />

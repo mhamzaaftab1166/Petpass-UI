@@ -12,11 +12,11 @@ import style from "../theme/style";
 import { Colors } from "../theme/color";
 import IntroItem from "../components/IntroItem/IntroItem";
 import AppButton from "../components/AppButton/AppButton";
-import { sliders } from "../constants/slidersContant";
+import { sliders } from "../constants/slidersConstant";
 
 const width = Dimensions.get("screen").width;
 
-const Sliders = () => {
+const Sliders = ({ theme }) => {
   const ref = useRef(null);
   const router = useRouter();
   const [currentSlideIndex, setCurrentSlideIndex] = useState(0);
@@ -37,7 +37,7 @@ const Sliders = () => {
   };
 
   const Footer = () => (
-    <View style={{ paddingHorizontal: 20,  paddingVertical: 20, backgroundColor: Colors.secondary }}>
+    <View style={{paddingHorizontal: 20,  paddingVertical: 20, backgroundColor: Colors.secondary,  backgroundColor: theme === "dark" ? "#000" : "#fff" }}>
       {/* Indicator Dots */}
       <View style={{ flexDirection: "row", alignSelf: "center" }}>
         {sliders.map((_, index) => (
@@ -62,7 +62,7 @@ const Sliders = () => {
           title="Get Started"
           onPress={() => router.push("/Authentication/Login")}
           style={style}
-          paddingVertical={20}
+          paddingVertical={10}
         />
       )}
     </View>
@@ -73,7 +73,7 @@ const Sliders = () => {
       <FlatList
         data={sliders}
         ref={ref}
-        renderItem={({ item }) => <IntroItem item={item} />}
+        renderItem={({ item }) => <IntroItem item={item} theme={theme} />}
         horizontal
         showsHorizontalScrollIndicator={false}
         pagingEnabled

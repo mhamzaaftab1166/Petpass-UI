@@ -29,6 +29,7 @@ import AuthenticationSuccess from "../ESB/success/authentication.json";
 import { useUserStore } from "../store/useStore";
 import { localStorageConst } from "../constants/storageConstant";
 import Checkbox from "expo-checkbox";
+import AppAlert from "../components/AppAlert";
 
 const width = Dimensions.get("screen").width;
 const height = Dimensions.get("screen").height;
@@ -50,12 +51,12 @@ export default function Login() {
       setIsLoading(true);
       const data = await authService.login(userInfo);
       if (data?.message === AuthenticationSuccess.loginSuccess) {
-        await storeage.storeToken(
-          localStorageConst.JWTUSER,
-          rememberMe ? data?.refreshToken : data?.accessToken
+        await storeage.storeAppData(
+          localStorageConst.JWTUSER, data?.accessToken
         );
+        await storeage.storeAppData(localStorageConst.REMEMBER, rememberMe)
       }
-      setToken(rememberMe ? data?.refreshToken : data?.accessToken);
+      setToken(data?.accessToken);
       router.replace("(home)");
     } catch (error) {
       setErrorVisible(true);

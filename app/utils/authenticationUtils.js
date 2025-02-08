@@ -1,4 +1,4 @@
-export const formatRegisterPayload = (userInfo) => {
+const formatRegisterPayload = (userInfo) => {
   if (!userInfo.phone_number) return userInfo; 
 
   const phoneParts = userInfo.phone_number.split(" ");
@@ -14,3 +14,5 @@ export const formatRegisterPayload = (userInfo) => {
     country_code: countryCode,
   };
 };
+
+export default formatRegisterPayload

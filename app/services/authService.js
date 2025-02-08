@@ -17,12 +17,17 @@ const resend = (payload) => {
   return _axios("post", "/auth/resend-otp", payload);
 };
 
+
 const forgotPassword = (payload) => {
   return _axios("post", "/auth/forgot-password", payload);
 }; 
 
 const resetPassword = (payload) => {
   return _axios("post", "/auth/reset-password", payload);
+}; 
+
+const validateToken = (payload) => {
+  return _axios("get", "/auth/validate-token", payload);
 }; 
 
 
@@ -33,5 +38,6 @@ export default {
   resend,
   forgotPassword,
   resetPassword,
+  validateToken
 };
 
