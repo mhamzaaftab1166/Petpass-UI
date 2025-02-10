@@ -10,9 +10,9 @@ const formatRegisterPayload = (userInfo) => {
     email: userInfo.email,
     phone_number: phoneNumber,
     password: userInfo.password,
-    profile_type: userInfo.profile_type,
+    profile_types: userInfo.profile_types,
     country_code: countryCode,
   };
 };
 
-export default formatRegisterPayload
+export default formatRegisterPayload;

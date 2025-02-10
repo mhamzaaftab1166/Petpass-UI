@@ -10,7 +10,16 @@ const AppFormRoleSelector = ({ name, parentStyles }) => {
     <>
       <AppRoleSelector
         value={values[name]}
-        onSelect={(role) => setFieldValue(name, role)}
+        onSelect={(role) => {
+          if (!values[name].includes(role)) {
+            setFieldValue(name, [...values[name], role]);
+          } else {
+            setFieldValue(
+              name,
+              values[name].filter((r) => r !== role)
+            );
+          }
+        }}
         parentStyles={parentStyles}
       />
       <AppErrorMessage error={errors[name]} visible={touched[name]} />

@@ -24,7 +24,7 @@ import SubmitButton from "../components/forms/SubmitButton";
 import AppFormPhoneField from "../components/forms/AppFormPhoneFeild";
 import AppFormRoleSelector from "../components/forms/AppFormRoleSelector";
 import authService from "../services/authService";
-import { formatRegisterPayload } from "../utils/authenticationUtils";
+import formatRegisterPayload from "../utils/authenticationUtils";
 import AuthenticationSuccess from "../ESB/success/authentication.json";
 import Loader from "../components/Loader/Loader";
 import { useTheme } from "../helper/themeProvider";
@@ -37,7 +37,7 @@ const validationSchema = Yup.object({
   email: Yup.string().required().email().label("Email"),
   password: Yup.string().required().min(4).label("Password"),
   phone_number: Yup.string().required().min(8).max(15).label("Phone"),
-  profile_type: Yup.string().required().label("Role"),
+  profile_types: Yup.array().of(Yup.string().required()).min(1).label("Role"),
 });
 
 export default function Signup() {
@@ -51,6 +51,7 @@ export default function Signup() {
     try {
       setIsLoading(true);
       const formattedPayload = formatRegisterPayload(userInfo);
+      
       const data = await authService.register(formattedPayload);
       if (data?.message === AuthenticationSuccess.registrationSuccess) {
       router.push(
@@ -70,7 +71,10 @@ export default function Signup() {
     <SafeAreaView
       style={[
         style.area,
-        { backgroundColor: isDarkMode ? Colors.active : Colors.secondary, paddingTop: 10 },
+        {
+          backgroundColor: isDarkMode ? Colors.active : Colors.secondary,
+          paddingTop: 10,
+        },
       ]}
     >
       <KeyboardAvoidingView
@@ -89,7 +93,7 @@ export default function Signup() {
               password: "",
               username: "",
               phone_number: "",
-              profile_type: "",
+              profile_types: [],
             }}
             onSubmit={(values) => handleSubmit(values)}
             validationSchema={validationSchema}
@@ -122,9 +126,17 @@ export default function Signup() {
 
             <AppFormPhoneField style={style} name={"phone_number"} />
 
-            <AppFormRoleSelector name={"profile_type"} />
+            <AppFormRoleSelector name={"profile_types"} />
 
-            <Text style={[style.r14, { color: isDarkMode ?  Colors.secondary : Colors.disable, marginTop: 20 }]}>
+            <Text
+              style={[
+                style.r14,
+                {
+                  color: isDarkMode ? Colors.secondary : Colors.disable,
+                  marginTop: 20,
+                },
+              ]}
+            >
               By clicking Sign up you agree to the following
               <Text style={[style.b14, { color: Colors.primary }]}>
                 {" "}
@@ -185,7 +197,12 @@ export default function Signup() {
               marginTop: 50,
             }}
           >
-            <Text style={[style.r14, { color: isDarkMode ?  Colors.secondary : Colors.lable }]}>
+            <Text
+              style={[
+                style.r14,
+                { color: isDarkMode ? Colors.secondary : Colors.lable },
+              ]}
+            >
               Don't have an account?
             </Text>
             <TouchableOpacity
