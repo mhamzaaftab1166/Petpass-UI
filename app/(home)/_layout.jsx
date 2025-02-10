@@ -71,20 +71,34 @@ const AnimatedTabIcon = ({ focused, children }) => {
 export default function TabLayout() {
   const router = useRouter()
   const { isDarkMode } = useTheme();
-  const [token, setToken] = useState()
   const {  clearUser } = useUserStore();
   const [showAlert, setShowAlert] = useState(false);
 
-  useEffect(() => {
+  useEffect(() => {  
+    console.log("useEffect triggered");
     const checkToken = async () => {
-      const isValid = await authService.validateToken();
-      if (!isValid) {
-        setShowAlert(true);
+      try {
+        console.log("Checking token...");
+        const isValid = await authService.validateToken();  
+        console.log(isValid.message, "isValid");
+        if (isValid.message ===  "Valid token") {
+          setShowAlert(false);
+        }
+      } catch (error) {
+        console.log(error, 'error');
+        
+        if (error.message ===  "Token expired") {
+          setShowAlert(true);
+        }
+        console.error("Error in checkToken:", error);
       }
     };
-
     checkToken();
-  }, [showAlert]);
+    const interval = setInterval(checkToken, 2 * 60 * 1000);
+    return () => clearInterval(interval);
+  }, []);
+
+
 
   const handleLogout = () => {
     clearUser()
