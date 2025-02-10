@@ -51,7 +51,7 @@ export default function Security() {
           style={{ marginTop: 20 }}
           showsVerticalScrollIndicator={false}
         >
-          <Link href="/Security">
+          <Link href="/MyAccount/screens/EditEmail">
             <View
               style={{
                 flexDirection: "row",
