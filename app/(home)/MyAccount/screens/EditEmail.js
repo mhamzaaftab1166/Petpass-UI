@@ -16,6 +16,7 @@ import * as Yup from "yup";
 import AppForm from "../../../components/forms/AppForm";
 import AppErrorMessage from "../../../components/forms/AppErrorMessage";
 import SubmitButton from "../../../components/forms/SubmitButton";
+import { useTheme } from "../../../helper/themeProvider";
 
 const validationSchema = Yup.object({
   email: Yup.string().required().email().label("Email"),
@@ -23,9 +24,10 @@ const validationSchema = Yup.object({
 
 export default function EditEmail() {
   const router = useRouter();
-
+  const { isDarkMode } = useTheme();
+ 
   return (
-    <SafeAreaView style={[style.area, { backgroundColor: Colors.secondary }]}>
+    <SafeAreaView style={[style.area, {  backgroundColor: isDarkMode ? Colors.active : Colors.secondary,  }]}>
       <KeyboardAvoidingView
         behavior={Platform.OS === "ios" ? "padding" : null}
         style={{ flex: 1 }}
@@ -33,18 +35,18 @@ export default function EditEmail() {
         <View
           style={[
             style.main,
-            { backgroundColor: Colors.secondary, marginTop: 10 },
+            {  backgroundColor: isDarkMode ? Colors.active : Colors.secondary,  marginTop: 10 },
           ]}
         >
           <AppBar
-            color={Colors.secondary}
+            color={isDarkMode?Colors.active:Colors.secondary}
             title="Email"
-            titleStyle={[style.apptitle, { color: Colors.active }]}
+            titleStyle={[style.apptitle, { color: isDarkMode?Colors.secondary:Colors.active }]}
             centerTitle={true}
             elevation={0}
             leading={
               <TouchableOpacity onPress={() => router.back()}>
-                <Icon name="chevron-back" color={Colors.active} size={25} />
+                <Icon name="chevron-back" color={isDarkMode?Colors.secondary: Colors.active} size={25} />
               </TouchableOpacity>
             }
           />
