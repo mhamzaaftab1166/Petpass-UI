@@ -27,6 +27,14 @@ const ProfileLayout = () => {
           name="MyAccount/screens/Settings"
           options={{ headerShown: false }}
         />
+        <Stack.Screen
+          name="MyAccount/screens/Security"
+          options={{ headerShown: false }}
+        />
+        <Stack.Screen
+          name="MyAccount/screens/EditPassword"
+          options={{ headerShown: false }}
+        />
       </Stack>
     </Slot>
   );

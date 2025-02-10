@@ -13,35 +13,49 @@ import { Avatar } from "react-native-paper";
 import { Colors } from "../../theme/color";
 import { MaterialCommunityIcons, Ionicons } from "@expo/vector-icons";
 import editProfileIcon from "../../../assets/images/profile/editProfile.png";
+import editProfileDark from "../../../assets/images/profile/editProfileDark.png";
 import notyIcon from "../../../assets/images/profile/noty.png";
+import notyDark from "../../../assets/images/profile/notyDark.png";
 import settingsIcon from "../../../assets/images/profile/settings.png";
+import settingDark from "../../../assets/images/profile/settingDark.png";
 import helpIcon from "../../../assets/images/profile/help.png";
+import helpDark from "../../../assets/images/profile/helpDark.png";
 import logoutIcon from "../../../assets/images/profile/logout.png";
+import logoutDark from "../../../assets/images/profile/logoutDark.png";
 import style from "../../theme/style";
 import { useRouter } from "expo-router";
 import { useUserStore } from "../../store/useStore";
 import { useTheme } from "../../helper/themeProvider";
 
 const { width, height } = Dimensions.get("screen");
-const iconMap = {
-  "Edit Profile": editProfileIcon,
-  Notifications: notyIcon,
-  Settings: settingsIcon,
-  "Help Center": helpIcon,
-  "Log Out": logoutIcon,
-};
+
 
 export default function MyAccount() {
   const router = useRouter();
   const { isDarkMode } = useTheme();
   const {  clearUser } = useUserStore();
 
+  const iconMap = {
+    "Edit Profile":isDarkMode?editProfileDark: editProfileIcon,
+    Notifications: isDarkMode ? notyDark : notyIcon,
+    Settings:isDarkMode?settingDark: settingsIcon,
+    "Help Center":isDarkMode?helpDark: helpIcon,
+    "Log Out":isDarkMode?logoutDark: logoutIcon,
+  };
   return (
-    <SafeAreaView style={[style.area, { backgroundColor: isDarkMode ? Colors.active : Colors.secondary }]}>
+    <SafeAreaView
+      style={[
+        style.area,
+        { backgroundColor: isDarkMode ? Colors.active : Colors.secondary },
+      ]}
+    >
       <View
         style={[
           style.main,
-          { backgroundColor: isDarkMode ? Colors.active : Colors.secondary, marginTop: 10 },
+          {
+            backgroundColor: isDarkMode ? Colors.active : Colors.secondary,
+            marginTop: 10,
+          },
         ]}
       >
         <AppBar
@@ -52,10 +66,10 @@ export default function MyAccount() {
               <TouchableOpacity
                 onPress={() => router.push("/MyAccount/screens/Notifications")}
               >
-                <Ionicons
-                  name="notifications-outline"
-                  color={isDarkMode ? Colors.secondary : Colors.active}
-                  size={30}
+                <Image
+                  source={iconMap["Notifications"]}
+                  style={{ width: 25, height: 25 }}
+                  resizeMode="contain"
                 />
               </TouchableOpacity>
             </View>
@@ -74,10 +88,20 @@ export default function MyAccount() {
               style={{ backgroundColor: Colors.secondary }}
             />
             <View style={{ marginLeft: 10 }}>
-              <Text style={[style.apptitle, { color: isDarkMode ? Colors.secondary : Colors.active }]}>
+              <Text
+                style={[
+                  style.apptitle,
+                  { color: isDarkMode ? Colors.secondary : Colors.active },
+                ]}
+              >
                 Anita Rose
               </Text>
-              <Text style={[style.r14, { color: isDarkMode ? Colors.secondary : Colors.disable }]}>
+              <Text
+                style={[
+                  style.r14,
+                  { color: isDarkMode ? Colors.secondary : Colors.disable },
+                ]}
+              >
                 anitarose@gmail.com
               </Text>
             </View>
@@ -227,7 +251,13 @@ export default function MyAccount() {
                   <Text
                     style={[
                       style.s16,
-                      { color: item.isRed ? "red" : isDarkMode ? Colors.secondary : Colors.active },
+                      {
+                        color: item.isRed
+                          ? "red"
+                          : isDarkMode
+                          ? Colors.secondary
+                          : Colors.active,
+                      },
                     ]}
                   >
                     {item.name}

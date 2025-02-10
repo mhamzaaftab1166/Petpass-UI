@@ -1,20 +1,14 @@
-import { View, Text, ScrollView, Image, TouchableOpacity } from "react-native";
+import { View, Text, ScrollView, TouchableOpacity } from "react-native";
 import React from "react";
 import { AppBar } from "@react-native-material/core";
 import Icon from "react-native-vector-icons/Ionicons";
 import { Colors } from "../../../theme/color";
 import { Link, useRouter } from "expo-router";
-import MaterialIcons from "@expo/vector-icons/MaterialIcons";
 import style from "../../../theme/style";
-import noty from "../../../../assets/images/profile/noty.png"
-import notyDark from "../../../../assets/images/profile/notyDark.png"
-import security from "../../../../assets/images/profile/security.png";
-import securityDark from "../../../../assets/images/profile/securityDark.png";
 import { SafeAreaView } from "react-native-safe-area-context";
-import { Switch } from "react-native-paper";
 import { useTheme } from "../../../helper/themeProvider";
 
-export default function Setting() {
+export default function Security() {
   const router = useRouter();
   const { isDarkMode, toggleTheme } = useTheme();
 
@@ -36,7 +30,7 @@ export default function Setting() {
       >
         <AppBar
           color={isDarkMode ? Colors.active : Colors.secondary}
-          title="Settings"
+          title="Security"
           titleStyle={[
             style.apptitle,
             { color: isDarkMode ? Colors.secondary : Colors.active },
@@ -57,18 +51,13 @@ export default function Setting() {
           style={{ marginTop: 20 }}
           showsVerticalScrollIndicator={false}
         >
-          <Link href="/MyAccount/screens/Security">
+          <Link href="/Security">
             <View
               style={{
                 flexDirection: "row",
                 alignItems: "center",
               }}
             >
-              <Image
-                resizeMode="contain"
-                source={isDarkMode ? securityDark : security}
-                style={{ width: 25, height: 25 }}
-              />
               <View style={{ marginLeft: 10, flex: 1 }}>
                 <Text
                   style={[
@@ -76,7 +65,7 @@ export default function Setting() {
                     { color: isDarkMode ? Colors.secondary : Colors.active },
                   ]}
                 >
-                  Security
+                  Change Email
                 </Text>
               </View>
               <Icon
@@ -88,14 +77,8 @@ export default function Setting() {
           </Link>
           <View style={[style.divider, { marginVertical: 15 }]}></View>
 
-          <Link href="/Notification1">
+          <Link href="/MyAccount/screens/EditPassword">
             <View style={{ flexDirection: "row", alignItems: "center" }}>
-              <Image
-                resizeMode="contain"
-                source={isDarkMode ? notyDark : noty}
-                style={{ width: 25, height: 25 }}
-              />
-
               <View style={{ marginLeft: 10, flex: 1 }}>
                 <Text
                   style={[
@@ -103,7 +86,7 @@ export default function Setting() {
                     { color: isDarkMode ? Colors.secondary : Colors.active },
                   ]}
                 >
-                  Notification
+                  Change Password
                 </Text>
               </View>
               <Icon
@@ -113,30 +96,6 @@ export default function Setting() {
               />
             </View>
           </Link>
-          <View style={[style.divider, { marginVertical: 15 }]}></View>
-
-          <View style={{ flexDirection: "row", alignItems: "center" }}>
-            <MaterialIcons
-              name="dark-mode"
-              size={24}
-              color={isDarkMode ? Colors.secondary : Colors.disable}
-            />
-            <View style={{ marginLeft: 10, flex: 1 }}>
-              <Text
-                style={[
-                  style.s16,
-                  { color: isDarkMode ? Colors.secondary : Colors.active },
-                ]}
-              >
-                Dark Mode
-              </Text>
-            </View>
-            <Switch
-              color={Colors.primary}
-              value={isDarkMode}
-              onValueChange={toggleTheme}
-            />
-          </View>
           <View style={[style.divider, { marginVertical: 15 }]}></View>
         </ScrollView>
       </View>
