@@ -1,6 +1,5 @@
 import { _axios } from "../helper/httpService";
 
-const key= "authToken";
 const login = (user) => {  
   return _axios("post", "/auth/login", user);
 };
