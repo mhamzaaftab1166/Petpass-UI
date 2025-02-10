@@ -1,7 +1,7 @@
 // app/(tabs)/_layout.js
 import React, { useRef, useEffect, useState } from "react";
 import { Animated, View } from "react-native";
-import { Tabs, useRouter } from "expo-router";
+import { Tabs, useFocusEffect, useRouter } from "expo-router";
 import { MaterialCommunityIcons, Ionicons, Feather } from "@expo/vector-icons";
 import { Colors } from "../theme/color"; // Adjust the path as needed
 import { useTheme } from "../helper/themeProvider";
@@ -74,30 +74,36 @@ export default function TabLayout() {
   const {  clearUser } = useUserStore();
   const [showAlert, setShowAlert] = useState(false);
 
-  useEffect(() => {  
-    console.log("useEffect triggered");
-    const checkToken = async () => {
-      try {
-        console.log("Checking token...");
-        const isValid = await authService.validateToken();  
-        console.log(isValid.message, "isValid");
-        if (isValid.message ===  "Valid token") {
-          setShowAlert(false);
-        }
-      } catch (error) {
-        console.log(error, 'error');
-        
-        if (error.message ===  "Token expired") {
-          setShowAlert(true);
-        }
-        console.error("Error in checkToken:", error);
-      }
-    };
-    checkToken();
-    const interval = setInterval(checkToken, 2 * 60 * 1000);
-    return () => clearInterval(interval);
-  }, []);
+  useFocusEffect(
+    React.useCallback(() => {
+      console.log("Screen is focused");
 
+      const checkToken = async () => {
+        try {
+          console.log("Checking token...");
+          const isValid = await authService.validateToken();
+          console.log(isValid.message, "isValid");
+          if (isValid.message === "Valid token") {
+            setShowAlert(false);
+          }
+        } catch (error) {
+          console.log(error, 'error');
+          if (error.message === "Token expired") {
+            setShowAlert(true);
+          }
+          console.log("Error in checkToken:", error);
+        }
+      };
+
+      checkToken();
+      const interval = setInterval(checkToken, 2 * 60 * 1000);
+
+      return () => {
+        console.log("Screen is unfocused");
+        clearInterval(interval);
+      };
+    }, [])
+  );
 
 
   const handleLogout = () => {
