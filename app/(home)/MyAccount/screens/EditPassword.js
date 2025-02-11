@@ -5,7 +5,7 @@ import {
   KeyboardAvoidingView,
   Platform,
 } from "react-native";
-import React from "react";
+import React, { useState } from "react";
 import { useRouter } from "expo-router";
 import style from "../../../theme/style";
 import { Colors } from "../../../theme/color";
@@ -17,6 +17,8 @@ import AppForm from "../../../components/forms/AppForm";
 import AppErrorMessage from "../../../components/forms/AppErrorMessage";
 import SubmitButton from "../../../components/forms/SubmitButton";
 import { useTheme } from "../../../helper/themeProvider";
+import userService from "../../../services/userService";
+import Loader from "../../../components/Loader/Loader";
 
 const validationSchema = Yup.object({
   current_password: Yup.string().required().label("Current Password"),
@@ -28,8 +30,29 @@ const validationSchema = Yup.object({
 });
 
 export default function EditPassword() {
+  const [error, setError] = useState();
+  const [errorVisible, setErrorVisible] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
   const router = useRouter();
   const { isDarkMode } = useTheme();
+
+
+  const handleSubmit = async ({ current_password, new_password }) => {
+    try {
+      setIsLoading(true);
+      await userService.changePassword({
+        currentPassword: current_password,
+        newPassword:new_password,
+      });
+      router.replace("/MyAccount/screens/Security");
+    } catch (error) {
+      setErrorVisible(true);
+      setError(error.message);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
 
   return (
     <SafeAreaView
@@ -42,6 +65,7 @@ export default function EditPassword() {
         behavior={Platform.OS === "ios" ? "padding" : null}
         style={{ flex: 1 }}
       >
+        <Loader isLoad={isLoading} />
         <View
           style={[
             style.main,
@@ -77,10 +101,10 @@ export default function EditPassword() {
               new_password: "",
               confirm_password: "",
             }}
-            onSubmit={(values) => console.log(values)}
+            onSubmit={(values) => handleSubmit(values)}
             validationSchema={validationSchema}
           >
-            <AppErrorMessage error={""} visible={false} />
+            <AppErrorMessage error={error} visible={errorVisible} />
             <AppFormField
               name={"current_password"}
               placeholder="CURRENT PASSWORD"
