@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   View,
   Text,
@@ -15,6 +15,10 @@ import style from "../../../theme/style";
 import { useRouter } from "expo-router";
 import { SwipeListView } from "react-native-swipe-list-view";
 import { useTheme } from "../../../helper/themeProvider";
+import useAddressStore from "../../../store/useAddressStore";
+import useUserStore from "../../../store/useUserStore";
+import Loader from "../../../components/Loader/Loader";
+import addressService from "../../../services/addressService";
 
 const width = Dimensions.get("screen").width;
 const height = Dimensions.get("screen").height;
@@ -22,47 +26,69 @@ const height = Dimensions.get("screen").height;
 export default function Address() {
   const router = useRouter();
   const { isDarkMode } = useTheme();
+  const { user } = useUserStore();
+  const { address, loading, fetchAddress } = useAddressStore();
+  const [isloading, setIsLoading] = useState(false)
 
-  // Sample Address Data
-  const [addresses, setAddresses] = useState([
-    {
-      id: "1",
-      name: "Anita Rose",
-      address: "1B -123 Latona Ave NE, Washington, United States",
-      phone: "(+1) 392 385 378",
-    },
-    {
-      id: "2",
-      name: "John Doe",
-      address: "456B - Elm Street, New York, United States",
-      phone: "(+1) 123 456 789",
-    },
-    {
-      id: "3",
-      name: "Alice Smith",
-      address: "789C - Sunset Blvd, Los Angeles, United States",
-      phone: "(+1) 987 654 321",
-    },
-  ]);
+  useEffect(() => {
+    fetchAddress(user?.id);
+  }, [fetchAddress]);
 
-  // Delete Address Function
-  const deleteAddress = (rowKey) => {
-    const newData = addresses.filter((item) => item.id !== rowKey);
-    setAddresses(newData);
+  const [addresses, setAddresses] = useState(address);
+
+  const deleteAddress = async (rowKey) => {
+    setIsLoading(true);
+    try {
+      console.log(rowKey, 'deleteUserAddress');
+      const newData = addresses.filter((item) => item.id !== rowKey);
+      
+      await addressService.deleteUserAddress(user?.id, rowKey);
+      
+      setAddresses(newData);
+    } catch (error) {
+      console.error("Error deleting address:", error);
+    } finally {
+      setIsLoading(false);
+    }
   };
 
+  console.log(address, 'ss');
+  
+
+  if (loading) {
+    return <Loader isLoad={loading} />;
+  }
+
   return (
-    <SafeAreaView style={[style.area, { backgroundColor: isDarkMode ? Colors.active : Colors.secondary }]}>
-      <View style={[style.main, { backgroundColor: isDarkMode ? Colors.active : Colors.secondary }]}>
+    <SafeAreaView
+      style={[
+        style.area,
+        { backgroundColor: isDarkMode ? Colors.active : Colors.secondary },
+      ]}
+    >
+      <Loader isLoad={isloading}/>
+      <View
+        style={[
+          style.main,
+          { backgroundColor: isDarkMode ? Colors.active : Colors.secondary },
+        ]}
+      >
         <AppBar
           color={isDarkMode ? Colors.active : Colors.secondary}
           title="Address"
-          titleStyle={[style.b18, { color: isDarkMode ? Colors.secondary : Colors.active }]}
+          titleStyle={[
+            style.b18,
+            { color: isDarkMode ? Colors.secondary : Colors.active },
+          ]}
           centerTitle={true}
           elevation={0}
           leading={
             <TouchableOpacity onPress={() => router.back()}>
-              <Icon name="chevron-back" color={isDarkMode ? Colors.secondary : Colors.active} size={30} />
+              <Icon
+                name="chevron-back"
+                color={isDarkMode ? Colors.secondary : Colors.active}
+                size={30}
+              />
             </TouchableOpacity>
           }
           trailing={
@@ -88,14 +114,35 @@ export default function Address() {
                 backgroundColor: isDarkMode ? Colors.disable : Colors.secondary,
               }}
             >
-              <Text style={[style.b16, { color: isDarkMode ? Colors.secondary : Colors.active }]}>
-                {item.name}
+              <Text
+                style={[
+                  style.b16,
+                  { color: isDarkMode ? Colors.secondary : Colors.active },
+                ]}
+              >
+                {item.full_name}
               </Text>
-              <Text style={[style.r14, { color: isDarkMode ? Colors.secondary : Colors.lable, marginTop: 5 }]}>
+              <Text
+                style={[
+                  style.r14,
+                  {
+                    color: isDarkMode ? Colors.secondary : Colors.lable,
+                    marginTop: 5,
+                  },
+                ]}
+              >
                 {item.address}
               </Text>
-              <Text style={[style.r14, { color: isDarkMode ? Colors.secondary : Colors.lable, marginTop: 3 }]}>
-                {item.phone}
+              <Text
+                style={[
+                  style.r14,
+                  {
+                    color: isDarkMode ? Colors.secondary : Colors.lable,
+                    marginTop: 3,
+                  },
+                ]}
+              >
+                {item.country_code} {item.phone_number}
               </Text>
             </View>
           )}

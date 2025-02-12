@@ -9,7 +9,6 @@ import {
   Platform,
   Text,
   View,
-  ActivityIndicator,
   StyleSheet
 } from "react-native";
 import { useRouter } from "expo-router";

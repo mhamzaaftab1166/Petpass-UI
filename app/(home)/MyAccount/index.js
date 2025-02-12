@@ -7,11 +7,11 @@ import {
   Image,
   ScrollView,
 } from "react-native";
-import React from "react";
+import React, { useEffect } from "react";
 import { AppBar } from "@react-native-material/core";
 import { Avatar } from "react-native-paper";
 import { Colors } from "../../theme/color";
-import { MaterialCommunityIcons, Ionicons } from "@expo/vector-icons";
+import { Ionicons } from "@expo/vector-icons";
 import editProfileIcon from "../../../assets/images/profile/editProfile.png";
 import editProfileDark from "../../../assets/images/profile/editProfileDark.png";
 import notyIcon from "../../../assets/images/profile/noty.png";
@@ -26,6 +26,7 @@ import style from "../../theme/style";
 import { useRouter } from "expo-router";
 import { useUserStore } from "../../store/useStore";
 import { useTheme } from "../../helper/themeProvider";
+import Loader from "../../components/Loader/Loader";
 
 const { width, height } = Dimensions.get("screen");
 
@@ -33,7 +34,14 @@ const { width, height } = Dimensions.get("screen");
 export default function MyAccount() {
   const router = useRouter();
   const { isDarkMode } = useTheme();
-  const {  clearUser } = useUserStore();
+  const { user, loading, fetchUser,  clearUser } = useUserStore();
+
+
+   useEffect(() => {
+      fetchUser();
+    }, [fetchUser]);
+  
+    console.log(user, 'user');
 
   const iconMap = {
     "Edit Profile":isDarkMode?editProfileDark: editProfileIcon,
@@ -42,6 +50,10 @@ export default function MyAccount() {
     "Help Center":isDarkMode?helpDark: helpIcon,
     "Log Out":isDarkMode?logoutDark: logoutIcon,
   };
+
+    if (loading) {
+      return <Loader isLoad={loading}/>;
+    }
   return (
     <SafeAreaView
       style={[
@@ -84,8 +96,8 @@ export default function MyAccount() {
             onPress={() => router.push("/MyAccount/screens/ProfileInfo")}
           >
             <Avatar.Image
-              source={require("../../../assets/images/profile/profile.png")}
-              style={{ backgroundColor: Colors.secondary }}
+              source={user?.profile_picture ?  user?.profile_picture : require("../../../assets/images/profile/profile.png")}
+              style={{ backgroundColor: isDarkMode ? Colors.secondary : Colors.active }}
             />
             <View style={{ marginLeft: 10 }}>
               <Text
@@ -94,7 +106,7 @@ export default function MyAccount() {
                   { color: isDarkMode ? Colors.secondary : Colors.active },
                 ]}
               >
-                Anita Rose
+                {user?.fullname}
               </Text>
               <Text
                 style={[
@@ -102,7 +114,7 @@ export default function MyAccount() {
                   { color: isDarkMode ? Colors.secondary : Colors.disable },
                 ]}
               >
-                anitarose@gmail.com
+                {user?.email}
               </Text>
             </View>
             <View style={{ alignItems: "flex-end", flex: 1 }}>

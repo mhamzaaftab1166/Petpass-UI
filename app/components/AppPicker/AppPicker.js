@@ -14,6 +14,7 @@ import ItemPicker from "../ItemPicker/ItemPicker"
 import { Colors } from "../../theme/color";
 import style from "../../theme/style";
 import SafeScreen from "../SafeScreen/SafeScreen";
+import { useTheme } from "../../helper/themeProvider";
 
 function AppPicker({
   icon,
@@ -25,6 +26,7 @@ function AppPicker({
   selectedItem,
   onSelectedItem,
 }) {
+  const { isDarkMode } = useTheme();
   const [modalVisible, setModalVisible] = useState(false);
   return (
     <>
@@ -49,7 +51,7 @@ function AppPicker({
               style={[
                 styles.text,
                 style.r16,
-                { color: Colors.active, flex: 1 },
+                { color: isDarkMode ? Colors.secondary : Colors.active, flex: 1 },
               ]}
             >
               {selectedItem.label}
@@ -67,10 +69,10 @@ function AppPicker({
           />
         </View>
       </TouchableWithoutFeedback>
-      <Modal visible={modalVisible} animationType="slide">
+      <Modal visible={modalVisible} animationType="slide" style={{backgroundColor: isDarkMode ? Colors.active : Colors.secondary}}>
         <SafeScreen>
           <Button
-            color={Colors.secondaryy}
+            color={isDarkMode ? Colors.active : Colors.secondary}
             title="Close"
             onPress={() => setModalVisible(false)}
           ></Button>

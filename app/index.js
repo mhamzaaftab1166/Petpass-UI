@@ -1,4 +1,4 @@
-import { ActivityIndicator, Dimensions } from "react-native";
+import { Dimensions } from "react-native";
 import { useFonts } from "expo-font";
 import React, { useEffect, useState } from "react";
 import storage from "./helper/localStorage";
@@ -6,6 +6,7 @@ import Sliders from "./Authentication/Sliders";
 import { useUserStore } from "./store/useStore";
 import { Redirect } from "expo-router";
 import { localStorageConst } from "./constants/storageConstant";
+import Loader from "./components/Loader/Loader";
 
 const width = Dimensions.get("screen").width;
 
@@ -30,7 +31,7 @@ export default function Introduction() {
   }, []);
 
   if (!fontsLoaded) {
-    return <ActivityIndicator size="large" />;
+    return <Loader size="large" />;
   }
 
   return token ? <Redirect href="(home)" /> : <Sliders />;

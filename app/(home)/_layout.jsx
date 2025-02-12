@@ -1,11 +1,11 @@
 // app/(tabs)/_layout.js
+
 import React, { useRef, useEffect, useState } from "react";
 import { Animated, View } from "react-native";
 import { Tabs, useFocusEffect, useRouter } from "expo-router";
 import { MaterialCommunityIcons, Ionicons, Feather } from "@expo/vector-icons";
-import { Colors } from "../theme/color"; // Adjust the path as needed
+import { Colors } from "../theme/color";
 import { useTheme } from "../helper/themeProvider";
-import storage from "../helper/localStorage";
 import authService from "../services/authService";
 import AppAlert  from "../components/AppAlert"
 import useUserStore from "../store/useUserStore"
@@ -36,7 +36,6 @@ const AnimatedTabIcon = ({ focused, children }) => {
         ]),
       ]).start();
     } else {
-      // When unfocused, animate the icon back to its original scale.
       Animated.spring(iconScale, {
         toValue: 1,
         friction: 4,
@@ -217,6 +216,7 @@ export default function TabLayout() {
           options={{
             title: "Account",
             headerShown: false,
+            tabBarStyle: { display: "none" },
             tabBarLabel: "",
             tabBarIcon: ({ focused, color }) => (
               <AnimatedTabIcon focused={focused}>
