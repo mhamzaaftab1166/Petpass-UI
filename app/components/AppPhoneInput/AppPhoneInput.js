@@ -13,6 +13,7 @@ const AppPhoneInput = ({
 }) => {
   const phone = useRef(null);
   const { isDarkMode } = useTheme();
+  
   const handlePhoneChange = (number) => {
     if (phone.current) {
       const countryCode = "+" + phone.current.getCountryCode();

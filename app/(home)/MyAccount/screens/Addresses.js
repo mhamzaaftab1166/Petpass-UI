@@ -27,33 +27,25 @@ export default function Address() {
   const router = useRouter();
   const { isDarkMode } = useTheme();
   const { user } = useUserStore();
-  const { address, loading, fetchAddress } = useAddressStore();
-  const [isloading, setIsLoading] = useState(false)
+  const { address, loading, fetchAddress, clearAddress } = useAddressStore();
+  const [isloading, setIsLoading] = useState(false);
 
   useEffect(() => {
     fetchAddress(user?.id);
-  }, [fetchAddress]);
-
-  const [addresses, setAddresses] = useState(address);
+    return () => clearAddress();
+  }, [user?.id]);
 
   const deleteAddress = async (rowKey) => {
     setIsLoading(true);
     try {
-      console.log(rowKey, 'deleteUserAddress');
-      const newData = addresses.filter((item) => item.id !== rowKey);
-      
       await addressService.deleteUserAddress(user?.id, rowKey);
-      
-      setAddresses(newData);
     } catch (error) {
       console.error("Error deleting address:", error);
     } finally {
+      fetchAddress(user?.id);
       setIsLoading(false);
     }
   };
-
-  console.log(address, 'ss');
-  
 
   if (loading) {
     return <Loader isLoad={loading} />;
@@ -66,7 +58,7 @@ export default function Address() {
         { backgroundColor: isDarkMode ? Colors.active : Colors.secondary },
       ]}
     >
-      <Loader isLoad={isloading}/>
+      <Loader isLoad={isloading} />
       <View
         style={[
           style.main,
@@ -93,7 +85,9 @@ export default function Address() {
           }
           trailing={
             <TouchableOpacity
-              onPress={() => router.push("/MyAccount/screens/AddressFrom")}
+              onPress={() =>
+                router.push("/MyAccount/screens/AddressFrom")
+              }
             >
               <Icon name="add" color={Colors.primary} size={30} />
             </TouchableOpacity>
@@ -101,7 +95,7 @@ export default function Address() {
         />
 
         <SwipeListView
-          data={addresses}
+          data={address}
           keyExtractor={(item) => item.id}
           renderItem={({ item }) => (
             <View
@@ -142,7 +136,7 @@ export default function Address() {
                   },
                 ]}
               >
-                {item.country_code} {item.phone_number}
+                {item.phone_number}
               </Text>
             </View>
           )}
@@ -160,7 +154,11 @@ export default function Address() {
               }}
             >
               <TouchableOpacity
-                onPress={() => router.push("/MyAccount/screens/AddressFrom")}
+                onPress={() =>
+                  router.push(
+                    `/MyAccount/screens/AddressFrom?userId=${user?.id}&addressId=${item.id}&isEdit=true`
+                  )
+                }
                 style={{
                   justifyContent: "center",
                   alignItems: "center",

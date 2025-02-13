@@ -36,7 +36,7 @@ const validationSchema = Yup.object({
 });
 
 export default function AccountInfo() {
-  const { user, loading, fetchUser } = useUserStore();
+  const { user, loading, fetchUser, clearUserData } = useUserStore();
   const router = useRouter();
   const { isDarkMode } = useTheme();
   const navigation = useNavigation();
@@ -50,6 +50,7 @@ export default function AccountInfo() {
 
   useEffect(() => {
     fetchUser();
+    return () => clearUserData();
   }, [fetchUser]);
 
   if (loading) {
@@ -101,7 +102,7 @@ export default function AccountInfo() {
               username: user.fullname,
               fullname: user.fullname,
               profile_picture: user.profile_picture,
-              phone_number: user.phone_number,
+              phone_number: `${user.country_code} ${user.phone_number}`,
               profile_types: user.profile_types,
             }}
             onSubmit={(values) => console.log(values)}

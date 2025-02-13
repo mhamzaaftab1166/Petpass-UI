@@ -39,7 +39,7 @@ const AppImagePicker = ({ imageUri, onSelectImage }) => {
   return (
     <View style={styles.center}>
       <TouchableOpacity onPress={selectImage} style={styles.container}>
-        {imageUri && <Image resizeMode="contain" style={styles.image} source={{ uri: imageUri }} />}
+        {imageUri && <Image resizeMode="cover" style={styles.image} source={{ uri: imageUri }} />}
       </TouchableOpacity>
       <Pressable onPress={selectImage}>
         <Text

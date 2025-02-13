@@ -40,8 +40,6 @@ export default function MyAccount() {
    useEffect(() => {
       fetchUser();
     }, [fetchUser]);
-  
-    console.log(user, 'user');
 
   const iconMap = {
     "Edit Profile":isDarkMode?editProfileDark: editProfileIcon,
@@ -152,7 +150,7 @@ export default function MyAccount() {
             <Image
               source={require("../../../assets/images/profile/address.png")}
               resizeMode="stretch"
-              style={{ width: width / 8, height: height / 22 }}
+              style={{ width: width / 9, height: height / 22 }}
             />
             <Text style={[style.b12, { color: Colors.disable, marginTop: 10 }]}>
               Address
