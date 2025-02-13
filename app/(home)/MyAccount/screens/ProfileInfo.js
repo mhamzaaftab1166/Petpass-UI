@@ -57,6 +57,9 @@ export default function AccountInfo() {
     return <Loader isLoad={loading} />;
   }
 
+  console.log(user, 'user');
+  
+
   return (
     <SafeAreaView
       style={[

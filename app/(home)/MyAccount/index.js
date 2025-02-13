@@ -30,28 +30,26 @@ import Loader from "../../components/Loader/Loader";
 
 const { width, height } = Dimensions.get("screen");
 
-
 export default function MyAccount() {
   const router = useRouter();
   const { isDarkMode } = useTheme();
-  const { user, loading, fetchUser,  clearUser } = useUserStore();
+  const { user, loading, fetchUser, clearUser } = useUserStore();
 
-
-   useEffect(() => {
-      fetchUser();
-    }, [fetchUser]);
+  useEffect(() => {
+    fetchUser();
+  }, [fetchUser]);
 
   const iconMap = {
-    "Edit Profile":isDarkMode?editProfileDark: editProfileIcon,
+    "Edit Profile": isDarkMode ? editProfileDark : editProfileIcon,
     Notifications: isDarkMode ? notyDark : notyIcon,
-    Settings:isDarkMode?settingDark: settingsIcon,
-    "Help Center":isDarkMode?helpDark: helpIcon,
-    "Log Out":isDarkMode?logoutDark: logoutIcon,
+    Settings: isDarkMode ? settingDark : settingsIcon,
+    "Help Center": isDarkMode ? helpDark : helpIcon,
+    "Log Out": isDarkMode ? logoutDark : logoutIcon,
   };
 
-    if (loading) {
-      return <Loader isLoad={loading}/>;
-    }
+  if (loading) {
+    return <Loader isLoad={loading} />;
+  }
   return (
     <SafeAreaView
       style={[
@@ -94,8 +92,14 @@ export default function MyAccount() {
             onPress={() => router.push("/MyAccount/screens/ProfileInfo")}
           >
             <Avatar.Image
-              source={user?.profile_picture ?  user?.profile_picture : require("../../../assets/images/profile/profile.png")}
-              style={{ backgroundColor: isDarkMode ? Colors.secondary : Colors.active }}
+              source={
+                user?.profile_picture
+                  ? { uri: user.profile_picture }
+                  : require("../../../assets/images/profile/profile.png")
+              }
+              style={{
+                backgroundColor: isDarkMode ? Colors.secondary : Colors.active,
+              }}
             />
             <View style={{ marginLeft: 10 }}>
               <Text
