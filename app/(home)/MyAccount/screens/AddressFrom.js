@@ -75,12 +75,12 @@ export default function AddressFrom() {
       isEdit
         ? await addressService.updateUserAddress(formattedupdateValues)
         : await addressService.createUserAddress(formattedValues);
+        router.replace("/MyAccount/screens/Addresses");
     } catch (error) {
       setErrorVisible(true);
-      setError(error);
+      setError(error.message);
     } finally {
-      router.replace("/MyAccount/screens/Addresses");
-      fetchAddress(user?.id);
+      fetchAddress(user?.id); 
       setIsLoading(false);
     }
   };
@@ -142,7 +142,7 @@ export default function AddressFrom() {
               initialValues={{
                 full_name: isEdit ? singleAddress?.full_name : "",
                 address: isEdit ? singleAddress?.address : "",
-                country_code: isEdit ? singleAddress?.country_code : "+971",
+                country_code: isEdit ? singleAddress?.country_code : "",
                 phone_number: isEdit ? singleAddress?.phone_number : "",
                 city: isEdit
                   ? { label: singleAddress?.city, value: singleAddress?.city }
@@ -157,7 +157,7 @@ export default function AddressFrom() {
               onSubmit={(values) => handleSubmit(values)}
               validationSchema={validationSchema}
             >
-              <AppErrorMessage error={error?.message} visible={errorVisible} />
+              <AppErrorMessage error={error} visible={errorVisible} />
 
               <AppFormField
                 name={"full_name"}
