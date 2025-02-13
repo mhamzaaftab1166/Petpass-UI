@@ -136,7 +136,7 @@ export default function Address() {
                   },
                 ]}
               >
-                {item.phone_number}
+               {item.country_code} {item.phone_number}
               </Text>
             </View>
           )}

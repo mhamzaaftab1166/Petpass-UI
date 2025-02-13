@@ -56,8 +56,15 @@ export default function AddressFrom() {
   }, [clearSingleAddress]);
 
   const handleSubmit = async (values) => {
+
+    const phoneParts = values.phone_number.split(" ");
+    const countryCode = phoneParts[0];
+    const phoneNumber = phoneParts.slice(1).join("");
+    
     const formattedValues = {
       ...values,
+      country_code: countryCode,
+      phone_number: phoneNumber,
       city: values.city.value,
       country: values.country.value,
     };
@@ -66,6 +73,8 @@ export default function AddressFrom() {
       ...values,
       userId: userId,
       addressId: addressId,
+      country_code: countryCode,
+      phone_number: phoneNumber,
       city: values.city.value,
       country: values.country.value,
     };
@@ -142,8 +151,7 @@ export default function AddressFrom() {
               initialValues={{
                 full_name: isEdit ? singleAddress?.full_name : "",
                 address: isEdit ? singleAddress?.address : "",
-                country_code: isEdit ? singleAddress?.country_code : "",
-                phone_number: isEdit ? singleAddress?.phone_number : "",
+                phone_number: isEdit ? `${singleAddress?.country_code} ${singleAddress?.phone_number}` : "",
                 city: isEdit
                   ? { label: singleAddress?.city, value: singleAddress?.city }
                   : "",
