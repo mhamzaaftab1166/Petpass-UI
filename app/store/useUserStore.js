@@ -18,6 +18,9 @@ const useUserStore = create((set) => ({
       set({ error: 'Failed to fetch users', loading: false });
     }
   },
+  clearUserData: async() => {
+    set({ user: null, loading: false, error: null });
+  },
   clearUser: async() => {
     set({ user: null, token: null });
     await storeage.removeAppData(localStorageConst.JWTUSER);
