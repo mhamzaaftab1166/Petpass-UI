@@ -59,7 +59,7 @@ export default function AddressFrom() {
       router.replace("/MyAccount/screens/Addresses");
     } catch (error) {
       setErrorVisible(true);
-      setError(error.message);
+      setError(error);
     } finally {
       setIsLoading(false);
     }
