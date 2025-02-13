@@ -32,7 +32,7 @@ const AppRoleSelector = ({ value, onSelect, parentStyles }) => {
           onPress={() => onSelect(role.role)}
           title={role.title}
           imageSrc={role.imageSrc}
-          isSelected={value.includes(role.role)}
+          isSelected={value?.includes(role.role)}
         />
       ))}
     </View>

@@ -1,6 +1,5 @@
 import {
   View,
-  Text,
   SafeAreaView,
   TouchableOpacity,
   KeyboardAvoidingView,
@@ -9,9 +8,7 @@ import {
 import React, { useCallback, useEffect, useState } from "react";
 import { AppBar } from "@react-native-material/core";
 import Icon from "react-native-vector-icons/Ionicons";
-import { Avatar } from "react-native-paper";
 import { Colors } from "../../../theme/color";
-import { Alert } from "react-native";
 import style from "../../../theme/style";
 import { useFocusEffect, useNavigation, useRouter } from "expo-router";
 import * as Yup from "yup";
@@ -24,15 +21,16 @@ import SubmitButton from "../../../components/forms/SubmitButton";
 import { useTheme } from "../../../helper/themeProvider";
 import { useUserStore } from "../../../store/useStore";
 import Loader from "../../../components/Loader/Loader";
-import * as ImagePicker from "expo-image-picker";
 import AppFormImagePicker from "../../../components/forms/AppFormImagePicker";
+import userService from "../../../services/userService";
+import * as FileSystem from "expo-file-system";
 
 const validationSchema = Yup.object({
   username: Yup.string().required().label("Username"),
   email: Yup.string().required().email().label("Email"),
   phone_number: Yup.string().required().min(8).max(15).label("Phone"),
   profile_types: Yup.array().of(Yup.string().required()).min(1).label("Role"),
-  image: Yup.string().required("Image is required"),
+  profile_picture: Yup.string(),
 });
 
 export default function AccountInfo() {
@@ -40,6 +38,9 @@ export default function AccountInfo() {
   const router = useRouter();
   const { isDarkMode } = useTheme();
   const navigation = useNavigation();
+  const [error, setError] = useState();
+  const [errorVisible, setErrorVisible] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
 
   useFocusEffect(
     useCallback(() => {
@@ -57,8 +58,39 @@ export default function AccountInfo() {
     return <Loader isLoad={loading} />;
   }
 
-  console.log(user, 'user');
-  
+  const handleSubmit = async ({
+    phone_number,
+    profile_picture,
+    profile_types,
+    username,
+  }) => {
+    const phoneParts = phone_number.split(" ");
+    const countryCode = phoneParts[0];
+    const phoneNumber = phoneParts.slice(1).join("");
+      // const base64ofImage = await FileSystem.readAsStringAsync(profile_picture, {
+      //   encoding: FileSystem.EncodingType.Base64,
+      // });
+      // console.log(base64ofImage);
+      
+    try {
+      setIsLoading(true);
+      await userService.editProfile(
+        {
+          phone_number: phoneNumber,
+          profile_picture:"",
+          profile_types,
+          username,
+          country_code: countryCode,
+        },
+        user?.id
+      );
+    } catch (error) {
+      setErrorVisible(true);
+      setError(error.message);
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
   return (
     <SafeAreaView
@@ -71,6 +103,7 @@ export default function AccountInfo() {
         behavior={Platform.OS === "ios" ? "padding" : null}
         style={{ flex: 1 }}
       >
+        <Loader isLoad={isLoading} />
         <View
           style={[
             style.main,
@@ -101,23 +134,24 @@ export default function AccountInfo() {
           />
           <AppForm
             initialValues={{
-              email: user.email,
-              username: user.fullname,
-              fullname: user.fullname,
-              profile_picture: user.profile_picture,
-              phone_number: `${user.country_code} ${user.phone_number}`,
-              profile_types: user.profile_types,
+              email: user?.email,
+              username: user?.fullname,
+              fullname: user?.fullname,
+              profile_picture: user?.profile_picture || "",
+              phone_number: `${user?.country_code} ${user?.phone_number}`,
+              profile_types: user?.profile_types,
             }}
-            onSubmit={(values) => console.log(values)}
+            onSubmit={handleSubmit}
             validationSchema={validationSchema}
           >
-            <AppErrorMessage error={""} visible={false} />
-            <AppFormImagePicker name="image" />
+            <AppErrorMessage error={error} visible={errorVisible} />
+            <AppFormImagePicker name="profile_picture" />
 
             <AppFormField
               name={"fullname"}
               placeholder="USERNAME"
               style={style}
+              editable={false}
               parentStyles={{ marginTop: 20 }}
             />
             <AppFormField
