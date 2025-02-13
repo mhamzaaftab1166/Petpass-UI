@@ -22,16 +22,17 @@ import AppFormPhoneField from "../../../components/forms/AppFormPhoneFeild";
 import AppFormRoleSelector from "../../../components/forms/AppFormRoleSelector";
 import SubmitButton from "../../../components/forms/SubmitButton";
 import { useTheme } from "../../../helper/themeProvider";
-import userServices from "../../../services/userService";
 import { useUserStore } from "../../../store/useStore";
 import Loader from "../../../components/Loader/Loader";
 import * as ImagePicker from "expo-image-picker";
+import AppFormImagePicker from "../../../components/forms/AppFormImagePicker";
 
 const validationSchema = Yup.object({
   username: Yup.string().required().label("Username"),
   email: Yup.string().required().email().label("Email"),
   phone_number: Yup.string().required().min(8).max(15).label("Phone"),
-  profile_type: Yup.string().required().label("Role"),
+  profile_types: Yup.array().of(Yup.string().required()).min(1).label("Role"),
+  image: Yup.string().required("Image is required"),
 });
 
 export default function AccountInfo() {
@@ -50,25 +51,6 @@ export default function AccountInfo() {
   useEffect(() => {
     fetchUser();
   }, [fetchUser]);
-
-
-  const pickImage = async (setProfilePicture) => {
-    const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
-    if (status !== "granted") {
-      Alert.alert("Permission Required", "Please allow access to your photos.");
-      return;
-    }
-    const result = await ImagePicker.launchImageLibraryAsync({
-      mediaTypes: ImagePicker.MediaTypeOptions.Images,
-      allowsEditing: true,
-      aspect: [1, 1],
-      quality: 1,
-    });
-  
-    if (!result.canceled) {
-      setProfilePicture(result.assets[0].uri);
-    }
-  };
 
   if (loading) {
     return <Loader isLoad={loading} />;
@@ -120,33 +102,14 @@ export default function AccountInfo() {
               fullname: user.fullname,
               profile_picture: user.profile_picture,
               phone_number: user.phone_number,
-              profile_type: user.profile_types,
+              profile_types: user.profile_types,
             }}
             onSubmit={(values) => console.log(values)}
             validationSchema={validationSchema}
           >
             <AppErrorMessage error={""} visible={false} />
-            <Avatar.Image
-              source={
-                user.profile_picture
-                  ? user.profile_picture
-                  : require("../../../../assets/images/profile/profile.png")
-              }
-              size={100}
-              style={{
-                backgroundColor: isDarkMode ? Colors.secondary : Colors.active,
-                alignSelf: "center",
-                marginTop: 15,
-              }}
-            />
-            <Text
-              style={[
-                style.r14,
-                { color: Colors.primary, textAlign: "center", marginTop: 10 },
-              ]}
-            >
-              Change avatar
-            </Text>
+            <AppFormImagePicker name="image" />
+
             <AppFormField
               name={"fullname"}
               placeholder="USERNAME"
@@ -167,10 +130,9 @@ export default function AccountInfo() {
               parentStyles={{ marginTop: 20 }}
             />
             <AppFormPhoneField style={style} name={"phone_number"} />
-
-            <AppFormRoleSelector name={"profile_type"} />
-            <View style={{marginTop: 50}}>
-            <SubmitButton title="SAVE" style={style}/>
+            <AppFormRoleSelector name={"profile_types"} />
+            <View style={{ marginTop: 50 }}>
+              <SubmitButton title="SAVE" style={style} />
             </View>
           </AppForm>
         </View>
