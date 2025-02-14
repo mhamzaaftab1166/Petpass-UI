@@ -12,10 +12,10 @@ const changePassword = (payload) => {
   return _axios("post", "/reset-password-token", payload);
 };
 
-const editProfile = (payload, userId) => {
+const editProfile = (payload) => {
   console.log(payload);
   
-  return _axios("put", `/user/${userId}`, payload, "multipart/form-data");
+  return _axios("put", `/user/${payload.userId}`, payload, "multipart/form-data");
 };
 
 export default {

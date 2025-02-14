@@ -108,7 +108,7 @@ export default function MyAccount() {
                   { color: isDarkMode ? Colors.secondary : Colors.active },
                 ]}
               >
-                {user?.fullname}
+                {user?.username}
               </Text>
               <Text
                 style={[

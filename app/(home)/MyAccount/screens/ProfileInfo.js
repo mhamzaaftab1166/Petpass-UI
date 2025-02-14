@@ -25,6 +25,7 @@ import AppFormImagePicker from "../../../components/forms/AppFormImagePicker";
 import userService from "../../../services/userService";
 import * as FileSystem from "expo-file-system";
 import AppText from "../../../components/AppText/AppText";
+import {getFirstName} from "../../../utils/getFirstName"
 
 const validationSchema = Yup.object({
   username: Yup.string().required().label("Username"),
@@ -68,26 +69,37 @@ export default function AccountInfo() {
     const phoneParts = phone_number.split(" ");
     const countryCode = phoneParts[0];
     const phoneNumber = phoneParts.slice(1).join("");
-    const base64ofImage = await FileSystem.readAsStringAsync(profile_picture, {
-      encoding: FileSystem.EncodingType.Base64,
-    });
-
+  
+    if (profile_picture) {
+      const fileInfo = await FileSystem.getInfoAsync(profile_picture);
+      const mimeType = fileInfo.uri.endsWith(".png") ? "image/png" : "image/jpeg"; 
+      const base64Image = await FileSystem.readAsStringAsync(profile_picture, {
+        encoding: FileSystem.EncodingType.Base64,
+      });
+      profile_picture = `data:${mimeType};base64,${base64Image}`;
+    }
+  
     try {
       setIsLoading(true);
-      await userService.editProfile(
+      const res = await userService.editProfile(
         {
+          userId: user.id,
           phone_number: phoneNumber,
-          profile_picture: base64ofImage,
+          profile_picture,
           profile_types,
           username,
           country_code: countryCode,
         },
-        user?.id
+        
       );
+      console.log(res, 'res');
     } catch (error) {
+      console.log(error, 'error');
+      
       setErrorVisible(true);
       setError(error.message);
     } finally {
+      fetchUser()
       setIsLoading(false);
     }
   };
@@ -136,7 +148,7 @@ export default function AccountInfo() {
           <AppForm
             initialValues={{
               email: user?.email,
-              username: user?.fullname,
+              username: user?.username,
               profile_picture: user?.profile_picture || "",
               phone_number: `${user?.country_code} ${user?.phone_number}`,
               profile_types: user?.profile_types,
@@ -151,12 +163,12 @@ export default function AccountInfo() {
               style={{
                 color:isDarkMode? "white":"black",
                 marginLeft:5,
-                fontSize: "30",
+                fontSize: 30,
                 marginTop: "20",
                 fontWeight: "700",
               }}
             >
-              {`Hi, ${user?.fullname?.split(" ")[0] || ""}`}
+              {`Hi, ${getFirstName(user?.username)}`}
             </AppText>
 
             <AppFormField
