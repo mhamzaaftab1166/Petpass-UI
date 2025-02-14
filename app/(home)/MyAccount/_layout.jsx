@@ -13,7 +13,7 @@ const ProfileLayout = () => {
         />
         <Stack.Screen
           name="MyAccount/screens/ProfileInfo"
-          options={{ headerShown: false }}
+          options={{ headerShown: false}}
         />
         <Stack.Screen
           name="MyAccount/screens/Addresses"

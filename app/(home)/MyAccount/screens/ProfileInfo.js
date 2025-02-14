@@ -5,12 +5,12 @@ import {
   KeyboardAvoidingView,
   Platform,
 } from "react-native";
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { AppBar } from "@react-native-material/core";
 import Icon from "react-native-vector-icons/Ionicons";
 import { Colors } from "../../../theme/color";
 import style from "../../../theme/style";
-import { useFocusEffect, useNavigation, useRouter } from "expo-router";
+import { useRouter } from "expo-router";
 import * as Yup from "yup";
 import AppForm from "../../../components/forms/AppForm";
 import AppErrorMessage from "../../../components/forms/AppErrorMessage";
@@ -39,17 +39,10 @@ export default function AccountInfo() {
   const { user, loading, fetchUser, clearUserData } = useUserStore();
   const router = useRouter();
   const { isDarkMode } = useTheme();
-  const navigation = useNavigation();
   const [error, setError] = useState();
   const [errorVisible, setErrorVisible] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
 
-  useFocusEffect(
-    useCallback(() => {
-      navigation.setOptions({ tabBarStyle: { display: "none" } });
-      return () => navigation.setOptions({ tabBarStyle: {} });
-    }, [navigation])
-  );
 
   useEffect(() => {
     fetchUser();
@@ -70,39 +63,41 @@ export default function AccountInfo() {
     const countryCode = phoneParts[0];
     const phoneNumber = phoneParts.slice(1).join("");
   
-    if (profile_picture) {
-      const fileInfo = await FileSystem.getInfoAsync(profile_picture);
-      const mimeType = fileInfo.uri.endsWith(".png") ? "image/png" : "image/jpeg"; 
-      const base64Image = await FileSystem.readAsStringAsync(profile_picture, {
-        encoding: FileSystem.EncodingType.Base64,
-      });
-      profile_picture = `data:${mimeType};base64,${base64Image}`;
+    if (profile_picture && !profile_picture.startsWith("http")) {
+      try {
+        const fileInfo = await FileSystem.getInfoAsync(profile_picture);
+        const mimeType = fileInfo.uri.endsWith(".png") ? "image/png" : "image/jpeg";
+        const base64Image = await FileSystem.readAsStringAsync(profile_picture, {
+          encoding: FileSystem.EncodingType.Base64,
+        });
+        profile_picture = `data:${mimeType};base64,${base64Image}`;
+      } catch (fileError) {
+        console.log("Error reading file:", fileError);
+      }
     }
   
     try {
       setIsLoading(true);
-      const res = await userService.editProfile(
-        {
-          userId: user.id,
-          phone_number: phoneNumber,
-          profile_picture,
-          profile_types,
-          username,
-          country_code: countryCode,
-        },
-        
-      );
-      console.log(res, 'res');
+      const res = await userService.editProfile({
+        userId: user.id,
+        phone_number: phoneNumber,
+        profile_picture,
+        profile_types,
+        username,
+        country_code: countryCode,
+      });
+  
+      console.log(res, "res");
     } catch (error) {
-      console.log(error, 'error');
-      
+      console.log(error, "error");
       setErrorVisible(true);
       setError(error.message);
     } finally {
-      fetchUser()
+      fetchUser();
       setIsLoading(false);
     }
   };
+  
 
   return (
     <SafeAreaView
@@ -164,8 +159,9 @@ export default function AccountInfo() {
                 color:isDarkMode? "white":"black",
                 marginLeft:5,
                 fontSize: 30,
-                marginTop: "20",
-                fontWeight: "700",
+                marginTop: 30,
+                textAlign: "center",
+                fontFamily: "Avenir-Bold"
               }}
             >
               {`Hi, ${getFirstName(user?.username)}`}
@@ -186,7 +182,7 @@ export default function AccountInfo() {
             />
             <AppFormPhoneField style={style} name={"phone_number"} />
             <AppFormRoleSelector name={"profile_types"} />
-            <View style={{ marginTop: 50 }}>
+            <View style={{ marginTop: 20 }}>
               <SubmitButton title="SAVE" style={style} />
             </View>
           </AppForm>

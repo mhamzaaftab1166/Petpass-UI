@@ -264,7 +264,6 @@ export default StyleSheet.create({
         marginBottom:30,
         justifyContent:'space-between',
         
-    },  
-    
+    },      
 }
 );
