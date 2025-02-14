@@ -8,6 +8,7 @@ function AppFormField({
   isPassword,
   parentStyles,
   style,
+  editable,
   ...otherProps
 }) {
   const { touched, setFieldTouched, errors, values, setFieldValue } =
@@ -21,6 +22,7 @@ function AppFormField({
         isPassword={isPassword}
         parentStyles={parentStyles}
         style={style}
+        editable={editable}
         {...otherProps}
       />
       <AppErrorMessage error={errors[name]} visible={touched[name]} />

@@ -24,6 +24,7 @@ import Loader from "../../../components/Loader/Loader";
 import AppFormImagePicker from "../../../components/forms/AppFormImagePicker";
 import userService from "../../../services/userService";
 import * as FileSystem from "expo-file-system";
+import AppText from "../../../components/AppText/AppText";
 
 const validationSchema = Yup.object({
   username: Yup.string().required().label("Username"),
@@ -67,17 +68,16 @@ export default function AccountInfo() {
     const phoneParts = phone_number.split(" ");
     const countryCode = phoneParts[0];
     const phoneNumber = phoneParts.slice(1).join("");
-      // const base64ofImage = await FileSystem.readAsStringAsync(profile_picture, {
-      //   encoding: FileSystem.EncodingType.Base64,
-      // });
-      // console.log(base64ofImage);
-      
+    const base64ofImage = await FileSystem.readAsStringAsync(profile_picture, {
+      encoding: FileSystem.EncodingType.Base64,
+    });
+
     try {
       setIsLoading(true);
       await userService.editProfile(
         {
           phone_number: phoneNumber,
-          profile_picture:"",
+          profile_picture: base64ofImage,
           profile_types,
           username,
           country_code: countryCode,
@@ -132,11 +132,11 @@ export default function AccountInfo() {
               </TouchableOpacity>
             }
           />
+
           <AppForm
             initialValues={{
               email: user?.email,
               username: user?.fullname,
-              fullname: user?.fullname,
               profile_picture: user?.profile_picture || "",
               phone_number: `${user?.country_code} ${user?.phone_number}`,
               profile_types: user?.profile_types,
@@ -147,13 +147,18 @@ export default function AccountInfo() {
             <AppErrorMessage error={error} visible={errorVisible} />
             <AppFormImagePicker name="profile_picture" />
 
-            <AppFormField
-              name={"fullname"}
-              placeholder="USERNAME"
-              style={style}
-              editable={false}
-              parentStyles={{ marginTop: 20 }}
-            />
+            <AppText
+              style={{
+                color:isDarkMode? "white":"black",
+                marginLeft:5,
+                fontSize: "30",
+                marginTop: "20",
+                fontWeight: "700",
+              }}
+            >
+              {`Hi, ${user?.fullname?.split(" ")[0] || ""}`}
+            </AppText>
+
             <AppFormField
               name={"username"}
               placeholder="FULL NAME"
