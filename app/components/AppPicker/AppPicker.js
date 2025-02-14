@@ -10,7 +10,7 @@ import {
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 
 import AppText from "../AppText/AppText";
-import ItemPicker from "../ItemPicker/ItemPicker"
+import ItemPicker from "../ItemPicker/ItemPicker";
 import { Colors } from "../../theme/color";
 import style from "../../theme/style";
 import SafeScreen from "../SafeScreen/SafeScreen";
@@ -51,7 +51,10 @@ function AppPicker({
               style={[
                 styles.text,
                 style.r16,
-                { color: isDarkMode ? Colors.secondary : Colors.active, flex: 1 },
+                {
+                  color: isDarkMode ? Colors.secondary : Colors.active,
+                  flex: 1,
+                },
               ]}
             >
               {selectedItem.label}
@@ -69,10 +72,20 @@ function AppPicker({
           />
         </View>
       </TouchableWithoutFeedback>
-      <Modal visible={modalVisible} animationType="slide" style={{backgroundColor: isDarkMode ? Colors.active : Colors.secondary}}>
-        <SafeScreen>
+      <Modal
+        visible={modalVisible}
+        animationType="slide"
+        style={{
+          backgroundColor: isDarkMode ? Colors.active : Colors.secondary,
+        }}
+      >
+        <SafeScreen
+          style={{
+            backgroundColor: isDarkMode ? Colors.active : Colors.secondary,
+          }}
+        >
           <Button
-            color={isDarkMode ? Colors.active : Colors.secondary}
+            color={isDarkMode ? Colors.secondary : Colors.active}
             title="Close"
             onPress={() => setModalVisible(false)}
           ></Button>

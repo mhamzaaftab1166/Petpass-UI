@@ -8,5 +8,7 @@ export const Colors = {
   disable1: "#6A6A6A",
   border: "#E0E0E0",
   light: "#f5f5f5",
+  dark:"black",
+  white:"white"
 };
 
