@@ -2,11 +2,19 @@ import React from "react";
 import { TouchableOpacity, StyleSheet } from "react-native";
 
 import AppText from "../AppText/AppText";
+import { useTheme } from "../../helper/themeProvider";
+import { Colors } from "../../theme/color";
 
 function ItemPicker({ item, onPress }) {
+  const { isDarkMode } = useTheme();
+
   return (
     <TouchableOpacity onPress={onPress}>
-      <AppText style={styles.text}>{item.label}</AppText>
+      <AppText
+        style={[styles.text, { color: isDarkMode ? Colors.secondary : Colors.active }]}
+      >
+        {item.label}
+      </AppText>
     </TouchableOpacity>
   );
 }
