@@ -26,6 +26,7 @@ import addressService from "../../../services/addressService";
 import Loader from "../../../components/Loader/Loader";
 import useUserStore from "../../../store/useUserStore";
 import useAddressStore from "../../../store/useAddressStore";
+import { getCountries } from "../../../utils/getCountries";
 
 const validationSchema = Yup.object({
   full_name: Yup.string().required().min(2).max(50),
@@ -50,7 +51,11 @@ export default function AddressFrom() {
   const [isLoading, setIsLoading] = useState(false);
   const { userId, addressId, isEdit } = useLocalSearchParams();
   const [errorVisible, setErrorVisible] = useState(false);
-
+  const countriesData = getCountries?.map((country) => ({
+    label: country.name,
+    value: country.name,
+  }));
+  
   useEffect(() => {
     clearSingleAddress();
   }, [clearSingleAddress]);
@@ -100,7 +105,7 @@ export default function AddressFrom() {
 
   if (loading) {
     return <Loader isLoad={loading} />;
-  }
+  }  
 
   return (
     <SafeAreaView
@@ -179,14 +184,7 @@ export default function AddressFrom() {
               />
               <AppFormPhoneField style={style} name={"phone_number"} />
               <AppFormPicker
-                items={[
-                  { label: "INDIA", value: "INDIA" },
-                  { label: "PAKISTAN", value: "PAKISTAN" },
-                  {
-                    label: "UNITED ARAB EMIRATE",
-                    value: "UNITED ARAB EMIRATE",
-                  },
-                ]}
+                items={countriesData}
                 name={"country"}
                 placeholder={"COUNTRY"}
               />
