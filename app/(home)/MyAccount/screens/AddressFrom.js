@@ -26,7 +26,7 @@ import addressService from "../../../services/addressService";
 import Loader from "../../../components/Loader/Loader";
 import useUserStore from "../../../store/useUserStore";
 import useAddressStore from "../../../store/useAddressStore";
-import { getCountries } from "../../../utils/getCountries";
+import { getCitiesByCountry, getCountries } from "../../../utils/getRegions";
 
 const validationSchema = Yup.object({
   full_name: Yup.string().required().min(2).max(50),
@@ -53,7 +53,7 @@ export default function AddressFrom() {
   const [errorVisible, setErrorVisible] = useState(false);
   const countriesData = getCountries?.map((country) => ({
     label: country.name,
-    value: country.name,
+    value: country.isoCode,
   }));
   
   useEffect(() => {
@@ -71,7 +71,7 @@ export default function AddressFrom() {
       country_code: countryCode,
       phone_number: phoneNumber,
       city: values.city.value,
-      country: values.country.value,
+      country: values.country.label,
     };
 
     const formattedupdateValues = {
@@ -81,7 +81,7 @@ export default function AddressFrom() {
       country_code: countryCode,
       phone_number: phoneNumber,
       city: values.city.value,
-      country: values.country.value,
+      country: values.country.label,
     };
 
     try {
@@ -106,6 +106,10 @@ export default function AddressFrom() {
   if (loading) {
     return <Loader isLoad={loading} />;
   }  
+
+  console.log(getCitiesByCountry("IN"));
+  
+  
 
   return (
     <SafeAreaView

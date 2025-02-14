@@ -1,5 +1,5 @@
 import { useFormikContext } from "formik";
-import React from "react";
+import React, { useEffect, useState } from "react";
 
 import AppPicker from "../AppPicker/AppPicker";
 import AppErrorMessage from "./AppErrorMessage";
@@ -12,7 +12,20 @@ function AppFormPicker({
   PickerItemComponent,
   numColumns,
 }) {
+  const [country, setCountry] = useState("");
   const { touched, setFieldValue, values, errors } = useFormikContext();
+
+  useEffect(() => {
+    if (values.country) {
+      setCountry(values.country.value); // Set the country value based on the selected country
+    }
+  }, [values.country]); // Update when country value changes
+
+  console.log(values, 'values');
+  console.log(country, 'selected country value'); 
+
+  console.log(values, 'values');
+  
 
   return (
     <>
