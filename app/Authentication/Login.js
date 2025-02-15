@@ -41,7 +41,7 @@ const validationSchema = Yup.object({
 export default function Login() {
   const router = useRouter();
   const { isDarkMode } = useTheme();
-  const { setToken } = useUserStore();
+  const { setToken, setRefreshToken, setRemember } = useUserStore();
   const [error, setError] = useState();
   const [errorVisible, setErrorVisible] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
@@ -53,11 +53,14 @@ export default function Login() {
       const data = await authService.login(userInfo);
       if (data?.message === AuthenticationSuccess.loginSuccess) {
         await storeage.storeAppData(
-          localStorageConst.JWTUSER, rememberMe ? data?.refreshToken : data?.accessToken
+          localStorageConst.JWTUSER,  data?.accessToken
         );
         await storeage.storeAppData(localStorageConst.REMEMBER, rememberMe)
+        await storeage.storeAppData(localStorageConst.REFRESHTOKEN, rememberMe ? data?.refreshToken  : null)
       }
-      setToken(rememberMe ? data?.refreshToken : data?.accessToken);
+      setToken(data?.accessToken);
+      setRefreshToken(data?.refreshToken)
+      setRemember(rememberMe)
       router.replace("(home)");
     } catch (error) {
       setErrorVisible(true);

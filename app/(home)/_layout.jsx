@@ -9,6 +9,8 @@ import { useTheme } from "../helper/themeProvider";
 import authService from "../services/authService";
 import AppAlert  from "../components/AppAlert"
 import useUserStore from "../store/useUserStore"
+import storeage from "../helper/localStorage"
+import { localStorageConst } from "../constants/storageConstant";
 
 const AnimatedTabIcon = ({ focused, children }) => {
   const iconScale = useRef(new Animated.Value(1)).current;
@@ -70,44 +72,70 @@ const AnimatedTabIcon = ({ focused, children }) => {
 export default function TabLayout() {
   const router = useRouter()
   const { isDarkMode } = useTheme();
-  const {  clearUser } = useUserStore();
+  const {  token, refreshToken, rememberMe, clearUser, setToken } = useUserStore();
   const [showAlert, setShowAlert] = useState(false);
 
   useFocusEffect(
     React.useCallback(() => {
       console.log("Screen is focused");
-
+  
       const checkToken = async () => {
         try {
           console.log("Checking token...");
           const isValid = await authService.validateToken();
           console.log(isValid.message, "isValid");
+  
           if (isValid.message === "Valid token") {
             setShowAlert(false);
           }
         } catch (error) {
-          if (error.message === "Token expired") {
-            setShowAlert(true);
-          }
           console.log("Error in checkToken:", error);
+  
+          if (error.message === "Token expired") {
+            if (rememberMe) {
+              try {
+                console.log("Attempting to refresh token...");
+                const data = await authService.refreshToken({ refreshToken: refreshToken, accessToken: token });
+  
+                if (data?.accessToken) {
+                  console.log("Token refreshed successfully");
+                  await storeage.storeAppData(localStorageConst.JWTUSER, data.accessToken);
+                  
+                  setToken(data.accessToken);
+                } else {
+                  console.log("Failed to refresh token, logging out...");
+                  setShowAlert(true);
+                }
+              } catch (refreshError) {
+                console.log("Refresh token failed:", refreshError);
+                setShowAlert(true);
+              }
+            } else {
+              console.log("Session expired. Logging out...");
+              setShowAlert(true);
+            }
+          }
         }
       };
-
+  
       checkToken();
       const interval = setInterval(checkToken, 2 * 60 * 1000);
-
+  
       return () => {
         console.log("Screen is unfocused");
         clearInterval(interval);
       };
-    }, [])
+    }, [rememberMe, refreshToken])
   );
-
+  
 
   const handleLogout = () => {
     clearUser()
     router.replace("Authentication/Login")
   }
+
+  console.log(refreshToken, "refreshToken", token, "token", rememberMe, 'settokens');
+  
 
   return (
     <>

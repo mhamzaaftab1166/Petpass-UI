@@ -6,9 +6,13 @@ import userServices from "../services/userService"
 const useUserStore = create((set) => ({
   user: null,
   token: null,
+  refreshToken: null,
+  rememberMe: false,
   loading: false,
   error: null,
   setToken: (tokenData) => set({ token: tokenData }),
+  setRemember: (rememberMe) => set({ rememberMe: rememberMe }),
+  setRefreshToken: (refreshTokenData) => set({ refreshToken: refreshTokenData }),
   fetchUser: async () => {
     set({ loading: true });
     try {
@@ -22,8 +26,10 @@ const useUserStore = create((set) => ({
     set({ user: null, loading: false, error: null });
   },
   clearUser: async() => {
-    set({ user: null, token: null });
+    set({ user: null, token: null,  refreshToken: null, rememberMe: false});
     await storeage.removeAppData(localStorageConst.JWTUSER);
+    await storeage.removeAppData(localStorageConst.REFRESHTOKEN)
+    await storeage.removeAppData(localStorageConst.REMEMBER)
   },
 }));
 

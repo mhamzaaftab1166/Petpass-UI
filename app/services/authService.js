@@ -25,9 +25,14 @@ const resetPassword = (payload) => {
   return _axios("post", "/auth/reset-password", payload);
 }; 
 
+const refreshToken = (payload) => {
+  return _axios("post", "/auth/refresh-token", payload);
+}; 
+
 const validateToken = () => {
   return _axios("get", "/validate-token");
 }; 
+
 
 
 export default {
@@ -37,6 +42,7 @@ export default {
   resend,
   forgotPassword,
   resetPassword,
+  refreshToken,
   validateToken
 };
 
