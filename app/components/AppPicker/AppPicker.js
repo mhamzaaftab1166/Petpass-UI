@@ -77,6 +77,7 @@ function AppPicker({
         animationType="slide"
         style={{
           backgroundColor: isDarkMode ? Colors.active : Colors.secondary,
+          fontFamily: "Avenir-Regular"
         }}
       >
         <SafeScreen
@@ -85,12 +86,13 @@ function AppPicker({
           }}
         >
           <Button
-            color={isDarkMode ? Colors.secondary : Colors.active}
+            color={isDarkMode ? Colors.active : Colors.secondary}
             title="Close"
             onPress={() => setModalVisible(false)}
           ></Button>
           <FlatList
             data={items}
+            style={{fontFamily: "Avenir-Regular"}}
             keyExtractor={(item) => item.value}
             numColumns={numColumns}
             renderItem={({ item }) => (
@@ -118,6 +120,7 @@ const styles = StyleSheet.create({
   },
   text: {
     flex: 1,
+    fontFamily: "Avenir-Regular"
   },
   placeholder: {
     flex: 1,

@@ -41,6 +41,8 @@ export default function AddressFrom() {
   const { user } = useUserStore();
   const { isDarkMode } = useTheme();
   const [error, setError] = useState();
+  const [country, setCountry] = useState();
+  const [cities, setCities] = useState()
   const {
     loading,
     singleAddress,
@@ -52,16 +54,33 @@ export default function AddressFrom() {
   const { userId, addressId, isEdit } = useLocalSearchParams();
   const [errorVisible, setErrorVisible] = useState(false);
   const countriesData = getCountries?.map((country) => ({
-    label: country.name,
-    value: country.isoCode,
+    label: country?.name?.toLocaleUpperCase(),
+    value: country?.name,
+    code: country?.isoCode
   }));
+
+
   
   useEffect(() => {
     clearSingleAddress();
   }, [clearSingleAddress]);
 
-  const handleSubmit = async (values) => {
+  useEffect(() => {
+    if (country) {
+       const cityList = getCitiesByCountry(country) || [];
+       console.log(cityList, 'cityList');
+       
+       const cities = cityList.map((city) => ({
+          label: city?.name,
+          value: city?.name,
+       }));
+       setCities(cities);
+    }
+ }, [country]);
 
+
+
+  const handleSubmit = async (values) => {
     const phoneParts = values.phone_number.split(" ");
     const countryCode = phoneParts[0];
     const phoneNumber = phoneParts.slice(1).join("");
@@ -106,8 +125,9 @@ export default function AddressFrom() {
   if (loading) {
     return <Loader isLoad={loading} />;
   }  
+console.log(country, 'con');
+console.log(cities, 'cities');
 
-  console.log(getCitiesByCountry("IN"));
   
   
 
@@ -191,17 +211,11 @@ export default function AddressFrom() {
                 items={countriesData}
                 name={"country"}
                 placeholder={"COUNTRY"}
+                setState={(selected) => setCountry(selected?.code)}
               />
 
               <AppFormPicker
-                items={[
-                  { label: "CUDDALORE", value: "CUDDALORE" },
-                  { label: "LAHORE", value: "LAHORE" },
-                  {
-                    label: "DUBAI",
-                    value: "DUBAI",
-                  },
-                ]}
+                items={cities}
                 name={"city"}
                 placeholder={"CITY"}
               />
