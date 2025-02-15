@@ -91,7 +91,7 @@ function AppPicker({
         <SafeScreen
           style={{
             backgroundColor: isDarkMode ? Colors.active : Colors.secondary,
-            flex:1
+            flex: 1,
           }}
         >
           <Button
@@ -105,6 +105,7 @@ function AppPicker({
               style.r16,
               {
                 color: isDarkMode ? Colors.secondary : Colors.active,
+                fontFamily: "Avenir-Regular",
               },
               styles.searchInput,
               style.txtinput,

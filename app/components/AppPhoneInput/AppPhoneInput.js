@@ -31,7 +31,7 @@ const AppPhoneInput = ({
         onChangePhoneNumber={handlePhoneChange}
         initialCountry="ae"
         initialValue={value?value:null}
-        textStyle={{color: isDarkMode ? Colors.secondary : Colors.active,}}
+        textStyle={{color: isDarkMode ? Colors.secondary : Colors.active,fontFamily: "Avenir-Regular"}}
         style={[style.r16, { color:  isDarkMode ? Colors.secondary : Colors.active, flex: 1, paddingLeft: 10 }]}
         textProps={{
           placeholder: placeholder,

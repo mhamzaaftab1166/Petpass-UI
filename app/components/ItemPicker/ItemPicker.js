@@ -11,7 +11,13 @@ function ItemPicker({ item, onPress }) {
   return (
     <TouchableOpacity onPress={onPress}>
       <AppText
-        style={[styles.text, { color: isDarkMode ? Colors.secondary : Colors.active }]}
+        style={[
+          styles.text,
+          {
+            color: isDarkMode ? Colors.secondary : Colors.active,
+            fontFamily: "Avenir-Regular",
+          },
+        ]}
       >
         {item.label}
       </AppText>

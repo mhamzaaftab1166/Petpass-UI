@@ -93,7 +93,7 @@ export default function Address() {
           }
         />
         {address.length === 0 ? (
-        <NoItem title={"address section"}/>
+        <NoItem title={"address"}/>
         ) : (
           <SwipeListView
             data={address}
