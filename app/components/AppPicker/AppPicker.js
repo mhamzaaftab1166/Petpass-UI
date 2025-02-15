@@ -6,6 +6,7 @@ import {
   Modal,
   Button,
   FlatList,
+  TextInput,
 } from "react-native";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 
@@ -18,7 +19,7 @@ import { useTheme } from "../../helper/themeProvider";
 
 function AppPicker({
   icon,
-  items,
+  items = [],
   placeholder,
   numColumns = 1,
   width = "100%",
@@ -28,6 +29,13 @@ function AppPicker({
 }) {
   const { isDarkMode } = useTheme();
   const [modalVisible, setModalVisible] = useState(false);
+  const [searchQuery, setSearchQuery] = useState("");
+  const filteredItems = Array.isArray(items)
+    ? items.filter((item) =>
+        item.label.toLowerCase().includes(searchQuery.toLowerCase())
+      )
+    : [];
+
   return (
     <>
       <TouchableWithoutFeedback onPress={() => setModalVisible(true)}>
@@ -77,39 +85,60 @@ function AppPicker({
         animationType="slide"
         style={{
           backgroundColor: isDarkMode ? Colors.active : Colors.secondary,
-          fontFamily: "Avenir-Regular"
+          fontFamily: "Avenir-Regular",
         }}
       >
         <SafeScreen
           style={{
             backgroundColor: isDarkMode ? Colors.active : Colors.secondary,
+            flex:1
           }}
         >
           <Button
-            color={isDarkMode ? Colors.active : Colors.secondary}
+            color={isDarkMode ? Colors.secondary : Colors.active}
             title="Close"
             onPress={() => setModalVisible(false)}
-          ></Button>
+          />
+          {/* Search Input Field */}
+          <TextInput
+            style={[
+              style.r16,
+              {
+                color: isDarkMode ? Colors.secondary : Colors.active,
+              },
+              styles.searchInput,
+              style.txtinput,
+            ]}
+            placeholder="Search..."
+            value={searchQuery}
+            onChangeText={(text) => setSearchQuery(text)}
+            placeholderTextColor={isDarkMode ? Colors.secondary : Colors.lable}
+          />
           <FlatList
-            data={items}
-            style={{fontFamily: "Avenir-Regular"}}
-            keyExtractor={(item) => item.value}
+            data={[{ label: "Search", value: "" }, ...filteredItems]}
+            style={{ fontFamily: "Avenir-Regular" }}
+            keyExtractor={(item, index) =>
+              item.value + (item.label || "") + index
+            }
             numColumns={numColumns}
-            renderItem={({ item }) => (
-              <PickerItemComponent
-                item={item}
-                onPress={() => {
-                  setModalVisible(false);
-                  onSelectedItem(item);
-                }}
-              />
-            )}
+            renderItem={({ item }) =>
+              item.label === "Search" ? null : (
+                <PickerItemComponent
+                  item={item}
+                  onPress={() => {
+                    setModalVisible(false);
+                    onSelectedItem(item);
+                  }}
+                />
+              )
+            }
           />
         </SafeScreen>
       </Modal>
     </>
   );
 }
+
 const styles = StyleSheet.create({
   container: {
     flexDirection: "row",
@@ -120,11 +149,18 @@ const styles = StyleSheet.create({
   },
   text: {
     flex: 1,
-    fontFamily: "Avenir-Regular"
+    fontFamily: "Avenir-Regular",
   },
   placeholder: {
     flex: 1,
     color: Colors.disable1,
   },
+  searchInput: {
+    marginHorizontal: 10,
+    marginVertical: 10,
+    paddingLeft: 10,
+    borderRadius: 5,
+  },
 });
+
 export default AppPicker;
