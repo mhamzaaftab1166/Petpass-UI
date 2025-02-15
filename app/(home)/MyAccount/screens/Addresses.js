@@ -19,6 +19,7 @@ import useAddressStore from "../../../store/useAddressStore";
 import useUserStore from "../../../store/useUserStore";
 import Loader from "../../../components/Loader/Loader";
 import addressService from "../../../services/addressService";
+import NoItem from "../../../components/NoItem/NoItem";
 
 const width = Dimensions.get("screen").width;
 const height = Dimensions.get("screen").height;
@@ -92,18 +93,7 @@ export default function Address() {
           }
         />
         {address.length === 0 ? (
-          <View style={{ alignItems: "center", marginTop: 20 ,}}>
-            <Text
-              style={{
-                color: isDarkMode ? Colors.secondary : Colors.lable,
-                fontSize: 18,
-                marginTop: 5,
-               
-              }}
-            >
-              Add an address to see it here.
-            </Text>
-          </View>
+        <NoItem title={"address section"}/>
         ) : (
           <SwipeListView
             data={address}
