@@ -9,6 +9,7 @@ export const Colors = {
   border: "#E0E0E0",
   light: "#f5f5f5",
   dark:"black",
-  white:"white"
+  white:"white",
+  unSelect:"#C6C6C6"
 };
 
