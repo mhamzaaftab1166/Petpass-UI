@@ -2,9 +2,12 @@ import { Image, StyleSheet, Text, View, TouchableOpacity } from "react-native";
 import React from "react";
 import { Colors } from "../../theme/color";
 import { useTheme } from "../../helper/themeProvider";
+import { useRouter } from "expo-router";
 
-const OnSuccess = ({ title = "Pet", onGoToPets }) => {
+const OnSuccess = ({ title = "Pet",route }) => {
+  const router = useRouter();
   const { isDarkMode } = useTheme();
+
   return (
     <View
       style={[
@@ -40,7 +43,10 @@ const OnSuccess = ({ title = "Pet", onGoToPets }) => {
         Check on the Dashboard
       </Text>
 
-      <TouchableOpacity style={styles.button} onPress={onGoToPets}>
+      <TouchableOpacity
+        style={styles.button}
+        onPress={() => router.push(route)}
+      >
         <Text style={styles.buttonText}>Go to My Pets</Text>
       </TouchableOpacity>
     </View>
@@ -70,13 +76,13 @@ const styles = StyleSheet.create({
     left: 20,
     right: 20,
     paddingVertical: 12,
-    height:44,
+    height: 44,
     backgroundColor: Colors.primary,
     borderRadius: 8,
     marginBottom: "8%",
     alignItems: "center",
-    display:"flex",
-    justifyContent:"center"
+    display: "flex",
+    justifyContent: "center",
   },
   buttonText: {
     fontSize: 16,

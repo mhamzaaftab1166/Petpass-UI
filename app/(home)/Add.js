@@ -217,7 +217,7 @@ export default function AccountInfo() {
           </ScrollView>
         </KeyboardAvoidingView>
       ) : (
-        <OnSuccess />
+        <OnSuccess route={"/MyAccount"} />
       )}
     </SafeAreaView>
   );
