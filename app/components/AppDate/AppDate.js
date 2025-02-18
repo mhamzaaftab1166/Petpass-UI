@@ -42,7 +42,7 @@ const AppDatePicker = ({ value, onChange, placeholder }) => {
         styles.container,
         style.txtinput,
         {
-          backgroundColor: isDarkMode ? Colors.disable : Colors.white,
+          backgroundColor: isDarkMode ? "transparent" : Colors.white,
           height:40
         },
       ]}
