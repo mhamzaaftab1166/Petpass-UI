@@ -12,6 +12,7 @@ import { Colors } from "../theme/color";
 import style from "../theme/style";
 import Banner from "../components/HomePage/Banner";
 import Categories from "../components/HomePage/Categories";
+import { Stack } from "expo-router";
 
 const { width, height } = Dimensions.get("screen");
 

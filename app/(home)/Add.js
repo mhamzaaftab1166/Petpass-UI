@@ -26,6 +26,7 @@ import AppFormPicker from "../components/forms/AppFormPicker";
 import femaleLight from "../../assets/images/pets/femaleLight.png";
 import maleLight from "../../assets/images/pets/maleLight.png";
 import AppFormDatePicker from "../components/forms/AppFormDatePicker";
+import OnSuccess from "../components/OnSuccess/OnSuccess";
 
 const validationSchema = Yup.object({
   pet_profile_picture: Yup.string().required().label("Pet Profile Image"),
@@ -40,6 +41,7 @@ const validationSchema = Yup.object({
 export default function AccountInfo() {
   const router = useRouter();
   const { isDarkMode } = useTheme();
+  const [submitted, setSubmitted] = useState(false);
   const [error, setError] = useState();
   const [errorVisible, setErrorVisible] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
@@ -58,7 +60,10 @@ export default function AccountInfo() {
         imageSrc: femaleLight,
       },
     ],
-  
+  };
+
+  const handleSubmit = () => {
+    setSubmitted(true);
   };
 
   return (
@@ -68,146 +73,152 @@ export default function AccountInfo() {
         { backgroundColor: isDarkMode ? Colors.active : Colors.secondary },
       ]}
     >
-      <KeyboardAvoidingView
-        behavior={Platform.OS === "ios" ? "padding" : null}
-        style={{ flex: 1 }}
-      >
-        <ScrollView
-          showsVerticalScrollIndicator={false}
-          style={{ flex: 1, marginHorizontal: 20 }}
+      {!submitted ? (
+        <KeyboardAvoidingView
+          behavior={Platform.OS === "ios" ? "padding" : null}
+          style={{ flex: 1 }}
         >
-          <Loader isLoad={isLoading} />
-          <View
-            style={[
-              style.main,
-              {
-                backgroundColor: isDarkMode ? Colors.active : Colors.secondary,
-                marginTop: 10,
-              },
-            ]}
+          <ScrollView
+            showsVerticalScrollIndicator={false}
+            style={{ flex: 1, marginHorizontal: 20 }}
           >
-            <AppBar
-              color={isDarkMode ? Colors.active : Colors.secondary}
-              title="Account Info"
-              titleStyle={[
-                style.b18,
-                { color: isDarkMode ? Colors.secondary : Colors.active },
+            <Loader isLoad={isLoading} />
+            <View
+              style={[
+                style.main,
+                {
+                  backgroundColor: isDarkMode
+                    ? Colors.active
+                    : Colors.secondary,
+                  marginTop: 10,
+                },
               ]}
-              centerTitle={true}
-              elevation={0}
-              leading={
-                <TouchableOpacity onPress={() => router.back()}>
-                  <Icon
-                    name="chevron-back"
-                    color={isDarkMode ? Colors.secondary : Colors.active}
-                    size={30}
-                  />
-                </TouchableOpacity>
-              }
-            />
-
-            <AppForm
-              initialValues={{
-                pet_profile_picture: "",
-                pet_name: "",
-                pet_type: "",
-                pet_breed: "",
-                pet_gender: "",
-                micro_chip: "",
-                color: "",
-              }}
-              onSubmit={(values) => console.log(values)}
-              validationSchema={validationSchema}
             >
-              <AppErrorMessage error={error} visible={errorVisible} />
-              <AppFormImagePicker name="pet_profile_picture" />
-              <Text
-                style={[
-                  style.subtitle,
-                  {
-                    textAlign: "center",
-                    color: Colors.primary,
-                    paddingTop: 15,
-                    fontFamily: "Avenir-Bold",
-                  },
+              <AppBar
+                color={isDarkMode ? Colors.active : Colors.secondary}
+                title="Account Info"
+                titleStyle={[
+                  style.b18,
+                  { color: isDarkMode ? Colors.secondary : Colors.active },
                 ]}
+                centerTitle={true}
+                elevation={0}
+                leading={
+                  <TouchableOpacity onPress={() => router.back()}>
+                    <Icon
+                      name="chevron-back"
+                      color={isDarkMode ? Colors.secondary : Colors.active}
+                      size={30}
+                    />
+                  </TouchableOpacity>
+                }
+              />
+
+              <AppForm
+                initialValues={{
+                  pet_profile_picture: "",
+                  pet_name: "",
+                  pet_type: "",
+                  pet_breed: "",
+                  pet_gender: "",
+                  micro_chip: "",
+                  color: "",
+                }}
+                onSubmit={(values) => handleSubmit(values)}
+                validationSchema={validationSchema}
               >
-                Add your pets here
-              </Text>
-              <Text
-                style={[
-                  style.r16,
-                  {
-                    color: Colors.active,
-                    textAlign: "center",
-                    fontFamily: "Avenir-Regular",
-                    padding: "20px",
-                    paddingTop: 15,
-                  },
-                ]}
-              >
-                You can have unlimited pets for free
-              </Text>
-              <Text
-                style={[
-                  style.r16,
-                  {
-                    color: Colors.active,
-                    textAlign: "center",
-                    fontFamily: "Avenir-Regular",
-                    paddingTop: 5,
-                  },
-                ]}
-              >
-                give the detail of your pets
-              </Text>
+                <AppErrorMessage error={error} visible={errorVisible} />
+                <AppFormImagePicker name="pet_profile_picture" />
+                <Text
+                  style={[
+                    style.subtitle,
+                    {
+                      textAlign: "center",
+                      color: Colors.primary,
+                      paddingTop: 15,
+                      fontFamily: "Avenir-Bold",
+                    },
+                  ]}
+                >
+                  Add your pets here
+                </Text>
+                <Text
+                  style={[
+                    style.r16,
+                    {
+                      color: Colors.active,
+                      textAlign: "center",
+                      fontFamily: "Avenir-Regular",
+                      padding: "20px",
+                      paddingTop: 15,
+                    },
+                  ]}
+                >
+                  You can have unlimited pets for free
+                </Text>
+                <Text
+                  style={[
+                    style.r16,
+                    {
+                      color: Colors.active,
+                      textAlign: "center",
+                      fontFamily: "Avenir-Regular",
+                      paddingTop: 5,
+                    },
+                  ]}
+                >
+                  give the detail of your pets
+                </Text>
 
-              <AppFormPicker
-                items={[{ label: "Dog", value: "dog" }]}
-                name={"pet_type"}
-                placeholder={"PET TYPE"}
-              />
+                <AppFormPicker
+                  items={[{ label: "Dog", value: "dog" }]}
+                  name={"pet_type"}
+                  placeholder={"PET TYPE"}
+                />
 
-              <AppFormField
-                name={"pet_name"}
-                placeholder="PET NAME"
-                style={style}
-                parentStyles={{ marginTop: 20 }}
-              />
+                <AppFormField
+                  name={"pet_name"}
+                  placeholder="PET NAME"
+                  style={style}
+                  parentStyles={{ marginTop: 20 }}
+                />
 
-              <AppFormPicker
-                items={[{ label: "Dog", value: "dog" }]}
-                name={"pet_breed"}
-                placeholder={"PET BREED"}
-              />
+                <AppFormPicker
+                  items={[{ label: "Dog", value: "dog" }]}
+                  name={"pet_breed"}
+                  placeholder={"PET BREED"}
+                />
 
-              <AppFormRoleSelector roles={roles} name={"pet_gender"} />
+                <AppFormRoleSelector roles={roles} name={"pet_gender"} />
 
-              <AppFormDatePicker
-                name="birthdate"
-                placeholder="SELECT BIRTHDATE"
-              />
+                <AppFormDatePicker
+                  name="birthdate"
+                  placeholder="SELECT BIRTHDATE"
+                />
 
-              <AppFormField
-                name={"micro_chip"}
-                placeholder="MICRO CHIP NUMBER"
-                style={style}
-                parentStyles={{ marginTop: 20 }}
-              />
+                <AppFormField
+                  name={"micro_chip"}
+                  placeholder="MICRO CHIP NUMBER"
+                  style={style}
+                  parentStyles={{ marginTop: 20 }}
+                />
 
-              <AppFormPicker
-                items={[{ label: "Brown", value: "brown" }]}
-                name={"color"}
-                placeholder={"COLOUR"}
-              />
+                <AppFormPicker
+                  items={[{ label: "Brown", value: "brown" }]}
+                  name={"color"}
+                  placeholder={"COLOUR"}
+                />
 
-              <View style={{ marginBottom: "15%" }}>
-                <SubmitButton title="SAVE" style={style} />
-              </View>
-            </AppForm>
-          </View>
-        </ScrollView>
-      </KeyboardAvoidingView>
+                <View style={{ marginBottom: "15%" }}>
+                  <SubmitButton title="SAVE" style={style} />
+                </View>
+              </AppForm>
+            </View>
+          </ScrollView>
+        </KeyboardAvoidingView>
+      ) : (
+        <OnSuccess />
+      )}
     </SafeAreaView>
   );
 }
