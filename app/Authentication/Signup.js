@@ -9,7 +9,7 @@ import {
   Platform,
   Text,
   View,
-  StyleSheet
+  StyleSheet,
 } from "react-native";
 import { useRouter } from "expo-router";
 import { Colors } from "../theme/color";
@@ -53,13 +53,12 @@ export default function Signup() {
     try {
       setIsLoading(true);
       const formattedPayload = formatRegisterPayload(userInfo);
-      
+
       const data = await authService.register(formattedPayload);
       if (data?.message === AuthenticationSuccess.registrationSuccess) {
-      router.push(
-        `/Authentication/EmailVerify?email=${formattedPayload.email}&username=${formattedPayload.username}`
-      ); 
-
+        router.push(
+          `/Authentication/EmailVerify?email=${formattedPayload.email}&username=${formattedPayload.username}`
+        );
       }
     } catch (error) {
       setErrorVisible(true);
@@ -69,23 +68,26 @@ export default function Signup() {
     }
   };
 
-   const roles = [
-     {
-       title: "Owner",
-       role: "pet_owner",
-       imageSrc: owner,
-     },
-     {
-       title: "Breeder",
-       role: "pet_breeder",
-       imageSrc: breeder,
-     },
-     {
-       title: "Shop",
-       role: "pet_shop",
-       imageSrc: shop,
-     },
-   ];
+  const roles = {
+    isOne: false,
+    data: [
+      {
+        title: "Owner",
+        role: "pet_owner",
+        imageSrc: owner,
+      },
+      {
+        title: "Breeder",
+        role: "pet_breeder",
+        imageSrc: breeder,
+      },
+      {
+        title: "Shop",
+        role: "pet_shop",
+        imageSrc: shop,
+      },
+    ],
+  };
 
   return (
     <SafeAreaView
@@ -240,6 +242,4 @@ export default function Signup() {
   );
 }
 
-const styles = StyleSheet.create({
- 
-});
+const styles = StyleSheet.create({});

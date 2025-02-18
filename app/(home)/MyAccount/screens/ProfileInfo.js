@@ -101,23 +101,26 @@ export default function AccountInfo() {
     }
   };
   
-   const roles = [
-      {
-        title: "Owner",
-        role: "pet_owner",
-        imageSrc: owner,
-      },
-      {
-        title: "Breeder",
-        role: "pet_breeder",
-        imageSrc: breeder,
-      },
-      {
-        title: "Shop",
-        role: "pet_shop",
-        imageSrc: shop,
-      },
-    ];
+   const roles = {
+       isOne: false,
+       data: [
+         {
+           title: "Owner",
+           role: "pet_owner",
+           imageSrc: owner,
+         },
+         {
+           title: "Breeder",
+           role: "pet_breeder",
+           imageSrc: breeder,
+         },
+         {
+           title: "Shop",
+           role: "pet_shop",
+           imageSrc: shop,
+         },
+       ],
+     };
 
   return (
     <SafeAreaView

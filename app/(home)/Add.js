@@ -32,7 +32,7 @@ const validationSchema = Yup.object({
   pet_type: Yup.object().required().label("Pet Type"),
   pet_name: Yup.string().required().min(8).max(15).label("Pet Name"),
   pet_breed: Yup.object().required().label("Pet Breed"),
-  pet_gender: Yup.array().required().label("Pet Gender"),
+  pet_gender: Yup.string().required().label("Pet Gender"),
   micro_chip: Yup.string().required().min(4).max(30).label("Micro Chip Number"),
   color: Yup.object().required().label("Pet Color"),
 });
@@ -44,18 +44,22 @@ export default function AccountInfo() {
   const [errorVisible, setErrorVisible] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
 
-  const roles = [
-        {
-          title: "Male",
-          role: "male",
-          imageSrc: maleLight,
-        },
-        {
-          title: "Female",
-          role: "female",
-          imageSrc: femaleLight,
-        },
-      ];
+  const roles = {
+    isOne: true,
+    data: [
+      {
+        title: "Male",
+        role: "male",
+        imageSrc: maleLight,
+      },
+      {
+        title: "Female",
+        role: "female",
+        imageSrc: femaleLight,
+      },
+    ],
+  
+  };
 
   return (
     <SafeAreaView
@@ -112,8 +116,7 @@ export default function AccountInfo() {
                 micro_chip: "",
                 color: "",
               }}
-              onSubmit={values=>console.log(values)
-              }
+              onSubmit={(values) => console.log(values)}
               validationSchema={validationSchema}
             >
               <AppErrorMessage error={error} visible={errorVisible} />
@@ -198,7 +201,7 @@ export default function AccountInfo() {
                 placeholder={"COLOUR"}
               />
 
-              <View style={{marginBottom:"15%" }}>
+              <View style={{ marginBottom: "15%" }}>
                 <SubmitButton title="SAVE" style={style} />
               </View>
             </AppForm>
