@@ -25,15 +25,16 @@ import AppFormImagePicker from "../components/forms/AppFormImagePicker";
 import AppFormPicker from "../components/forms/AppFormPicker";
 import femaleLight from "../../assets/images/pets/femaleLight.png";
 import maleLight from "../../assets/images/pets/maleLight.png";
+import AppFormDatePicker from "../components/forms/AppFormDatePicker";
 
 const validationSchema = Yup.object({
   pet_profile_picture: Yup.string().required().label("Pet Profile Image"),
   pet_type: Yup.object().required().label("Pet Type"),
   pet_name: Yup.string().required().min(8).max(15).label("Pet Name"),
   pet_breed: Yup.object().required().label("Pet Breed"),
-  pet_gender: Yup.object().required().label("Pet Gender"),
+  pet_gender: Yup.array().required().label("Pet Gender"),
   micro_chip: Yup.string().required().min(4).max(30).label("Micro Chip Number"),
-  color: Yup.string().required().label("Pet Color"),
+  color: Yup.object().required().label("Pet Color"),
 });
 
 export default function AccountInfo() {
@@ -111,7 +112,8 @@ export default function AccountInfo() {
                 micro_chip: "",
                 color: "",
               }}
-              onSubmit={""}
+              onSubmit={values=>console.log(values)
+              }
               validationSchema={validationSchema}
             >
               <AppErrorMessage error={error} visible={errorVisible} />
@@ -178,6 +180,11 @@ export default function AccountInfo() {
 
               <AppFormRoleSelector roles={roles} name={"pet_gender"} />
 
+              <AppFormDatePicker
+                name="birthdate"
+                placeholder="SELECT BIRTHDATE"
+              />
+
               <AppFormField
                 name={"micro_chip"}
                 placeholder="MICRO CHIP NUMBER"
@@ -191,7 +198,7 @@ export default function AccountInfo() {
                 placeholder={"COLOUR"}
               />
 
-              <View style={{ marginTop: 20 }}>
+              <View style={{marginBottom:"15%" }}>
                 <SubmitButton title="SAVE" style={style} />
               </View>
             </AppForm>
