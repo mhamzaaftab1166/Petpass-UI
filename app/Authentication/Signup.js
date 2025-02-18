@@ -27,6 +27,9 @@ import formatRegisterPayload from "../utils/authenticationUtils";
 import AuthenticationSuccess from "../ESB/success/authentication.json";
 import Loader from "../components/Loader/Loader";
 import { useTheme } from "../helper/themeProvider";
+import owner from "../../assets/images/authentication/d3.png";
+import breeder from "../../assets/images/authentication/breeder.png";
+import shop from "../../assets/images/authentication/d2.png";
 
 const width = Dimensions.get("screen").width;
 const height = Dimensions.get("screen").height;
@@ -65,6 +68,24 @@ export default function Signup() {
       setIsLoading(false);
     }
   };
+
+   const roles = [
+     {
+       title: "Owner",
+       role: "pet_owner",
+       imageSrc: owner,
+     },
+     {
+       title: "Breeder",
+       role: "pet_breeder",
+       imageSrc: breeder,
+     },
+     {
+       title: "Shop",
+       role: "pet_shop",
+       imageSrc: shop,
+     },
+   ];
 
   return (
     <SafeAreaView
@@ -125,7 +146,7 @@ export default function Signup() {
 
             <AppFormPhoneField style={style} name={"phone_number"} />
 
-            <AppFormRoleSelector name={"profile_types"} />
+            <AppFormRoleSelector roles={roles} name={"profile_types"} />
 
             <Text
               style={[

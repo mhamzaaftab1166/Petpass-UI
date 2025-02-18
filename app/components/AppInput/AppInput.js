@@ -41,7 +41,6 @@ const AppInput = ({
           {
             color: isDarkMode ? Colors.secondary : Colors.active,
             flex: 1,
-            marginLeft: 5,
           },
         ]}
         {...otherProps}

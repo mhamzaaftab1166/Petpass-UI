@@ -3,12 +3,13 @@ import { useFormikContext } from "formik";
 import AppRoleSelector from "../AppRoleSelector/AppRoleSelector";
 import AppErrorMessage from "./AppErrorMessage";
 
-const AppFormRoleSelector = ({ name, parentStyles }) => {
+const AppFormRoleSelector = ({ name, roles, parentStyles }) => {
   const { setFieldValue, values, touched, errors } = useFormikContext();
 
   return (
     <>
       <AppRoleSelector
+        roles={roles}
         value={values[name]}
         onSelect={(role) => {
           if (!values[name]?.includes(role)) {

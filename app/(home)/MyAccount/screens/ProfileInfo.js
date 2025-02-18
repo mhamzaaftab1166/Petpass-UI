@@ -26,6 +26,9 @@ import userService from "../../../services/userService";
 import * as FileSystem from "expo-file-system";
 import AppText from "../../../components/AppText/AppText";
 import {getFirstName} from "../../../utils/getFirstName"
+import owner from "../../../../assets/images/authentication/d3.png";
+import breeder from "../../../../assets/images/authentication/breeder.png";
+import shop from "../../../../assets/images/authentication/d2.png";
 
 const validationSchema = Yup.object({
   username: Yup.string().required().label("Username"),
@@ -98,6 +101,23 @@ export default function AccountInfo() {
     }
   };
   
+   const roles = [
+      {
+        title: "Owner",
+        role: "pet_owner",
+        imageSrc: owner,
+      },
+      {
+        title: "Breeder",
+        role: "pet_breeder",
+        imageSrc: breeder,
+      },
+      {
+        title: "Shop",
+        role: "pet_shop",
+        imageSrc: shop,
+      },
+    ];
 
   return (
     <SafeAreaView
@@ -122,7 +142,7 @@ export default function AccountInfo() {
         >
           <AppBar
             color={isDarkMode ? Colors.active : Colors.secondary}
-            title="Account Info"
+            title="Add Your Pets Here"
             titleStyle={[
               style.b18,
               { color: isDarkMode ? Colors.secondary : Colors.active },
@@ -156,12 +176,12 @@ export default function AccountInfo() {
 
             <AppText
               style={{
-                color:isDarkMode? "white":"black",
-                marginLeft:5,
+                color: isDarkMode ? "white" : "black",
+                marginLeft: 5,
                 fontSize: 30,
                 marginTop: 30,
                 textAlign: "center",
-                fontFamily: "Avenir-Bold"
+                fontFamily: "Avenir-Bold",
               }}
             >
               {`Hi, ${getFirstName(user?.username)}`}
@@ -181,7 +201,7 @@ export default function AccountInfo() {
               parentStyles={{ marginTop: 20 }}
             />
             <AppFormPhoneField style={style} name={"phone_number"} />
-            <AppFormRoleSelector name={"profile_types"} />
+            <AppFormRoleSelector roles={roles} name={"profile_types"} />
             <View style={{ marginTop: 20 }}>
               <SubmitButton title="SAVE" style={style} />
             </View>

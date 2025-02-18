@@ -1,85 +1,203 @@
-import React, { useState } from "react";
-import { View, Text, TouchableOpacity, StyleSheet, Image } from "react-native";
-import StepIndicator from "react-native-step-indicator";
-import SafeScreen from "../components/SafeScreen/SafeScreen";
+import {
+  View,
+  SafeAreaView,
+  TouchableOpacity,
+  KeyboardAvoidingView,
+  Platform,
+  Text,
+  ScrollView,
+} from "react-native";
+import React, { useEffect, useState } from "react";
+import { AppBar } from "@react-native-material/core";
+import Icon from "react-native-vector-icons/Ionicons";
 import { Colors } from "../theme/color";
-import { customPetStyles, styles } from "../constants/Pets";
+import style from "../theme/style";
+import { useRouter } from "expo-router";
+import * as Yup from "yup";
+import AppForm from "../components/forms/AppForm";
+import AppErrorMessage from "../components/forms/AppErrorMessage";
+import AppFormField from "../components/forms/AppFormFeild";
+import AppFormRoleSelector from "../components/forms/AppFormRoleSelector";
+import SubmitButton from "../components/forms/SubmitButton";
 import { useTheme } from "../helper/themeProvider";
-import doneDisable from "../../assets/images/pets/doneDisable.png";
-import doneActive from "../../assets/images/pets/doneActive.png";
-import footActive from "../../assets/images/pets/footActive.png";
-import footDisable from "../../assets/images/pets/footDisable.png";
-import dogActive from "../../assets/images/pets/dogActive.png";
-import dogDisable from "../../assets/images/pets/dogDisable.png";
+import Loader from "../components/Loader/Loader";
+import AppFormImagePicker from "../components/forms/AppFormImagePicker";
+import AppFormPicker from "../components/forms/AppFormPicker";
+import femaleLight from "../../assets/images/pets/femaleLight.png";
+import maleLight from "../../assets/images/pets/maleLight.png";
 
-const StepIndicatorExample = () => {
+const validationSchema = Yup.object({
+  pet_profile_picture: Yup.string().required().label("Pet Profile Image"),
+  pet_type: Yup.object().required().label("Pet Type"),
+  pet_name: Yup.string().required().min(8).max(15).label("Pet Name"),
+  pet_breed: Yup.object().required().label("Pet Breed"),
+  pet_gender: Yup.object().required().label("Pet Gender"),
+  micro_chip: Yup.string().required().min(4).max(30).label("Micro Chip Number"),
+  color: Yup.string().required().label("Pet Color"),
+});
+
+export default function AccountInfo() {
+  const router = useRouter();
   const { isDarkMode } = useTheme();
-  const [currentStep, setCurrentStep] = useState(0);
+  const [error, setError] = useState();
+  const [errorVisible, setErrorVisible] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
 
-  const nextStep = () => {
-    if (currentStep < 2) {
-      setCurrentStep(currentStep + 1);
-    }
-  };
+  const roles = [
+        {
+          title: "Male",
+          role: "male",
+          imageSrc: maleLight,
+        },
+        {
+          title: "Female",
+          role: "female",
+          imageSrc: femaleLight,
+        },
+      ];
 
-  const prevStep = () => {
-    if (currentStep > 0) {
-      setCurrentStep(currentStep - 1);
-    }
-  };
- const stepIcons = [
-  { active: footActive, inactive: footDisable },
-  { active: dogActive, inactive: dogDisable },
-  { active: doneActive, inactive: doneDisable },
-];
   return (
-    <SafeScreen
+    <SafeAreaView
       style={[
-        styles.container,
+        style.area,
         { backgroundColor: isDarkMode ? Colors.active : Colors.secondary },
       ]}
     >
-      <StepIndicator
-        customStyles={customPetStyles}
-        currentPosition={currentStep}
-        stepCount={3}
-        renderStepIndicator={({ position, stepStatus }) => {
-          let iconSource;
-
-          if (stepStatus === "finished" || stepStatus === "current") {
-            iconSource = stepIcons[position].active;
-          } else {
-            iconSource = stepIcons[position].inactive;
-          }
-
-          return (
-            <Image source={iconSource} style={{ width: 30, height: 30 }} />
-          );
-        }}
-      />
-      <View style={styles.contentContainer}>
-        <Text style={styles.stepText}>Step {currentStep + 1} Content</Text>
-      </View>
-
-      <View style={styles.buttonContainer}>
-        {currentStep > 0 && (
-          <TouchableOpacity
-            style={[styles.button, styles.previousButton]}
-            onPress={prevStep}
-          >
-            <Text style={styles.buttonText}>Previous</Text>
-          </TouchableOpacity>
-        )}
-
-        <TouchableOpacity
-          style={[styles.button, { marginLeft: currentStep > 0 ? 10 : 0 }]}
-          onPress={nextStep}
+      <KeyboardAvoidingView
+        behavior={Platform.OS === "ios" ? "padding" : null}
+        style={{ flex: 1 }}
+      >
+        <ScrollView
+          showsVerticalScrollIndicator={false}
+          style={{ flex: 1, marginHorizontal: 20 }}
         >
-          <Text style={styles.buttonText}>Continue</Text>
-        </TouchableOpacity>
-      </View>
-    </SafeScreen>
-  );
-};
+          <Loader isLoad={isLoading} />
+          <View
+            style={[
+              style.main,
+              {
+                backgroundColor: isDarkMode ? Colors.active : Colors.secondary,
+                marginTop: 10,
+              },
+            ]}
+          >
+            <AppBar
+              color={isDarkMode ? Colors.active : Colors.secondary}
+              title="Account Info"
+              titleStyle={[
+                style.b18,
+                { color: isDarkMode ? Colors.secondary : Colors.active },
+              ]}
+              centerTitle={true}
+              elevation={0}
+              leading={
+                <TouchableOpacity onPress={() => router.back()}>
+                  <Icon
+                    name="chevron-back"
+                    color={isDarkMode ? Colors.secondary : Colors.active}
+                    size={30}
+                  />
+                </TouchableOpacity>
+              }
+            />
 
-export default StepIndicatorExample;
+            <AppForm
+              initialValues={{
+                pet_profile_picture: "",
+                pet_name: "",
+                pet_type: "",
+                pet_breed: "",
+                pet_gender: "",
+                micro_chip: "",
+                color: "",
+              }}
+              onSubmit={""}
+              validationSchema={validationSchema}
+            >
+              <AppErrorMessage error={error} visible={errorVisible} />
+              <AppFormImagePicker name="pet_profile_picture" />
+              <Text
+                style={[
+                  style.subtitle,
+                  {
+                    textAlign: "center",
+                    color: Colors.primary,
+                    paddingTop: 15,
+                    fontFamily: "Avenir-Bold",
+                  },
+                ]}
+              >
+                Add your pets here
+              </Text>
+              <Text
+                style={[
+                  style.r16,
+                  {
+                    color: Colors.active,
+                    textAlign: "center",
+                    fontFamily: "Avenir-Regular",
+                    padding: "20px",
+                    paddingTop: 15,
+                  },
+                ]}
+              >
+                You can have unlimited pets for free
+              </Text>
+              <Text
+                style={[
+                  style.r16,
+                  {
+                    color: Colors.active,
+                    textAlign: "center",
+                    fontFamily: "Avenir-Regular",
+                    paddingTop: 5,
+                  },
+                ]}
+              >
+                give the detail of your pets
+              </Text>
+
+              <AppFormPicker
+                items={[{ label: "Dog", value: "dog" }]}
+                name={"pet_type"}
+                placeholder={"PET TYPE"}
+              />
+
+              <AppFormField
+                name={"pet_name"}
+                placeholder="PET NAME"
+                style={style}
+                parentStyles={{ marginTop: 20 }}
+              />
+
+              <AppFormPicker
+                items={[{ label: "Dog", value: "dog" }]}
+                name={"pet_breed"}
+                placeholder={"PET BREED"}
+              />
+
+              <AppFormRoleSelector roles={roles} name={"pet_gender"} />
+
+              <AppFormField
+                name={"micro_chip"}
+                placeholder="MICRO CHIP NUMBER"
+                style={style}
+                parentStyles={{ marginTop: 20 }}
+              />
+
+              <AppFormPicker
+                items={[{ label: "Brown", value: "brown" }]}
+                name={"color"}
+                placeholder={"COLOUR"}
+              />
+
+              <View style={{ marginTop: 20 }}>
+                <SubmitButton title="SAVE" style={style} />
+              </View>
+            </AppForm>
+          </View>
+        </ScrollView>
+      </KeyboardAvoidingView>
+    </SafeAreaView>
+  );
+}

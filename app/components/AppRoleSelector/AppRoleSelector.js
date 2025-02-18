@@ -1,29 +1,8 @@
 import React from "react";
 import { View, TouchableOpacity, StyleSheet, Text, Image } from "react-native";
 import RoleCard from "../RoleCard/RoleCard";
-import owner from "../../../assets/images/authentication/d3.png";
-import breeder from "../../../assets/images/authentication/breeder.png";
-import shop from "../../../assets/images/authentication/d2.png";
 
-const AppRoleSelector = ({ value, onSelect, parentStyles }) => {
-  const roles = [
-    {
-      title: "Owner",
-      role: "pet_owner",
-      imageSrc: owner,
-    },
-    {
-      title: "Breeder",
-      role: "pet_breeder",
-      imageSrc: breeder,
-    },
-    {
-      title: "Shop",
-      role: "pet_shop",
-      imageSrc: shop,
-    },
-  ];
-
+const AppRoleSelector = ({ roles=[], value, onSelect, parentStyles }) => {
   return (
     <View style={[styles.container, parentStyles]}>
       {roles.map((role, index) => (

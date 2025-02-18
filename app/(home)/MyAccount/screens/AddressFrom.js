@@ -125,11 +125,6 @@ export default function AddressFrom() {
   if (loading) {
     return <Loader isLoad={loading} />;
   }  
-console.log(country, 'con');
-console.log(cities, 'cities');
-
-  
-  
 
   return (
     <SafeAreaView
