@@ -43,7 +43,7 @@ const AppDatePicker = ({ value, onChange, placeholder }) => {
         style.txtinput,
         {
           backgroundColor: isDarkMode ? "transparent" : Colors.white,
-          height:40
+          height: 40,
         },
       ]}
     >
@@ -77,7 +77,7 @@ const AppDatePicker = ({ value, onChange, placeholder }) => {
         <Icon
           name="calendar"
           size={20}
-          color={isDarkMode ? Colors.secondary : Colors.lable}
+          color={isDarkMode ? Colors.secondary : Colors.disable}
         />
       </TouchableOpacity>
 

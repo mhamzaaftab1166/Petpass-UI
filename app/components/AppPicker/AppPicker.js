@@ -66,10 +66,11 @@ function AppPicker({
               ]}
             >
               {selectedItem.label}
-            </AppText>
+            </AppText> 
           ) : (
             <AppText
               style={[
+                style.r16,
                 styles.placeholder,
                 { color: isDarkMode ? Colors.secondary : Colors.lable },
               ]}
