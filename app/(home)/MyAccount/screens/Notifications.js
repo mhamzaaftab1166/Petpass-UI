@@ -126,7 +126,7 @@ export default function Notification() {
                 </Text>
               </View>
             </View>
-            {/* Divider after every notification except the last */}
+            
             {index !== notifications.length - 1 && (
               <View style={[style.divider, { marginVertical: 10 }]} />
             )}

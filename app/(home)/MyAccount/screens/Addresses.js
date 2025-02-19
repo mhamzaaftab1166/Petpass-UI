@@ -107,7 +107,7 @@ export default function Address() {
                   borderRadius: 10,
                   marginTop: 20,
                   backgroundColor: isDarkMode
-                    ? Colors.disable
+                    ? Colors.lable
                     : Colors.secondary,
                 }}
               >

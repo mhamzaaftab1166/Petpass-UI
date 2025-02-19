@@ -113,7 +113,7 @@ export default function MyAccount() {
               <Text
                 style={[
                   style.r14,
-                  { color: isDarkMode ? Colors.secondary : Colors.disable },
+                  { color: isDarkMode ? Colors.secondary : Colors.lable },
                 ]}
               >
                 {user?.email}
@@ -123,7 +123,7 @@ export default function MyAccount() {
               <Ionicons
                 name="chevron-forward"
                 size={20}
-                color={isDarkMode ? Colors.secondary : Colors.disable}
+                color={isDarkMode ? Colors.secondary : Colors.lable}
               />
             </View>
           </TouchableOpacity>
@@ -156,12 +156,13 @@ export default function MyAccount() {
               resizeMode="stretch"
               style={{ width: width / 9, height: height / 22 }}
             />
-            <Text style={[style.b12, { color: Colors.disable, marginTop: 10 }]}>
+            <Text style={[style.b12, { color: Colors.lable, marginTop: 10 }]}>
               Address
             </Text>
           </TouchableOpacity>
 
           <TouchableOpacity
+            onPress={() => router.push("/MyAccount/screens/MyPets")}
             style={[
               style.shadow,
               {
@@ -180,8 +181,8 @@ export default function MyAccount() {
               resizeMode="stretch"
               style={{ width: width / 8, height: height / 22 }}
             />
-            <Text style={[style.b12, { color: Colors.disable, marginTop: 10 }]}>
-              Security
+            <Text style={[style.b12, { color: Colors.lable, marginTop: 10 }]}>
+              My Pets
             </Text>
           </TouchableOpacity>
 
@@ -203,7 +204,7 @@ export default function MyAccount() {
               resizeMode="stretch"
               style={{ width: width / 10, height: height / 20 }}
             />
-            <Text style={[style.b12, { color: Colors.disable, marginTop: 10 }]}>
+            <Text style={[style.b12, { color: Colors.lable, marginTop: 10 }]}>
               About Us
             </Text>
           </TouchableOpacity>
@@ -281,7 +282,7 @@ export default function MyAccount() {
                   <Ionicons
                     name="chevron-forward"
                     size={20}
-                    color={isDarkMode ? Colors.secondary : Colors.disable}
+                    color={isDarkMode ? Colors.secondary : Colors.lable}
                   />
                 </View>
               </TouchableOpacity>
