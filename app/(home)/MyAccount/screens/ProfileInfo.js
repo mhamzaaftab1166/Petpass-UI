@@ -179,7 +179,7 @@ export default function AccountInfo() {
 
             <AppText
               style={{
-                color: isDarkMode ? "white" : "black",
+                color: isDarkMode ? Colors.secondary : Colors.active,
                 marginLeft: 5,
                 fontSize: 30,
                 marginTop: 30,

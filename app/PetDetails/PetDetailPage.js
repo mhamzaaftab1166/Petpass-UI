@@ -5,24 +5,28 @@ import style from "../theme/style";
 import { Colors } from "../theme/color";
 import Banner from "../components/PetDetailsComponents/Banner";
 import Description from "../components/PetDetailsComponents/Description";
+import { useTheme } from "../helper/themeProvider";
+import Bio from "../components/PetDetailsComponents/Bio";
 
 const width = Dimensions.get("screen").width;
 const height = Dimensions.get("screen").height;
 
 export default function PetDetailPage() {
+    const { isDarkMode } = useTheme();
   const router = useRouter();
 
   return (
-    <SafeAreaView style={[style.area, { backgroundColor: Colors.secondary }]}>
+    <SafeAreaView style={[style.area, {  backgroundColor: isDarkMode ? Colors.active : Colors.secondary, }]}>
       <StatusBar backgroundColor="transparent" translucent={true} />
       <Banner router={router} />
       <View
         style={[
           style.main,
-          { backgroundColor: Colors.secondary, marginTop: 10 },
+          {   backgroundColor: isDarkMode ? Colors.active : Colors.secondary, marginTop: 10 },
         ]}
       >
         <ScrollView showsVerticalScrollIndicator={false}>
+          <Bio/>
           <Description
             router={router}
             title="Description"
