@@ -95,7 +95,7 @@ export default function TabLayout() {
             if (rememberMe) {
               try {
                 console.log("Attempting to refresh token...");
-                const data = await authService.refreshToken({ refreshToken: refreshToken, accessToken: token });
+                const data = await authService.refreshToken({ refreshToken: refreshToken });
   
                 if (data?.accessToken) {
                   console.log("Token refreshed successfully");

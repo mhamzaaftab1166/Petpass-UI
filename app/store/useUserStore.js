@@ -11,7 +11,7 @@ const useUserStore = create((set) => ({
   loading: false,
   error: null,
   setToken: (tokenData) => set({ token: tokenData }),
-  setRemember: (rememberMe) => set({ rememberMe: rememberMe }),
+  setRemember: (value) => set({ rememberMe: value }),
   setRefreshToken: (refreshTokenData) => set({ refreshToken: refreshTokenData }),
   fetchUser: async () => {
     set({ loading: true });
