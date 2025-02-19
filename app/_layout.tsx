@@ -5,34 +5,42 @@ export default function RootLayout() {
 
   return (
     <ThemeProvider>
-    <Stack>
-      <Stack.Screen name="index" options={{ headerShown: false }} />
-      <Stack.Screen
-        name="Authentication/Sliders"
-        options={{ headerShown: false }}
-      />
-      <Stack.Screen
-        name="Authentication/Login"
-        options={{ headerShown: false }}
-      />
-      <Stack.Screen
-        name="Authentication/Signup"
-        options={{ headerShown: false }}
-      />
-      <Stack.Screen
-        name="Authentication/EmailVerify"
-        options={{ headerShown: false }}
-      />
-      <Stack.Screen
-        name="Authentication/ForgotPassword"
-        options={{ headerShown: false }}
-      />
-      <Stack.Screen
-        name="Authentication/NewPassword"
-        options={{ headerShown: false }}
-      />
-      <Stack.Screen name="(home)" options={{ headerShown: false }} />
-    </Stack>
+      <Stack screenOptions={{ headerShown: false }}>
+        <Stack.Screen name="index" options={{ headerShown: false }} />
+        <Stack.Screen
+          name="Authentication/Sliders"
+          options={{ headerShown: false }}
+        />
+        <Stack.Screen
+          name="Authentication/Login"
+          options={{ headerShown: false }}
+        />
+        <Stack.Screen
+          name="Authentication/Signup"
+          options={{ headerShown: false }}
+        />
+        <Stack.Screen
+          name="Authentication/EmailVerify"
+          options={{ headerShown: false }}
+        />
+        <Stack.Screen
+          name="Authentication/ForgotPassword"
+          options={{ headerShown: false }}
+        />
+        <Stack.Screen
+          name="Authentication/NewPassword"
+          options={{ headerShown: false }}
+        />
+        <Stack.Screen name="(home)" options={{ headerShown: false }} />
+        <Stack.Screen
+          name="PetDetails/PetEditForms/DescriptionEdit"
+          options={{ headerShown: false }}
+        />
+        <Stack.Screen
+          name="PetDetail/PetDetailsPage"
+          options={{ headerShown: false }}
+        />
+      </Stack>
     </ThemeProvider>
   );
 }

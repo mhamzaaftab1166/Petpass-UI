@@ -42,7 +42,7 @@ const ProfileLayout = () => {
         <Stack.Screen
           name="MyAccount/screens/MyPets"
           options={{ headerShown: false }}
-        />
+        /> 
       </Stack>
     </Slot>
   );

@@ -10,7 +10,10 @@ import birthLight from "../../../assets/images/pets/birthLight.png";
 import breedLight from "../../../assets/images/pets/breedLight.png";
 import genderLight from "../../../assets/images/pets/genderLight.png";
 import locationLight from "../../../assets/images/pets/locationLight.png";
+import locationDark from "../../../assets/images/pets/locationDark.png";
+import birthDark from "../../../assets/images/pets/birthDark.png";
 import detailcon from "../../../assets/images/pets/detailcon.png";
+import { TouchableOpacity } from "react-native";
 
 const { width, height } = Dimensions.get("screen");
 
@@ -19,7 +22,10 @@ const PetListingItem = () => {
   const { isDarkMode } = useTheme();
 
   return (
-    <View style={styles.outerContainer}>
+    <TouchableOpacity
+      onPress={() => router.push("/PetDetails/PetDetailPage")}
+      style={styles.outerContainer}
+    >
       <View style={styles.row}>
         <Image source={img} style={styles.profileImage} />
 
@@ -63,7 +69,10 @@ const PetListingItem = () => {
           </View>
 
           <View style={styles.detailRow}>
-            <Image source={birthLight} style={styles.icon} />
+            <Image
+              source={isDarkMode ? birthDark : birthLight}
+              style={styles.icon}
+            />
             <Text
               style={[
                 styles.detailText,
@@ -77,7 +86,10 @@ const PetListingItem = () => {
           {/** Location row with detail icon on the right */}
           <View style={[styles.detailRow, { justifyContent: "space-between" }]}>
             <View style={styles.locationContainer}>
-              <Image source={locationLight} style={styles.icon} />
+              <Image
+                source={isDarkMode ? locationDark : locationLight}
+                style={styles.icon}
+              />
               <Text
                 style={[
                   styles.detailText,
@@ -91,7 +103,7 @@ const PetListingItem = () => {
           </View>
         </View>
       </View>
-    </View>
+    </TouchableOpacity>
   );
 };
 
@@ -100,7 +112,7 @@ export default PetListingItem;
 const styles = StyleSheet.create({
   outerContainer: {
     backgroundColor: "transparent",
-    marginTop: "10%",
+    marginVertical: 20,
   },
   row: {
     flexDirection: "row",
@@ -119,7 +131,6 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "space-between",
-   
   },
   nameText: {
     fontFamily: "Avenir-Bold",
