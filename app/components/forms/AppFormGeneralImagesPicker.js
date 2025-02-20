@@ -3,7 +3,7 @@ import { useFormikContext } from "formik";
 import ImageInputList from "../GeneralImageInput/ImageInputList";
 import AppErrorMessage from "./AppErrorMessage"
 
-function AppFormImagePicker({ name }) {
+function AppFormImagePicker({ name, mediaType }) {
   const { touched, setFieldValue, values, errors } = useFormikContext();
 
   const imageUris = values[name];
@@ -19,9 +19,10 @@ function AppFormImagePicker({ name }) {
   return (
     <>
       <ImageInputList
-        imageUris={imageUris}
-        onAddImage={handleAdd}
-        onRemoveImage={handleRemove}
+        mediaUris={imageUris}
+        onAddMedia={handleAdd}
+        onRemoveMedia={handleRemove}
+        mediaType={mediaType}
       />
       <AppErrorMessage error={errors[name]} visible={touched[name]} />
     </>

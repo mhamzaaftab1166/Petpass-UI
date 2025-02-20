@@ -15,11 +15,12 @@ import { useTheme } from "../helper/themeProvider";
 import Bio from "../components/PetDetailsComponents/Bio";
 import About from "../components/PetDetailsComponents/About";
 import PhotoGallery from "../components/PetDetailsComponents/PetGallery";
-import p1 from  "../../assets/images/p1.png"
-import p2 from  "../../assets/images/p2.png"
-import p3 from  "../../assets/images/p3.png"
-import p4 from  "../../assets/images/p1.png"
+import p1 from "../../assets/images/p1.png";
+import p2 from "../../assets/images/p2.png";
+import p3 from "../../assets/images/p3.png";
+import p4 from "../../assets/images/p1.png";
 import p5 from "../../assets/images/p1.png";
+import VideoGallery from "../components/PetDetailsComponents/VideosGallery";
 
 const width = Dimensions.get("screen").width;
 const height = Dimensions.get("screen").height;
@@ -57,6 +58,16 @@ export default function PetDetailPage() {
             }
           />
           <PhotoGallery router={router} photos={[p1, p2, p3, p4, p5]} />
+          <VideoGallery
+            router={router}
+            videos={[
+              "https://www.w3schools.com/html/mov_bbb.mp4",
+              "https://www.w3schools.com/html/mov_bbb.mp4",
+              "https://www.w3schools.com/html/mov_bbb.mp4",
+              "https://www.w3schools.com/html/mov_bbb.mp4",
+              "https://www.w3schools.com/html/mov_bbb.mp4",
+            ]}
+          />
         </ScrollView>
       </View>
     </SafeAreaView>
