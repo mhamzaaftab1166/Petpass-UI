@@ -7,7 +7,7 @@ import { useTheme } from "../../helper/themeProvider";
 
 const Description = ({ title = "Description", text, router }) => {
   const { isDarkMode } = useTheme();
-  return ( 
+  return (
     <View style={{ marginTop: 20 }}>
       <View
         style={{
@@ -19,7 +19,10 @@ const Description = ({ title = "Description", text, router }) => {
         <Text
           style={[
             style.s16,
-            { color: isDarkMode ? Colors.secondary : Colors.active },
+            {
+              color: isDarkMode ? Colors.secondary : Colors.active,
+              fontFamily: "Avenir-Bold",
+            },
           ]}
         >
           {title}

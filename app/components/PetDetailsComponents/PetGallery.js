@@ -39,7 +39,10 @@ const PhotoGallery = ({ photos = [], router }) => {
         <Text
           style={[
             style.s16,
-            { color: isDarkMode ? Colors.secondary : Colors.active },
+            {
+              color: isDarkMode ? Colors.secondary : Colors.active,
+              fontFamily: "Avenir-Bold",
+            },
           ]}
         >
           {"Photos"}

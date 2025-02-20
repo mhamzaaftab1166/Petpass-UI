@@ -16,7 +16,10 @@ const About = ({ title = "About Tommy Gulf", router }) => {
         <Text
           style={[
             style.s16,
-            { color: isDarkMode ? Colors.secondary : Colors.active },
+            {
+              color: isDarkMode ? Colors.secondary : Colors.active,
+              fontFamily: "Avenir-Bold",
+            },
           ]}
         >
           {title}
@@ -72,6 +75,6 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
     alignItems: "center",
     marginTop: 20,
-    gap:10
+    gap: 10,
   },
 });
