@@ -37,9 +37,7 @@ export default function AboutEdit() {
   const { isDarkMode } = useTheme();
 
   const handleSubmit = (values) => {
-    console.log(values);
-
-    // router.push("/PetDetails/PetDetailPage");
+    router.push("/PetDetails/PetDetailPage");
   };
 
   const roles = {
