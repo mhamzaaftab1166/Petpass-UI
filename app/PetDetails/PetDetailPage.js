@@ -7,26 +7,36 @@ import Banner from "../components/PetDetailsComponents/Banner";
 import Description from "../components/PetDetailsComponents/Description";
 import { useTheme } from "../helper/themeProvider";
 import Bio from "../components/PetDetailsComponents/Bio";
+import About from "../components/PetDetailsComponents/About";
 
 const width = Dimensions.get("screen").width;
 const height = Dimensions.get("screen").height;
 
 export default function PetDetailPage() {
     const { isDarkMode } = useTheme();
-  const router = useRouter();
+    const router = useRouter();
 
   return (
-    <SafeAreaView style={[style.area, {  backgroundColor: isDarkMode ? Colors.active : Colors.secondary, }]}>
+    <SafeAreaView
+      style={[
+        style.area,
+        { backgroundColor: isDarkMode ? Colors.active : Colors.secondary },
+      ]}
+    >
       <StatusBar backgroundColor="transparent" translucent={true} />
       <Banner router={router} />
       <View
         style={[
           style.main,
-          {   backgroundColor: isDarkMode ? Colors.active : Colors.secondary, marginTop: 10 },
+          {
+            backgroundColor: isDarkMode ? Colors.active : Colors.secondary,
+            marginTop: 10,
+          },
         ]}
       >
         <ScrollView showsVerticalScrollIndicator={false}>
-          <Bio/>
+          <Bio router={router} />
+          <About router={router} />
           <Description
             router={router}
             title="Description"

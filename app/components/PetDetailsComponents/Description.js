@@ -8,7 +8,7 @@ import { useTheme } from "../../helper/themeProvider";
 const Description = ({ title = "Description", text, router }) => {
   const { isDarkMode } = useTheme();
   return (
-    <View style={{ marginTop: 10 }}>
+    <View style={{ marginVertical: 10 }}>
       <View
         style={{
           flexDirection: "row",
@@ -43,7 +43,7 @@ const Description = ({ title = "Description", text, router }) => {
       >
         {text}
       </Text>
-      <View style={[style.divider, { marginVertical: 10 }]}></View>
+      <View style={[style.divider, { marginTop: 10 }]}></View>
     </View>
   );
 };

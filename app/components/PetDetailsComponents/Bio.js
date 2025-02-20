@@ -1,4 +1,4 @@
-import { Image, StyleSheet, Text, View } from "react-native";
+import { Image, Pressable, StyleSheet, Text, View } from "react-native";
 import React from "react";
 import style from "../../theme/style";
 import { Colors } from "../../theme/color";
@@ -7,11 +7,19 @@ import genderLight from "../../../assets/images/pets/genderLight.png";
 import breedLight from "../../../assets/images/pets/breedLight.png";
 import birthDark from "../../../assets/images/pets/birthDark.png";
 import birthLight from "../../../assets/images/pets/birthLight.png";
+import petEdit from "../../../assets/images/pets/petEdit.png";
 
-const Bio = () => {
+const Bio = ({ router }) => {
   const { isDarkMode } = useTheme();
   return (
-    <View style={{marginVertical:20}}>
+    <View style={{ marginVertical: 10 }}>
+      <Pressable
+        onPress={() => router.push("/PetDetails/PetEditForms/BioEdit")}
+        style={styles.editIconContainer}
+      >
+        <Image source={petEdit} style={styles.editIcon} />
+      </Pressable>
+
       <View style={styles.topRow}>
         <Text
           style={[
@@ -37,7 +45,7 @@ const Bio = () => {
           </Text>
         </View>
       </View>
-      <View style={[styles.topRow,{marginTop:10,marginBottom:20}]}>
+      <View style={[styles.topRow, { marginTop: 10, marginBottom: 20 }]}>
         <View style={styles.detailRow}>
           <Image source={breedLight} style={styles.icon} />
           <Text
@@ -64,7 +72,7 @@ const Bio = () => {
           </Text>
         </View>
       </View>
-       <View style={[style.divider, { marginVertical: 10 }]}></View>
+      <View style={[style.divider, { marginTop: 10 }]}></View>
     </View>
   );
 };
@@ -98,5 +106,14 @@ const styles = StyleSheet.create({
     width: 16,
     height: 16,
     marginRight: 6,
+  },
+  editIconContainer: {
+    alignSelf: "flex-end",
+    marginBottom: 10,
+  },
+  editIcon: {
+    width: 20,
+    height: 20,
+    tintColor: Colors.primary,
   },
 });

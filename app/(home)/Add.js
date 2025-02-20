@@ -34,6 +34,7 @@ const validationSchema = Yup.object({
   pet_name: Yup.string().required().min(8).max(15).label("Pet Name"),
   pet_breed: Yup.object().required().label("Pet Breed"),
   pet_gender: Yup.string().required().label("Pet Gender"),
+  birthdate:Yup.string().required().label("Pet Birthdate"),
   micro_chip: Yup.string().required().min(4).max(30).label("Micro Chip Number"),
   color: Yup.object().required().label("Pet Color"),
 });
@@ -121,6 +122,7 @@ export default function AccountInfo() {
                   pet_type: "",
                   pet_breed: "",
                   pet_gender: "",
+                  birthdate:"",
                   micro_chip: "",
                   color: "",
                 }}

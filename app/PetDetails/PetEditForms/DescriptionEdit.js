@@ -18,7 +18,6 @@ import AppErrorMessage from "../../components/forms/AppErrorMessage";
 import { useTheme } from "../../helper/themeProvider";
 import { router, useRouter } from "expo-router";
 
-
 const validationSchema = Yup.object({
   description: Yup.string().required().label("Description"),
 });
@@ -26,9 +25,11 @@ const validationSchema = Yup.object({
 export default function DescriptionEdit() {
   const { isDarkMode } = useTheme();
 
-  const handleSubmit=()=>{
+  const handleSubmit = (values) => {
+    console.log(values);
+
     router.push("/PetDetails/PetDetailPage");
-  }
+  };
 
   return (
     <SafeAreaView
