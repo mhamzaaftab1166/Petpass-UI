@@ -22,20 +22,24 @@ import AppFormRoleSelector from "../../components/forms/AppFormRoleSelector";
 import AppFormPicker from "../../components/forms/AppFormPicker";
 import femaleLight from "../../../assets/images/pets/femaleLight.png";
 import maleLight from "../../../assets/images/pets/maleLight.png";
+import AppFormRangeField from "../../components/forms/AppFormRangeFeild";
 
 const validationSchema = Yup.object({
-  pet_type: Yup.object().required().label("Pet Type"),
-  pet_name: Yup.string().required().min(8).max(15).label("Pet Name"),
-  pet_breed: Yup.object().required().label("Pet Breed"),
-  pet_gender: Yup.string().required().label("Pet Gender"),
-  birthdate: Yup.string().required().label("Pet Birthdate"),
+  nuetered: Yup.object().required().label("Pet Nuetered"),
+  active: Yup.object().required().label("Phycically Active"),
+  micro_chip: Yup.string().required().min(4).max(30).label("Micro Chip Number"),
+  color: Yup.object().required().label("Pet Color"),
+  weightRange: Yup.object().required().label("Pet Weight"),
+  heightRange: Yup.object().required().label("Pet Height"),
 });
 
-export default function BioEdit() {
+export default function AboutEdit() {
   const { isDarkMode } = useTheme();
 
   const handleSubmit = (values) => {
-    router.push("/PetDetails/PetDetailPage");
+    console.log(values);
+
+    // router.push("/PetDetails/PetDetailPage");
   };
 
   const roles = {
@@ -72,11 +76,12 @@ export default function BioEdit() {
           <ScrollView showsVerticalScrollIndicator={false}>
             <AppForm
               initialValues={{
-                pet_name: "",
-                pet_type: "",
-                pet_breed: "",
-                pet_gender: "",
-                birthdate: "",
+                nuetered: "",
+                active: "",
+                micro_chip: "",
+                color: "",
+                weightRange: "",
+                heightRange: "",
               }}
               onSubmit={handleSubmit}
               validationSchema={validationSchema}
@@ -84,30 +89,44 @@ export default function BioEdit() {
               <AppTitle title={"PET ABOUT"} style={style} />
               <AppErrorMessage error={""} visible={""} />
               <AppFormPicker
-                items={[{ label: "Dog", value: "dog" }]}
-                name={"pet_type"}
-                placeholder={"PET TYPE"}
+                items={[{ label: "Brown", value: "brown" }]}
+                name={"color"}
+                placeholder={"COLOUR"}
               />
-
-              <AppFormField
-                name={"pet_name"}
-                placeholder="PET NAME"
-                style={style}
-                parentStyles={{ marginTop: 30 }}
-              />
-
               <AppFormPicker
-                items={[{ label: "Dog", value: "dog" }]}
-                name={"pet_breed"}
-                placeholder={"PET BREED"}
+                items={[{ label: "Yes", value: "yes" }]}
+                name={"nuetered"}
+                placeholder={"NUETERED"}
+              />
+              <AppFormPicker
+                items={[{ label: "Very Active", value: "very active" }]}
+                name={"active"}
+                placeholder={"PHYSICALLY ACTIVE"}
+              />
+              <View>
+                <AppFormField
+                  name={"micro_chip"}
+                  placeholder="MICRO CHIP NUMBER"
+                  style={style}
+                  parentStyles={{ marginTop: 30 }}
+                />
+              </View>
+              <AppFormRangeField
+                name="weightRange"
+                minValue={50}
+                maxValue={200}
+                label="Weight Range (kg)"
+                style={style}
               />
 
-              <AppFormRoleSelector roles={roles} name={"pet_gender"} />
-
-              <AppFormDatePicker
-                name="birthdate"
-                placeholder="SELECT BIRTHDATE"
+              <AppFormRangeField
+                name="heightRange"
+                minValue={50}
+                maxValue={200}
+                label="Height Range (cm)"
+                style={style}
               />
+
               <SubmitButton title="SAVE" style={style} />
             </AppForm>
           </ScrollView>

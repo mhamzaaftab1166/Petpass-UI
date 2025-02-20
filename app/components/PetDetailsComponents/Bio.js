@@ -12,7 +12,7 @@ import petEdit from "../../../assets/images/pets/petEdit.png";
 const Bio = ({ router }) => {
   const { isDarkMode } = useTheme();
   return (
-    <View style={{ marginVertical: 10 }}>
+    <View style={{ marginTop: 10 }}>
       <Pressable
         onPress={() => router.push("/PetDetails/PetEditForms/BioEdit")}
         style={styles.editIconContainer}
@@ -45,7 +45,7 @@ const Bio = ({ router }) => {
           </Text>
         </View>
       </View>
-      <View style={[styles.topRow, { marginTop: 10, marginBottom: 20 }]}>
+      <View style={[styles.topRow, { marginTop: 10 }]}>
         <View style={styles.detailRow}>
           <Image source={breedLight} style={styles.icon} />
           <Text
@@ -72,7 +72,7 @@ const Bio = ({ router }) => {
           </Text>
         </View>
       </View>
-      <View style={[style.divider, { marginTop: 10 }]}></View>
+      <View style={[style.divider, { marginTop: 20 }]}></View>
     </View>
   );
 };

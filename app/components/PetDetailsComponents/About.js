@@ -11,7 +11,7 @@ const About = ({ title = "About Tommy Gulf", router }) => {
   const { isDarkMode } = useTheme();
 
   return (
-    <View style={{ marginVertical: 10 }}>
+    <View style={{ marginTop: 20 }}>
       <View style={styles.header}>
         <Text
           style={[
@@ -22,9 +22,7 @@ const About = ({ title = "About Tommy Gulf", router }) => {
           {title}
         </Text>
         <Pressable
-          onPress={() =>
-            router.push("/PetDetails/PetEditForms/DescriptionEdit")
-          }
+          onPress={() => router.push("/PetDetails/PetEditForms/AboutEdit")}
         >
           <Image source={petEdit} style={{ width: 20, height: 20 }} />
         </Pressable>
@@ -56,7 +54,7 @@ const About = ({ title = "About Tommy Gulf", router }) => {
         />
       </View>
 
-      <View style={[style.divider, { marginTop: 10 }]}></View>
+      <View style={[style.divider, { marginTop: 20 }]}></View>
     </View>
   );
 };
@@ -74,5 +72,6 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
     alignItems: "center",
     marginTop: 20,
+    gap:10
   },
 });
