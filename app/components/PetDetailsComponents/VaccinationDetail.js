@@ -30,7 +30,7 @@ const VaccinationDetail = ({ title = "Vaccination Record", router }) => {
         </Text>
         <Pressable
           onPress={() =>
-            router.push("/PetDetails/PetEditForms/DescriptionEdit")
+            router.push("/PetDetails/PetEditForms/VaccinationEdit")
           }
         >
           <Image source={petEdit} style={{ width: 20, height: 20 }} />

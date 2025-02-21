@@ -15,7 +15,7 @@ import Icon from "react-native-vector-icons/Ionicons";
 import { useTheme } from "../../helper/themeProvider";
 import { formatDate } from "../../utils/date";
 
-const AppDatePicker = ({ value, onChange, placeholder }) => {
+const AppDatePicker = ({ value, onChange, placeholder, parentStyles }) => {
   const { isDarkMode } = useTheme();
   const [showPicker, setShowPicker] = useState(false);
   const [selectedDate, setSelectedDate] = useState(value || new Date());
@@ -45,6 +45,7 @@ const AppDatePicker = ({ value, onChange, placeholder }) => {
           backgroundColor: isDarkMode ? "transparent" : Colors.white,
           height: 40,
         },
+        parentStyles,
       ]}
     >
       <TouchableOpacity
