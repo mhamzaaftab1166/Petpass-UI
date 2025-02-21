@@ -27,15 +27,21 @@ import femaleLight from "../../assets/images/pets/femaleLight.png";
 import maleLight from "../../assets/images/pets/maleLight.png";
 import AppFormDatePicker from "../components/forms/AppFormDatePicker";
 import OnSuccess from "../components/OnSuccess/OnSuccess";
+import petServices from "../services/petServices";
+import { convertImageToBase64 } from "../utils/generalUtils";
 
 const validationSchema = Yup.object({
   pet_profile_picture: Yup.string().required().label("Pet Profile Image"),
   pet_type: Yup.object().required().label("Pet Type"),
-  pet_name: Yup.string().required().min(8).max(15).label("Pet Name"),
+  pet_name: Yup.string().required().min(3).max(15).label("Pet Name"),
   pet_breed: Yup.object().required().label("Pet Breed"),
-  pet_gender: Yup.string().required().label("Pet Gender"),
-  birthdate:Yup.string().required().label("Pet Birthdate"),
-  micro_chip: Yup.string().required().min(4).max(30).label("Micro Chip Number"),
+  gender: Yup.string().required().label("Pet Gender"),
+  date_of_birth: Yup.string().required().label("Pet Birthdate"),
+  microchip_number: Yup.string()
+    .required()
+    .min(4)
+    .max(30)
+    .label("Micro Chip Number"),
   color: Yup.object().required().label("Pet Color"),
 });
 
@@ -63,8 +69,35 @@ export default function AccountInfo() {
     ],
   };
 
-  const handleSubmit = () => {
-    setSubmitted(true);
+  const handleSubmit = async (values) => {
+    try {
+      setIsLoading(true);
+      const pet_profile_picture = await convertImageToBase64(
+        values.pet_profile_picture
+      );
+
+      const payload = {
+        pet_type: values.pet_type?.value || "",
+        pet_name: values.pet_name || "",
+        pet_breed: values.pet_breed?.value || "",
+        color: values.color?.label || "",
+        gender: values.gender || "",
+        date_of_birth: values.date_of_birth
+          ? new Date(values.date_of_birth).toISOString().split("T")[0]
+          : "",
+        microchip_number: values.microchip_number || "",
+        pet_profile_picture: pet_profile_picture,
+      };
+      const res = await petServices.createUserPet(payload);
+      console.log(res);
+      setIsLoading(false);
+      setSubmitted(true);
+    } catch (error) {
+      setErrorVisible(true);
+      setError(error.message);
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   return (
@@ -74,6 +107,7 @@ export default function AccountInfo() {
         { backgroundColor: isDarkMode ? Colors.active : Colors.secondary },
       ]}
     >
+      <Loader isLoad={isLoading} />
       {!submitted ? (
         <KeyboardAvoidingView
           behavior={Platform.OS === "ios" ? "padding" : null}
@@ -83,7 +117,6 @@ export default function AccountInfo() {
             showsVerticalScrollIndicator={false}
             style={{ flex: 1, marginHorizontal: 20 }}
           >
-            <Loader isLoad={isLoading} />
             <View
               style={[
                 style.main,
@@ -118,13 +151,13 @@ export default function AccountInfo() {
               <AppForm
                 initialValues={{
                   pet_profile_picture: "",
+                  pet_type: null,
                   pet_name: "",
-                  pet_type: "",
-                  pet_breed: "",
-                  pet_gender: "",
-                  birthdate:"",
-                  micro_chip: "",
-                  color: "",
+                  pet_breed: null,
+                  gender: "",
+                  date_of_birth: "",
+                  microchip_number: "",
+                  color: null,
                 }}
                 onSubmit={(values) => handleSubmit(values)}
                 validationSchema={validationSchema}
@@ -191,15 +224,15 @@ export default function AccountInfo() {
                   placeholder={"PET BREED"}
                 />
 
-                <AppFormRoleSelector roles={roles} name={"pet_gender"} />
+                <AppFormRoleSelector roles={roles} name={"gender"} />
 
                 <AppFormDatePicker
-                  name="birthdate"
+                  name="date_of_birth"
                   placeholder="SELECT BIRTHDATE"
                 />
 
                 <AppFormField
-                  name={"micro_chip"}
+                  name={"microchip_number"}
                   placeholder="MICRO CHIP NUMBER"
                   style={style}
                   parentStyles={{ marginTop: 20 }}
@@ -219,7 +252,7 @@ export default function AccountInfo() {
           </ScrollView>
         </KeyboardAvoidingView>
       ) : (
-        <OnSuccess route={"/MyAccount"} />
+        <OnSuccess route={"/MyAccount/screens/MyPets"} />
       )}
     </SafeAreaView>
   );

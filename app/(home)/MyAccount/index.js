@@ -177,7 +177,7 @@ export default function MyAccount() {
             ]}
           >
             <Image
-              source={require("../../../assets/images/profile/t17.png")}
+              source={require("../../../assets/images/profile/mypets.png")}
               resizeMode="stretch"
               style={{ width: width / 8, height: height / 22 }}
             />

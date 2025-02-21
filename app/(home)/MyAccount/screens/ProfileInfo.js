@@ -145,7 +145,7 @@ export default function AccountInfo() {
         >
           <AppBar
             color={isDarkMode ? Colors.active : Colors.secondary}
-            title="Add Your Pets Here"
+            title="My Profile"
             titleStyle={[
               style.b18,
               { color: isDarkMode ? Colors.secondary : Colors.active },

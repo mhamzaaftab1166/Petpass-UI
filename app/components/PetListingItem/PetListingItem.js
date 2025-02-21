@@ -9,10 +9,13 @@ import img from "../../../assets/images/profile/profile.png";
 import birthLight from "../../../assets/images/pets/birthLight.png";
 import breedLight from "../../../assets/images/pets/breedLight.png";
 import genderLight from "../../../assets/images/pets/genderLight.png";
+import genderDark from "../../../assets/images/pets/genderDark.png";
 import locationLight from "../../../assets/images/pets/locationLight.png";
 import locationDark from "../../../assets/images/pets/locationDark.png";
 import birthDark from "../../../assets/images/pets/birthDark.png";
 import detailcon from "../../../assets/images/pets/detailcon.png";
+import breedDark from "../../../assets/images/pets/breedDark.png";
+
 import { TouchableOpacity } from "react-native";
 
 const { width, height } = Dimensions.get("screen");
@@ -42,7 +45,7 @@ const PetListingItem = () => {
             </Text>
             <View style={styles.genderContainer}>
               <Image
-                source={genderLight}
+                source={isDarkMode ? genderDark : genderLight}
                 style={{ width: 18, height: 18, marginRight: 6 }}
               />
               <Text
@@ -57,7 +60,10 @@ const PetListingItem = () => {
           </View>
 
           <View style={styles.detailRow}>
-            <Image source={breedLight} style={styles.icon} />
+            <Image
+              source={isDarkMode ? breedDark : breedLight}
+              style={styles.icon}
+            />
             <Text
               style={[
                 styles.detailText,

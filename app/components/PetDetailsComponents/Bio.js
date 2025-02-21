@@ -5,9 +5,10 @@ import { Colors } from "../../theme/color";
 import { useTheme } from "../../helper/themeProvider";
 import genderLight from "../../../assets/images/pets/genderLight.png";
 import breedLight from "../../../assets/images/pets/breedLight.png";
+import genderDark from "../../../assets/images/pets/genderDark.png";
+import breedDark from "../../../assets/images/pets/breedDark.png";
 import birthDark from "../../../assets/images/pets/birthDark.png";
 import birthLight from "../../../assets/images/pets/birthLight.png";
-import petEdit from "../../../assets/images/pets/petEdit.png";
 
 const Bio = ({ router }) => {
   const { isDarkMode } = useTheme();
@@ -25,7 +26,7 @@ const Bio = ({ router }) => {
         </Text>
         <View style={styles.genderContainer}>
           <Image
-            source={genderLight}
+            source={isDarkMode ? genderDark : genderLight}
             style={{ width: 18, height: 18, marginRight: 6 }}
           />
           <Text
@@ -40,7 +41,10 @@ const Bio = ({ router }) => {
       </View>
       <View style={[styles.topRow, { marginTop: 10 }]}>
         <View style={styles.detailRow}>
-          <Image source={breedLight} style={styles.icon} />
+          <Image
+            source={isDarkMode ? breedDark : breedLight}
+            style={styles.icon}
+          />
           <Text
             style={[
               styles.detailText,
