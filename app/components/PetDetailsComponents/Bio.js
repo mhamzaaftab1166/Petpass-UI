@@ -13,13 +13,6 @@ const Bio = ({ router }) => {
   const { isDarkMode } = useTheme();
   return (
     <View style={{ marginTop: 10 }}>
-      <Pressable
-        onPress={() => router.push("/PetDetails/PetEditForms/BioEdit")}
-        style={styles.editIconContainer}
-      >
-        <Image source={petEdit} style={styles.editIcon} />
-      </Pressable>
-
       <View style={styles.topRow}>
         <Text
           style={[

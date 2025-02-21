@@ -52,7 +52,7 @@ const VideoItem = ({ videoUrl, onPress }) => {
         nativeControls={true}
       />
     </TouchableWithoutFeedback>
-  );
+  ); 
 };
 
 const VideoGallery = ({ videos = [], router }) => {

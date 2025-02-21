@@ -25,6 +25,11 @@ import maleLight from "../../../assets/images/pets/maleLight.png";
 import AppFormRangeField from "../../components/forms/AppFormRangeFeild";
 
 const validationSchema = Yup.object({
+  pet_type: Yup.object().required().label("Pet Type"),
+  pet_name: Yup.string().required().min(8).max(15).label("Pet Name"),
+  pet_breed: Yup.object().required().label("Pet Breed"),
+  pet_gender: Yup.string().required().label("Pet Gender"),
+  birthdate: Yup.string().required().label("Pet Birthdate"),
   nuetered: Yup.object().required().label("Pet Nuetered"),
   active: Yup.object().required().label("Phycically Active"),
   micro_chip: Yup.string().required().min(4).max(30).label("Micro Chip Number"),
@@ -37,6 +42,8 @@ export default function AboutEdit() {
   const { isDarkMode } = useTheme();
 
   const handleSubmit = (values) => {
+    console.log(values);
+    
     router.push("/PetDetails/PetDetailPage");
   };
 
@@ -74,6 +81,11 @@ export default function AboutEdit() {
           <ScrollView showsVerticalScrollIndicator={false}>
             <AppForm
               initialValues={{
+                pet_name: "",
+                pet_type: "",
+                pet_breed: "",
+                pet_gender: "",
+                birthdate: "",
                 nuetered: "",
                 active: "",
                 micro_chip: "",
@@ -86,6 +98,31 @@ export default function AboutEdit() {
             >
               <AppTitle title={"PET ABOUT"} style={style} />
               <AppErrorMessage error={""} visible={""} />
+              <AppFormPicker
+                items={[{ label: "Dog", value: "dog" }]}
+                name={"pet_type"}
+                placeholder={"PET TYPE"}
+              />
+
+              <AppFormField
+                name={"pet_name"}
+                placeholder="PET NAME"
+                style={style}
+                parentStyles={{ marginTop: 30 }}
+              />
+
+              <AppFormPicker
+                items={[{ label: "Dog", value: "dog" }]}
+                name={"pet_breed"}
+                placeholder={"PET BREED"}
+              />
+
+              <AppFormRoleSelector roles={roles} name={"pet_gender"} />
+
+              <AppFormDatePicker
+                name="birthdate"
+                placeholder="SELECT BIRTHDATE"
+              />
               <AppFormPicker
                 items={[{ label: "Brown", value: "brown" }]}
                 name={"color"}

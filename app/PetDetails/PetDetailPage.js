@@ -21,6 +21,7 @@ import p3 from "../../assets/images/p3.png";
 import p4 from "../../assets/images/p1.png";
 import p5 from "../../assets/images/p1.png";
 import VideoGallery from "../components/PetDetailsComponents/VideosGallery";
+import VaccinationDetail from "../components/PetDetailsComponents/VaccinationDetail";
 
 const width = Dimensions.get("screen").width;
 const height = Dimensions.get("screen").height;
@@ -67,7 +68,8 @@ export default function PetDetailPage() {
               "https://www.w3schools.com/html/mov_bbb.mp4",
               "https://www.w3schools.com/html/mov_bbb.mp4",
             ]}
-          />
+          /> 
+          <VaccinationDetail router={router}/>
         </ScrollView>
       </View>
     </SafeAreaView>
