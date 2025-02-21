@@ -6,7 +6,7 @@ import {
   Text,
   StyleSheet,
 } from "react-native";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { AppBar } from "@react-native-material/core";
 import { Colors } from "../../../theme/color";
 import style from "../../../theme/style";
@@ -15,18 +15,36 @@ import { useTheme } from "../../../helper/themeProvider";
 import Icon from "react-native-vector-icons/Ionicons";
 import PetListingItem from "../../../components/PetListingItem/PetListingItem";
 import { SwipeListView } from "react-native-swipe-list-view";
+import { usePetStore } from "../../../store/useStore";
+import Loader from "../../../components/Loader/Loader";
+import petServices from "../../../services/petServices";
+import AppErrorMessage from "../../../components/forms/AppErrorMessage";
 
 const { width, height } = Dimensions.get("screen");
 
-const petsData = [
-  { id: "1", name: "Pet 1" },
-  { id: "2", name: "Pet 2" },
-  { id: "3", name: "Pet 3" },
-];
-
 export default function MyPets({ isDelete = true }) {
+  const { pets, loading, error, fetchPets, clearPets } = usePetStore();
+  const [isloading, setIsLoading] = useState(false);
+
   const router = useRouter();
   const { isDarkMode } = useTheme();
+
+  useEffect(() => {
+    fetchPets();
+    return () => clearPets();
+  }, []);
+
+  const handleDeletePet = async (id) => {
+    setIsLoading(true);
+    try {
+      await petServices.deletePets(id);
+    } catch (error) {
+      console.error("Error deleting address:", error);
+    } finally {
+      await fetchPets();
+      setIsLoading(false);
+    }
+  };
 
   const renderItem = ({ item }) => (
     <View
@@ -38,9 +56,12 @@ export default function MyPets({ isDelete = true }) {
       <PetListingItem pet={item} />
     </View>
   );
-  const renderHiddenItem = () => (
+  const renderHiddenItem = ({ item }) => (
     <View style={styles.rowBack}>
-      <TouchableOpacity style={styles.deleteButton} onPress={() => {}}>
+      <TouchableOpacity
+        style={styles.deleteButton}
+        onPress={() => handleDeletePet(item?.id)}
+      >
         <Icon name="trash" color="#FA6262" size={30} />
       </TouchableOpacity>
     </View>
@@ -53,6 +74,7 @@ export default function MyPets({ isDelete = true }) {
         { backgroundColor: isDarkMode ? Colors.active : Colors.secondary },
       ]}
     >
+      <Loader isLoad={loading || isloading} />
       <View
         style={[
           style.main,
@@ -67,7 +89,9 @@ export default function MyPets({ isDelete = true }) {
           title="Your Pet List"
           titleStyle={[
             style.apptitle,
-            { color: isDarkMode ? Colors.secondary : Colors.active },
+            {
+              color: isDarkMode ? Colors.secondary : Colors.active,
+            },
           ]}
           centerTitle={true}
           elevation={0}
@@ -94,7 +118,7 @@ export default function MyPets({ isDelete = true }) {
         </Text>
 
         <SwipeListView
-          data={petsData}
+          data={pets}
           renderItem={renderItem}
           renderHiddenItem={isDelete ? renderHiddenItem : null}
           rightOpenValue={-75}

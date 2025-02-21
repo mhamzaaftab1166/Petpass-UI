@@ -17,10 +17,13 @@ import detailcon from "../../../assets/images/pets/detailcon.png";
 import breedDark from "../../../assets/images/pets/breedDark.png";
 
 import { TouchableOpacity } from "react-native";
+import { formatDate } from "../../utils/generalUtils";
 
 const { width, height } = Dimensions.get("screen");
 
-const PetListingItem = () => {
+const PetListingItem = ({ pet }) => {
+  console.log(pet);
+
   const router = useRouter();
   const { isDarkMode } = useTheme();
 
@@ -30,7 +33,11 @@ const PetListingItem = () => {
       style={styles.outerContainer}
     >
       <View style={styles.row}>
-        <Image source={img} style={styles.profileImage} />
+        <Image
+          source={{ uri: pet?.pet_profile_picture }}
+          resizeMode="contain"
+          style={styles.profileImage}
+        />
 
         <View style={styles.infoContainer}>
           <View style={styles.topRow}>
@@ -41,7 +48,7 @@ const PetListingItem = () => {
                 { color: isDarkMode ? Colors.secondary : Colors.active },
               ]}
             >
-              Tommy Gulf (Dog)
+              {`${pet?.pet_name} (${pet?.pet_type})`}
             </Text>
             <View style={styles.genderContainer}>
               <Image
@@ -54,7 +61,7 @@ const PetListingItem = () => {
                   { color: isDarkMode ? Colors.secondary : Colors.lable },
                 ]}
               >
-                Male
+                {pet?.gender}
               </Text>
             </View>
           </View>
@@ -70,7 +77,7 @@ const PetListingItem = () => {
                 { color: isDarkMode ? Colors.secondary : Colors.lable },
               ]}
             >
-              Cairn Terrier
+              {pet?.pet_breed}
             </Text>
           </View>
 
@@ -85,7 +92,7 @@ const PetListingItem = () => {
                 { color: isDarkMode ? Colors.secondary : Colors.lable },
               ]}
             >
-              September 04/2018
+              {formatDate(pet?.date_of_birth)}
             </Text>
           </View>
 
@@ -128,6 +135,7 @@ const styles = StyleSheet.create({
     resizeMode: "stretch",
     height: height / 12,
     width: width / 5,
+    borderRadius: "50%",
   },
   infoContainer: {
     flex: 1,

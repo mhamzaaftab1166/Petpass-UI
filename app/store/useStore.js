@@ -1,3 +1,4 @@
 import useUserStore from "./useUserStore";
+import usePetStore from "./usePetStore";
 
-export { useUserStore };
+export { useUserStore, usePetStore };

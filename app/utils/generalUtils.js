@@ -2,7 +2,7 @@ import * as FileSystem from "expo-file-system";
 
 export const convertImageToBase64 = async (imageUri) => {
   if (!imageUri || imageUri.startsWith("http")) {
-    return imageUri; 
+    return imageUri;
   }
 
   try {
@@ -15,6 +15,16 @@ export const convertImageToBase64 = async (imageUri) => {
     return `data:${mimeType};base64,${base64Image}`;
   } catch (error) {
     console.log("Error converting image to Base64:", error);
-    return "image"; 
+    return "image";
   }
+};
+export const formatDate = (dateString) => {
+  const date = new Date(dateString);
+  return date
+    .toLocaleDateString("en-US", {
+      month: "long",
+      day: "2-digit",
+      year: "numeric",
+    })
+    .replace(",", "/");
 };
