@@ -6,7 +6,7 @@ import {
   Text,
   StyleSheet,
 } from "react-native";
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { AppBar } from "@react-native-material/core";
 import { Colors } from "../../../theme/color";
 import style from "../../../theme/style";
@@ -19,31 +19,48 @@ import { usePetStore } from "../../../store/useStore";
 import Loader from "../../../components/Loader/Loader";
 import petServices from "../../../services/petServices";
 import AppErrorMessage from "../../../components/forms/AppErrorMessage";
+import AppAlert from "../../../components/AppAlert/index";
+import { useFocusEffect } from "expo-router";
 
 const { width, height } = Dimensions.get("screen");
 
 export default function MyPets({ isDelete = true }) {
-  const { pets, loading, error, fetchPets, clearPets } = usePetStore();
+  const { pets, loading, petError, petErrorVisible, fetchPets, clearPets } =
+    usePetStore();
   const [isloading, setIsLoading] = useState(false);
-
+  const [delError, setDelError] = useState();
+  const [delErrorVisible, setDelErrorVisible] = useState(false);
+  const [showAlert, setShowAlert] = useState(false);
+  const [selectedPetId, setSelectedPetId] = useState(null);
   const router = useRouter();
   const { isDarkMode } = useTheme();
 
-  useEffect(() => {
-    fetchPets();
-    return () => clearPets();
-  }, []);
+ useFocusEffect(
+   useCallback(() => {
+     fetchPets();
+     return () => clearPets();
+   }, [])
+ );
 
   const handleDeletePet = async (id) => {
     setIsLoading(true);
     try {
+      setShowAlert(false);
       await petServices.deletePets(id);
     } catch (error) {
-      console.error("Error deleting address:", error);
+      console.error("Error deleting pet:", error);
+      setDelError(error.message);
+      setDelErrorVisible(true);
     } finally {
       await fetchPets();
       setIsLoading(false);
+      setShowAlert(false);
     }
+  };
+
+  const confirmDelete = (id) => {
+    setSelectedPetId(id);
+    setShowAlert(true);
   };
 
   const renderItem = ({ item }) => (
@@ -56,11 +73,12 @@ export default function MyPets({ isDelete = true }) {
       <PetListingItem pet={item} />
     </View>
   );
+
   const renderHiddenItem = ({ item }) => (
     <View style={styles.rowBack}>
       <TouchableOpacity
         style={styles.deleteButton}
-        onPress={() => handleDeletePet(item?.id)}
+        onPress={() => confirmDelete(item?.id)}
       >
         <Icon name="trash" color="#FA6262" size={30} />
       </TouchableOpacity>
@@ -89,9 +107,7 @@ export default function MyPets({ isDelete = true }) {
           title="Your Pet List"
           titleStyle={[
             style.apptitle,
-            {
-              color: isDarkMode ? Colors.secondary : Colors.active,
-            },
+            { color: isDarkMode ? Colors.secondary : Colors.active },
           ]}
           centerTitle={true}
           elevation={0}
@@ -116,7 +132,10 @@ export default function MyPets({ isDelete = true }) {
         >
           Manage Your Pets Here
         </Text>
-
+        <AppErrorMessage
+          error={petError || delError}
+          visible={petErrorVisible || delErrorVisible}
+        />
         <SwipeListView
           data={pets}
           renderItem={renderItem}
@@ -125,6 +144,20 @@ export default function MyPets({ isDelete = true }) {
           disableRightSwipe
         />
       </View>
+      <AppAlert
+        showAlert={showAlert}
+        title="Are you sure?"
+        message="Do you really want to delete this pet?"
+        closeOnTouchOutside={false}
+        closeOnHardwareBackPress={false}
+        showCancelButton={true}
+        showConfirmButton={true}
+        cancelText="No"
+        confirmText="Yes"
+        confirmButtonColor="red"
+        onCancelPressed={() => setShowAlert(false)}
+        onConfirmPressed={() => handleDeletePet(selectedPetId)}
+      />
     </SafeAreaView>
   );
 }

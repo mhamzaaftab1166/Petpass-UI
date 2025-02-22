@@ -4,7 +4,8 @@ import petServices from "../services/petServices";
 const usePetStore = create((set) => ({
   pets: [],
   loading: false,
-  error: null,
+  petError: null,
+  petErrorVisible: false,
 
   fetchPets: async () => {
     set({ loading: true });
@@ -12,7 +13,7 @@ const usePetStore = create((set) => ({
       const response = await petServices.getPets();
       set({ pets: response.pets, loading: false });
     } catch (error) {
-      set({ error: error.message, loading: false });
+      set({ petError: error.message, loading: false, petErrorVisible: true });
     }
   },
 
