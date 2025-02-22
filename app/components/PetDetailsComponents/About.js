@@ -25,7 +25,12 @@ const About = ({ title = "About Tommy Gulf", router, pet }) => {
           {title}
         </Text>
         <Pressable
-          onPress={() => router.push("/PetDetails/PetEditForms/AboutEdit")}
+          onPress={() =>
+            router.push({
+              pathname: "/PetDetails/PetEditForms/AboutEdit",
+              params: { pet: JSON.stringify(pet) },
+            })
+          }
         >
           <Image source={petEdit} style={{ width: 20, height: 20 }} />
         </Pressable>

@@ -16,9 +16,14 @@ const getPetById = (id) => {
   return _axios("get", `/user-pets/${id}`);
 };
 
+const updatePetAbout = (payload, id) => {
+  return _axios("put", `/user-pets/${id}`, payload, "multipart/form-data");
+};
+
 export default {
   createUserPet,
   getPets,
   deletePets,
   getPetById,
+  updatePetAbout,
 };

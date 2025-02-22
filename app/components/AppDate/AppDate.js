@@ -16,6 +16,7 @@ import { useTheme } from "../../helper/themeProvider";
 import { formatDate } from "../../utils/date";
 
 const AppDatePicker = ({ value, onChange, placeholder, parentStyles }) => {
+  
   const { isDarkMode } = useTheme();
   const [showPicker, setShowPicker] = useState(false);
   const [selectedDate, setSelectedDate] = useState(value || new Date());

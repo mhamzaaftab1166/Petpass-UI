@@ -80,7 +80,7 @@ export default function AccountInfo() {
         pet_type: values.pet_type?.value || "",
         pet_name: values.pet_name || "",
         pet_breed: values.pet_breed?.value || "",
-        color: values.color?.label || "",
+        color: values.color?.value || "",
         gender: values.gender || "",
         date_of_birth: values.date_of_birth
           ? new Date(values.date_of_birth).toISOString().split("T")[0]
