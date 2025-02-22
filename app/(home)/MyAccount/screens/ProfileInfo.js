@@ -177,7 +177,7 @@ export default function AccountInfo() {
             <AppErrorMessage error={error} visible={errorVisible} />
             <AppFormImagePicker name="profile_picture" />
 
-            <AppText
+            <AppText 
               style={{
                 color: isDarkMode ? Colors.secondary : Colors.active,
                 marginLeft: 5,

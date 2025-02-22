@@ -23,6 +23,7 @@ import AppFormPicker from "../../components/forms/AppFormPicker";
 import femaleLight from "../../../assets/images/pets/femaleLight.png";
 import maleLight from "../../../assets/images/pets/maleLight.png";
 import AppFormRangeField from "../../components/forms/AppFormRangeFeild";
+import AppFormImagePicker from "../../components/forms/AppFormImagePicker";
 
 const validationSchema = Yup.object({
   pet_type: Yup.object().required().label("Pet Type"),
@@ -36,6 +37,7 @@ const validationSchema = Yup.object({
   color: Yup.object().required().label("Pet Color"),
   weightRange: Yup.object().required().label("Pet Weight"),
   heightRange: Yup.object().required().label("Pet Height"),
+  profile_picture: Yup.string().label("Pet Profile Image"),
 });
 
 export default function AboutEdit() {
@@ -43,7 +45,7 @@ export default function AboutEdit() {
 
   const handleSubmit = (values) => {
     console.log(values);
-    
+
     router.push("/PetDetails/PetDetailPage");
   };
 
@@ -81,6 +83,7 @@ export default function AboutEdit() {
           <ScrollView showsVerticalScrollIndicator={false}>
             <AppForm
               initialValues={{
+                profile_picture: null,
                 pet_name: "",
                 pet_type: "",
                 pet_breed: "",
@@ -98,6 +101,7 @@ export default function AboutEdit() {
             >
               <AppTitle title={"PET ABOUT"} style={style} />
               <AppErrorMessage error={""} visible={""} />
+              <AppFormImagePicker name="profile_picture" />
               <AppFormPicker
                 items={[{ label: "Dog", value: "dog" }]}
                 name={"pet_type"}
