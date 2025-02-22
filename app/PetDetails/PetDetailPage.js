@@ -5,8 +5,8 @@ import {
   StatusBar,
   View,
 } from "react-native";
-import React from "react";
-import { useRouter } from "expo-router";
+import React, { useCallback } from "react";
+import { useRouter, useLocalSearchParams, useFocusEffect } from "expo-router";
 import style from "../theme/style";
 import { Colors } from "../theme/color";
 import Banner from "../components/PetDetailsComponents/Banner";
@@ -22,13 +22,32 @@ import p4 from "../../assets/images/p1.png";
 import p5 from "../../assets/images/p1.png";
 import VideoGallery from "../components/PetDetailsComponents/VideosGallery";
 import VaccinationDetail from "../components/PetDetailsComponents/VaccinationDetail";
+import { usePetStore } from "../store/useStore";
+import Loader from "../components/Loader/Loader";
 
 const width = Dimensions.get("screen").width;
 const height = Dimensions.get("screen").height;
 
 export default function PetDetailPage() {
+  const {
+    pet,
+    loading,
+    fetchPetById,
+    singlePetError,
+    singlePetErrorVisible,
+    clearPets,
+  } = usePetStore();
+  const { id } = useLocalSearchParams();
+
   const { isDarkMode } = useTheme();
   const router = useRouter();
+
+  useFocusEffect(
+    useCallback(() => {
+      fetchPetById(id);
+      return () => clearPets();
+    }, [id])
+  );
 
   return (
     <SafeAreaView
@@ -37,8 +56,10 @@ export default function PetDetailPage() {
         { backgroundColor: isDarkMode ? Colors.active : Colors.secondary },
       ]}
     >
+      <Loader isLoad={loading} />
+
       <StatusBar backgroundColor="transparent" translucent={true} />
-      <Banner router={router} />
+      <Banner profileImg={pet?.pet_profile_picture} router={router} />
       <View
         style={[
           style.main,
@@ -49,8 +70,8 @@ export default function PetDetailPage() {
         ]}
       >
         <ScrollView showsVerticalScrollIndicator={false}>
-          <Bio router={router} />
-          <About router={router} />
+          <Bio pet={pet} router={router} />
+          <About pet={pet} router={router} />
           <Description
             router={router}
             title="Description"
@@ -68,8 +89,8 @@ export default function PetDetailPage() {
               "https://www.w3schools.com/html/mov_bbb.mp4",
               "https://www.w3schools.com/html/mov_bbb.mp4",
             ]}
-          /> 
-          <VaccinationDetail router={router}/>
+          />
+          <VaccinationDetail router={router} />
         </ScrollView>
       </View>
     </SafeAreaView>

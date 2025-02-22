@@ -7,7 +7,7 @@ import petEdit from "../../../assets/images/pets/petEdit.png";
 import InfoItem from "../InfoItem/InfoItem";
 import BoxItem from "../BoxItem/BoxItem";
 
-const About = ({ title = "About Tommy Gulf", router }) => {
+const About = ({ title = "About Tommy Gulf", router, pet }) => {
   const { isDarkMode } = useTheme();
 
   return (
@@ -31,27 +31,33 @@ const About = ({ title = "About Tommy Gulf", router }) => {
         </Pressable>
       </View>
 
-      <InfoItem label="Color" value="Brown" />
-      <InfoItem label="Neutered" value="No" />
-      <InfoItem label="Physically Active" value="Very Active" />
-      <InfoItem label="Microchip Number" value="12345678910" />
+      <InfoItem label="Color" value={pet?.color || "Not Provided"} />
+      <InfoItem label="Neutered" value={pet?.nuetered || "Not Provided"} />
+      <InfoItem
+        label="Physically Active"
+        value={pet?.physically_active || "Not Provided"}
+      />
+      <InfoItem
+        label="Microchip Number"
+        value={pet?.microchip_number || "Not Provided"}
+      />
 
       <View style={styles.boxContainer}>
         <BoxItem
           label="Age"
-          value="7 months"
+          value={`${pet?.age?.years || 0}y-${pet?.age?.months}m`}
           bgColor="#D9F3F7"
           textColor="#53A2B1"
         />
         <BoxItem
           label="Weight"
-          value="25 KG"
+          value={pet?.weight || "Not Provided"}
           bgColor="#FCE9D8"
           textColor="#E5A16F"
         />
         <BoxItem
           label="Height"
-          value="25 CM"
+          value={pet?.height || "Not Provided"}
           bgColor="#FDD9E1"
           textColor="#E56789"
         />

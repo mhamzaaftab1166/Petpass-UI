@@ -13,11 +13,11 @@ import { Colors } from "../../theme/color";
 
 const width = Dimensions.get("screen").width;
 const height = Dimensions.get("screen").height;
-const Banner = ({ router }) => {
+const Banner = ({ router, profileImg }) => {
   return (
     <View>
       <ImageBackground
-        source={require("../../../assets/images/petDummy.png")}
+        source={{ uri: profileImg }}
         resizeMode="stretch"
         style={{ width, height: height / 3.2 }}
       >

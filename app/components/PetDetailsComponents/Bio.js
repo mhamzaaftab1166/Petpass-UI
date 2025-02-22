@@ -9,8 +9,9 @@ import genderDark from "../../../assets/images/pets/genderDark.png";
 import breedDark from "../../../assets/images/pets/breedDark.png";
 import birthDark from "../../../assets/images/pets/birthDark.png";
 import birthLight from "../../../assets/images/pets/birthLight.png";
+import { formatDate } from "../../utils/generalUtils";
 
-const Bio = ({ router }) => {
+const Bio = ({ router, pet }) => {
   const { isDarkMode } = useTheme();
   return (
     <View style={{ marginTop: 10 }}>
@@ -22,7 +23,7 @@ const Bio = ({ router }) => {
             { color: isDarkMode ? Colors.secondary : Colors.active },
           ]}
         >
-          Tommy Gulf (Dog)
+          {`${pet?.pet_name} (${pet?.pet_type})`}
         </Text>
         <View style={styles.genderContainer}>
           <Image
@@ -35,7 +36,7 @@ const Bio = ({ router }) => {
               { color: isDarkMode ? Colors.secondary : Colors.lable },
             ]}
           >
-            Male
+            {pet?.gender}
           </Text>
         </View>
       </View>
@@ -51,7 +52,7 @@ const Bio = ({ router }) => {
               { color: isDarkMode ? Colors.secondary : Colors.lable },
             ]}
           >
-            Cairn Terrier
+            {pet?.pet_breed}
           </Text>
         </View>
         <View style={styles.detailRow}>
@@ -65,7 +66,7 @@ const Bio = ({ router }) => {
               { color: isDarkMode ? Colors.secondary : Colors.lable },
             ]}
           >
-            September 04/2018
+            {formatDate(pet?.date_of_birth)}
           </Text>
         </View>
       </View>

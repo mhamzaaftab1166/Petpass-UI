@@ -22,14 +22,13 @@ import { formatDate } from "../../utils/generalUtils";
 const { width, height } = Dimensions.get("screen");
 
 const PetListingItem = ({ pet }) => {
-  console.log(pet);
 
   const router = useRouter();
   const { isDarkMode } = useTheme();
 
   return (
     <TouchableOpacity
-      onPress={() => router.push("/PetDetails/PetDetailPage")}
+      onPress={() => router.push(`/PetDetails/PetDetailPage?id=${pet?.id}`)}
       style={styles.outerContainer}
     >
       <View style={styles.row}>
