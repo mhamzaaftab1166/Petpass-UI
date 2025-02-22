@@ -5,7 +5,6 @@ import {
   SafeAreaView,
   Dimensions,
   TouchableOpacity,
-  ScrollView,
 } from "react-native";
 import { AppBar } from "@react-native-material/core";
 import Icon from "react-native-vector-icons/Ionicons";
@@ -20,6 +19,7 @@ import useUserStore from "../../../store/useUserStore";
 import Loader from "../../../components/Loader/Loader";
 import addressService from "../../../services/addressService";
 import NoItem from "../../../components/NoItem/NoItem";
+import AppAlert from "../../../components/AppAlert/index";
 
 const width = Dimensions.get("screen").width;
 const height = Dimensions.get("screen").height;
@@ -31,21 +31,31 @@ export default function Address() {
   const { address, loading, fetchAddress, clearAddress } = useAddressStore();
   const [isloading, setIsLoading] = useState(false);
 
+  // New state for delete confirmation alert
+  const [deleteAlertVisible, setDeleteAlertVisible] = useState(false);
+  const [selectedAddressId, setSelectedAddressId] = useState(null);
+
   useEffect(() => {
     fetchAddress(user?.id);
     return () => clearAddress();
   }, [user?.id]);
 
-  const deleteAddress = async (rowKey) => {
+  const deleteAddress = async (addressId) => {
     setIsLoading(true);
     try {
-      await addressService.deleteUserAddress(user?.id, rowKey);
+      setDeleteAlertVisible(false);
+      await addressService.deleteUserAddress(user?.id, addressId);
     } catch (error) {
       console.error("Error deleting address:", error);
     } finally {
       fetchAddress(user?.id);
       setIsLoading(false);
     }
+  };
+
+  const handleConfirmDelete = (addressId) => {
+    setSelectedAddressId(addressId);
+    setDeleteAlertVisible(true);
   };
 
   if (loading) {
@@ -93,7 +103,7 @@ export default function Address() {
           }
         />
         {address.length === 0 ? (
-        <NoItem title={"address"}/>
+          <NoItem title={"address"} />
         ) : (
           <SwipeListView
             data={address}
@@ -106,9 +116,7 @@ export default function Address() {
                   borderColor: isDarkMode ? Colors.active : Colors.lable,
                   borderRadius: 10,
                   marginTop: 20,
-                  backgroundColor: isDarkMode
-                    ? Colors.lable
-                    : Colors.secondary,
+                  backgroundColor: isDarkMode ? Colors.lable : Colors.secondary,
                 }}
               >
                 <Text
@@ -176,7 +184,7 @@ export default function Address() {
                 </TouchableOpacity>
 
                 <TouchableOpacity
-                  onPress={() => deleteAddress(item.id)}
+                  onPress={() => handleConfirmDelete(item.id)}
                   style={{
                     justifyContent: "center",
                     alignItems: "center",
@@ -192,6 +200,26 @@ export default function Address() {
           />
         )}
       </View>
+
+      {/* Confirmation Alert */}
+      <AppAlert
+        showAlert={deleteAlertVisible}
+        showProgress={false}
+        title="Confirm Delete"
+        message="Are you sure you want to delete this address?"
+        closeOnTouchOutside={false}
+        closeOnHardwareBackPress={false}
+        showCancelButton={true}
+        showConfirmButton={true}
+        cancelText="No"
+        confirmText="Yes"
+        confirmButtonColor={Colors.primary}
+        onCancelPressed={() => setDeleteAlertVisible(false)}
+        onConfirmPressed={() => {
+          deleteAddress(selectedAddressId);
+          setDeleteAlertVisible(false);
+        }}
+      />
     </SafeAreaView>
   );
 }

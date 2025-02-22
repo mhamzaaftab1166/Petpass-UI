@@ -20,6 +20,7 @@ import Loader from "../../../components/Loader/Loader";
 import petServices from "../../../services/petServices";
 import AppErrorMessage from "../../../components/forms/AppErrorMessage";
 import AppAlert from "../../../components/AppAlert/index";
+import NoItem from "../../../components/NoItem/NoItem"
 import { useFocusEffect } from "expo-router";
 
 const { width, height } = Dimensions.get("screen");
@@ -35,12 +36,12 @@ export default function MyPets({ isDelete = true }) {
   const router = useRouter();
   const { isDarkMode } = useTheme();
 
- useFocusEffect(
-   useCallback(() => {
-     fetchPets();
-     return () => clearPets();
-   }, [])
- );
+  useFocusEffect(
+    useCallback(() => {
+      fetchPets();
+      return () => clearPets();
+    }, [])
+  );
 
   const handleDeletePet = async (id) => {
     setIsLoading(true);
@@ -136,13 +137,15 @@ export default function MyPets({ isDelete = true }) {
           error={petError || delError}
           visible={petErrorVisible || delErrorVisible}
         />
-        <SwipeListView
-          data={pets}
-          renderItem={renderItem}
-          renderHiddenItem={isDelete ? renderHiddenItem : null}
-          rightOpenValue={-75}
-          disableRightSwipe
-        />
+        {pets?.length > 0 ? (
+          <SwipeListView
+            data={pets}
+            renderItem={renderItem}
+            renderHiddenItem={isDelete ? renderHiddenItem : null}
+            rightOpenValue={-75}
+            disableRightSwipe
+          />
+        ) : <NoItem title={"Pet List"}/>}
       </View>
       <AppAlert
         showAlert={showAlert}

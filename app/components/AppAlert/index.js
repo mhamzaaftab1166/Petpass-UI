@@ -60,7 +60,7 @@ const AppAlert = ({
       borderRadius: 8,
       justifyContent: "center",
       alignItems: "center",
-      backgroundColor: "red",
+      backgroundColor: Colors.disable,
     },
     cancelButtonText: {
       fontSize: 16,
