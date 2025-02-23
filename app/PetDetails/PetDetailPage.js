@@ -41,7 +41,6 @@ export default function PetDetailPage() {
 
   const { isDarkMode } = useTheme();
   const router = useRouter();
-console.log(pet);
 
   useFocusEffect(
     useCallback(() => {
@@ -73,13 +72,7 @@ console.log(pet);
         <ScrollView showsVerticalScrollIndicator={false}>
           <Bio pet={pet} router={router} />
           <About pet={pet} router={router} />
-          <Description
-            router={router}
-            title="Description"
-            text={
-              "Lorem ipsum dolor sit amet, consectetur pisicing elit, sed do eiusmod tempor incididunt ut laboreet dolore magna aliqua."
-            }
-          />
+          <Description router={router} title="Description" pet={pet} />
           <PhotoGallery router={router} photos={[p1, p2, p3, p4, p5]} />
           <VideoGallery
             router={router}

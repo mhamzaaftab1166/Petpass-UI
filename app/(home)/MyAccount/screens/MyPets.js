@@ -20,7 +20,7 @@ import Loader from "../../../components/Loader/Loader";
 import petServices from "../../../services/petServices";
 import AppErrorMessage from "../../../components/forms/AppErrorMessage";
 import AppAlert from "../../../components/AppAlert/index";
-import NoItem from "../../../components/NoItem/NoItem"
+import NoItem from "../../../components/NoItem/NoItem";
 import { useFocusEffect } from "expo-router";
 
 const { width, height } = Dimensions.get("screen");
@@ -44,6 +44,7 @@ export default function MyPets({ isDelete = true }) {
   );
 
   const handleDeletePet = async (id) => {
+    setShowAlert(false);
     setIsLoading(true);
     try {
       setShowAlert(false);
@@ -145,7 +146,9 @@ export default function MyPets({ isDelete = true }) {
             rightOpenValue={-75}
             disableRightSwipe
           />
-        ) : <NoItem title={"Pet List"}/>}
+        ) : (
+          <NoItem title={"Pet List"} />
+        )}
       </View>
       <AppAlert
         showAlert={showAlert}

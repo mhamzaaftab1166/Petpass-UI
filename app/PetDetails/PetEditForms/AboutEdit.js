@@ -78,10 +78,9 @@ export default function AboutEdit() {
         pet_type: values?.pet_type.value || "",
         nuetered: values?.nuetered.value || "",
       };
-      // const res = await petServices.updatePetAbout(payload, petData?.id);
-      console.log(values);
+      const res = await petServices.updatePetAbout(payload, petData?.id);
       setIsLoading(false);
-      // router.push(`/PetDetails/PetDetailPage?id=${petData?.id}`);
+      router.push(`/PetDetails/PetDetailPage?id=${petData?.id}`);
     } catch (error) {
       setErrorVisible(true);
       setError(error.message);

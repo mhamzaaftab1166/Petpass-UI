@@ -22,7 +22,6 @@ import { formatDate } from "../../utils/generalUtils";
 const { width, height } = Dimensions.get("screen");
 
 const PetListingItem = ({ pet }) => {
-
   const router = useRouter();
   const { isDarkMode } = useTheme();
 
@@ -134,7 +133,7 @@ const styles = StyleSheet.create({
     resizeMode: "stretch",
     height: height / 12,
     width: width / 5,
-    borderRadius: "50%",
+    borderRadius: 50,
   },
   infoContainer: {
     flex: 1,

@@ -35,7 +35,7 @@ const AppRangePicker = ({
           { color: isDarkMode ? Colors.secondary : Colors.lable },
         ]}
       >
-        {label}: {`${value?.from} - ${value?.to}`}
+        {label}: {`${value?.from || minValue} - ${value?.to || maxValue}`}
       </Text>
 
       <RangeSlider

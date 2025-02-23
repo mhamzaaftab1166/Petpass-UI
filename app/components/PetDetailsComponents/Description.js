@@ -5,8 +5,10 @@ import { Colors } from "../../theme/color";
 import petEdit from "../../../assets/images/pets/petEdit.png";
 import { useTheme } from "../../helper/themeProvider";
 
-const Description = ({ title = "Description", text, router }) => {
+const Description = ({ title = "Description", pet, router }) => {
   const { isDarkMode } = useTheme();
+  console.log(pet, "des");
+
   return (
     <View style={{ marginTop: 20 }}>
       <View
@@ -29,7 +31,10 @@ const Description = ({ title = "Description", text, router }) => {
         </Text>
         <Pressable
           onPress={() =>
-            router.push("/PetDetails/PetEditForms/DescriptionEdit")
+            router.push({
+              pathname: "/PetDetails/PetEditForms/DescriptionEdit",
+              params: { pet: JSON.stringify(pet) },
+            })
           }
         >
           <Image source={petEdit} style={{ width: 20, height: 20 }} />
@@ -44,7 +49,7 @@ const Description = ({ title = "Description", text, router }) => {
           },
         ]}
       >
-        {text}
+        {pet?.description || "No Decription Added."}
       </Text>
       <View style={[style.divider, { marginTop: 20 }]}></View>
     </View>

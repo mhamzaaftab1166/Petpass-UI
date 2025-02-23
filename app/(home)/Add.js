@@ -7,12 +7,12 @@ import {
   Text,
   ScrollView,
 } from "react-native";
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { AppBar } from "@react-native-material/core";
 import Icon from "react-native-vector-icons/Ionicons";
 import { Colors } from "../theme/color";
 import style from "../theme/style";
-import { useRouter } from "expo-router";
+import { useFocusEffect, useRouter } from "expo-router";
 import * as Yup from "yup";
 import AppForm from "../components/forms/AppForm";
 import AppErrorMessage from "../components/forms/AppErrorMessage";
@@ -101,6 +101,11 @@ export default function Add() {
     }
   };
 
+  useFocusEffect(
+    useCallback(() => {
+      setSubmitted(false);
+    }, [])
+  );
   return (
     <SafeAreaView
       style={[
