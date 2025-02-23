@@ -7,7 +7,6 @@ import { useTheme } from "../../helper/themeProvider";
 
 const Description = ({ title = "Description", pet, router }) => {
   const { isDarkMode } = useTheme();
-  console.log(pet, "des");
 
   return (
     <View style={{ marginTop: 20 }}>

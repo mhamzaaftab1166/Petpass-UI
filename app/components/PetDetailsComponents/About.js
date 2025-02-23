@@ -9,6 +9,7 @@ import BoxItem from "../BoxItem/BoxItem";
 
 const About = ({ title = "About Tommy Gulf", router, pet }) => {
   const { isDarkMode } = useTheme();
+  console.log(pet);
 
   return (
     <View style={{ marginTop: 20 }}>
@@ -56,13 +57,19 @@ const About = ({ title = "About Tommy Gulf", router, pet }) => {
         />
         <BoxItem
           label="Weight"
-          value={pet?.weight || "Not Provided"}
+          value={
+            `${pet?.weight?.from || 0}-${pet?.weight?.to || 0}` ||
+            "Not Provided"
+          }
           bgColor="#FCE9D8"
           textColor="#E5A16F"
         />
         <BoxItem
           label="Height"
-          value={pet?.height || "Not Provided"}
+          value={
+            `${pet?.height?.from || 0}-${pet?.height?.to || 0}` ||
+            "Not Provided"
+          }
           bgColor="#FDD9E1"
           textColor="#E56789"
         />

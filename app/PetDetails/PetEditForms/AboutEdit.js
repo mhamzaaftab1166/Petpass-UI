@@ -77,7 +77,11 @@ export default function AboutEdit() {
         pet_name: values?.pet_name,
         pet_type: values?.pet_type.value || "",
         nuetered: values?.nuetered.value || "",
+        height: values?.height,
+        weight: values?.weight,
       };
+      console.log(payload, "jj");
+
       const res = await petServices.updatePetAbout(payload, petData?.id);
       setIsLoading(false);
       router.push(`/PetDetails/PetDetailPage?id=${petData?.id}`);
@@ -162,8 +166,8 @@ export default function AboutEdit() {
                 physically_active: petActive || "",
                 microchip_number: petData?.microchip_number.toString() || "",
                 color: petColor || "",
-                weight: { from: 77, to: 122 },
-                height: "",
+                weight: petData?.weight || "",
+                height: petData?.height || "",
               }}
               onSubmit={handleSubmit}
               validationSchema={validationSchema}
