@@ -78,10 +78,10 @@ export default function AboutEdit() {
         pet_type: values?.pet_type.value || "",
         nuetered: values?.nuetered.value || "",
       };
-      const res = await petServices.updatePetAbout(payload, petData?.id);
-      console.log(res);
+      // const res = await petServices.updatePetAbout(payload, petData?.id);
+      console.log(values);
       setIsLoading(false);
-      router.push(`/PetDetails/PetDetailPage?id=${petData?.id}`);
+      // router.push(`/PetDetails/PetDetailPage?id=${petData?.id}`);
     } catch (error) {
       setErrorVisible(true);
       setError(error.message);
@@ -119,7 +119,7 @@ export default function AboutEdit() {
   const petBreed =
     petBreeds.find((breed) => breed.value === petData?.pet_breed) || null;
   const petColors = [
-    { label: "Brown", value: "Brown" },
+    { label: "Brown", value: "brown" },
     { label: "White", value: "white" },
   ];
   const petColor =
@@ -129,11 +129,11 @@ export default function AboutEdit() {
   const petNut =
     petNuetered.find((nut) => nut.value === petData?.nuetered) || "";
 
-    const petActiveness = [{ label: "Very Active", value: "very active" }];
-    const petActive =
-      petActiveness.find(
-        (active) => active.value === petData?.physically_active
-      ) || "";
+  const petActiveness = [{ label: "Very Active", value: "very active" }];
+  const petActive =
+    petActiveness.find(
+      (active) => active.value === petData?.physically_active
+    ) || "";
   return (
     <SafeAreaView
       style={[
@@ -163,8 +163,8 @@ export default function AboutEdit() {
                 physically_active: petActive || "",
                 microchip_number: petData?.microchip_number.toString() || "",
                 color: petColor || "",
-                weight: petData?.weight || "",
-                height: petData?.height || "",
+                weight: { from: 77, to: 122 },
+                height: "",
               }}
               onSubmit={handleSubmit}
               validationSchema={validationSchema}

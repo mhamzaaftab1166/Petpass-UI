@@ -45,7 +45,7 @@ const validationSchema = Yup.object({
   color: Yup.object().required().label("Pet Color"),
 });
 
-export default function AccountInfo() {
+export default function Add() {
   const router = useRouter();
   const { isDarkMode } = useTheme();
   const [submitted, setSubmitted] = useState(false);
@@ -95,6 +95,7 @@ export default function AccountInfo() {
     } catch (error) {
       setErrorVisible(true);
       setError(error.message);
+      setSubmitted(false);
     } finally {
       setIsLoading(false);
     }

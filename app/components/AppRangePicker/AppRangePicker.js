@@ -4,19 +4,19 @@ import RangeSlider from "react-native-range-slider-expo";
 import { useTheme } from "../../helper/themeProvider";
 import { Colors } from "../../theme/color";
 
-
 const AppRangePicker = ({
   minValue = 0,
   maxValue = 0,
   label,
   onChange,
   style,
+  value,
   parentStyles,
   editable = true,
 }) => {
   const { isDarkMode } = useTheme();
-  const [fromValue, setFromValue] = useState(minValue);
-  const [toValue, setToValue] = useState(maxValue);
+  const [fromValue, setFromValue] = useState(value?.from);
+  const [toValue, setToValue] = useState(value?.to);
 
   const handleFromValueChange = (low) => {
     setFromValue(low);
@@ -27,11 +27,15 @@ const AppRangePicker = ({
     setToValue(high);
     onChange({ from: fromValue, to: high });
   };
-
   return (
     <View style={[styles.container, parentStyles]}>
-      <Text style={[ style.s16, { color:isDarkMode ? Colors.secondary : Colors.lable }]}>
-        {label}: {`${fromValue} - ${toValue}`}
+      <Text
+        style={[
+          style.s16,
+          { color: isDarkMode ? Colors.secondary : Colors.lable },
+        ]}
+      >
+        {label}: {`${value?.from} - ${value?.to}`}
       </Text>
 
       <RangeSlider
@@ -40,6 +44,8 @@ const AppRangePicker = ({
         fromValue={fromValue}
         toValue={toValue}
         step={1}
+        initialFromValue={value?.from}
+        initialToValue={value?.to}
         fromValueOnChange={handleFromValueChange}
         toValueOnChange={handleToValueChange}
         disabled={!editable}

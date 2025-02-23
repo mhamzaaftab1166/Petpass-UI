@@ -1,8 +1,7 @@
 import { Stack } from "expo-router";
-import { ThemeProvider } from './helper/themeProvider'; 
+import { ThemeProvider } from "./helper/themeProvider";
 
 export default function RootLayout() {
-
   return (
     <ThemeProvider>
       <Stack screenOptions={{ headerShown: false }}>
@@ -37,7 +36,7 @@ export default function RootLayout() {
           options={{ headerShown: false }}
         />
         <Stack.Screen
-          name="PetDetail/PetDetailsPage"
+          name="PetDetails/PetDetailPage"
           options={{ headerShown: false }}
         />
       </Stack>

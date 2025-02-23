@@ -17,7 +17,7 @@ function AppFormRangeField({
     useFormikContext();
 
   const handleRangeChange = (range) => {
-    setFieldValue(name, { start: range.from, end: range.to });
+    setFieldValue(name, { from: range.from, to: range.to });
   };
 
   return (
