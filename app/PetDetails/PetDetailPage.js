@@ -73,7 +73,11 @@ export default function PetDetailPage() {
           <Bio pet={pet} router={router} />
           <About pet={pet} router={router} />
           <Description router={router} title="Description" pet={pet} />
-          <PhotoGallery router={router} photos={[p1, p2, p3, p4, p5]} />
+          <PhotoGallery
+            router={router}
+            pet={pet}
+            photos={[p1, p2, p3, p4, p5]}
+          />
           <VideoGallery
             router={router}
             videos={[

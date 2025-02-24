@@ -17,7 +17,7 @@ import petEdit from "../../../assets/images/pets/petEdit.png";
 
 const { height, width } = Dimensions.get("window");
 
-const PhotoGallery = ({ photos = [], router }) => {
+const PhotoGallery = ({ photos = [], router, pet }) => {
   const { isDarkMode } = useTheme();
   const totalPhotos = photos.length;
   const remainingCount = totalPhotos > 4 ? totalPhotos - 3 : 0;
@@ -48,7 +48,12 @@ const PhotoGallery = ({ photos = [], router }) => {
           {"Photos"}
         </Text>
         <Pressable
-          onPress={() => router.push("/PetDetails/PetEditForms/PetAddPhotos")}
+          onPress={() =>
+            router.push({
+              pathname: "/PetDetails/PetEditForms/PetAddPhotos",
+              params: { pet: JSON.stringify(pet) },
+            })
+          }
         >
           <Image source={petEdit} style={{ width: 20, height: 20 }} />
         </Pressable>

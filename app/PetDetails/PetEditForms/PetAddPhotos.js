@@ -16,8 +16,11 @@ import AppFormField from "../../components/forms/AppFormFeild";
 import SubmitButton from "../../components/forms/SubmitButton";
 import AppErrorMessage from "../../components/forms/AppErrorMessage";
 import { useTheme } from "../../helper/themeProvider";
-import { router, useRouter } from "expo-router";
+import { router, useLocalSearchParams, useRouter } from "expo-router";
 import AppFormImagePicker from "../../components/forms/AppFormGeneralImagesPicker";
+import Loader from "../../components/Loader/Loader";
+import petServices from "../../services/petServices";
+import { convertImageToBase64 } from "../../utils/generalUtils";
 
 const validationSchema = Yup.object({
   images: Yup.array().min(1, "Please select at least one image.").max(15),
@@ -25,13 +28,32 @@ const validationSchema = Yup.object({
 
 export default function PetAddPhotos() {
   const { isDarkMode } = useTheme();
+  const [error, setError] = useState();
+  const [errorVisible, setErrorVisible] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+  const { pet } = useLocalSearchParams();
+  const petData = pet ? JSON.parse(pet) : null;
 
-  const handleSubmit = (values) => {
-    console.log(values);
-
-    router.push("/PetDetails/PetDetailPage");
+  const handleSubmit = async (values) => {
+    try {
+        const base64Images = await Promise.all(
+          values?.images.map((image) => convertImageToBase64(image))
+        );
+        const payload = {
+          pet_id: petData?.id,
+          images_url: base64Images,
+        };
+      setIsLoading(true);
+      await petServices.addPetMedia(payload);
+      setIsLoading(false);
+      router.push(`/PetDetails/PetDetailPage?id=${petData?.id}`);
+    } catch (error) {
+      setErrorVisible(true);
+      setError(error.message);
+    } finally {
+      setIsLoading(false);
+    }
   };
-
   return (
     <SafeAreaView
       style={[
@@ -46,6 +68,7 @@ export default function PetAddPhotos() {
         behavior={Platform.OS === "ios" ? "padding" : undefined}
         style={{ flex: 1 }}
       >
+        <Loader isLoad={isLoading} />
         <View style={{ flex: 1, marginHorizontal: 20 }}>
           <ScrollView showsVerticalScrollIndicator={false}>
             <AppForm
@@ -53,10 +76,10 @@ export default function PetAddPhotos() {
               onSubmit={handleSubmit}
               validationSchema={validationSchema}
             >
-              <View style={{marginBottom:30}}>
+              <View style={{ marginBottom: 30 }}>
                 <AppTitle title={"PET GALLERY"} style={style} />
               </View>
-              <AppErrorMessage error={""} visible={""} />
+              <AppErrorMessage error={error} visible={errorVisible} />
               <AppFormImagePicker name={"images"} />
               <SubmitButton title="SAVE" style={style} />
             </AppForm>
