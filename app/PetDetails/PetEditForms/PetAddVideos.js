@@ -20,7 +20,7 @@ import { router, useRouter } from "expo-router";
 import AppFormImagePicker from "../../components/forms/AppFormGeneralImagesPicker";
 
 const validationSchema = Yup.object({
-  images: Yup.array().min(1, "Please select at least one Video.").max(15),
+  videos: Yup.array().min(1, "Please select at least one Video.").max(5).label("Videos"),
 });
 
 export default function PetAddVideos() {
@@ -28,7 +28,6 @@ export default function PetAddVideos() {
 
   const handleSubmit = (values) => {
     console.log(values);
-
     router.push("/PetDetails/PetDetailPage");
   };
 
@@ -49,7 +48,7 @@ export default function PetAddVideos() {
         <View style={{ flex: 1, marginHorizontal: 20 }}>
           <ScrollView showsVerticalScrollIndicator={false}>
             <AppForm
-              initialValues={{ images: [] }}
+              initialValues={{ videos: [] }}
               onSubmit={handleSubmit}
               validationSchema={validationSchema}
             >
@@ -57,7 +56,7 @@ export default function PetAddVideos() {
                 <AppTitle title={"PET GALLERY"} style={style} />
               </View>
               <AppErrorMessage error={""} visible={""} />
-              <AppFormImagePicker name={"images"} mediaType={"video"} />
+              <AppFormImagePicker name={"videos"} mediaType={"video"} />
               <SubmitButton title="SAVE" style={style} />
             </AppForm>
           </ScrollView>

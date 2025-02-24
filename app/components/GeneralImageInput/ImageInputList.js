@@ -1,6 +1,7 @@
 import React, { useRef } from "react";
 import { View, StyleSheet, ScrollView } from "react-native";
 import MediaInput from "./ImageInput";
+import Loader from "../Loader/Loader"
 function MediaInputList({
   mediaUris = [],
   onAddMedia,

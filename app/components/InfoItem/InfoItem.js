@@ -2,7 +2,7 @@ import React from "react";
 import { Text, View } from "react-native";
 import { Colors } from "../../theme/color";
 import { useTheme } from "../../helper/themeProvider";
-
+ 
 const InfoItem = ({ label, value }) => {
   const { isDarkMode } = useTheme();
   return (

@@ -51,14 +51,14 @@ const About = ({ title = "About Tommy Gulf", router, pet }) => {
       <View style={styles.boxContainer}>
         <BoxItem
           label="Age"
-          value={`${pet?.age?.years || 0}y-${pet?.age?.months}m`}
+          value={`${pet?.age?.years || 0}y - ${pet?.age?.months}m`}
           bgColor="#D9F3F7"
           textColor="#53A2B1"
         />
         <BoxItem
           label="Weight"
           value={
-            `${pet?.weight?.from || 0}-${pet?.weight?.to || 0}` ||
+            `${pet?.weight?.from || 0} - ${pet?.weight?.to || 0}` ||
             "Not Provided"
           }
           bgColor="#FCE9D8"
@@ -67,7 +67,7 @@ const About = ({ title = "About Tommy Gulf", router, pet }) => {
         <BoxItem
           label="Height"
           value={
-            `${pet?.height?.from || 0}-${pet?.height?.to || 0}` ||
+            `${pet?.height?.from || 0} - ${pet?.height?.to || 0}` ||
             "Not Provided"
           }
           bgColor="#FDD9E1"

@@ -27,12 +27,12 @@ const styles = StyleSheet.create({
   },
   label: {
     fontSize: 16,
-    fontWeight: "bold",
     color: "#666",
+    fontFamily: "Avenir-Bold",
   },
   value: {
     fontSize: 14,
-    fontWeight: "bold",
+    fontFamily: "Avenir-Bold",
     marginTop: 5,
   },
 });

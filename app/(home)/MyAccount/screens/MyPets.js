@@ -108,7 +108,7 @@ export default function MyPets({ isDelete = true }) {
           color={isDarkMode ? Colors.active : Colors.secondary}
           title="Your Pet List"
           titleStyle={[
-            style.apptitle,
+            style.b18,
             { color: isDarkMode ? Colors.secondary : Colors.active },
           ]}
           centerTitle={true}

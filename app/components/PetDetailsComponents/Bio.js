@@ -100,6 +100,9 @@ const styles = StyleSheet.create({
     alignItems: "center",
     marginTop: 8,
   },
+  detailText:{
+   fontFamily: "Avenir-Regular",
+  },
   icon: {
     width: 16,
     height: 16,

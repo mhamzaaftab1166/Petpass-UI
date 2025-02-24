@@ -89,7 +89,6 @@ export default function Add() {
         pet_profile_picture: pet_profile_picture,
       };
       const res = await petServices.createUserPet(payload);
-      console.log(res);
       setIsLoading(false);
       setSubmitted(true);
     } catch (error) {
@@ -211,12 +210,6 @@ export default function Add() {
                   give the detail of your pets
                 </Text>
 
-                <AppFormPicker
-                  items={[{ label: "Dog", value: "dog" }]}
-                  name={"pet_type"}
-                  placeholder={"PET TYPE"}
-                />
-
                 <AppFormField
                   name={"pet_name"}
                   placeholder="PET NAME"
@@ -226,10 +219,21 @@ export default function Add() {
 
                 <AppFormPicker
                   items={[{ label: "Dog", value: "dog" }]}
+                  name={"pet_type"}
+                  placeholder={"PET TYPE"}
+                />
+
+                <AppFormPicker
+                  items={[{ label: "Dog", value: "dog" }]}
                   name={"pet_breed"}
                   placeholder={"PET BREED"}
                 />
 
+                <AppFormPicker
+                  items={[{ label: "Brown", value: "brown" }]}
+                  name={"color"}
+                  placeholder={"COLOUR"}
+                />
                 <AppFormRoleSelector roles={roles} name={"gender"} />
 
                 <AppFormDatePicker
@@ -242,12 +246,6 @@ export default function Add() {
                   placeholder="MICRO CHIP NUMBER"
                   style={style}
                   parentStyles={{ marginTop: 20 }}
-                />
-
-                <AppFormPicker
-                  items={[{ label: "Brown", value: "brown" }]}
-                  name={"color"}
-                  placeholder={"COLOUR"}
                 />
 
                 <View style={{ marginBottom: "15%" }}>

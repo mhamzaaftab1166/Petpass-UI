@@ -1,39 +1,40 @@
-import React from "react";
+import React, { useState } from "react";
 import {
   View,
   StyleSheet,
   Image,
   TouchableWithoutFeedback,
   Alert,
+  ActivityIndicator,
 } from "react-native";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import * as ImagePicker from "expo-image-picker";
 import { Colors } from "../../theme/color";
-
-// Import expo-video hooks and components
 import { useVideoPlayer, VideoView } from "expo-video";
-import { useEvent } from "expo";
+import Loader from "../Loader/Loader";
 
 function VideoPreview({ videoUri }) {
   const player = useVideoPlayer(videoUri, (player) => {
     player.loop = true;
-    player.volume = 0; // Mute the preview
+    player.volume = 0;
     player.play();
   });
 
-  // We disable fullscreen, PiP, and native controls in preview mode
   return (
     <VideoView
       style={styles.videoPreview}
       player={player}
-      allowsFullscreen={false}
-      allowsPictureInPicture={false}
-      nativeControls={false}
+      allowsFullscreen
+      allowsPictureInPicture
+      nativeControls
+      startsPictureInPictureAutomatically
     />
   );
 }
 
 function MediaInput({ mediaUri, onSelectMedia, mediaType = "image" }) {
+  const [loading, setLoading] = useState(false);
+
   const handlePress = () => {
     if (!mediaUri) {
       selectMedia();
@@ -47,6 +48,7 @@ function MediaInput({ mediaUri, onSelectMedia, mediaType = "image" }) {
 
   const selectMedia = async () => {
     try {
+      setLoading(true);
       const result = await ImagePicker.launchImageLibraryAsync({
         mediaTypes:
           mediaType === "video"
@@ -54,26 +56,32 @@ function MediaInput({ mediaUri, onSelectMedia, mediaType = "image" }) {
             : ImagePicker.MediaTypeOptions.Images,
         quality: 0.5,
       });
-      if (!result.canceled) onSelectMedia(result.assets[0].uri);
+
+      if (!result.canceled) {
+        onSelectMedia(result.assets[0].uri);
+      }
     } catch (error) {
       console.log("Error picking media", error);
+    } finally {
+      setLoading(false);
     }
   };
 
   return (
     <TouchableWithoutFeedback onPress={handlePress}>
       <View style={styles.container}>
-        {!mediaUri && (
+        {loading && <ActivityIndicator size="large" color={Colors.active} />}
+        {!loading && !mediaUri && (
           <MaterialCommunityIcons
             size={40}
             name={mediaType === "video" ? "video" : "camera"}
             color={Colors.active}
           />
         )}
-        {mediaUri && mediaType === "image" && (
+        {!loading && mediaUri && mediaType === "image" && (
           <Image style={styles.image} source={{ uri: mediaUri }} />
         )}
-        {mediaUri && mediaType === "video" && (
+        {!loading && mediaUri && mediaType === "video" && (
           <VideoPreview videoUri={mediaUri} />
         )}
       </View>

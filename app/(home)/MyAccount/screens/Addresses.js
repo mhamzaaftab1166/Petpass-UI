@@ -5,6 +5,7 @@ import {
   SafeAreaView,
   Dimensions,
   TouchableOpacity,
+  StyleSheet,
 } from "react-native";
 import { AppBar } from "@react-native-material/core";
 import Icon from "react-native-vector-icons/Ionicons";
@@ -82,7 +83,7 @@ export default function Address() {
           titleStyle={[
             style.b18,
             { color: isDarkMode ? Colors.secondary : Colors.active },
-          ]}
+          ]} 
           centerTitle={true}
           elevation={0}
           leading={
@@ -97,8 +98,10 @@ export default function Address() {
           trailing={
             <TouchableOpacity
               onPress={() => router.push("/MyAccount/screens/AddressFrom")}
+              style={styles.addAddressContainer}
             >
-              <Icon name="add" color={Colors.primary} size={30} />
+              <Text style={styles.addAddressText}>Add Address</Text>
+              <Icon name="add" color={Colors.primary} size={25} />
             </TouchableOpacity>
           }
         />
@@ -223,3 +226,15 @@ export default function Address() {
     </SafeAreaView>
   );
 }
+
+const styles = StyleSheet.create({
+  addAddressContainer: {
+    flexDirection: "row",
+    alignItems: "center",
+  },
+  addAddressText: {
+    fontSize: 14,
+    fontFamily: "Avenir-Regular",
+    color: Colors.primary,
+  },
+});
