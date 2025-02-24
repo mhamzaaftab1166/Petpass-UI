@@ -95,10 +95,10 @@ export default function MyAccount() {
               source={
                 user?.profile_picture
                   ? { uri: user.profile_picture }
-                  : require("../../../assets/images/profile/profile.png")
+                  : null
               }
               style={{
-                backgroundColor: isDarkMode ? Colors.secondary : Colors.active,
+                backgroundColor: isDarkMode ? Colors.secondary : Colors.unSelect,
               }}
             />
             <View style={{ marginLeft: 10 }}>

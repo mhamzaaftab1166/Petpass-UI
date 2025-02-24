@@ -174,7 +174,9 @@ export default function AboutEdit() {
             >
               <AppTitle title={"PET ABOUT"} style={style} />
               <AppErrorMessage error={error} visible={errorVisible} />
-              <AppFormImagePicker name="pet_profile_picture" />
+              <View style={{marginTop:20}}>
+                <AppFormImagePicker name="pet_profile_picture" />
+              </View>
               <AppFormPicker
                 items={petTypes}
                 name={"pet_type"}

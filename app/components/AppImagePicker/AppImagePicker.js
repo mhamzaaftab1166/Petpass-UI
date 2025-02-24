@@ -88,13 +88,14 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   container: {
-    backgroundColor: Colors.disable,
+    backgroundColor: Colors.unSelect,
     borderRadius: 50,
     alignItems: "center",
     justifyContent: "center",
     height: 100,
     width: 100,
     overflow: "hidden",
+    marginTop:10
   },
   image: {
     width: "100%",
