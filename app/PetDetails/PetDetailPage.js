@@ -41,7 +41,6 @@ export default function PetDetailPage() {
 
   const { isDarkMode } = useTheme();
   const router = useRouter();
-console.log(pet,"jj");
 
   useFocusEffect(
     useCallback(() => {

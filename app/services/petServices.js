@@ -24,6 +24,12 @@ const addVaccinations = (payload) => {
   return _axios("post", "/user-pets-vaccination", payload);
 };
 
+const updateVaccinations = (payload) => {
+  console.log("1234",payload);
+
+  return _axios("put", "/user-pets-vaccination", payload);
+};
+
 export default {
   createUserPet,
   getPets,
@@ -31,4 +37,5 @@ export default {
   getPetById,
   updatePetAbout,
   addVaccinations,
+  updateVaccinations,
 };

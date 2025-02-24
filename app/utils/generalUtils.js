@@ -55,3 +55,35 @@ export const formatVaccinationPayload = (petId, values) => {
     ],
   };
 };
+
+
+export const formatUpdateVaccinationPayload = (pet_vaccination_id, values,vaccinations) => {
+  console.log(vaccinations,"kk");
+  
+  const formatDate = (date) =>
+    date ? new Date(date).toISOString().split("T")[0] : "";
+
+  return {
+    pet_vaccination_id: pet_vaccination_id,
+    vaccinated_details: [
+      {
+        vaccination_name: "Nobivac KC",
+        id: vaccinations[0].id,
+        vaccinated_date: formatDate(values?.NobivacKC_Vaccinated_Date),
+        vaccination_next_date: formatDate(values?.NobivacKC_Vaccination_Date),
+      },
+      {
+        vaccination_name: "DhppiL",
+        id: vaccinations[1].id,
+        vaccinated_date: formatDate(values?.DHPPiL_Vaccinated_Date),
+        vaccination_next_date: formatDate(values?.DHPPiL_Vaccination_Date),
+      },
+      {
+        vaccination_name: "Rabies",
+        id: vaccinations[2].id,
+        vaccinated_date: formatDate(values?.Rabies_Vaccinated_Date),
+        vaccination_next_date: formatDate(values?.Rabies_Vaccination_Date),
+      },
+    ],
+  };
+};
