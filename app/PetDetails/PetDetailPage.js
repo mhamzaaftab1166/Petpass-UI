@@ -41,6 +41,7 @@ export default function PetDetailPage() {
 
   const { isDarkMode } = useTheme();
   const router = useRouter();
+console.log(pet,"jj");
 
   useFocusEffect(
     useCallback(() => {
@@ -84,7 +85,7 @@ export default function PetDetailPage() {
               "https://www.w3schools.com/html/mov_bbb.mp4",
             ]}
           />
-          <VaccinationDetail router={router} />
+          <VaccinationDetail pet={pet} router={router} />
         </ScrollView>
       </View>
     </SafeAreaView>

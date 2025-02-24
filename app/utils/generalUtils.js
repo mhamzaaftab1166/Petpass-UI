@@ -28,3 +28,30 @@ export const formatDate = (dateString) => {
     })
     .replace(",", "/");
 };
+
+
+export const formatVaccinationPayload = (petId, values) => {
+  const formatDate = (date) =>
+    date ? new Date(date).toISOString().split("T")[0] : "";
+
+  return {
+    pet_id: petId,
+    vaccinated_details: [
+      {
+        vaccination_name: "Nobivac KC",
+        vaccinated_date: formatDate(values?.NobivacKC_Vaccinated_Date),
+        vaccination_next_date: formatDate(values?.NobivacKC_Vaccination_Date),
+      },
+      {
+        vaccination_name: "DhppiL",
+        vaccinated_date: formatDate(values?.DHPPiL_Vaccinated_Date),
+        vaccination_next_date: formatDate(values?.DHPPiL_Vaccination_Date),
+      },
+      {
+        vaccination_name: "Rabies",
+        vaccinated_date: formatDate(values?.Rabies_Vaccinated_Date),
+        vaccination_next_date: formatDate(values?.Rabies_Vaccination_Date),
+      },
+    ],
+  };
+};

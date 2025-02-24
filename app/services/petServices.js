@@ -20,10 +20,15 @@ const updatePetAbout = (payload, id) => {
   return _axios("put", `/user-pets/${id}`, payload, "multipart/form-data");
 };
 
+const addVaccinations = (payload) => {
+  return _axios("post", "/user-pets-vaccination", payload);
+};
+
 export default {
   createUserPet,
   getPets,
   deletePets,
   getPetById,
   updatePetAbout,
+  addVaccinations,
 };

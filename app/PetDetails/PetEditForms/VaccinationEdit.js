@@ -18,8 +18,11 @@ import AppFormDatePicker from "../../components/forms/AppFormDatePicker";
 import SubmitButton from "../../components/forms/SubmitButton";
 import AppErrorMessage from "../../components/forms/AppErrorMessage";
 import { useTheme } from "../../helper/themeProvider";
-import { router, useRouter } from "expo-router";
+import { router, useLocalSearchParams, useRouter } from "expo-router";
+import { formatVaccinationPayload } from "../../utils/generalUtils";
 import Checkbox from "expo-checkbox";
+import Loader from "../../components/Loader/Loader";
+import petServices from "../../services/petServices";
 
 const validationSchema = Yup.object({
   NobivacKC_Vaccinated_Date: Yup.string().label("Nobivac KC Vaccinated Date"),
@@ -38,13 +41,30 @@ const validationSchema = Yup.object({
 
 export default function VaccinationEdit() {
   const { isDarkMode } = useTheme();
+  const { pet } = useLocalSearchParams();
+  const petData = pet ? JSON.parse(pet) : null;
   const [isNobivacVaccinated, setIsNobivacVaccinated] = useState(false);
   const [isDHPPiLVaccinated, setIsDHPPiLVaccinated] = useState(false);
   const [isRabiesVaccinated, setIsRabiesVaccinated] = useState(false);
+  const [error, setError] = useState();
+  const [errorVisible, setErrorVisible] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
 
-  const handleSubmit = (values) => {
-    console.log(values);
-    router.push("/PetDetails/PetDetailPage");
+  const handleSubmit = async (values) => {
+    const payload = formatVaccinationPayload(petData?.id, values);
+    console.log(payload);
+    try {
+      setIsLoading(true);
+      const res = await petServices.addVaccinations(payload);
+      console.log(res);
+      setIsLoading(false);
+      router.push(`/PetDetails/PetDetailPage?id=${petData?.id}`);
+    } catch (error) {
+      setErrorVisible(true);
+      setError(error.message);
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   return (
@@ -61,6 +81,7 @@ export default function VaccinationEdit() {
         behavior={Platform.OS === "ios" ? "padding" : undefined}
         style={{ flex: 1 }}
       >
+        <Loader isLoad={isLoading} />
         <View style={{ flex: 1, marginHorizontal: 20 }}>
           <ScrollView showsVerticalScrollIndicator={false}>
             <AppForm
@@ -76,7 +97,7 @@ export default function VaccinationEdit() {
               validationSchema={validationSchema}
             >
               <AppTitle title={"PET VACCINATIONS"} style={style} />
-              <AppErrorMessage error={""} visible={""} />
+              <AppErrorMessage error={error} visible={errorVisible} />
 
               <Text
                 style={{
