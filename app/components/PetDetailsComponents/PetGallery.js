@@ -18,6 +18,7 @@ import petEdit from "../../../assets/images/pets/petEdit.png";
 const { height, width } = Dimensions.get("window");
 
 const PhotoGallery = ({ photos = [], router, pet }) => {
+
   const { isDarkMode } = useTheme();
   const totalPhotos = photos.length;
   const remainingCount = totalPhotos > 4 ? totalPhotos - 3 : 0;
@@ -58,40 +59,59 @@ const PhotoGallery = ({ photos = [], router, pet }) => {
           <Image source={petEdit} style={{ width: 20, height: 20 }} />
         </Pressable>
       </View>
-      <View style={styles.container}>
-        {/* Render first 3 images */}
-        {photos.slice(0, 3).map((photo, index) => (
-          <View key={index} style={index % 2 !== 0 ? styles.spacing : null}>
-            <Image source={photo} resizeMode="stretch" style={styles.image} />
-          </View>
-        ))}
 
-        {/* 4th Image - Shows More Count */}
-        {remainingCount > 0 && (
-          <TouchableOpacity onPress={handleMorePress} style={styles.spacing}>
-            <ImageBackground
-              source={photos[3]}
-              resizeMode="stretch"
-              style={styles.image}
-            >
-              <View style={styles.overlay}>
-                <Text style={styles.overlayText}>+{remainingCount}</Text>
-              </View>
-            </ImageBackground>
-          </TouchableOpacity>
-        )}
+      {totalPhotos === 0 ? (
+        <Text
+          style={[
+            style.r16,
+            {
+              color: isDarkMode ? Colors.secondary : Colors.disable,
+              marginTop: 10,
+              fontFamily: "Avenir-Regular",
+            },
+          ]}
+        >
+          No Photos Added Yet.
+        </Text>
+      ) : (
+        <View style={styles.container}>
+          {photos.slice(0, 3).map((photo, index) => (
+            <View key={index} style={index % 2 !== 0 ? styles.spacing : null}>
+              {/* Use the image_url key from the photo object */}
+              <Image
+                source={{ uri: photo.image_url }}
+                resizeMode="stretch"
+                style={styles.image}
+              />
+            </View>
+          ))}
 
-        {/* Show the 4th image normally if total images are exactly 4 */}
-        {totalPhotos === 4 && (
-          <View style={styles.spacing}>
-            <Image
-              source={photos[3]}
-              resizeMode="stretch"
-              style={styles.image}
-            />
-          </View>
-        )}
-      </View>
+          {remainingCount > 0 && (
+            <TouchableOpacity onPress={handleMorePress} style={styles.spacing}>
+              <ImageBackground
+                source={{ uri: photos[3].image_url }} // Use the image_url key here
+                resizeMode="stretch"
+                style={[styles.image,{borderRadius:10}]}
+              >
+                <View style={styles.overlay}>
+                  <Text style={styles.overlayText}>+{remainingCount}</Text>
+                </View>
+              </ImageBackground>
+            </TouchableOpacity>
+          )}
+
+          {totalPhotos === 4 && (
+            <View style={styles.spacing}>
+              <Image
+                source={{ uri: photos[3].image_url }} // Use the image_url key here as well
+                resizeMode="stretch"
+                style={styles.image}
+              />
+            </View>
+          )}
+        </View>
+      )}
+
       <View style={[style.divider, { marginTop: 20 }]}></View>
     </View>
   );
@@ -107,10 +127,12 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     marginTop: 10,
+    borderRadius: 10,
   },
   image: {
     height: height / 12,
     width: width / 5,
+    borderRadius: 10,
   },
   spacing: {
     marginHorizontal: 10,

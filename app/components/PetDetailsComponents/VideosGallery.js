@@ -20,6 +20,7 @@ import { useTheme } from "../../helper/themeProvider";
 const { height, width } = Dimensions.get("window");
 
 const VideoItem = ({ videoUrl, onPress }) => {
+  // Create a video player with looping enabled
   const player = useVideoPlayer(videoUrl, (player) => {
     player.loop = true;
   });
@@ -41,9 +42,7 @@ const VideoItem = ({ videoUrl, onPress }) => {
   };
 
   return (
-    <TouchableWithoutFeedback
-      onPress={handlePress}
-    >
+    <TouchableWithoutFeedback onPress={handlePress}>
       <VideoView
         style={styles.video}
         player={player}
@@ -52,12 +51,13 @@ const VideoItem = ({ videoUrl, onPress }) => {
         nativeControls={true}
       />
     </TouchableWithoutFeedback>
-  ); 
+  );
 };
 
-const VideoGallery = ({ videos = [], router }) => {
+const VideoGallery = ({ videos = [], router, pet }) => {
   const { isDarkMode } = useTheme();
-  const totalVideos = videos.length;
+  const formattedVideos = videos.map((videoObj) => videoObj.video_url);
+  const totalVideos = formattedVideos.length;
   const remainingCount = totalVideos > 4 ? totalVideos - 3 : 0;
 
   const handleMorePress = () => {
@@ -86,33 +86,61 @@ const VideoGallery = ({ videos = [], router }) => {
           Videos
         </Text>
         <Pressable
-          onPress={() => router.push("/PetDetails/PetEditForms/PetAddVideos")}
+          onPress={() =>
+            router.push({
+              pathname: "/PetDetails/PetEditForms/PetAddVideos",
+              params: { pet: JSON.stringify(pet) },
+            })
+          }
         >
           <Image source={petEdit} style={{ width: 20, height: 20 }} />
         </Pressable>
       </View>
       <View style={styles.container}>
-        {videos.slice(0, 3).map((video, index) => (
-          <View key={index} style={index % 2 !== 0 ? styles.spacing : null}>
-            <VideoItem  videoUrl={video} />
-          </View>
-        ))}
-
-        {remainingCount > 0 && (
-          <TouchableOpacity onPress={handleMorePress} style={styles.spacing}>
-            <View style={styles.videoWrapper}>
-              <VideoItem videoUrl={videos[3]} onPress={handleMorePress} />
-              <View style={styles.overlay}>
-                <Text style={styles.overlayText}>+{remainingCount}</Text>
+        {totalVideos === 0 ? (
+          <Text
+            style={[
+              style.r16,
+              {
+                color: isDarkMode ? Colors.secondary : Colors.disable,
+                marginTop: 10,
+                fontFamily: "Avenir-Regular",
+              },
+            ]}
+          >
+            No Videos Added Yet.
+          </Text>
+        ) : (
+          <>
+            {formattedVideos.slice(0, 3).map((videoUrl, index) => (
+              <View key={index} style={index % 2 !== 0 ? styles.spacing : null}>
+                <VideoItem videoUrl={videoUrl} />
               </View>
-            </View>
-          </TouchableOpacity>
-        )}
+            ))}
 
-        {totalVideos === 4 && (
-          <View style={styles.spacing}>
-            <VideoItem videoUrl={videos[3]} />
-          </View>
+            {remainingCount > 0 && (
+              <TouchableOpacity
+                onPress={handleMorePress}
+                style={styles.spacing}
+              >
+                <View style={styles.videoWrapper}>
+                  <VideoItem
+                    videoUrl={formattedVideos[3]}
+                    onPress={handleMorePress}
+                  />
+                  <View style={styles.overlay}>
+                    <Text style={styles.overlayText}>+{remainingCount}</Text>
+                  </View>
+                </View>
+              </TouchableOpacity>
+            )}
+
+            {totalVideos === 4 && (
+              <View style={styles.spacing}>
+                <VideoItem videoUrl={formattedVideos[3]} />
+              </View>
+            )}
+          </>
         )}
       </View>
       <View style={[style.divider, { marginTop: 20 }]} />

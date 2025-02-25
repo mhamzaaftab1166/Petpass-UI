@@ -28,8 +28,12 @@ const updateVaccinations = (payload) => {
   return _axios("put", "/user-pets-vaccination", payload);
 };
 
-const addPetMedia = (payload) => {
-  return _axios("post", "/user-pets-gallery", payload, "multipart/form-data");
+const addImages = (payload) => {
+  return _axios("post", "/user-pets-images", payload, "multipart/form-data");
+};
+
+const addVideos = (payload) => {
+  return _axios("post", "/user-pets-videos", payload, "multipart/form-data");
 };
 
 export default {
@@ -40,5 +44,6 @@ export default {
   updatePetAbout,
   addVaccinations,
   updateVaccinations,
-  addPetMedia,
+  addImages,
+  addVideos,
 };

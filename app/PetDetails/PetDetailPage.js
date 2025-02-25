@@ -76,17 +76,12 @@ export default function PetDetailPage() {
           <PhotoGallery
             router={router}
             pet={pet}
-            photos={[p1, p2, p3, p4, p5]}
+            photos={pet?.pet_gallery?.images}
           />
           <VideoGallery
+            pet={pet}
             router={router}
-            videos={[
-              "https://www.w3schools.com/html/mov_bbb.mp4",
-              "https://www.w3schools.com/html/mov_bbb.mp4",
-              "https://www.w3schools.com/html/mov_bbb.mp4",
-              "https://www.w3schools.com/html/mov_bbb.mp4",
-              "https://www.w3schools.com/html/mov_bbb.mp4",
-            ]}
+            videos={pet?.pet_gallery?.video}
           />
           <VaccinationDetail pet={pet} router={router} />
         </ScrollView>

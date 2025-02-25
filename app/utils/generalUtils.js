@@ -18,6 +18,32 @@ export const convertImageToBase64 = async (imageUri) => {
     return "image";
   }
 };
+
+
+export const convertVideoToBase64 = async (videoUri) => {
+  if (!videoUri || videoUri.startsWith("http")) {
+    return videoUri; // Return original URI if it's already a valid URL
+  }
+
+  try {
+    const fileInfo = await FileSystem.getInfoAsync(videoUri);
+
+    const mimeType = videoUri.endsWith(".mp4")
+      ? "video/mp4"
+      : videoUri.endsWith(".mov")
+      ? "video/quicktime"
+      : "video/mp4";
+    const base64Video = await FileSystem.readAsStringAsync(videoUri, {
+      encoding: FileSystem.EncodingType.Base64,
+    });
+
+    return `data:${mimeType};base64,${base64Video}`;
+  } catch (error) {
+    console.log("Error converting video to Base64:", error);
+    return "video";
+  }
+};
+
 export const formatDate = (dateString) => {
   const date = new Date(dateString);
   return date
@@ -28,7 +54,6 @@ export const formatDate = (dateString) => {
     })
     .replace(",", "/");
 };
-
 
 export const formatVaccinationPayload = (petId, values) => {
   const formatDate = (date) =>
@@ -56,10 +81,13 @@ export const formatVaccinationPayload = (petId, values) => {
   };
 };
 
+export const formatUpdateVaccinationPayload = (
+  pet_vaccination_id,
+  values,
+  vaccinations
+) => {
+  console.log(vaccinations, "kk");
 
-export const formatUpdateVaccinationPayload = (pet_vaccination_id, values,vaccinations) => {
-  console.log(vaccinations,"kk");
-  
   const formatDate = (date) =>
     date ? new Date(date).toISOString().split("T")[0] : "";
 

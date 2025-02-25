@@ -67,7 +67,7 @@ export default function Verify2() {
           router.push("/Authentication/Login");
         }
       } else {
-        router.push(`/Authentication/NewPassword?email=${email}`);
+        router.replace(`/Authentication/NewPassword?email=${email}`);
       }
     } catch (error) {
       setErrorVisible(true);

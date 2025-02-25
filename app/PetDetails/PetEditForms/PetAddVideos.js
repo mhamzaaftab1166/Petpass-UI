@@ -16,19 +16,55 @@ import AppFormField from "../../components/forms/AppFormFeild";
 import SubmitButton from "../../components/forms/SubmitButton";
 import AppErrorMessage from "../../components/forms/AppErrorMessage";
 import { useTheme } from "../../helper/themeProvider";
-import { router, useRouter } from "expo-router";
+import { router, useLocalSearchParams, useRouter } from "expo-router";
 import AppFormImagePicker from "../../components/forms/AppFormGeneralImagesPicker";
-
-const validationSchema = Yup.object({
-  videos: Yup.array().min(1, "Please select at least one Video.").max(5).label("Videos"),
-});
+import { convertVideoToBase64 } from "../../utils/generalUtils";
+import petServices from "../../services/petServices";
+import Loader from "../../components/Loader/Loader";
 
 export default function PetAddVideos() {
-  const { isDarkMode } = useTheme();
+  const [error, setError] = useState();
+  const [errorVisible, setErrorVisible] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
 
-  const handleSubmit = (values) => {
-    console.log(values);
-    router.push("/PetDetails/PetDetailPage");
+  const { isDarkMode } = useTheme();
+  const { pet } = useLocalSearchParams();
+  const petData = pet ? JSON.parse(pet) : null;
+  const existingVideos = petData?.pet_gallery?.video || [];
+
+  const validationSchema = Yup.object({
+    videos: Yup.array()
+      .test(
+        "max-limit",
+        "You can only upload up to 5 videos in total.",
+        function (newVideos) {
+          const totalVideos = existingVideos.length + (newVideos?.length || 0);
+          return totalVideos <= 5;
+        }
+      )
+      .min(1, "Please select at least one video.")
+      .label("Videos"),
+  });
+  const handleSubmit = async (values) => {
+    try {
+      setIsLoading(true);
+      const base64Videos = await Promise.all(
+        values?.videos.map((video) => convertVideoToBase64(video))
+      );
+      const payload = {
+        pet_id: petData?.id,
+        videos_url: base64Videos,
+        type: "videos",
+      };
+      const res = await petServices.addVideos(payload);
+      setIsLoading(false);
+      router.push(`/PetDetails/PetDetailPage?id=${petData?.id}`);
+    } catch (error) {
+      setErrorVisible(true);
+      setError(error.message);
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   return (
@@ -45,6 +81,7 @@ export default function PetAddVideos() {
         behavior={Platform.OS === "ios" ? "padding" : undefined}
         style={{ flex: 1 }}
       >
+        <Loader isLoad={isLoading} />
         <View style={{ flex: 1, marginHorizontal: 20 }}>
           <ScrollView showsVerticalScrollIndicator={false}>
             <AppForm
@@ -55,7 +92,7 @@ export default function PetAddVideos() {
               <View style={{ marginBottom: 30 }}>
                 <AppTitle title={"PET GALLERY"} style={style} />
               </View>
-              <AppErrorMessage error={""} visible={""} />
+              <AppErrorMessage error={error} visible={errorVisible} />
               <AppFormImagePicker name={"videos"} mediaType={"video"} />
               <SubmitButton title="SAVE" style={style} />
             </AppForm>
