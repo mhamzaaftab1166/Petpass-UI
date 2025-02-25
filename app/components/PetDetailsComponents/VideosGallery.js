@@ -61,7 +61,10 @@ const VideoGallery = ({ videos = [], router, pet }) => {
   const remainingCount = totalVideos > 4 ? totalVideos - 3 : 0;
 
   const handleMorePress = () => {
-    Alert.alert("More Videos", `You have ${remainingCount} more videos!`);
+    router.push({
+      pathname: "/components/PetDetailsComponents/PetVideosListing",
+      params: { videos: JSON.stringify(videos) },
+    });
   };
 
   return (

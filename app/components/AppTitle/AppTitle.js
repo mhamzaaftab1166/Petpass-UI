@@ -7,7 +7,18 @@ const AppTitle = ({ style, title }) => {
   const { isDarkMode } = useTheme();
   return (
     <View>
-      <Text style={[style.title, { marginTop: 50, color:  isDarkMode ? Colors.secondary : Colors.active}]}>{title}</Text>
+      <Text
+        style={[
+          style.title,
+          {
+            marginTop: 50,
+            color: isDarkMode ? Colors.secondary : Colors.active,
+            fontFamily: "Avenir-Bold",
+          },
+        ]}
+      >
+        {title}
+      </Text>
     </View>
   );
 };

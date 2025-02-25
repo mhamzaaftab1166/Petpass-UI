@@ -23,10 +23,14 @@ const PhotoGallery = ({ photos = [], router, pet }) => {
   const totalPhotos = photos.length;
   const remainingCount = totalPhotos > 4 ? totalPhotos - 3 : 0;
 
-  const handleMorePress = () => {
-    Alert.alert("More Photos", `You have ${remainingCount} more photos!`);
-  };
+ const handleMorePress = () => {
+   router.push({
+     pathname: "/components/PetDetailsComponents/PetImageListing",
+     params: { photos: JSON.stringify(photos) },
+   });
+ };
 
+ 
   return (
     <View>
       <View
