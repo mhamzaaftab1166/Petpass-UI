@@ -23,7 +23,7 @@ const VIDEO_SIZE = width / 2 - 10;
 const VideoItem = ({ videoUrl, onPressDelete, onPressPreview }) => {
   const player = useVideoPlayer(videoUrl, (player) => {
     player.loop = true;
-     player.play();
+    player.play();
   });
 
   return (

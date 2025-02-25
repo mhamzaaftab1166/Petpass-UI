@@ -23,6 +23,7 @@ const VideoItem = ({ videoUrl, onPress }) => {
   // Create a video player with looping enabled
   const player = useVideoPlayer(videoUrl, (player) => {
     player.loop = true;
+    player.play();
   });
 
   const { isPlaying } = useEvent(player, "playingChange", {
