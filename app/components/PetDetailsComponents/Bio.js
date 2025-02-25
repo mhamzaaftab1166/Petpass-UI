@@ -13,7 +13,7 @@ import { formatDate } from "../../utils/generalUtils";
 
 const Bio = ({ router, pet }) => {
   const { isDarkMode } = useTheme();
-  return (
+  return ( 
     <View style={{ marginTop: 10 }}>
       <View style={styles.topRow}>
         <Text

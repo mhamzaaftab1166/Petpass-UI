@@ -19,6 +19,8 @@ import VideoGallery from "../components/PetDetailsComponents/VideosGallery";
 import VaccinationDetail from "../components/PetDetailsComponents/VaccinationDetail";
 import { usePetStore } from "../store/useStore";
 import Loader from "../components/Loader/Loader";
+import Passport from "../components/PetDetailsComponents/Passport";
+import { isLoading } from "expo-font";
 
 const width = Dimensions.get("screen").width;
 const height = Dimensions.get("screen").height;
@@ -44,6 +46,7 @@ export default function PetDetailPage() {
     }, [id])
   );
 
+  if (loading) return <Loader isLoad={loading} />;
   return (
     <SafeAreaView
       style={[
@@ -54,31 +57,34 @@ export default function PetDetailPage() {
       <Loader isLoad={loading} />
 
       <StatusBar backgroundColor="transparent" translucent={true} />
-      <Banner profileImg={pet?.pet_profile_picture} router={router} />
-      <View
-        style={[
-          style.main,
-          {
-            backgroundColor: isDarkMode ? Colors.active : Colors.secondary,
-            marginTop: 10,
-          },
-        ]}
-      >
+      <View>
         <ScrollView showsVerticalScrollIndicator={false}>
-          <Bio pet={pet} router={router} />
-          <About pet={pet} router={router} />
-          <Description router={router} title="Description" pet={pet} />
-          <PhotoGallery
-            router={router}
-            pet={pet}
-            photos={pet?.pet_gallery?.images}
-          />
-          <VideoGallery
-            pet={pet}
-            router={router}
-            videos={pet?.pet_gallery?.video}
-          />
-          <VaccinationDetail pet={pet} router={router} />
+          <Banner profileImg={pet?.pet_profile_picture} router={router} />
+          <View
+            style={[
+              style.main,
+              {
+                backgroundColor: isDarkMode ? Colors.active : Colors.secondary,
+                marginTop: 10,
+              },
+            ]}
+          >
+            <Bio pet={pet} router={router} />
+            <About pet={pet} router={router} />
+            <Description router={router} title="Description" pet={pet} />
+            <PhotoGallery
+              router={router}
+              pet={pet}
+              photos={pet?.pet_gallery?.images}
+            />
+            <VideoGallery
+              pet={pet}
+              router={router}
+              videos={pet?.pet_gallery?.video}
+            />
+            <VaccinationDetail pet={pet} router={router} />
+            <Passport pet={pet} router={router} />
+          </View>
         </ScrollView>
       </View>
     </SafeAreaView>

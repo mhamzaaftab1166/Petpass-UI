@@ -84,7 +84,7 @@ const PhotoGallery = ({ photos = [], router, pet }) => {
               {/* Use the image_url key from the photo object */}
               <Image
                 source={{ uri: photo.image_url }}
-                resizeMode="stretch"
+                resizeMode="cover"
                 style={styles.image}
               />
             </View>
@@ -94,8 +94,8 @@ const PhotoGallery = ({ photos = [], router, pet }) => {
             <TouchableOpacity onPress={handleMorePress} style={styles.spacing}>
               <ImageBackground
                 source={{ uri: photos[3].image_url }} // Use the image_url key here
-                resizeMode="stretch"
-                style={[styles.image,{borderRadius:10}]}
+                resizeMode="cover"
+                style={[styles.image, { borderRadius: 10 }]}
               >
                 <View style={styles.overlay}>
                   <Text style={styles.overlayText}>+{remainingCount}</Text>
@@ -108,7 +108,7 @@ const PhotoGallery = ({ photos = [], router, pet }) => {
             <View style={styles.spacing}>
               <Image
                 source={{ uri: photos[3].image_url }} // Use the image_url key here as well
-                resizeMode="stretch"
+                resizeMode="cover"
                 style={styles.image}
               />
             </View>

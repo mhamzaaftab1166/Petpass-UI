@@ -7,7 +7,7 @@ import petEdit from "../../../assets/images/pets/petEdit.png";
 import InfoItem from "../InfoItem/InfoItem";
 import BoxItem from "../BoxItem/BoxItem";
 
-const About = ({ title = "About Tommy Gulf", router, pet }) => {
+const About = ({  router, pet }) => {
   const { isDarkMode } = useTheme();
   console.log(pet);
 
@@ -23,7 +23,7 @@ const About = ({ title = "About Tommy Gulf", router, pet }) => {
             },
           ]}
         >
-          {title}
+          {`About ${pet?.pet_name}`}
         </Text>
         <Pressable
           onPress={() =>

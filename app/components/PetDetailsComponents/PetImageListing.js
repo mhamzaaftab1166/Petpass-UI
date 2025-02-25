@@ -75,6 +75,7 @@ const PetImageListing = () => {
                   <Image
                     source={{ uri: item.image_url }}
                     style={styles.image}
+                    resizeMode="cover"
                   />
                 </TouchableOpacity>
 
@@ -98,7 +99,11 @@ const PetImageListing = () => {
           >
             <Icon name="close" size={30} color="#fff" />
           </TouchableOpacity>
-          <Image source={{ uri: selectedImage }} style={styles.fullImage} />
+          <Image
+            resizeMode="cover"
+            source={{ uri: selectedImage }}
+            style={styles.fullImage}
+          />
         </View>
       </Modal>
     </SafeScreen>
