@@ -36,6 +36,14 @@ const addVideos = (payload) => {
   return _axios("post", "/user-pets-videos", payload, "multipart/form-data");
 };
 
+const deleteImage = (imgid, petid) => {
+  return _axios("delete", `/user-pets-image/${imgid}/${petid}`);
+};
+
+const deleteVideo = (vidid, petid) => {
+  return _axios("delete", `/user-pets-video/${vidid}/${petid}`);
+};
+
 export default {
   createUserPet,
   getPets,
@@ -46,4 +54,6 @@ export default {
   updateVaccinations,
   addImages,
   addVideos,
+  deleteImage,
+  deleteVideo,
 };

@@ -16,6 +16,9 @@ import { useTheme } from "../../helper/themeProvider";
 import { Colors } from "../../theme/color";
 import style from "../../theme/style";
 import { useVideoPlayer, VideoView } from "expo-video";
+import Loader from "../Loader/Loader";
+import AppErrorMessage from "../forms/AppErrorMessage";
+import petServices from "../../services/petServices";
 
 const { width, height } = Dimensions.get("window");
 const VIDEO_SIZE = width / 2 - 10;
@@ -71,14 +74,27 @@ const VideoModal = ({ videoUrl, onClose }) => {
 };
 
 const PetVideoListing = () => {
-  const { videos } = useLocalSearchParams();
+  const { videos, pet } = useLocalSearchParams();
   const Videos = videos ? JSON.parse(videos) : [];
+  const petData = pet ? JSON.parse(pet) : {};
   const { isDarkMode } = useTheme();
+  const [error, setError] = useState();
+  const [errorVisible, setErrorVisible] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
 
   const [selectedVideo, setSelectedVideo] = useState(null);
 
-  const handleDelete = (videoUrl) => {
-    console.log("Deleting video:", videoUrl);
+  const handleDelete = async (item) => {
+    try {
+      setIsLoading(true);
+      await petServices.deleteVideo(item?.id, petData?.id);
+      router.push(`/PetDetails/PetDetailPage?id=${petData?.id}`);
+    } catch (error) {
+      setErrorVisible(true);
+      setError(error.message);
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   return (
@@ -88,6 +104,7 @@ const PetVideoListing = () => {
         { backgroundColor: isDarkMode ? Colors.active : Colors.secondary },
       ]}
     >
+      <Loader isLoad={isLoading} />
       <AppBar
         color={isDarkMode ? Colors.active : Colors.secondary}
         title="Pet Videos"
@@ -109,17 +126,18 @@ const PetVideoListing = () => {
       />
 
       <View style={styles.container}>
+        <AppErrorMessage error={error} visible={errorVisible} />
         {Videos.length === 0 ? (
           <Text style={styles.noVideosText}>No videos added yet.</Text>
         ) : (
           <FlatList
             data={Videos}
             keyExtractor={(item, index) => index.toString()}
-            numColumns={2} // 2 videos per row
+            numColumns={2}
             renderItem={({ item }) => (
               <VideoItem
                 videoUrl={item.video_url}
-                onPressDelete={handleDelete}
+                onPressDelete={() => handleDelete(item)}
                 onPressPreview={() => setSelectedVideo(item.video_url)}
               />
             )}

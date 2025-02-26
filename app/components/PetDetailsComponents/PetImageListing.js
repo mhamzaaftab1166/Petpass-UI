@@ -16,19 +16,35 @@ import Icon from "react-native-vector-icons/Ionicons";
 import { useTheme } from "../../helper/themeProvider";
 import { Colors } from "../../theme/color";
 import style from "../../theme/style";
+import Loader from "../Loader/Loader";
+import AppErrorMessage from "../forms/AppErrorMessage";
+import petServices from "../../services/petServices";
 
 const { width, height } = Dimensions.get("window");
-const IMAGE_SIZE = width / 2 - 10; // 2 images per row
+const IMAGE_SIZE = width / 2 - 10;
 
 const PetImageListing = () => {
-  const { photos } = useLocalSearchParams();
+  const { photos, pet } = useLocalSearchParams();
   const Images = photos ? JSON.parse(photos) : [];
+  const petData = pet ? JSON.parse(pet) : {};
   const { isDarkMode } = useTheme();
+  const [error, setError] = useState();
+  const [errorVisible, setErrorVisible] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
 
   const [selectedImage, setSelectedImage] = useState(null);
 
-  const handleDelete = (imageUrl) => {
-    console.log("Deleting image:", imageUrl);
+  const handleDelete = async (item) => {
+    try {
+      setIsLoading(true);
+      await petServices.deleteImage(item?.id, petData?.id);
+       router.push(`/PetDetails/PetDetailPage?id=${petData?.id}`);
+    } catch (error) {
+      setErrorVisible(true);
+      setError(error.message);
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   return (
@@ -38,6 +54,7 @@ const PetImageListing = () => {
         { backgroundColor: isDarkMode ? Colors.active : Colors.secondary },
       ]}
     >
+      <Loader isLoad={isLoading} />
       <AppBar
         color={isDarkMode ? Colors.active : Colors.secondary}
         title="Pet Images"
@@ -59,6 +76,7 @@ const PetImageListing = () => {
       />
 
       <View style={styles.container}>
+        <AppErrorMessage error={error} visible={errorVisible} />
         {Images.length === 0 ? (
           <Text style={styles.noImagesText}>No images added yet.</Text>
         ) : (
@@ -81,7 +99,7 @@ const PetImageListing = () => {
 
                 <TouchableOpacity
                   style={styles.menuButton}
-                  onPress={() => handleDelete(item.image_url)}
+                  onPress={() => handleDelete(item)}
                 >
                   <Icon name="trash" color={Colors.light} size={20} />
                 </TouchableOpacity>

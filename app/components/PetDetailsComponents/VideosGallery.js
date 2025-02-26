@@ -64,7 +64,7 @@ const VideoGallery = ({ videos = [], router, pet }) => {
   const handleMorePress = () => {
     router.push({
       pathname: "/components/PetDetailsComponents/PetVideosListing",
-      params: { videos: JSON.stringify(videos) },
+      params: { videos: JSON.stringify(videos), pet: JSON.stringify(pet) },
     });
   };
 

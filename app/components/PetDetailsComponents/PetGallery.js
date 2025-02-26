@@ -18,19 +18,17 @@ import petEdit from "../../../assets/images/pets/petEdit.png";
 const { height, width } = Dimensions.get("window");
 
 const PhotoGallery = ({ photos = [], router, pet }) => {
-
   const { isDarkMode } = useTheme();
   const totalPhotos = photos.length;
   const remainingCount = totalPhotos > 4 ? totalPhotos - 3 : 0;
 
- const handleMorePress = () => {
-   router.push({
-     pathname: "/components/PetDetailsComponents/PetImageListing",
-     params: { photos: JSON.stringify(photos) },
-   });
- };
+  const handleMorePress = () => {
+    router.push({
+      pathname: "/components/PetDetailsComponents/PetImageListing",
+      params: { photos: JSON.stringify(photos), pet: JSON.stringify(pet) },
+    });
+  };
 
- 
   return (
     <View>
       <View
