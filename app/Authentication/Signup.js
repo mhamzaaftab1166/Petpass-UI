@@ -39,7 +39,7 @@ const validationSchema = Yup.object({
   email: Yup.string().required().email().label("Email"),
   password: Yup.string().required().min(4).label("Password"),
   phone_number: Yup.string().required().min(8).max(15).label("Phone"),
-  profile_types: Yup.array().of(Yup.string().required()).min(1).label("Role"),
+  // profile_types: Yup.array().of(Yup.string().required()).min(1).label("Role"),
 });
 
 export default function Signup() {
@@ -115,7 +115,7 @@ export default function Signup() {
               password: "",
               username: "",
               phone_number: "",
-              profile_types: [],
+              // profile_types: [],
             }}
             onSubmit={(values) => handleSubmit(values)}
             validationSchema={validationSchema}
@@ -148,7 +148,7 @@ export default function Signup() {
 
             <AppFormPhoneField style={style} name={"phone_number"} />
 
-            <AppFormRoleSelector roles={roles} name={"profile_types"} />
+            {/* <AppFormRoleSelector roles={roles} name={"profile_types"} /> */}
 
             <Text
               style={[
@@ -170,7 +170,6 @@ export default function Signup() {
             <SubmitButton title="SIGN UP" style={style} />
           </AppForm>
 
-          {/* Social Login Options */}
           <Text
             style={[style.r14, { color: Colors.disable, textAlign: "center" }]}
           >
