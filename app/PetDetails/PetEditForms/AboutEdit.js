@@ -79,6 +79,7 @@ export default function AboutEdit() {
         nuetered: values?.nuetered.value || "",
         height: values?.height,
         weight: values?.weight,
+        description: petData?.description,
       };
       console.log(payload, "jj");
 
@@ -174,7 +175,7 @@ export default function AboutEdit() {
             >
               <AppTitle title={"PET ABOUT"} style={style} />
               <AppErrorMessage error={error} visible={errorVisible} />
-              <View style={{marginTop:20}}>
+              <View style={{ marginTop: 20 }}>
                 <AppFormImagePicker name="pet_profile_picture" />
               </View>
               <AppFormPicker
