@@ -21,6 +21,7 @@ import { usePetStore } from "../store/useStore";
 import Loader from "../components/Loader/Loader";
 import Passport from "../components/PetDetailsComponents/Passport";
 import { isLoading } from "expo-font";
+import ProfileCompletionBar from "../components/PetDetailsComponents/ProfileCompletionBar";
 
 const width = Dimensions.get("screen").width;
 const height = Dimensions.get("screen").height;
@@ -69,6 +70,8 @@ export default function PetDetailPage() {
               },
             ]}
           >
+            <ProfileCompletionBar router={router} pet={pet} />
+             <View style={[style.divider, { marginTop: 20,marginBottom:10 }]}></View>
             <Bio pet={pet} router={router} />
             <About pet={pet} router={router} />
             <Description router={router} title="Description" pet={pet} />
