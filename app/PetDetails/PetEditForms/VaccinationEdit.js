@@ -81,6 +81,56 @@ const validationSchema = Yup.object({
 });
 
 
+// const today = new Date();
+// today.setHours(0, 0, 0, 0);
+
+// const validationSchema = Yup.object({
+//   NobivacKC_Vaccinated_Date: Yup.date()
+//     .transform((value, originalValue) =>
+//       originalValue ? new Date(originalValue) : null
+//     )
+//     .max(today, "Nobivac KC Vaccinated Date must be today or earlier")
+//     .label("Nobivac KC Vaccinated Date"),
+
+//   NobivacKC_Vaccination_Date: Yup.date()
+//     .transform((value, originalValue) =>
+//       originalValue ? new Date(originalValue) : null
+//     )
+//     .min(today, "Nobivac KC Vaccination Date must be today or later")
+//     .required("Nobivac KC Vaccination Date is required")
+//     .label("Nobivac KC Vaccination Date"),
+
+//   DHPPiL_Vaccinated_Date: Yup.date()
+//     .transform((value, originalValue) =>
+//       originalValue ? new Date(originalValue) : null
+//     )
+//     .max(today, "DHPPiL Vaccinated Date must be today or earlier")
+//     .label("DHPPiL Vaccinated Date"),
+
+//   DHPPiL_Vaccination_Date: Yup.date()
+//     .transform((value, originalValue) =>
+//       originalValue ? new Date(originalValue) : null
+//     )
+//     .min(today, "DHPPiL Vaccination Date must be today or later")
+//     .required("DHPPiL Vaccination Date is required")
+//     .label("DHPPiL Vaccination Date"),
+
+//   Rabies_Vaccinated_Date: Yup.date()
+//     .transform((value, originalValue) =>
+//       originalValue ? new Date(originalValue) : null
+//     )
+//     .max(today, "Rabies Vaccinated Date must be today or earlier")
+//     .label("Rabies Vaccinated Date"),
+
+//   Rabies_Vaccination_Date: Yup.date()
+//     .transform((value, originalValue) =>
+//       originalValue ? new Date(originalValue) : null
+//     )
+//     .min(today, "Rabies Vaccination Date must be today or later")
+//     .required("Rabies Vaccination Date is required")
+//     .label("Rabies Vaccination Date"),
+// });
+
 
 export default function VaccinationEdit() {
   const { isDarkMode } = useTheme();
