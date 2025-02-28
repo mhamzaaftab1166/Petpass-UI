@@ -30,8 +30,17 @@ import petServices from "../../services/petServices";
 const today = new Date();
 today.setHours(0, 0, 0, 0);
 
+const tomorrow = new Date(today);
+tomorrow.setDate(today.getDate() + 1); // Tomorrow's date
+
 const validationSchema = Yup.object({
-  NobivacKC_Vaccinated_Date: Yup.string().label("Nobivac KC Vaccinated Date"),
+  NobivacKC_Vaccinated_Date: Yup.date()
+    .transform((value, originalValue) =>
+      originalValue ? new Date(originalValue) : null
+    )
+    .max(tomorrow, "Nobivac KC Vaccinated Date must be today or tomorrow")
+    .label("Nobivac KC Vaccinated Date"),
+
   NobivacKC_Vaccination_Date: Yup.date()
     .transform((value, originalValue) =>
       originalValue ? new Date(originalValue) : null
@@ -39,7 +48,14 @@ const validationSchema = Yup.object({
     .min(today, "Nobivac KC Vaccination Date must be today or later")
     .required("Nobivac KC Vaccination Date is required")
     .label("Nobivac KC Vaccination Date"),
-  DHPPiL_Vaccinated_Date: Yup.string().label("DHPPiL Vaccinated Date"),
+
+  DHPPiL_Vaccinated_Date: Yup.date()
+    .transform((value, originalValue) =>
+      originalValue ? new Date(originalValue) : null
+    )
+    .max(tomorrow, "DHPPiL Vaccinated Date must be today or tomorrow")
+    .label("DHPPiL Vaccinated Date"),
+
   DHPPiL_Vaccination_Date: Yup.date()
     .transform((value, originalValue) =>
       originalValue ? new Date(originalValue) : null
@@ -47,7 +63,14 @@ const validationSchema = Yup.object({
     .min(today, "DHPPiL Vaccination Date must be today or later")
     .required("DHPPiL Vaccination Date is required")
     .label("DHPPiL Vaccination Date"),
-  Rabies_Vaccinated_Date: Yup.string().label("Rabies Vaccinated Date"),
+
+  Rabies_Vaccinated_Date: Yup.date()
+    .transform((value, originalValue) =>
+      originalValue ? new Date(originalValue) : null
+    )
+    .max(tomorrow, "Rabies Vaccinated Date must be today or tomorrow")
+    .label("Rabies Vaccinated Date"),
+
   Rabies_Vaccination_Date: Yup.date()
     .transform((value, originalValue) =>
       originalValue ? new Date(originalValue) : null
@@ -56,6 +79,7 @@ const validationSchema = Yup.object({
     .required("Rabies Vaccination Date is required")
     .label("Rabies Vaccination Date"),
 });
+
 
 
 export default function VaccinationEdit() {
@@ -111,32 +135,40 @@ export default function VaccinationEdit() {
             <AppForm
               initialValues={{
                 NobivacKC_Vaccinated_Date:
-                  petData?.vaccinations[0]?.vaccinated_date === "0000-00-00"
-                    ? ""
-                    : new Date(petData?.vaccinations[0]?.vaccinated_date),
+                  petData?.vaccinations?.[0]?.vaccinated_date &&
+                  petData.vaccinations[0].vaccinated_date !== "0000-00-00"
+                    ? new Date(petData.vaccinations[0].vaccinated_date)
+                    : "",
+
                 NobivacKC_Vaccination_Date:
-                  petData?.vaccinations[0]?.vaccination_next_date ===
-                  "0000-00-00"
-                    ? ""
-                    : new Date(petData?.vaccinations[0]?.vaccination_next_date),
+                  petData?.vaccinations?.[0]?.vaccination_next_date &&
+                  petData.vaccinations[0].vaccination_next_date !== "0000-00-00"
+                    ? new Date(petData.vaccinations[0].vaccination_next_date)
+                    : "",
+
                 DHPPiL_Vaccinated_Date:
-                  petData?.vaccinations[1]?.vaccinated_date === "0000-00-00"
-                    ? ""
-                    : new Date(petData?.vaccinations[1]?.vaccinated_date),
+                  petData?.vaccinations?.[1]?.vaccinated_date &&
+                  petData.vaccinations[1].vaccinated_date !== "0000-00-00"
+                    ? new Date(petData.vaccinations[1].vaccinated_date)
+                    : "",
+
                 DHPPiL_Vaccination_Date:
-                  petData?.vaccinations[1]?.vaccination_next_date ===
-                  "0000-00-00"
-                    ? ""
-                    : new Date(petData?.vaccinations[1]?.vaccination_next_date),
+                  petData?.vaccinations?.[1]?.vaccination_next_date &&
+                  petData.vaccinations[1].vaccination_next_date !== "0000-00-00"
+                    ? new Date(petData.vaccinations[1].vaccination_next_date)
+                    : "",
+
                 Rabies_Vaccinated_Date:
-                  petData?.vaccinations[2]?.vaccinated_date === "0000-00-00"
-                    ? ""
-                    : new Date(petData?.vaccinations[2]?.vaccinated_date),
+                  petData?.vaccinations?.[2]?.vaccinated_date &&
+                  petData.vaccinations[2].vaccinated_date !== "0000-00-00"
+                    ? new Date(petData.vaccinations[2].vaccinated_date)
+                    : "",
+
                 Rabies_Vaccination_Date:
-                  petData?.vaccinations[2]?.vaccination_next_date ===
-                  "0000-00-00"
-                    ? ""
-                    : new Date(petData?.vaccinations[2]?.vaccination_next_date),
+                  petData?.vaccinations?.[2]?.vaccination_next_date &&
+                  petData.vaccinations[2].vaccination_next_date !== "0000-00-00"
+                    ? new Date(petData.vaccinations[2].vaccination_next_date)
+                    : "",
               }}
               onSubmit={handleSubmit}
               validationSchema={validationSchema}
@@ -165,12 +197,16 @@ export default function VaccinationEdit() {
                   style={styles.checkbox}
                   value={
                     isNobivacVaccinated ||
-                    petData?.vaccinations[0]?.vaccinated_date !== "0000-00-00"
+                    (petData?.vaccinations[0]?.vaccinated_date &&
+                      petData?.vaccinations[0]?.vaccinated_date !==
+                        "0000-00-00")
                   }
                   onValueChange={setIsNobivacVaccinated}
                   color={
                     isNobivacVaccinated ||
-                    petData?.vaccinations[0]?.vaccinated_date !== "0000-00-00"
+                    (petData?.vaccinations[0]?.vaccinated_date &&
+                      petData?.vaccinations[0]?.vaccinated_date !==
+                        "0000-00-00")
                       ? Colors.primary
                       : Colors.border
                   }
@@ -188,7 +224,9 @@ export default function VaccinationEdit() {
                 </Text>
               </View>
               {(isNobivacVaccinated ||
-                petData?.vaccinations[0]?.vaccinated_date !== "0000-00-00") && (
+                (petData?.vaccinations[0]?.vaccinated_date &&
+                  petData?.vaccinations[0]?.vaccinated_date !==
+                    "0000-00-00")) && (
                 <AppFormDatePicker
                   name="NobivacKC_Vaccinated_Date"
                   placeholder="Nobivac KC VACCINATED DATE"
@@ -220,12 +258,16 @@ export default function VaccinationEdit() {
                   style={styles.checkbox}
                   value={
                     isDHPPiLVaccinated ||
-                    petData?.vaccinations[1]?.vaccinated_date !== "0000-00-00"
+                    (petData?.vaccinations[1]?.vaccinated_date &&
+                      petData?.vaccinations[1]?.vaccinated_date !==
+                        "0000-00-00")
                   }
                   onValueChange={setIsDHPPiLVaccinated}
                   color={
                     isDHPPiLVaccinated ||
-                    petData?.vaccinations[1]?.vaccinated_date !== "0000-00-00"
+                    (petData?.vaccinations[1]?.vaccinated_date &&
+                      petData?.vaccinations[1]?.vaccinated_date !==
+                        "0000-00-00")
                       ? Colors.primary
                       : Colors.border
                   }
@@ -243,7 +285,9 @@ export default function VaccinationEdit() {
                 </Text>
               </View>
               {(isDHPPiLVaccinated ||
-                petData?.vaccinations[1]?.vaccinated_date !== "0000-00-00") && (
+                (petData?.vaccinations[1]?.vaccinated_date &&
+                  petData?.vaccinations[1]?.vaccinated_date !==
+                    "0000-00-00")) && (
                 <AppFormDatePicker
                   name="DHPPiL_Vaccinated_Date"
                   placeholder="DHPPiL VACCINATED DATE"
@@ -275,12 +319,16 @@ export default function VaccinationEdit() {
                   style={styles.checkbox}
                   value={
                     isRabiesVaccinated ||
-                    petData?.vaccinations[2]?.vaccinated_date !== "0000-00-00"
+                    (petData?.vaccinations[2]?.vaccinated_date &&
+                      petData?.vaccinations[2]?.vaccinated_date !==
+                        "0000-00-00")
                   }
                   onValueChange={setIsRabiesVaccinated}
                   color={
                     isRabiesVaccinated ||
-                    petData?.vaccinations[2]?.vaccinated_date !== "0000-00-00"
+                    (petData?.vaccinations[2]?.vaccinated_date &&
+                      petData?.vaccinations[2]?.vaccinated_date !==
+                        "0000-00-00")
                       ? Colors.primary
                       : Colors.border
                   }
@@ -298,7 +346,9 @@ export default function VaccinationEdit() {
                 </Text>
               </View>
               {(isRabiesVaccinated ||
-                petData?.vaccinations[2]?.vaccinated_date !== "0000-00-00") && (
+                (petData?.vaccinations[2]?.vaccinated_date &&
+                  petData?.vaccinations[2]?.vaccinated_date !==
+                    "0000-00-00")) && (
                 <AppFormDatePicker
                   name="Rabies_Vaccinated_Date"
                   placeholder="Rabies VACCINATED DATE"
