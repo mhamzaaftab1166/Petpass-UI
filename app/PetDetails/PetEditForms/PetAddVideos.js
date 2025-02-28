@@ -58,7 +58,7 @@ export default function PetAddVideos() {
       };
       const res = await petServices.addVideos(payload);
       setIsLoading(false);
-      router.push(`/PetDetails/PetDetailPage?id=${petData?.id}`);
+      router.replace(`/PetDetails/PetDetailPage?id=${petData?.id}`);
     } catch (error) {
       setErrorVisible(true);
       setError(error.message);

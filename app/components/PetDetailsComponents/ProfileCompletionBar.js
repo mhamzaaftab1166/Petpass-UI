@@ -4,9 +4,8 @@ import { useTheme } from "../../helper/themeProvider";
 import style from "../../theme/style";
 import { Colors } from "../../theme/color";
 
-const ProfileCompletionBar = () => {
+const ProfileCompletionBar = ({ value: progress }) => {
   const { isDarkMode } = useTheme();
-  const progress = 75; // Dummy profile completion value
   const [containerWidth, setContainerWidth] = useState(0);
   const animatedWidth = useRef(new Animated.Value(0)).current;
   const animatedCounter = useRef(new Animated.Value(0)).current;
@@ -82,7 +81,6 @@ const ProfileCompletionBar = () => {
         >
           {`${counter}%`}
         </Animated.Text>
-        
       </View>
     </View>
   );

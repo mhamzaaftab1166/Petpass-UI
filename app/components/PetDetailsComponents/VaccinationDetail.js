@@ -31,7 +31,7 @@ const VaccinationDetail = ({ title = "Vaccination Record", router, pet }) => {
         </Text>
         <Pressable
           onPress={() =>
-            router.push({
+            router.replace({
               pathname: "/PetDetails/PetEditForms/VaccinationEdit",
               params: { pet: JSON.stringify(pet) },
             })

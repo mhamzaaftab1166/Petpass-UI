@@ -83,11 +83,11 @@ export default function Address() {
           titleStyle={[
             style.b18,
             { color: isDarkMode ? Colors.secondary : Colors.active },
-          ]} 
+          ]}
           centerTitle={true}
           elevation={0}
           leading={
-            <TouchableOpacity onPress={() => router.back()}>
+            <TouchableOpacity onPress={() => router.replace("MyAccount")}>
               <Icon
                 name="chevron-back"
                 color={isDarkMode ? Colors.secondary : Colors.active}
@@ -130,6 +130,22 @@ export default function Address() {
                 >
                   {item.full_name}
                 </Text>
+                <Text
+                  style={[
+                    style.r14,
+                    {
+                      color: isDarkMode ? Colors.secondary : Colors.lable,
+                      marginTop: 5,
+                    },
+                  ]}
+                >
+                  {item.address_type
+                    ? item.address_type
+                        .toLowerCase()
+                        .replace(/\b\w/g, (char) => char.toUpperCase())
+                    : ""}
+                </Text>
+
                 <Text
                   style={[
                     style.r14,

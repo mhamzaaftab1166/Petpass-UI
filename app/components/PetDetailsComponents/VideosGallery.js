@@ -91,7 +91,7 @@ const VideoGallery = ({ videos = [], router, pet }) => {
         </Text>
         <Pressable
           onPress={() =>
-            router.push({
+            router.replace({
               pathname: "/PetDetails/PetEditForms/PetAddVideos",
               params: { pet: JSON.stringify(pet) },
             })

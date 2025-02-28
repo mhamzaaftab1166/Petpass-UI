@@ -85,7 +85,7 @@ export default function AboutEdit() {
 
       const res = await petServices.updatePetAbout(payload, petData?.id);
       setIsLoading(false);
-      router.push(`/PetDetails/PetDetailPage?id=${petData?.id}`);
+      router.replace(`/PetDetails/PetDetailPage?id=${petData?.id}`);
     } catch (error) {
       setErrorVisible(true);
       setError(error.message);

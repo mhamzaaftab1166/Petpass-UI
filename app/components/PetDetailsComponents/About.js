@@ -27,7 +27,7 @@ const About = ({  router, pet }) => {
         </Text>
         <Pressable
           onPress={() =>
-            router.push({
+            router.replace({
               pathname: "/PetDetails/PetEditForms/AboutEdit",
               params: { pet: JSON.stringify(pet) },
             })

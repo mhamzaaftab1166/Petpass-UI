@@ -70,8 +70,14 @@ export default function PetDetailPage() {
               },
             ]}
           >
-            <ProfileCompletionBar router={router} pet={pet} />
-             <View style={[style.divider, { marginTop: 20,marginBottom:10 }]}></View>
+            <ProfileCompletionBar
+              router={router}
+              pet={pet}
+              value={pet?.pet_profile_completeion}
+            />
+            <View
+              style={[style.divider, { marginTop: 20, marginBottom: 10 }]}
+            ></View>
             <Bio pet={pet} router={router} />
             <About pet={pet} router={router} />
             <Description router={router} title="Description" pet={pet} />

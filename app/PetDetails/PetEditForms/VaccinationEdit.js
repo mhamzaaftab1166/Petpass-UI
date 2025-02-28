@@ -82,7 +82,7 @@ export default function VaccinationEdit() {
           )
         : petServices.addVaccinations(payload));
       setIsLoading(false);
-      router.push(`/PetDetails/PetDetailPage?id=${petData?.id}`);
+      router.replace(`/PetDetails/PetDetailPage?id=${petData?.id}`);
     } catch (error) {
       setErrorVisible(true);
       setError(error.message);

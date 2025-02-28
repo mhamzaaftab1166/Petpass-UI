@@ -52,7 +52,7 @@ const PhotoGallery = ({ photos = [], router, pet }) => {
         </Text>
         <Pressable
           onPress={() =>
-            router.push({
+            router.replace({
               pathname: "/PetDetails/PetEditForms/PetAddPhotos",
               params: { pet: JSON.stringify(pet) },
             })

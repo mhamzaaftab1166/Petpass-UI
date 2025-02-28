@@ -30,7 +30,9 @@ const Banner = ({ router, profileImg }) => {
           }}
           elevation={0}
           leading={
-            <TouchableOpacity onPress={() => router.back()}>
+            <TouchableOpacity
+              onPress={() => router.replace("/MyAccount/screens/MyPets")}
+            >
               <Ionicons
                 name="chevron-back"
                 color={Colors.secondary}

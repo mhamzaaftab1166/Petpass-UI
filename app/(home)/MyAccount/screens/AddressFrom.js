@@ -32,6 +32,7 @@ const validationSchema = Yup.object({
   full_name: Yup.string().required().min(2).max(50),
   address: Yup.string().required().min(5),
   city: Yup.object().required(),
+  address_type: Yup.object().required(),
   country: Yup.object().required(),
   phone_number: Yup.string().required().min(8).max(15).label("Phone"),
 });
@@ -42,7 +43,7 @@ export default function AddressFrom() {
   const { isDarkMode } = useTheme();
   const [error, setError] = useState();
   const [country, setCountry] = useState();
-  const [cities, setCities] = useState()
+  const [cities, setCities] = useState();
   const {
     loading,
     singleAddress,
@@ -56,41 +57,38 @@ export default function AddressFrom() {
   const countriesData = getCountries?.map((country) => ({
     label: country?.name?.toLocaleUpperCase(),
     value: country?.name,
-    code: country?.isoCode
+    code: country?.isoCode,
   }));
 
-
-  
   useEffect(() => {
     clearSingleAddress();
   }, [clearSingleAddress]);
 
   useEffect(() => {
     if (country) {
-       const cityList = getCitiesByCountry(country) || [];
-       console.log(cityList, 'cityList');
-       
-       const cities = cityList.map((city) => ({
-          label: city?.name,
-          value: city?.name,
-       }));
-       setCities(cities);
+      const cityList = getCitiesByCountry(country) || [];
+      console.log(cityList, "cityList");
+
+      const cities = cityList.map((city) => ({
+        label: city?.name,
+        value: city?.name,
+      }));
+      setCities(cities);
     }
- }, [country]);
-
-
+  }, [country]);
 
   const handleSubmit = async (values) => {
     const phoneParts = values.phone_number.split(" ");
     const countryCode = phoneParts[0];
     const phoneNumber = phoneParts.slice(1).join("");
-    
+
     const formattedValues = {
       ...values,
       country_code: countryCode,
       phone_number: phoneNumber,
       city: values.city.value,
       country: values.country.label,
+      address_type: values.address_type.value,
     };
 
     const formattedupdateValues = {
@@ -101,6 +99,7 @@ export default function AddressFrom() {
       phone_number: phoneNumber,
       city: values.city.value,
       country: values.country.label,
+      address_type: values.address_type.value,
     };
 
     try {
@@ -108,12 +107,12 @@ export default function AddressFrom() {
       isEdit
         ? await addressService.updateUserAddress(formattedupdateValues)
         : await addressService.createUserAddress(formattedValues);
-        router.replace("/MyAccount/screens/Addresses");
+      router.replace("/MyAccount/screens/Addresses");
     } catch (error) {
       setErrorVisible(true);
       setError(error.message);
     } finally {
-      fetchAddress(user?.id); 
+      fetchAddress(user?.id);
       setIsLoading(false);
     }
   };
@@ -124,7 +123,15 @@ export default function AddressFrom() {
 
   if (loading) {
     return <Loader isLoad={loading} />;
-  }  
+  }
+  const addressTypes = [
+    { label: "FLAT", value: "flat" },
+    { label: "PET SHOP", value: "pet shop" },
+    { label: "VILLA ", value: "villa " },
+  ];
+  const matchingAddressType = addressTypes.find(
+    (addressType) => addressType.value === singleAddress?.address_type
+  );
 
   return (
     <SafeAreaView
@@ -175,10 +182,13 @@ export default function AddressFrom() {
               initialValues={{
                 full_name: isEdit ? singleAddress?.full_name : "",
                 address: isEdit ? singleAddress?.address : "",
-                phone_number: isEdit ? `${singleAddress?.country_code} ${singleAddress?.phone_number}` : "",
+                phone_number: isEdit
+                  ? `${singleAddress?.country_code} ${singleAddress?.phone_number}`
+                  : "",
                 city: isEdit
                   ? { label: singleAddress?.city, value: singleAddress?.city }
                   : "",
+                address_type: matchingAddressType || "",
                 country: isEdit
                   ? {
                       label: singleAddress?.country,
@@ -196,9 +206,15 @@ export default function AddressFrom() {
                 placeholder="FULL NAME"
                 style={style}
               />
+              <AppFormPicker
+                items={addressTypes}
+                name={"address_type"}
+                placeholder={"ADDRESS TYPE"}
+                setState={(selected) => setCountry(selected?.code)}
+              />
               <AppFormField
                 name={"address"}
-                placeholder="FULL ADDRESS"
+                placeholder="BUILDING NAME - FLAT NUMBER / SHOP NUMBER"
                 style={style}
               />
               <AppFormPhoneField style={style} name={"phone_number"} />
