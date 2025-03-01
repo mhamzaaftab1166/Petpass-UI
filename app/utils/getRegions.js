@@ -6,9 +6,7 @@ const getStatesByCountry = (countryCode) => {
   return State.getStatesOfCountry(countryCode);
 };
 
-const getCitiesByCountry = (countryCode) => {
-  console.log(countryCode, 'countryCode');
-  
+const getCitiesByCountry = (countryCode) => {  
   return City.getCitiesOfCountry(countryCode);
 };
 

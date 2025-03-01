@@ -49,7 +49,7 @@ export default function AddressFrom() {
     fetchCurrentAddress,
     clearSingleAddress,
   } = useAddressStore();
-  const [country, setCountry] = useState(singleAddress ? singleAddress?.country : "");
+  const [country, setCountry] = useState();
   const [cities, setCities] = useState();
   const [isLoading, setIsLoading] = useState(false);
   const { userId, addressId, isEdit } = useLocalSearchParams();
@@ -65,9 +65,19 @@ export default function AddressFrom() {
   }, [clearSingleAddress]);
 
   useEffect(() => {
+    if (isEdit && singleAddress?.country) {
+      const selectedCountry = countriesData.find(
+        (c) => c.label === singleAddress.country
+      );
+      if (selectedCountry) {
+        setCountry(selectedCountry.code);
+      }
+    }
+  }, [isEdit, singleAddress?.country, countriesData]);
+
+  useEffect(() => {
     if (country) {
       const cityList = getCitiesByCountry(country) || [];
-      console.log(cityList, "cityList");
 
       const cities = cityList.map((city) => ({
         label: city?.name,
@@ -76,8 +86,6 @@ export default function AddressFrom() {
       setCities(cities);
     }
   }, [country]);
-
-  console.log(singleAddress, 'singleAddress');
   
   const handleSubmit = async (values) => {
     const phoneParts = values.phone_number.split(" ");
@@ -129,11 +137,11 @@ export default function AddressFrom() {
   const addressTypes = [
     { label: "FLAT", value: "flat" },
     { label: "PET SHOP", value: "pet shop" },
-    { label: "VILLA ", value: "villa " },
+    { label: "VILLA ", value: "villa" },
   ];
   const matchingAddressType = addressTypes.find(
     (addressType) => addressType.value === singleAddress?.address_type
-  );
+  );  
 
   return (
     <SafeAreaView
