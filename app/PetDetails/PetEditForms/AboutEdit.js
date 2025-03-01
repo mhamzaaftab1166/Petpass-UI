@@ -5,11 +5,13 @@ import {
   ScrollView,
   KeyboardAvoidingView,
   Platform,
+  TouchableOpacity,
 } from "react-native";
 import React, { useState } from "react";
 import { Colors } from "../../theme/color";
 import style from "../../theme/style";
 import AppTitle from "../../components/AppTitle/AppTitle";
+import Icon from "react-native-vector-icons/Ionicons";
 import AppForm from "../../components/forms/AppForm";
 import * as Yup from "yup";
 import AppFormField from "../../components/forms/AppFormFeild";
@@ -27,6 +29,7 @@ import AppFormImagePicker from "../../components/forms/AppFormImagePicker";
 import Loader from "../../components/Loader/Loader";
 import { convertImageToBase64 } from "../../utils/generalUtils";
 import petServices from "../../services/petServices";
+import { AppBar } from "@react-native-material/core";
 
 const validationSchema = Yup.object({
   pet_type: Yup.object().required().label("Pet Type"),
@@ -154,6 +157,25 @@ export default function AboutEdit() {
       >
         <Loader isLoad={isLoading} />
         <View style={{ flex: 1, marginHorizontal: 20 }}>
+        <AppBar
+            color={isDarkMode ? Colors.active : Colors.secondary}
+            title={`Edit Your Pet Profile`}
+            titleStyle={[
+              style.b18,
+              { color: isDarkMode ? Colors.secondary : Colors.active },
+            ]}
+            centerTitle={true}
+            elevation={0}
+            leading={
+              <TouchableOpacity onPress={() => router.back()}>
+                <Icon
+                  name="chevron-back"
+                  color={isDarkMode ? Colors.secondary : Colors.active}
+                  size={30}
+                />
+              </TouchableOpacity>
+            }
+          />
           <ScrollView showsVerticalScrollIndicator={false}>
             <AppForm
               initialValues={{
@@ -173,10 +195,10 @@ export default function AboutEdit() {
               onSubmit={handleSubmit}
               validationSchema={validationSchema}
             >
-              <AppTitle title={"PET ABOUT"} style={style} />
+              {/* <AppTitle title={"PET ABOUT"} style={style} /> */}
               <AppErrorMessage error={error} visible={errorVisible} />
               <View style={{ marginTop: 20 }}>
-                <AppFormImagePicker name="pet_profile_picture" />
+                <AppFormImagePicker name="pet_profile_picture" pickerName={"Pet Profile Picture"} />
               </View>
               <AppFormPicker
                 items={petTypes}
@@ -228,7 +250,7 @@ export default function AboutEdit() {
               </View>
               <AppFormRangeField
                 name="weight"
-                minValue={50}
+                minValue={0}
                 maxValue={200}
                 label="Weight Range (kg)"
                 style={style}
@@ -236,7 +258,7 @@ export default function AboutEdit() {
 
               <AppFormRangeField
                 name="height"
-                minValue={50}
+                minValue={0}
                 maxValue={200}
                 label="Height Range (cm)"
                 style={style}

@@ -12,6 +12,8 @@ const AppInput = ({
   isPassword,
   parentStyles,
   editable = true,
+  multiline = false,
+  numberOfLines = 4,
   ...otherProps
 }) => {
   const { isDarkMode } = useTheme();
@@ -19,7 +21,7 @@ const AppInput = ({
   return (
     <View
       style={[
-        style.txtinput,
+        multiline ? styles.inputContainer : style.txtinput,
         {
           marginTop: 30,
           backgroundColor:
@@ -36,10 +38,14 @@ const AppInput = ({
         editable={editable}
         placeholderTextColor={isDarkMode ? Colors.secondary : Colors.lable}
         secureTextEntry={isPassword && !isPasswordVisible}
+        multiline={multiline}
+        numberOfLines={numberOfLines}
+        textAlignVertical={multiline ? "top" : "center"}
         style={[
-          style.r16,
+          multiline ? styles.input : style.r16,
           {
             color: isDarkMode ? Colors.secondary : Colors.active,
+            height: multiline ? 100 : 50,
             flex: 1,
           },
         ]}
@@ -62,4 +68,18 @@ const AppInput = ({
 
 export default AppInput;
 
-const styles = StyleSheet.create({});
+const styles = StyleSheet.create({
+  inputContainer: {
+    borderBottomWidth: 1,
+    borderColor: Colors.border,
+    flexDirection: "row",
+    alignItems: "center",
+    paddingHorizontal: 2
+  },
+  input: {
+    flex: 1,
+    fontSize: 16,
+    color: Colors.active,
+    fontFamily: "OpenSans-Regular"
+  },
+});

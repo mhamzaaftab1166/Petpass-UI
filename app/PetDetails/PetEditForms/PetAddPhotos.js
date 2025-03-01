@@ -5,6 +5,7 @@ import {
   ScrollView,
   KeyboardAvoidingView,
   Platform,
+  TouchableOpacity,
 } from "react-native";
 import React, { useState } from "react";
 import { Colors } from "../../theme/color";
@@ -13,6 +14,7 @@ import AppTitle from "../../components/AppTitle/AppTitle";
 import AppForm from "../../components/forms/AppForm";
 import * as Yup from "yup";
 import AppFormField from "../../components/forms/AppFormFeild";
+import Icon from "react-native-vector-icons/Ionicons";
 import SubmitButton from "../../components/forms/SubmitButton";
 import AppErrorMessage from "../../components/forms/AppErrorMessage";
 import { useTheme } from "../../helper/themeProvider";
@@ -21,6 +23,7 @@ import AppFormImagePicker from "../../components/forms/AppFormGeneralImagesPicke
 import Loader from "../../components/Loader/Loader";
 import petServices from "../../services/petServices";
 import { convertImageToBase64 } from "../../utils/generalUtils";
+import { AppBar } from "@react-native-material/core";
 
 export default function PetAddPhotos() {
   const { isDarkMode } = useTheme();
@@ -79,6 +82,25 @@ export default function PetAddPhotos() {
       >
         <Loader isLoad={isLoading} />
         <View style={{ flex: 1, marginHorizontal: 20 }}>
+        <AppBar
+            color={isDarkMode ? Colors.active : Colors.secondary}
+            title={`Add Pet Images`}
+            titleStyle={[
+              style.b18,
+              { color: isDarkMode ? Colors.secondary : Colors.active },
+            ]}
+            centerTitle={true}
+            elevation={0}
+            leading={
+              <TouchableOpacity onPress={() => router.back()}>
+                <Icon
+                  name="chevron-back"
+                  color={isDarkMode ? Colors.secondary : Colors.active}
+                  size={30}
+                />
+              </TouchableOpacity>
+            }
+          />
           <ScrollView showsVerticalScrollIndicator={false}>
             <AppForm
               initialValues={{ images: [] }}
@@ -86,7 +108,6 @@ export default function PetAddPhotos() {
               validationSchema={validationSchema}
             >
               <View style={{ marginBottom: 30 }}>
-                <AppTitle title={"PET GALLERY"} style={style} />
               </View>
               <AppErrorMessage error={error} visible={errorVisible} />
               <AppFormImagePicker name={"images"} />

@@ -136,6 +136,7 @@ const styles = StyleSheet.create({
   text: {
     flex: 1,
     fontSize: 16,
+    fontFamily: "OpenSans-Regular"
   },
   modalContainer: {
     flex: 1,

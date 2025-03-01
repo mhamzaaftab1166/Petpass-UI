@@ -7,11 +7,13 @@ import {
   Platform,
   Text,
   StyleSheet,
+  TouchableOpacity,
 } from "react-native";
 import React, { useState } from "react";
 import { Colors } from "../../theme/color";
 import style from "../../theme/style";
 import AppTitle from "../../components/AppTitle/AppTitle";
+import Icon from "react-native-vector-icons/Ionicons";
 import AppForm from "../../components/forms/AppForm";
 import * as Yup from "yup";
 import AppFormDatePicker from "../../components/forms/AppFormDatePicker";
@@ -26,6 +28,7 @@ import {
 import Checkbox from "expo-checkbox";
 import Loader from "../../components/Loader/Loader";
 import petServices from "../../services/petServices";
+import { AppBar } from "@react-native-material/core";
 
 const today = new Date();
 today.setHours(0, 0, 0, 0);
@@ -181,6 +184,25 @@ export default function VaccinationEdit() {
       >
         <Loader isLoad={isLoading} />
         <View style={{ flex: 1, marginHorizontal: 20 }}>
+        <AppBar
+            color={isDarkMode ? Colors.active : Colors.secondary}
+            title={`Add Pet Vaccination`}
+            titleStyle={[
+              style.b18,
+              { color: isDarkMode ? Colors.secondary : Colors.active },
+            ]}
+            centerTitle={true}
+            elevation={0}
+            leading={
+              <TouchableOpacity onPress={() => router.back()}>
+                <Icon
+                  name="chevron-back"
+                  color={isDarkMode ? Colors.secondary : Colors.active}
+                  size={30}
+                />
+              </TouchableOpacity>
+            }
+          />
           <ScrollView showsVerticalScrollIndicator={false}>
             <AppForm
               initialValues={{
@@ -223,7 +245,7 @@ export default function VaccinationEdit() {
               onSubmit={handleSubmit}
               validationSchema={validationSchema}
             >
-              <AppTitle title={"PET VACCINATIONS"} style={style} />
+              {/* <AppTitle title={"PET VACCINATIONS"} style={style} /> */}
               <AppErrorMessage error={error} visible={errorVisible} />
 
               <Text

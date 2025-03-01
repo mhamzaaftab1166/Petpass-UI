@@ -128,7 +128,8 @@ export default function MyPets({ isDelete = true }) {
             styles.text,
             {
               color: Colors.primary,
-              marginTop: 30,
+              marginTop: 20,
+              marginBottom: 38,
             },
           ]}
         >

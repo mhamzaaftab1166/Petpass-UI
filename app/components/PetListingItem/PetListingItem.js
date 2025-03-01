@@ -4,7 +4,6 @@ import { Colors } from "../../theme/color";
 import { useTheme } from "../../helper/themeProvider";
 import { useRouter } from "expo-router";
 import style from "../../theme/style";
-
 import img from "../../../assets/images/profile/profile.png";
 import birthLight from "../../../assets/images/pets/birthLight.png";
 import breedLight from "../../../assets/images/pets/breedLight.png";
@@ -24,6 +23,9 @@ const { width, height } = Dimensions.get("screen");
 const PetListingItem = ({ pet }) => {
   const router = useRouter();
   const { isDarkMode } = useTheme();
+
+  console.log(pet, 'pet');
+  
 
   return (
     <TouchableOpacity
@@ -107,7 +109,7 @@ const PetListingItem = ({ pet }) => {
                   { color: isDarkMode ? Colors.secondary : Colors.lable },
                 ]}
               >
-                Dubai, United Arab Emirates
+                United Arab Emirates
               </Text>
             </View>
             <Image source={detailcon} style={styles.detailIcon} />
@@ -127,7 +129,7 @@ const styles = StyleSheet.create({
   },
   row: {
     flexDirection: "row",
-    alignItems: "center",
+    alignItems: "flex-start",
   },
   profileImage: {
     resizeMode: "stretch",
@@ -146,15 +148,19 @@ const styles = StyleSheet.create({
   },
   nameText: {
     fontFamily: "Avenir-Bold",
+    textTransform: "capitalize",
+    width: 200,
   },
   genderContainer: {
     flexDirection: "row",
     alignItems: "center",
   },
   genderText: {
-    marginLeft: 5,
-    fontSize: 18,
+    marginLeft: 4,
+    width: 38,
+    fontSize: 14,
     fontFamily: "Avenir-Regular",
+    textTransform: "capitalize"
   },
   detailRow: {
     flexDirection: "row",
@@ -167,8 +173,10 @@ const styles = StyleSheet.create({
     marginRight: 6,
   },
   detailText: {
-    fontSize: 16,
+    fontSize: 14,
+    width: 200,
     fontFamily: "Avenir-Regular",
+    textTransform: "capitalize"
   },
   locationContainer: {
     flexDirection: "row",
@@ -176,7 +184,7 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   detailIcon: {
-    width: 22,
-    height: 22,
+    width: 24,
+    height: 24,
   },
 });

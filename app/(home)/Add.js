@@ -120,7 +120,7 @@ export default function Add() {
         >
           <ScrollView
             showsVerticalScrollIndicator={false}
-            style={{ flex: 1, marginHorizontal: 20 }}
+            style={{ flex: 1, marginHorizontal: 0 }}
           >
             <View
               style={[
@@ -135,7 +135,7 @@ export default function Add() {
             >
               <AppBar
                 color={isDarkMode ? Colors.active : Colors.secondary}
-                title="Account Info"
+                title="Add Your Pets Here"
                 titleStyle={[
                   style.b18,
                   { color: isDarkMode ? Colors.secondary : Colors.active },
@@ -168,7 +168,7 @@ export default function Add() {
                 validationSchema={validationSchema}
               >
                 <AppErrorMessage error={error} visible={errorVisible} />
-                <AppFormImagePicker name="pet_profile_picture" />
+                <AppFormImagePicker name="pet_profile_picture" pickerName="Pet Profile Picture" />
                 <Text
                   style={[
                     style.subtitle,
@@ -248,7 +248,7 @@ export default function Add() {
                   parentStyles={{ marginTop: 20 }}
                 />
 
-                <View style={{ marginBottom: "15%" }}>
+                <View style={{ marginBottom: 80 }}>
                   <SubmitButton title="SAVE" style={style} />
                 </View>
               </AppForm>

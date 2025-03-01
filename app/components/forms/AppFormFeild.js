@@ -9,6 +9,8 @@ function AppFormField({
   parentStyles,
   style,
   editable,
+  multiline,
+  numberOfLines,
   ...otherProps
 }) {
   const { touched, setFieldTouched, errors, values, setFieldValue } =
@@ -23,6 +25,8 @@ function AppFormField({
         parentStyles={parentStyles}
         style={style}
         editable={editable}
+        multiline={multiline}
+        numberOfLines={numberOfLines}
         {...otherProps}
       />
       <AppErrorMessage error={errors[name]} visible={touched[name]} />

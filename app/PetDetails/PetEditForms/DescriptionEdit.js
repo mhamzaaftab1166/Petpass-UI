@@ -5,12 +5,14 @@ import {
   ScrollView,
   KeyboardAvoidingView,
   Platform,
+  TouchableOpacity,
 } from "react-native";
 import React, { useState } from "react";
 import { Colors } from "../../theme/color";
 import style from "../../theme/style";
 import AppTitle from "../../components/AppTitle/AppTitle";
 import AppForm from "../../components/forms/AppForm";
+import Icon from "react-native-vector-icons/Ionicons";
 import * as Yup from "yup";
 import AppFormField from "../../components/forms/AppFormFeild";
 import SubmitButton from "../../components/forms/SubmitButton";
@@ -19,6 +21,7 @@ import { useTheme } from "../../helper/themeProvider";
 import { router, useLocalSearchParams, useRouter } from "expo-router";
 import petServices from "../../services/petServices";
 import Loader from "../../components/Loader/Loader";
+import { AppBar } from "@react-native-material/core";
 
 const validationSchema = Yup.object({
   description: Yup.string().required().label("Description"),
@@ -65,13 +68,31 @@ export default function DescriptionEdit() {
       >
         <Loader isLoad={isLoading} />
         <View style={{ flex: 1, marginHorizontal: 20 }}>
+        <AppBar
+            color={isDarkMode ? Colors.active : Colors.secondary}
+            title={`Edit Description`}
+            titleStyle={[
+              style.b18,
+              { color: isDarkMode ? Colors.secondary : Colors.active },
+            ]}
+            centerTitle={true}
+            elevation={0}
+            leading={
+              <TouchableOpacity onPress={() => router.back()}>
+                <Icon
+                  name="chevron-back"
+                  color={isDarkMode ? Colors.secondary : Colors.active}
+                  size={30}
+                />
+              </TouchableOpacity>
+            }
+          />
           <ScrollView showsVerticalScrollIndicator={false}>
             <AppForm
               initialValues={{ description: petData?.description || "" }}
               onSubmit={handleSubmit}
               validationSchema={validationSchema}
             >
-              <AppTitle title={"PET DESCRIPTION"} style={style} />
               <AppErrorMessage error={error} visible={errorVisible} />
               <AppFormField
                 name={"description"}

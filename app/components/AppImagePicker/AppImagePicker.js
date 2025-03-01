@@ -12,7 +12,7 @@ import * as ImagePicker from "expo-image-picker";
 import { Colors } from "../../theme/color";
 import style from "../../theme/style";
 
-const AppImagePicker = ({ imageUri, onSelectImage }) => {
+const AppImagePicker = ({ imageUri, pickerName = "Choose Avatar", onSelectImage }) => {
   const [hasPermission, setHasPermission] = useState(null);
 
   useEffect(() => {
@@ -76,7 +76,7 @@ const AppImagePicker = ({ imageUri, onSelectImage }) => {
             { color: Colors.primary, textAlign: "center", marginTop: 10 },
           ]}
         >
-          Change Avatar
+          {pickerName}
         </Text>
       </Pressable>
     </View>

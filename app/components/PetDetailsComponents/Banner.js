@@ -41,17 +41,17 @@ const Banner = ({ router, profileImg }) => {
             </TouchableOpacity>
           }
           trailing={
-            <HStack style={{ gap: 10 }}>
-              <MaterialIcons
-                name="download"
-                color={Colors.secondary}
-                size={30}
-                style={{ marginRight: 10 }}
-              />
+            <HStack style={{ gap: 16 }}>
               <Ionicons
-                name="share-social-sharp"
+                name="cloud-download-outline"
                 color={Colors.secondary}
-                size={30}
+                size={25}
+                style={{ marginRight: 15, marginTop: 2 }}
+              />
+              <MaterialIcons
+                name="share"
+                color={Colors.secondary}
+                size={25}
               />
             </HStack>
           }
