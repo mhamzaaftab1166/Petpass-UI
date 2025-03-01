@@ -1,39 +1,25 @@
-import React, { useRef } from "react";
-import { View, StyleSheet, ScrollView } from "react-native";
+import React from "react";
+import { View, StyleSheet } from "react-native";
 import MediaInput from "./ImageInput";
-import Loader from "../Loader/Loader"
-function MediaInputList({
-  mediaUris = [],
-  onAddMedia,
-  onRemoveMedia,
-  mediaType
-}) {
-  const scrollViewRef = useRef(null);
 
+function MediaInputList({ mediaUris = [], onAddMedia, onRemoveMedia, mediaType }) {
   return (
-    <View>
-      <ScrollView
-        ref={scrollViewRef}
-        horizontal
-        onContentSizeChange={() => scrollViewRef.current?.scrollToEnd()}
-      >
-        <View style={styles.container}>
-          {mediaUris.map((mediaUri) => (
-            <View style={styles.media} key={mediaUri}>
-              <MediaInput
-                mediaUri={mediaUri}
-                onSelectMedia={() => onRemoveMedia(mediaUri)}
-                mediaType={mediaType}
-              />
-            </View>
-          ))}
-
+    <View style={styles.container}>
+      {mediaUris.map((mediaUri) => (
+        <View style={styles.media} key={mediaUri}>
           <MediaInput
-            onSelectMedia={(uri) => onAddMedia(uri)}
+            mediaUri={mediaUri}
+            onSelectMedia={() => onRemoveMedia(mediaUri)}
             mediaType={mediaType}
           />
         </View>
-      </ScrollView>
+      ))}
+      <View style={styles.media}>
+        <MediaInput
+          onSelectMedia={(uri) => onAddMedia(uri)}
+          mediaType={mediaType}
+        />
+      </View>
     </View>
   );
 }
@@ -41,9 +27,12 @@ function MediaInputList({
 const styles = StyleSheet.create({
   container: {
     flexDirection: "row",
+    flexWrap: "wrap",
   },
   media: {
-    marginRight: 10,
+    width: "33.33%",
+    padding: 5, 
+    marginTop:10
   },
 });
 
