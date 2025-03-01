@@ -42,8 +42,6 @@ export default function AddressFrom() {
   const { user } = useUserStore();
   const { isDarkMode } = useTheme();
   const [error, setError] = useState();
-  const [country, setCountry] = useState();
-  const [cities, setCities] = useState();
   const {
     loading,
     singleAddress,
@@ -51,6 +49,8 @@ export default function AddressFrom() {
     fetchCurrentAddress,
     clearSingleAddress,
   } = useAddressStore();
+  const [country, setCountry] = useState(singleAddress ? singleAddress?.country : "");
+  const [cities, setCities] = useState();
   const [isLoading, setIsLoading] = useState(false);
   const { userId, addressId, isEdit } = useLocalSearchParams();
   const [errorVisible, setErrorVisible] = useState(false);
@@ -77,6 +77,8 @@ export default function AddressFrom() {
     }
   }, [country]);
 
+  console.log(singleAddress, 'singleAddress');
+  
   const handleSubmit = async (values) => {
     const phoneParts = values.phone_number.split(" ");
     const countryCode = phoneParts[0];

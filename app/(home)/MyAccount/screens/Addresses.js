@@ -95,7 +95,18 @@ export default function Address() {
               />
             </TouchableOpacity>
           }
-          trailing={
+          // trailing={
+          //   <TouchableOpacity
+          //     onPress={() => router.push("/MyAccount/screens/AddressFrom")}
+          //     style={styles.addAddressContainer}
+          //   >
+          //     <Text style={styles.addAddressText}>Add Address</Text>
+          //     <Icon name="add" color={Colors.primary} size={22} />
+          //   </TouchableOpacity>
+          // }
+        />
+        {address.length === 0 ? (
+          <>
             <TouchableOpacity
               onPress={() => router.push("/MyAccount/screens/AddressFrom")}
               style={styles.addAddressContainer}
@@ -103,120 +114,129 @@ export default function Address() {
               <Text style={styles.addAddressText}>Add Address</Text>
               <Icon name="add" color={Colors.primary} size={25} />
             </TouchableOpacity>
-          }
-        />
-        {address.length === 0 ? (
-          <NoItem title={"address"} />
+            <NoItem title={"address"} />
+          </>
         ) : (
-          <SwipeListView
-            data={address}
-            keyExtractor={(item) => item.id}
-            renderItem={({ item }) => (
-              <View
-                style={{
-                  padding: 10,
-                  borderWidth: 1,
-                  borderColor: isDarkMode ? Colors.active : Colors.lable,
-                  borderRadius: 10,
-                  marginTop: 20,
-                  backgroundColor: isDarkMode ? Colors.lable : Colors.secondary,
-                }}
-              >
-                <Text
-                  style={[
-                    style.b16,
-                    { color: isDarkMode ? Colors.secondary : Colors.active },
-                  ]}
-                >
-                  {item.full_name}
-                </Text>
-                <Text
-                  style={[
-                    style.r14,
-                    {
-                      color: isDarkMode ? Colors.secondary : Colors.lable,
-                      marginTop: 5,
-                    },
-                  ]}
-                >
-                  {item.address_type
-                    ? item.address_type
-                        .toLowerCase()
-                        .replace(/\b\w/g, (char) => char.toUpperCase())
-                    : ""}
-                </Text>
-
-                <Text
-                  style={[
-                    style.r14,
-                    {
-                      color: isDarkMode ? Colors.secondary : Colors.lable,
-                      marginTop: 5,
-                    },
-                  ]}
-                >
-                  {item.address}
-                </Text>
-                <Text
-                  style={[
-                    style.r14,
-                    {
-                      color: isDarkMode ? Colors.secondary : Colors.lable,
-                      marginTop: 3,
-                    },
-                  ]}
-                >
-                  {item.country_code} {item.phone_number}
-                </Text>
-              </View>
-            )}
-            renderHiddenItem={({ item }) => (
-              <View
-                style={{
-                  flexDirection: "row",
-                  justifyContent: "flex-end",
-                  alignItems: "center",
-                  height: 80,
-                  backgroundColor: Colors.secondary,
-                  paddingHorizontal: 10,
-                  marginTop: 20,
-                  borderRadius: 10,
-                }}
-              >
-                <TouchableOpacity
-                  onPress={() =>
-                    router.push(
-                      `/MyAccount/screens/AddressFrom?userId=${user?.id}&addressId=${item.id}&isEdit=true`
-                    )
-                  }
+          <>
+            <TouchableOpacity
+              onPress={() => router.push("/MyAccount/screens/AddressFrom")}
+              style={styles.addAddressContainer}
+            >
+              <Text style={styles.addAddressText}>Add Address</Text>
+              <Icon name="add" color={Colors.primary} size={25} />
+            </TouchableOpacity>
+            <SwipeListView
+              data={address}
+              keyExtractor={(item) => item.id}
+              renderItem={({ item }) => (
+                <View
                   style={{
-                    justifyContent: "center",
-                    alignItems: "center",
-                    height: "100%",
+                    padding: 10,
+                    borderWidth: 1,
+                    borderColor: isDarkMode ? Colors.active : Colors.lable,
+                    borderRadius: 10,
+                    marginTop: 20,
+                    backgroundColor: isDarkMode
+                      ? Colors.lable
+                      : Colors.secondary,
                   }}
                 >
-                  <Icons
-                    name="pencil-outline"
-                    color={Colors.primary}
-                    size={30}
-                  />
-                </TouchableOpacity>
+                  <Text
+                    style={[
+                      style.b16,
+                      { color: isDarkMode ? Colors.secondary : Colors.active },
+                    ]}
+                  >
+                    {item.full_name}
+                  </Text>
+                  <Text
+                    style={[
+                      style.r14,
+                      {
+                        color: isDarkMode ? Colors.secondary : Colors.lable,
+                        marginTop: 5,
+                      },
+                    ]}
+                  >
+                    {item.address_type
+                      ? item.address_type
+                          .toLowerCase()
+                          .replace(/\b\w/g, (char) => char.toUpperCase())
+                      : ""}
+                  </Text>
 
-                <TouchableOpacity
-                  onPress={() => handleConfirmDelete(item.id)}
+                  <Text
+                    style={[
+                      style.r14,
+                      {
+                        color: isDarkMode ? Colors.secondary : Colors.lable,
+                        marginTop: 5,
+                      },
+                    ]}
+                  >
+                    {item.address}
+                  </Text>
+                  <Text
+                    style={[
+                      style.r14,
+                      {
+                        color: isDarkMode ? Colors.secondary : Colors.lable,
+                        marginTop: 3,
+                      },
+                    ]}
+                  >
+                    {item.country_code} {item.phone_number}
+                  </Text>
+                </View>
+              )}
+              renderHiddenItem={({ item }) => (
+                <View
                   style={{
-                    justifyContent: "center",
+                    flexDirection: "row",
+                    justifyContent: "flex-end",
                     alignItems: "center",
-                    width: 50,
-                    height: "100%",
+                    height: 80,
+                    backgroundColor: Colors.secondary,
+                    paddingHorizontal: 10,
+                    marginTop: 20,
+                    borderRadius: 10,
                   }}
                 >
-                  <Icon name="trash" color="#FA6262" size={30} />
-                </TouchableOpacity>
-              </View>
-            )}
-            rightOpenValue={-100}
-          />
+                  <TouchableOpacity
+                    onPress={() =>
+                      router.push(
+                        `/MyAccount/screens/AddressFrom?userId=${user?.id}&addressId=${item.id}&isEdit=true`
+                      )
+                    }
+                    style={{
+                      justifyContent: "center",
+                      alignItems: "center",
+                      height: "100%",
+                    }}
+                  >
+                    <Icons
+                      name="pencil-outline"
+                      color={Colors.primary}
+                      size={30}
+                    />
+                  </TouchableOpacity>
+
+                  <TouchableOpacity
+                    onPress={() => handleConfirmDelete(item.id)}
+                    style={{
+                      justifyContent: "center",
+                      alignItems: "center",
+                      width: 50,
+                      height: "100%",
+                    }}
+                  >
+                    <Icon name="trash" color="#FA6262" size={30} />
+                  </TouchableOpacity>
+                </View>
+              )}
+              rightOpenValue={-100}
+            />
+          </>
         )}
       </View>
 
@@ -247,10 +267,13 @@ const styles = StyleSheet.create({
   addAddressContainer: {
     flexDirection: "row",
     alignItems: "center",
+    justifyContent: 'flex-end',
+    marginTop: 6,
   },
   addAddressText: {
     fontSize: 14,
     fontFamily: "Avenir-Regular",
     color: Colors.primary,
+    marginRight: 5,
   },
 });
