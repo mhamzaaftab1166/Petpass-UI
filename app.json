@@ -11,9 +11,11 @@
     "ios": {
       "infoPlist": {
         "NSPhotoLibraryUsageDescription": "This app needs access to your photo library to upload profile pictures.",
-        "NSCameraUsageDescription": "This app needs access to your camera to take profile pictures."
+        "NSCameraUsageDescription": "This app needs access to your camera to take profile pictures.",
+        "ITSAppUsesNonExemptEncryption": false
       },
-      "supportsTablet": true
+      "supportsTablet": true,
+      "bundleIdentifier": "com.anonymous.PetpassUI"
     },
     "android": {
       "adaptiveIcon": {

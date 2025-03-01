@@ -92,7 +92,7 @@ export default function PetAddPhotos() {
             centerTitle={true}
             elevation={0}
             leading={
-              <TouchableOpacity onPress={() => router.back()}>
+              <TouchableOpacity onPress={() => router.replace(`/PetDetails/PetDetailPage?id=${petData?.id})`)}>
                 <Icon
                   name="chevron-back"
                   color={isDarkMode ? Colors.secondary : Colors.active}
