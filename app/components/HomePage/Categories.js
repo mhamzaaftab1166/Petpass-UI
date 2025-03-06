@@ -34,14 +34,29 @@ const Categories = () => {
           },
         ]}
       >
-        <TouchableOpacity>
-          <Image
-            source={require("../../../assets/images/authentication/d2.png")}
-            resizeMode="stretch"
-            style={{ width: width / 12, height: height / 28 }}
-          ></Image>
-          <Text style={[style.s16, { color: Colors.disable }]}>Shop</Text>
-        </TouchableOpacity>
+        <CategoryItem
+          imageSource={require("../../../assets/images/home/hotel.png")}
+          title="Hotels"
+          categoryPayload={{
+            filterValue: "pet_friendly_hotels",
+          }}
+        />
+        <View style={{ margin: 10 }}></View>
+        <CategoryItem
+          imageSource={require("../../../assets/images/home/grooming.png")}
+          title="Grooming"
+          categoryPayload={{
+            filterValue: "pet_grooming",
+          }}
+        />
+        <View style={{ margin: 10 }}></View>
+        <CategoryItem
+          imageSource={require("../../../assets/images/home/training.png")}
+          title="Training"
+          categoryPayload={{
+            filterValue: "pet_training",
+          }}
+        />
       </View>
       <View style={{ margin: 10 }}></View>
       <View
