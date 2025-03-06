@@ -35,10 +35,10 @@ const CategoryItem = ({ imageSource, title, categoryPayload }) => {
       >
         <Image
           source={imageSource}
-          resizeMode="stretch"
-          style={{ width: width / 12, height: height / 28 }}
+          resizeMode="contain"
+          style={{ width: width / 8, height: height / 24 }}
         />
-        <Text style={[style.s16, { color: Colors.disable, marginTop: 5 }]}>
+        <Text style={[style.s16, { color: Colors.disable, marginTop: 10, fontSize: 12 }]}>
           {title}
         </Text>
       </TouchableOpacity>
@@ -48,9 +48,9 @@ const CategoryItem = ({ imageSource, title, categoryPayload }) => {
 
 const Categories = () => {
   return (
-    <View style={{ paddingVertical: 5, paddingHorizontal: 20 }}>
+    <View style={{ paddingVertical: 16, paddingHorizontal: 20 }}>
       <View
-        style={{ flexDirection: "row", alignItems: "center", marginBottom: 10 }}
+        style={{ flexDirection: "row", alignItems: "center", marginBottom: 5 }}
       >
         <CategoryItem
           imageSource={require("../../../assets/images/home/hotel.png")}
@@ -59,7 +59,7 @@ const Categories = () => {
             filterValue: "restaurant",
           }}
         />
-        <View style={{ margin: 10 }}></View>
+        <View style={{ margin: 8 }}></View>
         <CategoryItem
           imageSource={require("../../../assets/images/home/grooming.png")}
           title="Grooming"
@@ -67,7 +67,7 @@ const Categories = () => {
             filterValue: "pet_grooming",
           }}
         />
-        <View style={{ margin: 10 }}></View>
+        <View style={{ margin: 8 }}></View>
         <CategoryItem
           imageSource={require("../../../assets/images/home/training.png")}
           title="Training"
@@ -78,7 +78,7 @@ const Categories = () => {
       </View>
 
       <View
-        style={{ flexDirection: "row", alignItems: "center", marginTop: 20 }}
+        style={{ flexDirection: "row", alignItems: "center", marginTop: 10 }}
       >
         <CategoryItem
           imageSource={require("../../../assets/images/home/walking.png")}
@@ -87,7 +87,7 @@ const Categories = () => {
             filterValue: "pet_walking",
           }}
         />
-        <View style={{ margin: 10 }}></View>
+        <View style={{ margin: 8 }}></View>
         <CategoryItem
           imageSource={require("../../../assets/images/home/vet.png")}
           title="Veterinary"
@@ -95,7 +95,7 @@ const Categories = () => {
             filterValue: "veterinary_care",
           }}
         />
-        <View style={{ margin: 10 }}></View>
+        <View style={{ margin: 8 }}></View>
         <CategoryItem
           imageSource={require("../../../assets/images/home/more.png")}
           title="More"
