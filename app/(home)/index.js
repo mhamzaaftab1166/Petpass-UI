@@ -1,18 +1,14 @@
+
 import React from "react";
 import {
-  View,
-  Text,
   Dimensions,
-  TouchableOpacity,
   ScrollView,
   Platform,
-  Image,
 } from "react-native";
-import { Colors } from "../theme/color";
-import style from "../theme/style";
 import Banner from "../components/HomePage/Banner";
 import Categories from "../components/HomePage/Categories";
-import { Stack } from "expo-router";
+import "react-native-get-random-values";
+import { v4 as uuidv4 } from 'uuid';
 
 const { width, height } = Dimensions.get("screen");
 
