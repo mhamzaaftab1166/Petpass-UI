@@ -7,7 +7,7 @@ import {
   Dimensions,
 } from "react-native";
 import { Avatar, Icon } from "react-native-paper";
-import { Colors } from "../../theme/color";
+import {Colors} from "../../theme/color";
 import style from "../../theme/style";
 import Title from "../Title/Title";
 

@@ -90,6 +90,7 @@ export default function TabLayout() {
             setShowAlert(false);
           }
         } catch (error) {
+          console.log(error);
           console.log("Error in checkToken:", error);
 
           if (error.message === "Token expired") {
