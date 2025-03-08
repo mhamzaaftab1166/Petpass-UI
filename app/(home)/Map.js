@@ -97,7 +97,6 @@ const Map = () => {
   }, [params.filter]);
 
   const fetchPetPlaces = async (lat, lng, type) => {
-    console.log(type);
     const url = `https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=${lat},${lng}&radius=${radius}&type=${type}&keyword=pet&key=${API_KEY}`;
     try {
       const response = await fetch(url);
@@ -472,7 +471,7 @@ const Map = () => {
                     // type is the palce type - not search type
                     // type: "animal"
                   }}
-                  onFail={(fail) => console.log(fail)}
+                  onFail={(fail) => console.log("Auto fill failed: " + fail)}
                   onError={(error) => console.log("Autocomplete Error:", error)}
                   onPress={(data, details = null) => {
                     handleSearchResult(data, details);

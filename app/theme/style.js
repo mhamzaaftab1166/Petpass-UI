@@ -129,8 +129,8 @@ export default StyleSheet.create({
           width:0,
           height:0,
         },
-        shadowOpacity:0.1,
-        shadowRadius:10,
+        shadowOpacity: 0.1,
+        shadowRadius: 10,
         elevation:5,
         backgroundColor:'#FFFFFF',
      
