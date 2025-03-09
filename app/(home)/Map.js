@@ -3,7 +3,6 @@ import {
   StyleSheet,
   Text,
   View,
-  ActivityIndicator,
   TouchableOpacity,
   Image,
   ScrollView,
@@ -18,6 +17,7 @@ import { GooglePlacesAutocomplete } from "react-native-google-places-autocomplet
 import moment from "moment";
 import { useLocalSearchParams } from "expo-router";
 import FontAwesome from "react-native-vector-icons/FontAwesome";
+import Loader from "../components/Loader/Loader";
 
 const API_KEY = "AIzaSyCFt2E-FGr2Xk7N9t_sgyuyxmAcfpF5-0U";
 const radius = 5000; // 5km
@@ -97,6 +97,7 @@ const Map = () => {
   }, [params.filter]);
 
   const fetchPetPlaces = async (lat, lng, type) => {
+    setLoading(true);
     const url = `https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=${lat},${lng}&radius=${radius}&type=${type}&keyword=pet&key=${API_KEY}`;
     try {
       const response = await fetch(url);
@@ -108,9 +109,11 @@ const Map = () => {
     } catch (error) {
       console.error("Error fetching pet places:", error);
     }
+    setLoading(false);
   };
 
   const fetchPlaceDetails = async (placeId) => {
+    setLoading(true);
     const url = `https://maps.googleapis.com/maps/api/place/details/json?place_id=${placeId}&fields=name,rating,formatted_phone_number,opening_hours,photos,formatted_address&key=${API_KEY}`;
     try {
       const response = await fetch(url);
@@ -160,6 +163,7 @@ const Map = () => {
     } catch (error) {
       console.error("Error fetching place details:", error);
     }
+    setLoading(false);
   };
 
   const recenterMap = () => {
@@ -169,6 +173,7 @@ const Map = () => {
   };
 
   const handleSearchResult = (data, details = null) => {
+    setLoading(true);
     setSearchResult({
       latitude: details.geometry.location.lat,
       longitude: details.geometry.location.lng,
@@ -195,16 +200,19 @@ const Map = () => {
       details.geometry.location.lng,
       selectedOptions.length > 0
         ? selectedOptions.join("|")
-        : filterValue || petOptions[0].type // Use default if filterValue is null/undefined
+        : filterValue || petOptions[0].type 
     );
+    setLoading(false);
   };
 
   const clearMarkers = () => {
     setPlaces([]);
     setSearchResult(null);
+    setSelectedOptions([]);
   };
 
   const handleConfirmSelection = () => {
+    setLoading(true);
     setIsPetOptionsVisible(false);
     if (selectedOptions.length > 0) {
       if(searchResult !== null){
@@ -221,6 +229,7 @@ const Map = () => {
         );
       }
     }
+    setLoading(false);
   };
 
   const handleToggleSelect = (option) => {
@@ -248,14 +257,8 @@ const Map = () => {
   return (
     <View style={styles.container}>
       {loading ? (
-        <ActivityIndicator
-          size="large"
-          color="#0000ff"
-          style={{
-            flex: 1,
-            justifyContent: "center",
-            alignContent: "center",
-          }}
+        <Loader
+          isLoad={loading}
         />
       ) : location ? (
         <>
