@@ -1,5 +1,5 @@
 import React from "react";
-import { Dimensions, ScrollView, Platform } from "react-native";
+import { Dimensions, ScrollView, View } from "react-native";
 import Banner from "../components/HomePage/Banner";
 import Categories from "../components/HomePage/Categories";
 import PetBanner from "../components/HomePage/PetBanner";
@@ -24,15 +24,14 @@ const Index = () => {
           marginTop: 20,
           backgroundColor: isDarkMode ? Colors.dark : Colors.secondary,
         }}
-        contentContainerStyle={{
-          height: Platform.OS === "ios" ? height * 1.25 : height * 2,
-        }}
       >
         <Banner />
         <Categories />
         <PetBanner />
         <RecentPets />
-        <PetTips />
+        <View style={{ paddingBottom: "30%" }}>
+          <PetTips />
+        </View>
       </ScrollView>
     </>
   );

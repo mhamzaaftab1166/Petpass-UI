@@ -200,7 +200,7 @@ const Map = () => {
       details.geometry.location.lng,
       selectedOptions.length > 0
         ? selectedOptions.join("|")
-        : filterValue || petOptions[0].type 
+        : filterValue || petOptions[0].type
     );
     setLoading(false);
   };
@@ -215,13 +215,13 @@ const Map = () => {
     setLoading(true);
     setIsPetOptionsVisible(false);
     if (selectedOptions.length > 0) {
-      if(searchResult !== null){
+      if (searchResult !== null) {
         fetchPetPlaces(
           searchResult.latitude,
           searchResult.longitude,
           selectedOptions.join("|")
         );
-      }else{
+      } else {
         fetchPetPlaces(
           location.latitude,
           location.longitude,
@@ -257,9 +257,7 @@ const Map = () => {
   return (
     <View style={styles.container}>
       {loading ? (
-        <Loader
-          isLoad={loading}
-        />
+        <Loader isLoad={loading} />
       ) : location ? (
         <>
           <MapView
@@ -298,19 +296,31 @@ const Map = () => {
               style={styles.iconButton}
               onPress={() => setIsPetOptionsVisible(true)}
             >
-              <FontAwesome5 name="ellipsis-v" size={24} color="black" />
+              <Image
+                source={require("../../assets/images/map/filterIcon.png")}
+                style={{ width: 50, height: 50 }}
+              />
             </TouchableOpacity>
             <TouchableOpacity style={styles.iconButton} onPress={recenterMap}>
-              <MaterialIcons name="my-location" size={32} color="black" />
+              <Image
+                source={require("../../assets/images/map/zoom.png")}
+                style={{ width: 50, height: 50 }}
+              />
             </TouchableOpacity>
             <TouchableOpacity
               style={styles.iconButton}
               onPress={() => setIsSearchModalVisible(true)}
             >
-              <FontAwesome5 name="search-location" size={32} color="black" />
+              <Image
+                source={require("../../assets/images/map/search.png")}
+                style={{ width: 50, height: 50 }}
+              />
             </TouchableOpacity>
             <TouchableOpacity style={styles.iconButton} onPress={clearMarkers}>
-              <MaterialIcons name="close" size={32} color="black" />
+              <Image
+                source={require("../../assets/images/map/close.png")}
+                style={{ width: 50, height: 50 }}
+              />
             </TouchableOpacity>
           </View>
 
