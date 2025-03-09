@@ -543,7 +543,6 @@ const styles = StyleSheet.create({
   iconRow: {
     position: "absolute",
     top: Platform.OS === "ios" ? 40 : 5,
-    right: 5,
     flexDirection: "row",
     justifyContent: "space-between",
     width: "100%",
