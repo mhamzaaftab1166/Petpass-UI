@@ -14,7 +14,6 @@ const { width, height } = Dimensions.get("screen");
 
 const Index = () => {
   const { isDarkMode } = useTheme();
-  console.log(isDarkMode, "isDarkMode");
 
   return (
     <>

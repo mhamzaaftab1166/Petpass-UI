@@ -18,6 +18,9 @@ import moment from "moment";
 import { useLocalSearchParams } from "expo-router";
 import FontAwesome from "react-native-vector-icons/FontAwesome";
 import Loader from "../components/Loader/Loader";
+import { Colors } from "../theme/color";
+import style from "../theme/style";
+import { useTheme } from "../helper/themeProvider";
 
 const API_KEY = "AIzaSyCFt2E-FGr2Xk7N9t_sgyuyxmAcfpF5-0U";
 const radius = 5000; // 5km
@@ -38,6 +41,7 @@ const petOptions = [
 ];
 
 const Map = () => {
+  const { isDarkMode } = useTheme();
   const [location, setLocation] = useState(null);
   const [loading, setLoading] = useState(true);
   const [places, setPlaces] = useState([]);
@@ -324,26 +328,55 @@ const Map = () => {
             </TouchableOpacity>
           </View>
 
-          {/* Pet Places search option drop down modal */}
           <Modal
             visible={isPetOptionsVisible}
             transparent={true}
             animationType="slide"
             onRequestClose={() => setIsPetOptionsVisible(false)}
           >
-            <View style={styles.dropdownModalContainer}>
-              <View style={styles.dropdownContent}>
+            <View style={[styles.dropdownModalContainer]}>
+              <View
+                style={[
+                  styles.dropdownContent,
+                  {
+                    backgroundColor: isDarkMode
+                      ? Colors.active
+                      : Colors.secondary,
+                  },
+                ]}
+              >
                 <View style={styles.modalHeader}>
                   {/* Back Arrow */}
                   <TouchableOpacity
                     onPress={() => setIsPetOptionsVisible(false)}
                   >
-                    <FontAwesome name="arrow-left" size={24} color="#000" />
+                    <MaterialIcons
+                      style={[
+                        {
+                          color: isDarkMode ? Colors.secondary : Colors.active,
+                          fontFamily: "Avenir-Regular",
+                        },
+                      ]}
+                      name="arrow-back"
+                      size={30}
+                      color="#000"
+                    />
                   </TouchableOpacity>
 
                   {/* OK Checkmark */}
                   <TouchableOpacity onPress={handleConfirmSelection}>
-                    <FontAwesome name="check" size={24} color="#000" />
+                    <Text
+                      style={[
+                        style.s16,
+                        {
+                          color: isDarkMode ? Colors.secondary : Colors.active,
+                          fontFamily: "Avenir-Regular",
+                          paddingTop: 10,
+                        },
+                      ]}
+                    >
+                      Search
+                    </Text>
                   </TouchableOpacity>
                 </View>
 
@@ -357,10 +390,33 @@ const Map = () => {
                     ]}
                     onPress={() => handleToggleSelect(option)}
                   >
-                    <Text style={styles.dropdownItemText}>
-                      {selectedOptions.includes(option.type) ? "✔ " : ""}{" "}
-                      {option.name}
-                    </Text>
+                    <View
+                      style={{ flexDirection: "row", alignItems: "center" }}
+                    >
+                      {selectedOptions.includes(option.type) && (
+                        <FontAwesome
+                          name="check"
+                          size={16}
+                          color="white"
+                          style={{ marginRight: 8 }}
+                        />
+                      )}
+                      <Text
+                        style={[
+                          styles.dropdownItemText,
+                          {
+                            color: isDarkMode
+                              ? Colors.secondary
+                              : Colors.active,
+                          },
+                          selectedOptions.includes(option.type)
+                            ? { color: "white" }
+                            : {},
+                        ]}
+                      >
+                        {option.name}
+                      </Text>
+                    </View>
                   </TouchableOpacity>
                 ))}
               </View>
@@ -369,8 +425,17 @@ const Map = () => {
 
           {/* BottomSheet for place details */}
           <BottomSheet modalProps={{}} isVisible={isVisible}>
-            <View style={styles.modalContainer}>
-              <View style={styles.modalContent}>
+            <View style={[styles.modalContainer]}>
+              <View
+                style={[
+                  styles.modalContent,
+                  {
+                    backgroundColor: isDarkMode
+                      ? Colors.active
+                      : Colors.secondary,
+                  },
+                ]}
+              >
                 {selectedPlace ? (
                   <>
                     <TouchableOpacity
@@ -381,25 +446,85 @@ const Map = () => {
                         setSelectedPlace(null);
                       }}
                     >
-                      <Text style={styles.closeText}>✕</Text>
+                      <Text
+                        style={
+                          (styles.closeText,
+                          {
+                            color: isDarkMode
+                              ? Colors.secondary
+                              : Colors.active,
+                          })
+                        }
+                      >
+                        ✕
+                      </Text>
                     </TouchableOpacity>
-                    <Text style={styles.placeName}>{selectedPlace.name}</Text>
+                    <Text
+                      style={[
+                        styles.placeName,
+                        {
+                          color: isDarkMode ? Colors.secondary : Colors.active,
+                          fontFamily: "Avenir-Bold",
+                        },
+                      ]}
+                    >
+                      {selectedPlace.name}
+                    </Text>
                     {selectedPlace.formatted_address && (
-                      <Text style={styles.placeDetails}>
+                      <Text
+                        style={[
+                          styles.placeDetails,
+                          {
+                            color: isDarkMode
+                              ? Colors.secondary
+                              : Colors.active,
+                            fontFamily: "Avenir-Regular",
+                          },
+                        ]}
+                      >
                         📍 {selectedPlace.formatted_address}
                       </Text>
                     )}
                     <TouchableOpacity style={styles.actionButton}>
-                      <Text style={styles.buttonText}>Instructions</Text>
+                      <Text
+                        style={[
+                          styles.buttonText,
+                          {
+                            color: Colors.secondary,
+
+                            fontFamily: "Avenir-Bold",
+                          },
+                        ]}
+                      >
+                        Instructions
+                      </Text>
                     </TouchableOpacity>
-                    <Text style={styles.placeDetails}>
+                    <Text
+                      style={[
+                        styles.placeDetails,
+                        {
+                          color: isDarkMode ? Colors.secondary : Colors.active,
+                          fontFamily: "Avenir-Regular",
+                        },
+                      ]}
+                    >
                       ⭐{" "}
                       {selectedPlace.rating
                         ? selectedPlace.rating + " Rating"
                         : "No rating"}
                     </Text>
                     {selectedPlace.formatted_phone_number && (
-                      <Text style={styles.placeDetails}>
+                      <Text
+                        style={[
+                          styles.placeDetails,
+                          {
+                            color: isDarkMode
+                              ? Colors.secondary
+                              : Colors.active,
+                            fontFamily: "Avenir-Regular",
+                          },
+                        ]}
+                      >
                         📞 {selectedPlace.formatted_phone_number}
                       </Text>
                     )}
@@ -408,16 +533,46 @@ const Map = () => {
                         <TouchableOpacity
                           onPress={() => setShowHours(!showHours)}
                         >
-                          <Text style={styles.placeDetails}>
+                          <Text
+                            style={[
+                              styles.placeDetails,
+                              {
+                                color: isDarkMode
+                                  ? Colors.secondary
+                                  : Colors.active,
+                                fontFamily: "Avenir-Regular",
+                              },
+                            ]}
+                          >
                             {todayStatus} ▼
                           </Text>
                         </TouchableOpacity>
                         {showHours &&
                           selectedPlace.opening_hours.weekday_text && (
-                            <View style={styles.openingHoursContainer}>
+                            <View
+                              style={[
+                                styles.openingHoursContainer,
+                                {
+                                  backgroundColor: isDarkMode
+                                    ? Colors.active
+                                    : Colors.secondary,
+                                },
+                              ]}
+                            >
                               {selectedPlace.opening_hours.weekday_text.map(
                                 (day, index) => (
-                                  <Text key={index} style={styles.placeDetails}>
+                                  <Text
+                                    key={index}
+                                    style={[
+                                      styles.placeDetails,
+                                      {
+                                        color: isDarkMode
+                                          ? Colors.secondary
+                                          : Colors.active,
+                                        fontFamily: "Avenir-Regular",
+                                      },
+                                    ]}
+                                  >
                                     {day}
                                   </Text>
                                 )
@@ -461,12 +616,28 @@ const Map = () => {
             onRequestClose={() => setIsSearchModalVisible(false)}
           >
             <View style={styles.searchModalContainer}>
-              <View style={styles.searchModalContent}>
+              <View
+                style={[
+                  styles.searchModalContent,
+                  {
+                    backgroundColor: isDarkMode
+                      ? Colors.active
+                      : Colors.secondary,
+                  },
+                ]}
+              >
                 <TouchableOpacity
                   style={styles.closeButton}
                   onPress={() => setIsSearchModalVisible(false)}
                 >
-                  <Text style={styles.closeText}>✕</Text>
+                  <Text
+                    style={[
+                      styles.closeText,
+                      { color: isDarkMode ? Colors.secondary : Colors.active },
+                    ]}
+                  >
+                    ✕
+                  </Text>
                 </TouchableOpacity>
                 <GooglePlacesAutocomplete
                   nearbyPlacesAPI="GooglePlacesSearch"
@@ -500,7 +671,16 @@ const Map = () => {
             source={require("../../assets/images/home/banner1.png")}
             style={styles.image}
           />
-          <Text style={styles.text}>No location available</Text>
+          <Text
+            style={[
+              styles.text,
+              {
+                backgrouncolor: isDarkMode ? Colors.secondary : Colors.active,
+              },
+            ]}
+          >
+            No location available
+          </Text>
         </View>
       )}
     </View>
@@ -536,7 +716,7 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
   },
   selectedItem: {
-    backgroundColor: "#d0f0c0", // Light green to indicate selection
+    backgroundColor: Colors.primary,
   },
   container: { flex: 1 },
   map: { flex: 1, borderRadius: 20 },
@@ -593,10 +773,11 @@ const styles = StyleSheet.create({
   dropdownItem: {
     padding: 15,
     borderBottomWidth: 1,
-    borderBottomColor: "#ccc",
+    borderBottomColor: Colors.border,
   },
   dropdownItemText: {
     fontSize: 16,
+    fontFamily: "Avenir-Regular",
   },
   closeButton: {
     position: "absolute",
@@ -645,8 +826,9 @@ const styles = StyleSheet.create({
 
 const autoComplete = {
   textInputContainer: {
-    backgroundColor: "rgba(0,0,0,0)",
-    width: "94%",
+    width: "100%",
+    paddingTop: 30,
+    fontFamily: "Avenir-Regular",
   },
   textInput: {
     marginLeft: 0,
@@ -654,12 +836,16 @@ const autoComplete = {
     height: 38,
     color: "#5d5d5d",
     fontSize: 18,
-    borderWidth: 2,
-    borderColor: "#ccc",
+    fontFamily: "Avenir-Regular",
     borderRadius: 5,
     paddingLeft: 10,
+
+    height: 50,
+    borderBottomWidth: 1,
+    borderBottomColor: Colors.border,
   },
   predefinedPlacesDescription: {
     color: "#1faadb",
+    fontFamily: "Avenir-Regular",
   },
 };
