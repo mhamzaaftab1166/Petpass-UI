@@ -8,6 +8,7 @@ import {
   ScrollView,
   Modal,
   Platform,
+  StatusBar,
 } from "react-native";
 import MapView, { Marker, PROVIDER_DEFAULT } from "react-native-maps";
 import * as Location from "expo-location";
@@ -260,6 +261,7 @@ const Map = () => {
 
   return (
     <View style={styles.container}>
+      <StatusBar barStyle={isDarkMode ? "light-content" : "dark-content"} />
       {loading ? (
         <Loader isLoad={loading} />
       ) : location ? (
@@ -320,11 +322,23 @@ const Map = () => {
                 style={{ width: 50, height: 50 }}
               />
             </TouchableOpacity>
-            <TouchableOpacity style={styles.iconButton} onPress={clearMarkers}>
-              <Image
-                source={require("../../assets/images/map/close.png")}
-                style={{ width: 50, height: 50 }}
-              />
+            <TouchableOpacity
+              style={[
+                styles.iconButton,
+                {
+                  borderRadius: 20,
+                  backgroundColor: "white",
+                  height: 50,
+                  marginTop: 12,
+                  alignItems: "center",
+                  justifyContent: "center",
+                },
+              ]}
+              onPress={clearMarkers}
+            >
+              <Text style={{ textAlign: "center", fontFamily: "Avenir-Bold" }}>
+                Clear Filters
+              </Text>
             </TouchableOpacity>
           </View>
 

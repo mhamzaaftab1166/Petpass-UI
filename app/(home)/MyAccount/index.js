@@ -6,6 +6,7 @@ import {
   TouchableOpacity,
   Image,
   ScrollView,
+  StatusBar,
 } from "react-native";
 import React, { useEffect } from "react";
 import { AppBar } from "@react-native-material/core";
@@ -57,6 +58,8 @@ export default function MyAccount() {
         { backgroundColor: isDarkMode ? Colors.active : Colors.secondary },
       ]}
     >
+      <StatusBar barStyle={isDarkMode ? "light-content" : "dark-content"} />
+
       <View
         style={[
           style.main,
@@ -66,7 +69,7 @@ export default function MyAccount() {
           },
         ]}
       >
-        <AppBar
+        {/* <AppBar
           color={isDarkMode ? Colors.active : Colors.secondary}
           elevation={0}
           trailing={
@@ -82,7 +85,7 @@ export default function MyAccount() {
               </TouchableOpacity>
             </View>
           }
-        />
+        /> */}
 
         <View
           style={{ flexDirection: "row", alignItems: "center", marginTop: 10 }}
@@ -93,12 +96,12 @@ export default function MyAccount() {
           >
             <Avatar.Image
               source={
-                user?.profile_picture
-                  ? { uri: user.profile_picture }
-                  : null
+                user?.profile_picture ? { uri: user.profile_picture } : null
               }
               style={{
-                backgroundColor: isDarkMode ? Colors.secondary : Colors.unSelect,
+                backgroundColor: isDarkMode
+                  ? Colors.secondary
+                  : Colors.unSelect,
               }}
             />
             <View style={{ marginLeft: 10 }}>
@@ -223,7 +226,7 @@ export default function MyAccount() {
             {
               name: "Notifications",
               icon: "Notifications",
-              route: "/MyAccount/screens/Notifications",
+              route: "/GeneralScreens/Notifications",
             },
             {
               name: "Settings",

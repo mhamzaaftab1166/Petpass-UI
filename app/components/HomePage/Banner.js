@@ -61,7 +61,7 @@ const Banner = () => {
         {/* Notification Icon */}
         <TouchableOpacity
           style={{ marginHorizontal: 10 }}
-          onPress={() => router.push("/MyAccount/screens/Notifications")}
+          onPress={() => router.push("/GeneralScreens/Notifications")}
         >
           <Icon
             name="notifications-outline"

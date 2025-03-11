@@ -6,6 +6,7 @@ import {
   Platform,
   Text,
   ScrollView,
+  StatusBar,
 } from "react-native";
 import React, { useCallback, useEffect, useState } from "react";
 import { AppBar } from "@react-native-material/core";
@@ -112,6 +113,7 @@ export default function Add() {
         { backgroundColor: isDarkMode ? Colors.active : Colors.secondary },
       ]}
     >
+       <StatusBar barStyle={isDarkMode ? "light-content" : "dark-content"} />
       <Loader isLoad={isLoading} />
       {!submitted ? (
         <KeyboardAvoidingView

@@ -17,6 +17,7 @@
         "NSPhotoLibraryUsageDescription": "This app needs access to your photo library to upload profile pictures.",
         "NSCameraUsageDescription": "This app needs access to your camera to take profile pictures.",
         "ITSAppUsesNonExemptEncryption": false
+
       },
       "config": {
         "googleMapsApiKey": "AIzaSyCFt2E-FGr2Xk7N9t_sgyuyxmAcfpF5-0U"

@@ -1,5 +1,5 @@
 import React from "react";
-import { Dimensions, ScrollView, View } from "react-native";
+import { Dimensions, ScrollView, StatusBar, View } from "react-native";
 import Banner from "../components/HomePage/Banner";
 import Categories from "../components/HomePage/Categories";
 import PetBanner from "../components/HomePage/PetBanner";
@@ -24,6 +24,7 @@ const Index = () => {
           backgroundColor: isDarkMode ? Colors.dark : Colors.secondary,
         }}
       >
+        <StatusBar barStyle={isDarkMode ? "light-content" : "dark-content"} />
         <Banner />
         <Categories />
         <PetBanner />
