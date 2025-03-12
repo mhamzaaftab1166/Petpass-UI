@@ -8,7 +8,12 @@ const getTipById = (id) => {
   return _axios("get", `/pet-tips/${id}`);
 };
 
+const getTips = () => {
+  return _axios("get", `/pet-tips`);
+};
+
 export default {
   getHomeData,
   getTipById,
+  getTips,
 };

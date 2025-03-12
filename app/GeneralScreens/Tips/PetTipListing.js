@@ -5,25 +5,88 @@ import {
   TouchableOpacity,
   Text,
   Dimensions,
+  ImageBackground,
 } from "react-native";
-import React, { useState } from "react";
+import React, { useCallback, useState } from "react";
 import style from "../../theme/style";
 import { Colors } from "../../theme/color";
 import Icon from "react-native-vector-icons/Ionicons";
 import { AppBar } from "@react-native-material/core";
 import { useTheme } from "../../helper/themeProvider";
-import { router } from "expo-router";
+import { router, useFocusEffect } from "expo-router";
+import homeService from "../../services/homeService";
+import Loader from "../../components/Loader/Loader";
 
 const width = Dimensions.get("screen").width;
 const height = Dimensions.get("screen").height;
 
 export default function PetListing() {
   const { isDarkMode } = useTheme();
+  const [tips, setTips] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
   const [selectedTab, setSelectedTab] = useState("All");
 
+  useFocusEffect(
+    useCallback(() => {
+      const fetchTips = async () => {
+        try {
+          setLoading(true);
+          setError(null);
+          const data = await homeService.getTips();
+          setTips(data);
+        } catch (err) {
+          setError(err.message);
+        } finally {
+          setLoading(false);
+        }
+      };
+      fetchTips();
+    }, [])
+  );
+
+  const truncateText = (text, maxLength) => {
+    return text.length > maxLength
+      ? text.substring(0, maxLength) + "..."
+      : text;
+  };
+
+  if (loading) return <Loader isLoad={loading} />;
+  if (error) return <Text>Error: {error}</Text>;
+
+  // Filter tips based on selected tab (convert both to lowercase before comparing)
+  const filteredTips =
+    selectedTab === "All"
+      ? tips
+      : tips.filter(
+          (tip) =>
+            tip.category &&
+            tip.category.toLowerCase() === selectedTab.toLowerCase()
+        );
+
+  // Group the tips into rows (2 per row)
+  const tipRows = filteredTips.reduce((rows, tip, index) => {
+    if (index % 2 === 0) {
+      rows.push([tip]);
+    } else {
+      rows[rows.length - 1].push(tip);
+    }
+    return rows;
+  }, []);
+
   return (
-    <SafeAreaView style={[style.area, { backgroundColor: Colors.secondary }]}>
-      <View style={[style.main, { backgroundColor: Colors.secondary }]}>
+    <SafeAreaView
+      style={[
+        style.area,
+        { backgroundColor: isDarkMode ? Colors.dark : Colors.secondary },
+      ]}
+    >
+      <View
+        style={[
+          style.main,
+          { backgroundColor: isDarkMode ? Colors.dark : Colors.secondary },
+        ]}
+      >
         <AppBar
           color={isDarkMode ? Colors.active : Colors.secondary}
           titleStyle={[
@@ -48,12 +111,12 @@ export default function PetListing() {
         <View
           style={{
             flexDirection: "row",
-            flexWrap: "wrap", // This ensures the buttons wrap to the next line
+            flexWrap: "wrap",
             justifyContent: "center",
             marginVertical: 20,
           }}
         >
-          {["All", "Dogs", "Cats", "Others"].map((tab) => (
+          {["All", "Dog", "Cat", "Fish"].map((tab) => (
             <TouchableOpacity
               key={tab}
               onPress={() => setSelectedTab(tab)}
@@ -61,14 +124,14 @@ export default function PetListing() {
                 paddingVertical: 10,
                 paddingHorizontal: 20,
                 borderRadius: 8,
-                flexBasis: "48%", // Makes each button take up about 48% of the width
+                flexBasis: "48%",
                 alignItems: "center",
                 justifyContent: "center",
                 borderWidth: 2,
                 borderColor: Colors.primary,
                 backgroundColor: selectedTab === tab ? Colors.primary : "white",
-                marginHorizontal: "1%", // Ensures space between buttons
-                marginBottom: 10, // Adds space between rows
+                marginHorizontal: "1%",
+                marginBottom: 10,
               }}
             >
               <Text
@@ -83,7 +146,65 @@ export default function PetListing() {
           ))}
         </View>
 
-        <ScrollView showsVerticalScrollIndicator={false}></ScrollView>
+        <ScrollView showsVerticalScrollIndicator={false}>
+          <View style={{ marginTop: 20 }}>
+            {tipRows.map((row, rowIndex) => (
+              <View
+                key={rowIndex}
+                style={{
+                  flexDirection: "row",
+                  justifyContent: "space-between",
+                  marginBottom: 16,
+                }}
+              >
+                {row.map((tip, colIndex) => (
+                  <TouchableOpacity
+                    onPress={() =>
+                      router.push(
+                        `/GeneralScreens/Tips/TipDetailPage?id=${tip?.id}`
+                      )
+                    }
+                    key={colIndex}
+                    style={{ width: width / 2.3 }}
+                  >
+                    <ImageBackground
+                      source={{ uri: tip.image }}
+                      resizeMode="cover"
+                      style={{ height: height / 5.8 }}
+                    />
+                    <Text
+                      numberOfLines={1}
+                      ellipsizeMode="tail"
+                      style={[
+                        style.b14,
+                        {
+                          color: isDarkMode ? Colors.secondary : Colors.active,
+                          marginTop: 10,
+                          paddingLeft: 2,
+                        },
+                      ]}
+                    >
+                      {truncateText(tip.title, 25)}
+                    </Text>
+                    <Text
+                      numberOfLines={2}
+                      ellipsizeMode="tail"
+                      style={[
+                        style.r14,
+                        {
+                          color: isDarkMode ? Colors.secondary : Colors.disable,
+                          gap: 3,
+                        },
+                      ]}
+                    >
+                      {truncateText(tip.overview, 60)}
+                    </Text>
+                  </TouchableOpacity>
+                ))}
+              </View>
+            ))}
+          </View>
+        </ScrollView>
       </View>
     </SafeAreaView>
   );
