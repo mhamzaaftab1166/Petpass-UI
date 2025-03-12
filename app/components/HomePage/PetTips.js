@@ -59,11 +59,11 @@ const PetTips = ({ tips = [] }) => {
                     )
                   }
                   key={colIndex}
-                  style={{ width: width / 2.3 }}
+                  style={{ width: width / 2.3, }}
                 >
                   <ImageBackground
                     source={{ uri: tip.image }}
-                    resizeMode="stretch"
+                    resizeMode="cover"
                     style={{ height: height / 5.8 }}
                   />
                   <Text
@@ -74,7 +74,7 @@ const PetTips = ({ tips = [] }) => {
                       {
                         color: isDarkMode ? Colors.secondary : Colors.active,
                         marginTop: 10,
-                        paddingLeft: 5,
+                        paddingLeft: 2,
                       },
                     ]}
                   >
@@ -87,7 +87,7 @@ const PetTips = ({ tips = [] }) => {
                       style.r14,
                       {
                         color: isDarkMode ? Colors.secondary : Colors.disable,
-                        paddingLeft: 5,
+                        paddingLeft: 2,
                       },
                     ]}
                   >

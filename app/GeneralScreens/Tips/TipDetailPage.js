@@ -76,11 +76,12 @@ export default function Post() {
             <Image
               source={{ uri: tip.image }}
               style={{
-                resizeMode: "stretch",
+                resizeMode: "cover",
                 height: height / 5,
                 width: width / 1.15,
                 alignSelf: "center",
                 width: "100%",
+                borderRadius:10
               }}
             />
           )}
