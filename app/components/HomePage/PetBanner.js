@@ -13,7 +13,7 @@ const PetBanner = () => {
   return (
     <View style={{ paddingVertical: 16, paddingHorizontal: 20 }}>
       <ImageBackground
-        source={require("../../../assets/images/home/adorable-animal-cat-1404819.png")}
+        source={require("../../../assets/images/home/petBanner.png")}
         style={styles.container}
         imageStyle={{ borderRadius: 10 }}
       >
@@ -35,7 +35,7 @@ const PetBanner = () => {
 
 const styles = StyleSheet.create({
   container: {
-    width: 350,
+    width: "100%",
     height: 321,
     borderRadius: 18,
     justifyContent: "flex-end",
@@ -44,9 +44,9 @@ const styles = StyleSheet.create({
   overlay: {
     backgroundColor: "rgba(0, 0, 0, 0.2)",
     borderRadius: 12,
-    borderBottomLeftRadius: 50,
+    borderBottomLeftRadius: 13,
     padding: 15,
-    width: 350,
+    width: "100%",
     height: 321,
   },
   title: {

@@ -6,8 +6,8 @@ import {
   View,
   Dimensions,
 } from "react-native";
-import { Avatar, Icon } from "react-native-paper";
-import {Colors} from "../../theme/color";
+import { Icon } from "react-native-paper";
+import { Colors } from "../../theme/color";
 import style from "../../theme/style";
 import Title from "../Title/Title";
 
@@ -34,7 +34,7 @@ const RecentPets = () => {
               resizeMode="stretch"
               style={{ width: width / 1.4, height: height / 5.8 }}
             >
-              <View
+              {/* <View
                 style={{
                   alignItems: "flex-end",
                   marginRight: 10,
@@ -47,7 +47,7 @@ const RecentPets = () => {
                   size={30}
                   style={{ backgroundColor: "#FFFFFF70" }}
                 ></Avatar.Icon>
-              </View>
+              </View> */}
               <View
                 style={{
                   justifyContent: "flex-end",
@@ -116,20 +116,6 @@ const RecentPets = () => {
               resizeMode="stretch"
               style={{ width: width / 1.4, height: height / 5.8 }}
             >
-              <View
-                style={{
-                  alignItems: "flex-end",
-                  marginRight: 10,
-                  marginTop: 10,
-                }}
-              >
-                <Avatar.Icon
-                  icon={"heart-outline"}
-                  color={Colors.active}
-                  size={30}
-                  style={{ backgroundColor: "#FFFFFF70" }}
-                ></Avatar.Icon>
-              </View>
               <View
                 style={{
                   justifyContent: "flex-end",
