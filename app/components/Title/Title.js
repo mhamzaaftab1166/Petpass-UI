@@ -12,12 +12,19 @@ const Title = ({ title, onClick, color = Colors.primary, size = "large", isLoad 
         flexDirection: "row",
         alignItems: "center",
         marginTop: 15,
-        paddingHorizontal: 20, 
+        paddingHorizontal: 20,
         justifyContent: "space-between",
       }}
     >
-      <Text style={[style.b18, { color: isDarkMode ? Colors.secondary : Colors.active }]}>{title}</Text>
-      <TouchableOpacity onPress={() => navigation.navigate("TopService")}>
+      <Text
+        style={[
+          style.b18,
+          { color: isDarkMode ? Colors.secondary : Colors.active },
+        ]}
+      >
+        {title}
+      </Text>
+      <TouchableOpacity onPress={onClick}>
         <Text style={[style.b12, { color: Colors.primary }]}>View All</Text>
       </TouchableOpacity>
     </View>

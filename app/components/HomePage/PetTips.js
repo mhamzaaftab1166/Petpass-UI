@@ -31,10 +31,13 @@ const PetTips = ({ tips = [] }) => {
       ? text.substring(0, maxLength) + "..."
       : text;
   };
+  const handleViewAllClick = () => {
+    router.push("/GeneralScreens/Tips/PetTipListing");
+  };
 
   return (
     <>
-      <Title title="Pet Tips" />
+      <Title title="Pet Tips" onClick={handleViewAllClick} />
       <View style={{ paddingHorizontal: 20, marginTop: 20 }}>
         {tips
           .reduce((rows, tip, index) => {
@@ -59,7 +62,7 @@ const PetTips = ({ tips = [] }) => {
                     )
                   }
                   key={colIndex}
-                  style={{ width: width / 2.3, }}
+                  style={{ width: width / 2.3 }}
                 >
                   <ImageBackground
                     source={{ uri: tip.image }}
@@ -87,7 +90,7 @@ const PetTips = ({ tips = [] }) => {
                       style.r14,
                       {
                         color: isDarkMode ? Colors.secondary : Colors.disable,
-                        paddingLeft: 2,
+                        gap: 3,
                       },
                     ]}
                   >

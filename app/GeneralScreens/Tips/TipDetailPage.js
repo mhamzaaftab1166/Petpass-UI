@@ -17,6 +17,7 @@ import { AppBar } from "@react-native-material/core";
 import homeService from "../../services/homeService";
 import Loader from "../../components/Loader/Loader";
 import { formatTipDate } from "../../utils/generalUtils";
+import { useTheme } from "../../helper/themeProvider";
 
 const width = Dimensions.get("screen").width;
 const height = Dimensions.get("screen").height;
@@ -27,6 +28,7 @@ export default function Post() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const router = useRouter();
+  const { isDarkMode } = useTheme();
 
   useFocusEffect(
     useCallback(() => {
@@ -46,29 +48,57 @@ export default function Post() {
     }, [id])
   );
 
-  if(loading)return <Loader isLoad={loading}/>
+  if (loading) return <Loader isLoad={loading} />;
 
   return (
-    <SafeAreaView style={[style.area, { backgroundColor: Colors.secondary }]}>
-      <View style={[style.main, { backgroundColor: Colors.secondary }]}>
+    <SafeAreaView
+      style={[
+        style.area,
+        { backgroundColor: isDarkMode ? Colors.dark : Colors.secondary },
+      ]}
+    >
+      <View
+        style={[
+          style.main,
+          { backgroundColor: isDarkMode ? Colors.dark : Colors.secondary },
+        ]}
+      >
         <AppBar
-          color={Colors.secondary}
+          color={isDarkMode ? Colors.active : Colors.secondary}
           elevation={0}
           leading={
             <TouchableOpacity onPress={() => router.back()}>
-              <Icon name="chevron-back" color={Colors.active} size={30} />
+              <Icon
+                name="chevron-back"
+                color={isDarkMode ? Colors.secondary : Colors.active}
+                size={30}
+              />
             </TouchableOpacity>
           }
         />
         <ScrollView showsVerticalScrollIndicator={false}>
-          <Text style={[style.title, { color: Colors.active, marginTop: 20 }]}>
+          <Text
+            style={[
+              style.title,
+              {
+                color: isDarkMode ? Colors.secondary : Colors.active,
+                marginTop: 20,
+              },
+            ]}
+          >
             {tip?.title}
           </Text>
           <Text style={[style.r14, { color: Colors.disable, marginTop: 10 }]}>
             {tip?.created_at ? formatTipDate(tip.created_at) : "Unknown time"}
           </Text>
           <Text
-            style={[style.r16, { color: Colors.active, marginVertical: 15 }]}
+            style={[
+              style.r16,
+              {
+                color: isDarkMode ? Colors.secondary : Colors.active,
+                marginVertical: 15,
+              },
+            ]}
           >
             {tip?.overview}
           </Text>
@@ -81,11 +111,19 @@ export default function Post() {
                 width: width / 1.15,
                 alignSelf: "center",
                 width: "100%",
-                borderRadius:10
+                borderRadius: 10,
               }}
             />
           )}
-          <Text style={[style.r16, { color: Colors.active, marginTop: 15 }]}>
+          <Text
+            style={[
+              style.r16,
+              {
+                color: isDarkMode ? Colors.secondary : Colors.active,
+                marginTop: 15,
+              },
+            ]}
+          >
             {tip?.description}
           </Text>
         </ScrollView>
