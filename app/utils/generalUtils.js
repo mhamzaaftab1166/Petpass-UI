@@ -115,3 +115,37 @@ export const formatUpdateVaccinationPayload = (
     ],
   };
 };
+
+// utils/dateUtils.js
+export const formatTipDate = (date) => {
+  const now = new Date();
+  const createdAt = new Date(date);
+  const diffInSeconds = Math.floor((now - createdAt) / 1000);
+
+  if (diffInSeconds < 60) {
+    return "Just now";
+  }
+
+  const diffInMinutes = Math.floor(diffInSeconds / 60);
+  if (diffInMinutes < 60) {
+    return `${diffInMinutes} min ago`;
+  }
+
+  const diffInHours = Math.floor(diffInMinutes / 60);
+  if (diffInHours < 24) {
+    return `${diffInHours} hr ago`;
+  }
+
+  const diffInDays = Math.floor(diffInHours / 24);
+  if (diffInDays < 30) {
+    return `${diffInDays} day(s) ago`;
+  }
+
+  const diffInMonths = Math.floor(diffInDays / 30);
+  if (diffInMonths < 12) {
+    return `${diffInMonths} month(s) ago`;
+  }
+
+  const diffInYears = Math.floor(diffInMonths / 12);
+  return `${diffInYears} year(s) ago`;
+};

@@ -1,161 +1,102 @@
 import React from "react";
-import {
-  ImageBackground,
-  ScrollView,
-  Text,
-  View,
-  Dimensions,
-} from "react-native";
+import { ImageBackground, Text, View, Dimensions } from "react-native";
 import { Colors } from "../../theme/color";
 import style from "../../theme/style";
 import Title from "../Title/Title";
 import { useTheme } from "../../helper/themeProvider";
+import { TouchableOpacity } from "react-native";
+import { router } from "expo-router";
 
-const PetTips = () => {
+const PetTips = ({ tips = [] }) => {
   const { width, height } = Dimensions.get("screen");
   const { isDarkMode } = useTheme();
+
+  if (tips.length < 1) {
+    return (
+      <View style={{ padding: 20, alignItems: "center" }}>
+        <Text
+          style={[
+            style.b14,
+            { color: isDarkMode ? Colors.secondary : Colors.active },
+          ]}
+        >
+          No Pet Tips Available
+        </Text>
+      </View>
+    );
+  }
+
+  const truncateText = (text, maxLength) => {
+    return text.length > maxLength
+      ? text.substring(0, maxLength) + "..."
+      : text;
+  };
 
   return (
     <>
       <Title title="Pet Tips" />
-      <View
-        style={{
-          flexDirection: "row",
-          alignItems: "center",
-          marginTop: 20,
-          paddingHorizontal: 20,
-        }}
-      >
-        <View style={{ flex: 1 }}>
-          <ImageBackground
-            source={require("../../../assets/images/t5.png")}
-            resizeMode="stretch"
-            style={{ height: height / 5.8 }}
-          ></ImageBackground>
-          <Text
-            style={[
-              style.b14,
-              {
-                color: isDarkMode ? Colors.secondary : Colors.active,
-                marginTop: 10,
-                paddingLeft: 5,
-              },
-            ]}
-          >
-            Mystery of cat’s food…
-          </Text>
-          <Text
-            style={[
-              style.r14,
-              {
-                color: isDarkMode ? Colors.secondary : Colors.disable,
-                paddingLeft: 5,
-              },
-            ]}
-          >
-            Lorem ipsum dolor sit amet consectets…
-          </Text>
-        </View>
-
-        <View style={{ margin: 8 }}></View>
-
-        <View style={{ flex: 1 }}>
-          <ImageBackground
-            source={require("../../../assets/images/t6.png")}
-            resizeMode="stretch"
-            style={{ height: height / 5.8 }}
-          ></ImageBackground>
-          <Text
-            style={[
-              style.b14,
-              {
-                color: isDarkMode ? Colors.secondary : Colors.active,
-                marginTop: 10,
-                paddingLeft: 5,
-              },
-            ]}
-          >
-            Tranning dogs at home
-          </Text>
-          <Text
-            style={[
-              style.r14,
-              {
-                color: isDarkMode ? Colors.secondary : Colors.disable,
-                paddingLeft: 5,
-              },
-            ]}
-          >
-            Lorem ipsum dolor sit amet consectets…
-          </Text>
-        </View>
-      </View>
-      <View
-        style={{ flexDirection: "row", marginTop: 16, paddingHorizontal: 20 }}
-      >
-        <View style={{ flex: 1 }}>
-          <ImageBackground
-            source={require("../../../assets/images/t7.png")}
-            resizeMode="stretch"
-            style={{ height: height / 5.8 }}
-          ></ImageBackground>
-          <Text
-            style={[
-              style.b14,
-              {
-                color: isDarkMode ? Colors.secondary : Colors.active,
-                marginTop: 10,
-                paddingLeft: 5,
-              },
-            ]}
-          >
-            Vaccination for cats…
-          </Text>
-          <Text
-            style={[
-              style.r14,
-              {
-                color: isDarkMode ? Colors.secondary : Colors.disable,
-                paddingLeft: 5,
-              },
-            ]}
-          >
-            Lorem ipsum dolor sit amet consectets…
-          </Text>
-        </View>
-
-        <View style={{ margin: 8 }}></View>
-
-        <View style={{ flex: 1 }}>
-          <ImageBackground
-            source={require("../../../assets/images/t8.png")}
-            resizeMode="stretch"
-            style={{ height: height / 5.8 }}
-          ></ImageBackground>
-          <Text
-            style={[
-              style.b14,
-              {
-                color: isDarkMode ? Colors.secondary : Colors.active,
-                marginTop: 10,
-                paddingLeft: 5,
-              },
-            ]}
-          >
-            Small pet sleep
-          </Text>
-          <Text
-            style={[
-              style.r14,
-              {
-                color: isDarkMode ? Colors.secondary : Colors.disable,
-                paddingLeft: 5,
-              },
-            ]}
-          >
-            Lorem ipsum dolor sit amet consectets…
-          </Text>
-        </View>
+      <View style={{ paddingHorizontal: 20, marginTop: 20 }}>
+        {tips
+          .reduce((rows, tip, index) => {
+            if (index % 2 === 0) rows.push([tip]);
+            else rows[rows.length - 1].push(tip);
+            return rows;
+          }, [])
+          .map((row, rowIndex) => (
+            <View
+              key={rowIndex}
+              style={{
+                flexDirection: "row",
+                justifyContent: "space-between",
+                marginBottom: 16,
+              }}
+            >
+              {row.map((tip, colIndex) => (
+                <TouchableOpacity
+                  onPress={() =>
+                    router.push(
+                      `/GeneralScreens/Tips/TipDetailPage?id=${tip?.id}`
+                    )
+                  }
+                  key={colIndex}
+                  style={{ width: width / 2.3 }}
+                >
+                  <ImageBackground
+                    source={{ uri: tip.image }}
+                    resizeMode="stretch"
+                    style={{ height: height / 5.8 }}
+                  />
+                  <Text
+                    numberOfLines={1}
+                    ellipsizeMode="tail"
+                    style={[
+                      style.b14,
+                      {
+                        color: isDarkMode ? Colors.secondary : Colors.active,
+                        marginTop: 10,
+                        paddingLeft: 5,
+                      },
+                    ]}
+                  >
+                    {truncateText(tip.title, 25)}{" "}
+                  </Text>
+                  <Text
+                    numberOfLines={2}
+                    ellipsizeMode="tail"
+                    style={[
+                      style.r14,
+                      {
+                        color: isDarkMode ? Colors.secondary : Colors.disable,
+                        paddingLeft: 5,
+                      },
+                    ]}
+                  >
+                    {truncateText(tip.overview, 60)}
+                  </Text>
+                </TouchableOpacity>
+              ))}
+            </View>
+          ))}
       </View>
     </>
   );
