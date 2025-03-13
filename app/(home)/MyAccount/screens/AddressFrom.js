@@ -248,7 +248,9 @@ export default function AddressFrom() {
 
               <AppMapLocationPicker name="location_url" />
 
+             <View style={{paddingBottom: 60}}>
               <SubmitButton title="SAVE" style={style} />
+              </View>
             </AppForm>
           </ScrollView>
         </View>

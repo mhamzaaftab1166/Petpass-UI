@@ -82,7 +82,7 @@ const PetTips = ({ tips = [], loading }) => {
                   <ImageBackground
                     source={{ uri: tip.image }}
                     resizeMode="cover"
-                    style={{ height: height / 5.8 }}
+                    style={{ height: height / 5.8, borderRadius: 10, overflow: 'hidden' }}
                   />
                   <Text
                     numberOfLines={1}
