@@ -31,23 +31,29 @@ export default function PetDetailPage() {
     pet,
     loading,
     fetchPetById,
+    fetchPublicPetById,
     singlePetError,
     singlePetErrorVisible,
     clearPets,
   } = usePetStore();
-  const { id } = useLocalSearchParams();
+  const { id, userId, isPublic } = useLocalSearchParams();
 
   const { isDarkMode } = useTheme();
   const router = useRouter();
 
   useFocusEffect(
     useCallback(() => {
-      fetchPetById(id);
+      if (isPublic) {
+        fetchPublicPetById(id, userId);
+      } else {
+        fetchPetById(id);
+      }
       return () => clearPets();
     }, [id])
   );
 
   if (loading) return <Loader isLoad={loading} />;
+
   return (
     <SafeAreaView
       style={[
@@ -60,40 +66,59 @@ export default function PetDetailPage() {
       <StatusBar backgroundColor="transparent" translucent={true} />
       <View>
         <ScrollView showsVerticalScrollIndicator={false}>
-          <Banner profileImg={pet?.pet_profile_picture} router={router} />
+          <Banner profileImg={pet?.pet_profile_picture} router={router} isPublic={isPublic} />
           <View
             style={[
               style.main,
               {
                 backgroundColor: isDarkMode ? Colors.active : Colors.secondary,
-                marginTop: 10,
+                marginTop: isPublic ? 0 : 10,
               },
             ]}
           >
-            <ProfileCompletionBar
-              router={router}
-              pet={pet}
-              value={pet?.pet_profile_completeion}
-            />
+            {!isPublic && (
+              <ProfileCompletionBar
+                router={router}
+                pet={pet}
+                value={pet?.pet_profile_completeion}
+              />
+            )}
             <View
-              style={[style.divider, { marginTop: 20, marginBottom: 10 }]}
+              style={[
+                style.divider,
+                { marginTop: isPublic ? 0 : 20, marginBottom: 10 },
+              ]}
             ></View>
             <Bio pet={pet} router={router} />
-            <About pet={pet} router={router} />
-            <Description router={router} title="Description" pet={pet} />
+            <About pet={pet} router={router} isEdit={isPublic ? false : true} />
+            <Description
+              router={router}
+              title="Description"
+              pet={pet}
+              isEdit={isPublic ? false : true}
+            />
             <PhotoGallery
+              isEdit={isPublic ? false : true}
               router={router}
               pet={pet}
               photos={pet?.pet_gallery?.images}
             />
             <VideoGallery
+              isEdit={isPublic ? false : true}
               pet={pet}
               router={router}
               videos={pet?.pet_gallery?.video}
             />
-            <VaccinationDetail pet={pet} router={router} />
-            <Passport pet={pet} router={router} />
+            {!isPublic && (
+              <VaccinationDetail
+                pet={pet}
+                router={router}
+                isEdit={isPublic ? false : true}
+              />
+            )}
+            {!isPublic && <Passport pet={pet} router={router} />}
           </View>
+          {isPublic && <View style={{ marginBottom: 20 }}></View>}
         </ScrollView>
       </View>
     </SafeAreaView>

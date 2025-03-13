@@ -20,19 +20,25 @@ import { formatDate } from "../../utils/generalUtils";
 
 const { width, height } = Dimensions.get("screen");
 
-const PetListingItem = ({ pet }) => {
+const PetListingItem = ({ pet, isPublic = false }) => {
   const router = useRouter();
   const { isDarkMode } = useTheme();
 
   return (
     <TouchableOpacity
-      onPress={() => router.push(`/PetDetails/PetDetailPage?id=${pet?.id}`)}
+      onPress={() =>
+        router.push(
+          isPublic
+            ? `/PetDetails/PetDetailPage?id=${pet?.id}&isPublic=true&userId=${pet.user_id}`
+            : `/PetDetails/PetDetailPage?id=${pet?.id}`
+        )
+      }
       style={styles.outerContainer}
     >
       <View style={styles.row}>
         <Image
           source={{ uri: pet?.pet_profile_picture }}
-          resizeMode="contain"
+          resizeMode="cover"
           style={styles.profileImage}
         />
 
@@ -129,7 +135,7 @@ const styles = StyleSheet.create({
     alignItems: "flex-start",
   },
   profileImage: {
-    resizeMode: "stretch",
+    resizeMode: "cover",
     height: 80,
     width: 80,
     borderRadius: 50,
@@ -146,14 +152,14 @@ const styles = StyleSheet.create({
   nameText: {
     fontFamily: "Avenir-Bold",
     textTransform: "capitalize",
-    width: 200,
+    width: 180,
   },
   genderContainer: {
     flexDirection: "row",
     alignItems: "center",
   },
   genderText: {
-    marginLeft: 4,
+    marginLeft: 1,
     fontSize: 14,
     fontFamily: "Avenir-Regular",
     textTransform: "capitalize",
@@ -172,7 +178,7 @@ const styles = StyleSheet.create({
     fontSize: 14,
     width: 200,
     fontFamily: "Avenir-Regular",
-    textTransform: "capitalize"
+    textTransform: "capitalize",
   },
   locationContainer: {
     flexDirection: "row",

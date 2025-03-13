@@ -55,7 +55,7 @@ const VideoItem = ({ videoUrl, onPress }) => {
   );
 };
 
-const VideoGallery = ({ videos = [], router, pet }) => {
+const VideoGallery = ({ videos = [], router, pet, isEdit }) => {
   const { isDarkMode } = useTheme();
   const formattedVideos = videos.map((videoObj) => videoObj.video_url);
   const totalVideos = formattedVideos.length;
@@ -97,7 +97,7 @@ const VideoGallery = ({ videos = [], router, pet }) => {
             })
           }
         >
-          <Image source={petEdit} style={{ width: 20, height: 20 }} />
+          {isEdit && <Image source={petEdit} style={{ width: 20, height: 20 }} />}
         </Pressable>
       </View>
       <View style={styles.container}>

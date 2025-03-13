@@ -17,7 +17,7 @@ import petEdit from "../../../assets/images/pets/petEdit.png";
 
 const { height, width } = Dimensions.get("window");
 
-const PhotoGallery = ({ photos = [], router, pet }) => {
+const PhotoGallery = ({ photos = [], router, pet, isEdit }) => {
   const { isDarkMode } = useTheme();
   const totalPhotos = photos.length;
   const remainingCount = totalPhotos > 4 ? totalPhotos - 3 : 0;
@@ -58,7 +58,7 @@ const PhotoGallery = ({ photos = [], router, pet }) => {
             })
           }
         >
-          <Image source={petEdit} style={{ width: 20, height: 20 }} />
+          {isEdit && <Image source={petEdit} style={{ width: 20, height: 20 }} />}
         </Pressable>
       </View>
 

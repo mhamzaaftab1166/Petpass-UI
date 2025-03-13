@@ -7,9 +7,8 @@ import petEdit from "../../../assets/images/pets/petEdit.png";
 import InfoItem from "../InfoItem/InfoItem";
 import BoxItem from "../BoxItem/BoxItem";
 
-const About = ({  router, pet }) => {
+const About = ({  router, pet, isEdit }) => {
   const { isDarkMode } = useTheme();
-  console.log(pet);
 
   return (
     <View style={{ marginTop: 20 }}>
@@ -33,7 +32,7 @@ const About = ({  router, pet }) => {
             })
           }
         >
-          <Image source={petEdit} style={{ width: 20, height: 20 }} />
+          {isEdit && <Image source={petEdit} style={{ width: 20, height: 20 }} />}
         </Pressable>
       </View>
 

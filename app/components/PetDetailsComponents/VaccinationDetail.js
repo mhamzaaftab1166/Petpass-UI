@@ -7,7 +7,7 @@ import { useTheme } from "../../helper/themeProvider";
 import BoxItem from "../BoxItem/BoxItem";
 import { formatDate } from "../../utils/generalUtils";
 
-const VaccinationDetail = ({ title = "Vaccination Record", router, pet }) => {
+const VaccinationDetail = ({ title = "Vaccination Record", router, pet, isEdit }) => {
   const { isDarkMode } = useTheme();
   return (
     <View style={{ marginTop: 20 }}>
@@ -37,7 +37,7 @@ const VaccinationDetail = ({ title = "Vaccination Record", router, pet }) => {
             })
           }
         >
-          <Image source={petEdit} style={{ width: 20, height: 20 }} />
+          {isEdit && <Image source={petEdit} style={{ width: 20, height: 20 }} />}
         </Pressable>
       </View>
       {pet?.vaccinations?.length > 0 ? (

@@ -84,7 +84,6 @@ export default function AboutEdit() {
         weight: values?.weight,
         description: petData?.description,
       };
-      console.log(payload, "jj");
 
       const res = await petServices.updatePetAbout(payload, petData?.id);
       setIsLoading(false);
