@@ -45,6 +45,7 @@ const PetTips = ({ tips = [], loading }) => {
       ? text.substring(0, maxLength) + "..."
       : text;
   };
+  
   const handleViewAllClick = () => {
     router.push("/GeneralScreens/Tips/PetTipListing");
   };

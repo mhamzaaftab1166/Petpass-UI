@@ -13,12 +13,12 @@ import { Colors } from "../../theme/color";
 
 const width = Dimensions.get("screen").width;
 const height = Dimensions.get("screen").height;
-const Banner = ({ router, profileImg }) => {
+const Banner = ({ router, profileImg, isPublic }) => {
   return (
     <View>
       <ImageBackground
         source={{ uri: profileImg }}
-        resizeMode="stretch"
+        resizeMode="cover"
         style={{ width, height: height / 3.2 }}
       >
         <AppBar
@@ -31,7 +31,7 @@ const Banner = ({ router, profileImg }) => {
           elevation={0}
           leading={
             <TouchableOpacity
-              onPress={() => router.replace("/MyAccount/screens/MyPets")}
+            onPress={() => isPublic ? router.back() : router.replace("/MyAccount/screens/MyPets")}
             >
               <Ionicons
                 name="chevron-back"

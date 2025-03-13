@@ -44,7 +44,9 @@ const Index = () => {
         <Banner />
         <Categories />
         <PetBanner />
-        <RecentPets />
+        <View style={{ paddingBottom: "5%" }}>
+        <RecentPets pets={homeData?.recent_pets} />
+        </View>
         <View style={{ paddingBottom: "30%" }}>
           <PetTips tips={homeData?.pet_tips} loading={loading} />
         </View>

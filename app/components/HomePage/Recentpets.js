@@ -5,17 +5,42 @@ import {
   Text,
   View,
   Dimensions,
+  TouchableOpacity,
 } from "react-native";
 import { Icon } from "react-native-paper";
 import { Colors } from "../../theme/color";
 import style from "../../theme/style";
 import Title from "../Title/Title";
+import { useTheme } from "../../helper/themeProvider";
+import { useRouter } from "expo-router";
 
-const RecentPets = () => {
+const RecentPets = ({ pets = [] }) => {
   const { width, height } = Dimensions.get("screen");
+  const { isDarkMode } = useTheme();
+  const router = useRouter()
+
+  if (pets?.length < 1) {
+    return (
+      <View style={{ padding: 20, alignItems: "center" }}>
+        <Text
+          style={[
+            style.b14,
+            { color: isDarkMode ? Colors.secondary : Colors.active },
+          ]}
+        >
+          No Recent Pets Available
+        </Text>
+      </View>
+    );
+  }
+
+   const handleViewAllClick = () => {
+      router.push("/GeneralScreens/RecentPets/recentPetsListing");
+    };
+
   return (
     <>
-      <Title title="Recent Pets" />
+      <Title title="Recent Pets" onClick={handleViewAllClick}/>
       <View style={{ paddingHorizontal: 20, marginTop: 16 }}>
         <ScrollView
           horizontal
@@ -27,154 +52,97 @@ const RecentPets = () => {
               flexDirection: "row",
               alignItems: "center",
               marginTop: 10,
+              gap: 16,
             }}
           >
-            <ImageBackground
-              source={require("../../../assets/images/d4.png")}
-              resizeMode="stretch"
-              style={{ width: width / 1.4, height: height / 5.8 }}
-            >
-              {/* <View
-                style={{
-                  alignItems: "flex-end",
-                  marginRight: 10,
-                  marginTop: 10,
-                }}
+            {pets.map((pet, index) => (
+              <TouchableOpacity
+                onPress={() => router.push(`/PetDetails/PetDetailPage?id=${pet?.id}&isPublic=true&userId=${pet.user_id}`)}
+                key={index}
               >
-                <Avatar.Icon
-                  icon={"heart-outline"}
-                  color={Colors.active}
-                  size={30}
-                  style={{ backgroundColor: "#FFFFFF70" }}
-                ></Avatar.Icon>
-              </View> */}
-              <View
-                style={{
-                  justifyContent: "flex-end",
-                  flex: 1,
-                  marginBottom: 10,
-                  marginHorizontal: 10,
-                }}
-              >
-                <View
+                <ImageBackground
+                  source={{ uri: pet.pet_profile_picture }}
+                  resizeMode="cover"
                   style={{
-                    flexDirection: "row",
-                    justifyContent: "space-between",
-                    alignItems: "center",
+                    width: width / 1.4,
+                    height: height / 5.8,
+                    borderRadius: 8,
+                    overflow: "hidden",
                   }}
                 >
-                  <View>
-                    <Text style={[style.b16, { color: Colors.secondary }]}>
-                      Tommy Leo
-                    </Text>
-                    <View
-                      style={{ flexDirection: "row", alignItems: "center" }}
-                    >
-                      <Icon name="star" color={"#FFCE00"} size={12}></Icon>
-                      <Icon name="star" color={"#FFCE00"} size={12}></Icon>
-                      <Icon name="star" color={"#FFCE00"} size={12}></Icon>
-                      <Icon
-                        name="star-outline"
-                        color={Colors.secondary}
-                        size={12}
-                      ></Icon>
-                      <Icon
-                        name="star-outline"
-                        color={Colors.secondary}
-                        size={12}
-                      ></Icon>
-                      <Text style={[style.b10, { color: Colors.secondary }]}>
-                        Cairn Terrier
-                      </Text>
-                    </View>
-                  </View>
                   <View
                     style={{
-                      flexDirection: "row",
-                      justifyContent: "space-between",
-                      alignItems: "center",
+                      justifyContent: "flex-end",
+                      flex: 1,
+                      marginBottom: 10,
+                      marginHorizontal: 10,
+                      borderRadius: 10,
                     }}
                   >
-                    <View style={{ alignItems: "flex-end" }}>
-                      <Text style={[style.b16, { color: Colors.secondary }]}>
-                        Dubai
-                      </Text>
-                      <Text style={[style.b10, { color: Colors.secondary }]}>
-                        {" "}
-                        Male
-                      </Text>
-                    </View>
-                  </View>
-                </View>
-              </View>
-            </ImageBackground>
-
-            <View style={{ margin: 7 }}></View>
-
-            <ImageBackground
-              source={require("../../../assets/images/d4.png")}
-              resizeMode="stretch"
-              style={{ width: width / 1.4, height: height / 5.8 }}
-            >
-              <View
-                style={{
-                  justifyContent: "flex-end",
-                  flex: 1,
-                  marginBottom: 10,
-                  marginHorizontal: 10,
-                }}
-              >
-                <View
-                  style={{
-                    flexDirection: "row",
-                    justifyContent: "space-between",
-                    alignItems: "center",
-                  }}
-                >
-                  <View>
-                    <Text style={[style.b16, { color: Colors.secondary }]}>
-                      Tommy Leo
-                    </Text>
                     <View
-                      style={{ flexDirection: "row", alignItems: "center" }}
+                      style={{
+                        flexDirection: "row",
+                        justifyContent: "space-between",
+                        alignItems: "center",
+                      }}
                     >
-                      <Icon name="star" color={"#FFCE00"} size={12}></Icon>
-                      <Icon name="star" color={"#FFCE00"} size={12}></Icon>
-                      <Icon name="star" color={"#FFCE00"} size={12}></Icon>
-                      <Icon
-                        name="star-outline"
-                        color={Colors.secondary}
-                        size={12}
-                      ></Icon>
-                      <Icon
-                        name="star-outline"
-                        color={Colors.secondary}
-                        size={12}
-                      ></Icon>
-                      <Text style={[style.b10, { color: Colors.secondary }]}>
-                        Cairn Terrier
-                      </Text>
+                      <View>
+                        <Text style={[style.b16, { color: Colors.secondary }]}>
+                          {pet?.pet_name.charAt(0).toUpperCase() +
+                            pet?.pet_name.slice(1)}
+                        </Text>
+                        <View
+                          style={{ flexDirection: "row", alignItems: "center" }}
+                        >
+                          <Icon name="star" color={"#FFCE00"} size={12}></Icon>
+                          <Icon name="star" color={"#FFCE00"} size={12}></Icon>
+                          <Icon name="star" color={"#FFCE00"} size={12}></Icon>
+                          <Icon
+                            name="star-outline"
+                            color={Colors.secondary}
+                            size={12}
+                          ></Icon>
+                          <Icon
+                            name="star-outline"
+                            color={Colors.secondary}
+                            size={12}
+                          ></Icon>
+                          <Text
+                            style={[style.b10, { color: Colors.secondary }]}
+                          >
+                            {pet.pet_breed.charAt(0).toUpperCase() +
+                              pet.pet_breed.slice(1)}
+                          </Text>
+                        </View>
+                      </View>
+                      <View
+                        style={{
+                          flexDirection: "row",
+                          justifyContent: "space-between",
+                          alignItems: "center",
+                        }}
+                      >
+                        <View style={{ alignItems: "flex-end" }}>
+                          <Text
+                            style={[style.b16, { color: Colors.secondary }]}
+                          >
+                            {pet?.color.charAt(0).toUpperCase() +
+                              pet.color.slice(1)}
+                          </Text>
+                          <Text
+                            style={[style.b10, { color: Colors.secondary }]}
+                          >
+                            {" "}
+                            {pet.gender.charAt(0).toUpperCase() +
+                              pet.gender.slice(1)}
+                          </Text>
+                        </View>
+                      </View>
                     </View>
                   </View>
-                  <View
-                    style={{
-                      flexDirection: "row",
-                      justifyContent: "space-between",
-                      alignItems: "center",
-                    }}
-                  >
-                    <View style={{ alignItems: "flex-end" }}>
-                      <Text style={[style.b16, { color: Colors.secondary }]}>
-                        Ajman
-                      </Text>
-                      <Text style={[style.b10, { color: Colors.secondary }]}>
-                        Male
-                      </Text>
-                    </View>
-                  </View>
-                </View>
-              </View>
-            </ImageBackground>
+                </ImageBackground>
+              </TouchableOpacity>
+            ))}
           </View>
         </ScrollView>
       </View>

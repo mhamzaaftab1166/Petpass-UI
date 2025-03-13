@@ -126,7 +126,7 @@ export default function TabLayout() {
       };
 
       checkToken();
-      const interval = setInterval(checkToken, 2 * 60 * 1000);
+      const interval = setInterval(checkToken, 1 * 60 * 1000);
 
       return () => {
         console.log("Screen is unfocused");

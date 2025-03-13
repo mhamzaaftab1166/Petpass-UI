@@ -5,7 +5,7 @@ import { Colors } from "../../theme/color";
 import petEdit from "../../../assets/images/pets/petEdit.png";
 import { useTheme } from "../../helper/themeProvider";
 
-const Description = ({ title = "Description", pet, router }) => {
+const Description = ({ title = "Description", pet, router, isEdit }) => {
   const { isDarkMode } = useTheme();
 
   return (
@@ -36,7 +36,7 @@ const Description = ({ title = "Description", pet, router }) => {
             })
           }
         >
-          <Image source={petEdit} style={{ width: 20, height: 20 }} />
+         {isEdit && <Image source={petEdit} style={{ width: 20, height: 20 }} />}
         </Pressable>
       </View>
       <Text

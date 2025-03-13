@@ -86,7 +86,6 @@ export const formatUpdateVaccinationPayload = (
   values,
   vaccinations
 ) => {
-  console.log(vaccinations, "kk");
 
   const formatDate = (date) =>
     date ? new Date(date).toISOString().split("T")[0] : "";

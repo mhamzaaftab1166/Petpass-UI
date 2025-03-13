@@ -8,6 +8,11 @@ const getPets = () => {
   return _axios("get", "/user-pets");
 };
 
+const getPublicPets = () => {
+  return _axios("get", "/live-pets");
+};
+
+
 const deletePets = (id) => {
   return _axios("delete", `/user-pets/${id}`);
 };
@@ -15,6 +20,12 @@ const deletePets = (id) => {
 const getPetById = (id) => {
   return _axios("get", `/user-pets/${id}`);
 };
+
+const getPublicPetById = (id, userId) => {
+  return _axios("get", `/user-pets/${id}/${userId}`);
+};
+
+
 
 const updatePetAbout = (payload, id) => {
   return _axios("put", `/user-pets/${id}`, payload, "multipart/form-data");
@@ -71,4 +82,6 @@ export default {
   getPetsTypes,
   getPetsBreeds,
   getPetsColor,
+  getPublicPets,
+  getPublicPetById,
 };
