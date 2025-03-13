@@ -18,8 +18,11 @@ function AppFormPicker({
     if (values.country && setState) {
       setState(values.country);
     }
-  }, [values.country, setState]);
-  
+    if ( values.pet_type && setState) {
+      setState(values.pet_type);
+    }
+  }, [values.country, values.pet_type, setState]);
+
   return (
     <>
       <AppPicker

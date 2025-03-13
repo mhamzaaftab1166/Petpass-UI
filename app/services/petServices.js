@@ -44,6 +44,18 @@ const deleteVideo = (vidid, petid) => {
   return _axios("delete", `/user-pets-video/${vidid}/${petid}`);
 };
 
+const getPetsTypes = () => {
+  return _axios("get", "/get-pet-types");
+};
+
+const getPetsBreeds = (type) => {
+  return _axios("get", `/get-pet-breeds/${type}`);
+};
+
+const getPetsColor = (type) => {
+  return _axios("get", `/get-pet-colors/${type}`);
+};
+
 export default {
   createUserPet,
   getPets,
@@ -56,4 +68,7 @@ export default {
   addVideos,
   deleteImage,
   deleteVideo,
+  getPetsTypes,
+  getPetsBreeds,
+  getPetsColor,
 };

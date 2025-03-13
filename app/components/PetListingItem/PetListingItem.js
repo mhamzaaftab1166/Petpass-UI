@@ -24,9 +24,6 @@ const PetListingItem = ({ pet }) => {
   const router = useRouter();
   const { isDarkMode } = useTheme();
 
-  console.log(pet, 'pet');
-  
-
   return (
     <TouchableOpacity
       onPress={() => router.push(`/PetDetails/PetDetailPage?id=${pet?.id}`)}
@@ -133,8 +130,8 @@ const styles = StyleSheet.create({
   },
   profileImage: {
     resizeMode: "stretch",
-    height: height / 12,
-    width: width / 5,
+    height: 80,
+    width: 80,
     borderRadius: 50,
   },
   infoContainer: {
@@ -157,10 +154,9 @@ const styles = StyleSheet.create({
   },
   genderText: {
     marginLeft: 4,
-    width: 38,
     fontSize: 14,
     fontFamily: "Avenir-Regular",
-    textTransform: "capitalize"
+    textTransform: "capitalize",
   },
   detailRow: {
     flexDirection: "row",

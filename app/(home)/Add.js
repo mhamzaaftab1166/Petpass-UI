@@ -30,6 +30,7 @@ import AppFormDatePicker from "../components/forms/AppFormDatePicker";
 import OnSuccess from "../components/OnSuccess/OnSuccess";
 import petServices from "../services/petServices";
 import { convertImageToBase64 } from "../utils/generalUtils";
+import AutoUpdateFields from "../components/forms/AutoUpdate";
 
 const validationSchema = Yup.object({
   pet_profile_picture: Yup.string().required().label("Pet Profile Image"),
@@ -53,7 +54,10 @@ export default function Add() {
   const [error, setError] = useState();
   const [errorVisible, setErrorVisible] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
-
+  const [petTypes, setPetTypes] = useState([]);
+  const [selectedPetType, setSelectedPetType] = useState("");
+  const [selectedPetBreedType, setSelectedPetBreedType] = useState("");
+  const [petColor, setPetColor] = useState("");
   const roles = {
     isOne: true,
     data: [
@@ -76,7 +80,6 @@ export default function Add() {
       const pet_profile_picture = await convertImageToBase64(
         values.pet_profile_picture
       );
-
       const payload = {
         pet_type: values.pet_type?.value || "",
         pet_name: values.pet_name || "",
@@ -106,6 +109,39 @@ export default function Add() {
       setSubmitted(false);
     }, [])
   );
+
+  useFocusEffect(
+    useCallback(() => {
+      const fetchTips = async () => {
+        try {
+          const data = await petServices.getPetsTypes();
+          setPetTypes(data?.pet_types);
+        } catch (err) {
+          console.log(err);
+        } finally {
+        }
+      };
+      fetchTips();
+    }, [])
+  );
+
+  useEffect(() => {
+    const fetchPetData = async () => {
+      try {
+        if (selectedPetType) {
+          const breedData = await petServices.getPetsBreeds(selectedPetType);
+          setSelectedPetBreedType(breedData?.pet_breeds);
+          const colorData = await petServices.getPetsColor(selectedPetType);
+          setPetColor(colorData?.pet_colors);
+        }
+      } catch (err) {
+        console.log(err);
+      } finally {
+      }
+    };
+    fetchPetData();
+  }, [selectedPetType]);
+
   return (
     <SafeAreaView
       style={[
@@ -113,7 +149,7 @@ export default function Add() {
         { backgroundColor: isDarkMode ? Colors.active : Colors.secondary },
       ]}
     >
-       <StatusBar barStyle={isDarkMode ? "light-content" : "dark-content"} />
+      <StatusBar barStyle={isDarkMode ? "light-content" : "dark-content"} />
       <Loader isLoad={isLoading} />
       {!submitted ? (
         <KeyboardAvoidingView
@@ -170,7 +206,11 @@ export default function Add() {
                 validationSchema={validationSchema}
               >
                 <AppErrorMessage error={error} visible={errorVisible} />
-                <AppFormImagePicker name="pet_profile_picture" pickerName="Pet Profile Picture" />
+                <AutoUpdateFields selectedPetType={selectedPetType} />
+                <AppFormImagePicker
+                  name="pet_profile_picture"
+                  pickerName="Pet Profile Picture"
+                />
                 <Text
                   style={[
                     style.subtitle,
@@ -220,19 +260,20 @@ export default function Add() {
                 />
 
                 <AppFormPicker
-                  items={[{ label: "Dog", value: "dog" }]}
+                  items={petTypes}
                   name={"pet_type"}
                   placeholder={"PET TYPE"}
+                  setState={(selected) => setSelectedPetType(selected.value)}
                 />
 
                 <AppFormPicker
-                  items={[{ label: "Dog", value: "dog" }]}
+                  items={selectedPetBreedType}
                   name={"pet_breed"}
                   placeholder={"PET BREED"}
                 />
 
                 <AppFormPicker
-                  items={[{ label: "Brown", value: "brown" }]}
+                  items={petColor}
                   name={"color"}
                   placeholder={"COLOUR"}
                 />
