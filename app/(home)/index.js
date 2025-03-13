@@ -31,8 +31,6 @@ const Index = () => {
       return () => clearHomeData();
     }, [])
   );
-
-  if (loading) return <Loader isLoad={loading} />;
   return (
     <>
       <ScrollView
@@ -42,14 +40,13 @@ const Index = () => {
           backgroundColor: isDarkMode ? Colors.dark : Colors.secondary,
         }}
       >
-        <Loader isLoad={loading} />
         <StatusBar barStyle={isDarkMode ? "light-content" : "dark-content"} />
         <Banner />
         <Categories />
         <PetBanner />
         <RecentPets />
         <View style={{ paddingBottom: "30%" }}>
-          <PetTips tips={homeData?.pet_tips} />
+          <PetTips tips={homeData?.pet_tips} loading={loading} />
         </View>
       </ScrollView>
     </>

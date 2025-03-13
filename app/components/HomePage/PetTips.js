@@ -7,9 +7,23 @@ import { useTheme } from "../../helper/themeProvider";
 import { TouchableOpacity } from "react-native";
 import { router } from "expo-router";
 
-const PetTips = ({ tips = [] }) => {
+const PetTips = ({ tips = [], loading }) => {
   const { width, height } = Dimensions.get("screen");
   const { isDarkMode } = useTheme();
+
+  if (loading)
+    return (
+      <View style={{ padding: 20, alignItems: "center" }}>
+        <Text
+          style={[
+            style.b14,
+            { color: isDarkMode ? Colors.secondary : Colors.active },
+          ]}
+        >
+          Loading Tips...
+        </Text>
+      </View>
+    );
 
   if (tips.length < 1) {
     return (
