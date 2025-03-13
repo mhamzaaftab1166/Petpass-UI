@@ -27,6 +27,7 @@ import Loader from "../../../components/Loader/Loader";
 import useUserStore from "../../../store/useUserStore";
 import useAddressStore from "../../../store/useAddressStore";
 import { getCitiesByCountry, getCountries } from "../../../utils/getRegions";
+import AppMapLocationPicker from "../../../components/forms/AppLocationPicker";
 
 const validationSchema = Yup.object({
   full_name: Yup.string().required().min(2).max(50),
@@ -35,6 +36,7 @@ const validationSchema = Yup.object({
   address_type: Yup.object().required(),
   country: Yup.object().required(),
   phone_number: Yup.string().required().min(8).max(15).label("Phone"),
+  location_url: Yup.string().required().label("Pin Location"),
 });
 
 export default function AddressFrom() {
@@ -86,7 +88,7 @@ export default function AddressFrom() {
       setCities(cities);
     }
   }, [country]);
-  
+
   const handleSubmit = async (values) => {
     const phoneParts = values.phone_number.split(" ");
     const countryCode = phoneParts[0];
@@ -98,7 +100,8 @@ export default function AddressFrom() {
       phone_number: phoneNumber,
       city: values.city.value,
       country: values.country.label,
-      address_type: values.address_type.value,
+      address_type: values?.address_type.value,
+      location_url: values?.location_url,
     };
 
     const formattedupdateValues = {
@@ -110,6 +113,7 @@ export default function AddressFrom() {
       city: values.city.value,
       country: values.country.label,
       address_type: values.address_type.value,
+      location_url: values?.location_url,
     };
 
     try {
@@ -141,7 +145,7 @@ export default function AddressFrom() {
   ];
   const matchingAddressType = addressTypes.find(
     (addressType) => addressType.value === singleAddress?.address_type
-  );  
+  );
 
   return (
     <SafeAreaView
@@ -205,6 +209,7 @@ export default function AddressFrom() {
                       value: singleAddress?.country,
                     }
                   : "",
+                location_url: isEdit ? singleAddress?.location_url : "",
               }}
               onSubmit={(values) => handleSubmit(values)}
               validationSchema={validationSchema}
@@ -240,6 +245,8 @@ export default function AddressFrom() {
                 name={"city"}
                 placeholder={"CITY"}
               />
+
+              <AppMapLocationPicker name="location_url" />
 
               <SubmitButton title="SAVE" style={style} />
             </AppForm>
