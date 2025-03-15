@@ -12,7 +12,7 @@ const AppFormImagePicker = ({ name, pickerName }) => {
         imageUri={values[name]}
         pickerName={pickerName}
         onSelectImage={(uri) => setFieldValue(name, uri)}
-      />
+      /> 
       <AppErrorMessage error={errors[name]} visible={touched[name]} />
     </>
   );

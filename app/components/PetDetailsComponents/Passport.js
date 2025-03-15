@@ -31,7 +31,7 @@ const Passport = ({ pet, router }) => {
         <Pressable
           onPress={() =>
             router.push({
-              pathname: "/PetDetails/PetEditForms/DescriptionEdit",
+              pathname: "/GeneralScreens/Passport/PassportDetails",
               params: { pet: JSON.stringify(pet) },
             })
           }
