@@ -10,7 +10,7 @@ import {
 import React, { useState } from "react";
 import { Colors } from "../../theme/color";
 import style from "../../theme/style";
-import { useRouter } from "expo-router";
+import { useLocalSearchParams, useRouter } from "expo-router";
 import AppTitle from "../../components/AppTitle/AppTitle";
 import AppForm from "../../components/forms/AppForm";
 import * as Yup from "yup";
@@ -31,12 +31,15 @@ export default function Login() {
   const [error, setError] = useState();
   const [errorVisible, setErrorVisible] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+  const { pet } = useLocalSearchParams();
+  const petData = pet ? JSON.parse(pet) : null;
 
-  const handleSubmit = async (userInfo) => {
+  const handleSubmit = async (info) => {
+    const { passport } = info;
+    console.log(passport);
+
     try {
-        console.log(userInfo);
-        
-    //   setIsLoading(true);
+      //   setIsLoading(true);
       //   router.replace("(home)");
     } catch (error) {
       setErrorVisible(true);
