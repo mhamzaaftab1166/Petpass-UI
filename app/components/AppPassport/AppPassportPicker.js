@@ -180,11 +180,12 @@ const styles = StyleSheet.create({
     height: 400,
     width: "100%",
     overflow: "hidden",
-    marginTop: 10,
+    marginTop: 30,
   },
   image: {
     width: "100%",
     height: "100%",
+    marginTop: 20
   },
   placeholderText: {
     color: Colors.placeholder || "#aaa",
@@ -192,7 +193,7 @@ const styles = StyleSheet.create({
   },
   titleText: {
     fontSize: 16,
-    fontWeight: "bold",
+    fontFamily:"Avenir-Bold",
     color: Colors.primary,
   },
   buttonContainer: {
@@ -203,10 +204,10 @@ const styles = StyleSheet.create({
     marginTop: 10,
   },
   optionButton: {
-    backgroundColor: Colors.primary,
+    backgroundColor: Colors.active,
     paddingVertical: 10,
     paddingHorizontal: 15,
-    borderRadius: 5,
+    borderRadius: 12,
     marginHorizontal: 5,
     textAlign: "center",
     width: "30%",
@@ -215,6 +216,7 @@ const styles = StyleSheet.create({
     color: "#fff",
     fontSize: 14,
     textAlign: "center",
+    fontFamily:"Avenir-Regular"
   },
   loaderContainer: {
     marginTop: 10,

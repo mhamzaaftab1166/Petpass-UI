@@ -67,6 +67,10 @@ const getPetsColor = (type) => {
   return _axios("get", `/get-pet-colors/${type}`);
 };
 
+const addPassport = (payload) => {
+  return _axios("post", "/user-pet-passport", payload, "multipart/form-data");
+};
+
 export default {
   createUserPet,
   getPets,
@@ -84,4 +88,5 @@ export default {
   getPetsColor,
   getPublicPets,
   getPublicPetById,
+  addPassport
 };

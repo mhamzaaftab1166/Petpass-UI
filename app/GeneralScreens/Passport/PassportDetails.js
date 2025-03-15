@@ -18,6 +18,9 @@ import SubmitButton from "../../components/forms/SubmitButton";
 import AppErrorMessage from "../../components/forms/AppErrorMessage";
 import AppFormPassportPicker from "../../components/forms/AppFormPassportPicker";
 import { useTheme } from "../../helper/themeProvider";
+import petServices from "../../services/petServices";
+import * as FileSystem from "expo-file-system";
+import Loader from "../../components/Loader/Loader";
 
 const width = Dimensions.get("screen").width;
 const height = Dimensions.get("screen").height;
@@ -34,13 +37,52 @@ export default function Login() {
   const { pet } = useLocalSearchParams();
   const petData = pet ? JSON.parse(pet) : null;
 
+  console.log(petData, 'petData');
+  
+
   const handleSubmit = async (info) => {
     const { passport } = info;
-    console.log(passport);
+    console.log(passport, 'pass');
+    let fileUri = passport
+
+    if (!fileUri) {
+      console.error("No file URI found");
+      return;
+    }
+  
+    if (fileUri.startsWith("content://")) {
+      const fileName = `passport_${Date.now()}.jpg`;
+      const newPath = `${FileSystem.cacheDirectory}${fileName}`;
+      try {
+        await FileSystem.copyAsync({
+          from: fileUri,
+          to: newPath,
+        });
+        fileUri = newPath;
+      } catch (error) {
+        console.error("Failed to copy file from content URI:", error);
+        return;
+      }
+    }
+
 
     try {
-      //   setIsLoading(true);
-      //   router.replace("(home)");
+      const base64 = await FileSystem.readAsStringAsync(fileUri, {
+        encoding: FileSystem.EncodingType.Base64,
+      });
+  
+      const payload = {
+        pet_id: petData?.id,
+        passport: `data:image/jpeg;base64,${base64}`,
+      };
+  
+      console.log(petData, 'petData');
+        setIsLoading(true);
+        const res = await petData.pet_passport[0].id ? null : petServices.addPassport(payload)
+        console.log(res, 'res');
+        
+
+        // router.replace("(home)");
     } catch (error) {
       setErrorVisible(true);
       setError(error.message);
@@ -63,7 +105,7 @@ export default function Login() {
         behavior={Platform.OS === "ios" ? "padding" : undefined}
         style={{ flex: 1 }}
       >
-        {/* <Loader isLoad={isLoading} /> */}
+        <Loader isLoad={isLoading} />
         <View style={{ flex: 1, marginHorizontal: 20 }}>
           <ScrollView showsVerticalScrollIndicator={false}>
             <AppForm
