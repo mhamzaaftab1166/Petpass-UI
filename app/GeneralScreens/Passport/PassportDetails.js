@@ -78,10 +78,8 @@ export default function Login() {
   
       console.log(petData, 'petData');
         setIsLoading(true);
-        const res = await petData.pet_passport[0].id ? null : petServices.addPassport(payload)
+        const res = await petData.pet_passport[0].id ? petServices.updatePassport(payload, petData.id) : petServices.addPassport(payload)
         console.log(res, 'res');
-        
-
         // router.replace("(home)");
     } catch (error) {
       setErrorVisible(true);
