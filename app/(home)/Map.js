@@ -9,6 +9,7 @@ import {
   Modal,
   Platform,
   StatusBar,
+  Linking,
 } from "react-native";
 import MapView, { Marker, PROVIDER_DEFAULT } from "react-native-maps";
 import * as Location from "expo-location";
@@ -22,6 +23,7 @@ import Loader from "../components/Loader/Loader";
 import { Colors } from "../theme/color";
 import style from "../theme/style";
 import { useTheme } from "../helper/themeProvider";
+import AppAlert from "../components/AppAlert";
 
 const API_KEY = "AIzaSyCFt2E-FGr2Xk7N9t_sgyuyxmAcfpF5-0U";
 const radius = 5000; // 5km
@@ -40,6 +42,9 @@ const petOptions = [
   { id: 6, name: "Pet-Walking", type: "pet_walking_area" },
   { id: 7, name: "Pet-Friendly Hotels", type: "pet_friendly_hotels" },
 ];
+ const handlePermissionRequest = async () => {
+    await Linking.openSettings();
+  };
 
 const Map = () => {
   const { isDarkMode } = useTheme();
@@ -681,20 +686,15 @@ const Map = () => {
         </>
       ) : (
         <View style={styles.noLocationContainer}>
-          <Image
-            source={require("../../assets/images/home/banner1.png")}
-            style={styles.image}
+          <AppAlert
+            showAlert={true}
+            title="Location Permission Needed"
+            message="This feature requires access to your location. Please enable location services in your device settings."
+            closeOnTouchOutside={false}
+            showConfirmButton={true}
+            confirmText="Access"
+            onConfirmPressed={handlePermissionRequest}
           />
-          <Text
-            style={[
-              styles.text,
-              {
-                backgrouncolor: isDarkMode ? Colors.secondary : Colors.active,
-              },
-            ]}
-          >
-            No location available
-          </Text>
         </View>
       )}
     </View>
