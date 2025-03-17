@@ -36,8 +36,6 @@ export default function Login() {
   const [isLoading, setIsLoading] = useState(false);
   const { pet } = useLocalSearchParams();
   const petData = pet ? JSON.parse(pet) : null;
-
-  console.log(petData, 'petData');
   
 
   const handleSubmit = async (info) => {
@@ -65,7 +63,6 @@ export default function Login() {
       }
     }
 
-
     try {
       const base64 = await FileSystem.readAsStringAsync(fileUri, {
         encoding: FileSystem.EncodingType.Base64,
@@ -73,21 +70,23 @@ export default function Login() {
   
       const payload = {
         pet_id: petData?.id,
+        pet_passport_id : petData?.pet_passport?.id || null,
         passport: `data:image/jpeg;base64,${base64}`,
       };
-  
-      console.log(petData, 'petData');
         setIsLoading(true);
-        const res = await petData.pet_passport[0].id ? petServices.updatePassport(payload, petData.id) : petServices.addPassport(payload)
-        console.log(res, 'res');
-        // router.replace("(home)");
-    } catch (error) {
+        const res = await petServices.addPassport(payload)
+        if(res.message === "Pet Passport saved successfully."){
+          setIsLoading(false);
+          router.replace(`/PetDetails/PetDetailPage?id=${petData?.id}`);
+        }
+      } catch (error) {
       setErrorVisible(true);
       setError(error.message);
     } finally {
       setIsLoading(false);
     }
   };
+  
 
   return (
     <SafeAreaView
