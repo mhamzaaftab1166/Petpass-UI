@@ -31,6 +31,8 @@ const Index = () => {
       return () => clearHomeData();
     }, [])
   );
+
+  if(loading) return <Loader isLoad={loading}/>
   return (
     <>
       <ScrollView

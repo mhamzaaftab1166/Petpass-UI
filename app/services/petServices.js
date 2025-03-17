@@ -26,7 +26,6 @@ const getPublicPetById = (id, userId) => {
 };
 
 
-
 const updatePetAbout = (payload, id) => {
   return _axios("put", `/user-pets/${id}`, payload, "multipart/form-data");
 };
