@@ -37,6 +37,7 @@ export default function PetDetailPage() {
     clearPets,
   } = usePetStore();
   const { id, userId, isPublic } = useLocalSearchParams();
+console.log(pet);
 
   const { isDarkMode } = useTheme();
   const router = useRouter();

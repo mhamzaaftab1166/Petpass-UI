@@ -78,7 +78,7 @@
     "react-native-swipe-list-view": "^3.2.9",
     "react-native-swiper": "^1.6.0",
     "react-native-web": "~0.19.13",
-    "react-native-webview": "13.12.5",
+    "react-native-webview": "^13.13.4",
     "rn-wave-bottom-bar": "^2.2.36",
     "uuid": "^11.1.0",
     "yup": "^1.6.1",
