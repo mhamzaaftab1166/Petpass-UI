@@ -13,34 +13,54 @@ import style from "../../theme/style";
 import Title from "../Title/Title";
 import { useTheme } from "../../helper/themeProvider";
 import { useRouter } from "expo-router";
+import AppSkeleton from "../AppSkeleton";
 
-const RecentPets = ({ pets = [] }) => {
+const RecentPets = ({ pets = [], isLoading }) => {
   const { width, height } = Dimensions.get("screen");
   const { isDarkMode } = useTheme();
-  const router = useRouter()
+  const router = useRouter();
 
-  if (pets?.length < 1) {
+  if (isLoading) {
     return (
-      <View style={{ padding: 20, alignItems: "center" }}>
-        <Text
-          style={[
-            style.b14,
-            { color: isDarkMode ? Colors.secondary : Colors.active },
-          ]}
-        >
-          No Recent Pets Available
-        </Text>
-      </View>
+      <>
+        <Title title="Recent Pets" onClick={handleViewAllClick} />
+        <View style={{ paddingHorizontal: 20, marginTop: 16 }}>
+          <ScrollView
+            horizontal
+            showsHorizontalScrollIndicator={false}
+            nestedScrollEnabled={true}
+          >
+            <View
+              style={{
+                flexDirection: "row",
+                alignItems: "center",
+                marginTop: 10,
+                gap: 16,
+              }}
+            >
+              {[...Array(3)].map((_, index) => (
+                <AppSkeleton
+                  key={index}
+                  width={width / 1.4}
+                  height={height / 5.8}
+                  borderRadius={8}
+                />
+              ))}
+            </View>
+          </ScrollView>
+        </View>
+      </>
     );
   }
+  
 
-   const handleViewAllClick = () => {
-      router.push("/GeneralScreens/RecentPets/recentPetsListing");
-    };
+  const handleViewAllClick = () => {
+    router.push("/GeneralScreens/RecentPets/recentPetsListing");
+  };
 
   return (
     <>
-      <Title title="Recent Pets" onClick={handleViewAllClick}/>
+      <Title title="Recent Pets" onClick={handleViewAllClick} />
       <View style={{ paddingHorizontal: 20, marginTop: 16 }}>
         <ScrollView
           horizontal
@@ -57,7 +77,11 @@ const RecentPets = ({ pets = [] }) => {
           >
             {pets.map((pet, index) => (
               <TouchableOpacity
-                onPress={() => router.push(`/PetDetails/PetDetailPage?id=${pet?.id}&isPublic=true&userId=${pet.user_id}`)}
+                onPress={() =>
+                  router.push(
+                    `/PetDetails/PetDetailPage?id=${pet?.id}&isPublic=true&userId=${pet.user_id}`
+                  )
+                }
                 key={index}
               >
                 <ImageBackground

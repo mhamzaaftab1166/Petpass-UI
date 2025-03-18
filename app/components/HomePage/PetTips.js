@@ -6,6 +6,7 @@ import Title from "../Title/Title";
 import { useTheme } from "../../helper/themeProvider";
 import { TouchableOpacity } from "react-native";
 import { router } from "expo-router";
+import AppSkeleton from "../AppSkeleton";
 
 const PetTips = ({ tips = [], loading }) => {
   const { width, height } = Dimensions.get("screen");
@@ -13,16 +14,19 @@ const PetTips = ({ tips = [], loading }) => {
 
   if (loading)
     return (
-      <View style={{ padding: 20, alignItems: "center" }}>
-        <Text
-          style={[
-            style.b14,
-            { color: isDarkMode ? Colors.secondary : Colors.active },
-          ]}
-        >
-          Loading Tips...
-        </Text>
+      <>
+      <Title title="Pet Tips" onClick={handleViewAllClick} />
+      <View style={{ paddingHorizontal: 20, marginTop: 20, flexDirection: 'row', justifyContent: "space-between", marginBottom: 16, }}>
+      {[...Array(2)].map((_, index) => (
+        <View key={index}>
+        <AppSkeleton  width={width / 2.3} height={height / 5.8} borderRadius={10}/>
+        <AppSkeleton width={width / 2.3} height={20}/>
+        <AppSkeleton width={width / 2.3} height={20}/>
+        <AppSkeleton width={width / 2.3} height={20}/>
+        </View>
+      ))}
       </View>
+      </>
     );
 
   if (tips.length < 1) {

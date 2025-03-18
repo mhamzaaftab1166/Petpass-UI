@@ -22,12 +22,19 @@ import AppErrorMessage from "../../components/forms/AppErrorMessage";
 import AppAlert from "../../components/AppAlert/index";
 import NoItem from "../../components/NoItem/NoItem";
 import { useFocusEffect } from "expo-router";
+import PetListingSkeletonCard from "../../components/SkeletonCards/PetListingCards";
 
 const { width, height } = Dimensions.get("screen");
 
 export default function RecentPetListing({ isDelete = true }) {
-  const { publicPets, loading, petError, petErrorVisible, fetchPublicPets, clearPets } =
-    usePetStore();
+  const {
+    publicPets,
+    loading,
+    petError,
+    petErrorVisible,
+    fetchPublicPets,
+    clearPets,
+  } = usePetStore();
   const [isloading, setIsLoading] = useState(false);
   const [delError, setDelError] = useState();
   const [delErrorVisible, setDelErrorVisible] = useState(false);
@@ -94,7 +101,7 @@ export default function RecentPetListing({ isDelete = true }) {
         { backgroundColor: isDarkMode ? Colors.active : Colors.secondary },
       ]}
     >
-      <Loader isLoad={loading || isloading} />
+      <Loader isLoad={isloading} />
       <View
         style={[
           style.main,
@@ -127,7 +134,13 @@ export default function RecentPetListing({ isDelete = true }) {
           error={petError || delError}
           visible={petErrorVisible || delErrorVisible}
         />
-        {publicPets?.length > 0 ? (
+        {loading ? (
+          <>
+            {[...Array(3)].map((_, index) => (
+              <PetListingSkeletonCard key={index} />
+            ))}
+          </>
+        ) : publicPets?.length > 0 ? (
           <SwipeListView
             data={publicPets}
             renderItem={renderItem}

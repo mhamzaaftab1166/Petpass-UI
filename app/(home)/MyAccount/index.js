@@ -27,7 +27,7 @@ import style from "../../theme/style";
 import { useRouter } from "expo-router";
 import { useUserStore } from "../../store/useStore";
 import { useTheme } from "../../helper/themeProvider";
-import Loader from "../../components/Loader/Loader";
+import AppSkeleton from "../../components/AppSkeleton";
 
 const { width, height } = Dimensions.get("screen");
 
@@ -48,9 +48,6 @@ export default function MyAccount() {
     "Log Out": isDarkMode ? logoutDark : logoutIcon,
   };
 
-  if (loading) {
-    return <Loader isLoad={loading} />;
-  }
   return (
     <SafeAreaView
       style={[
@@ -92,43 +89,57 @@ export default function MyAccount() {
         >
           <TouchableOpacity
             style={{ flexDirection: "row", alignItems: "center" }}
-            onPress={() => router.push("/MyAccount/screens/ProfileInfo")}
+            onPress={() => loading ? null : router.push("/MyAccount/screens/ProfileInfo")}
           >
-            <Avatar.Image
-              source={
-                user?.profile_picture ? { uri: user.profile_picture } : null
-              }
-              style={{
-                backgroundColor: isDarkMode
-                  ? Colors.secondary
-                  : Colors.unSelect,
-              }}
-            />
-            <View style={{ marginLeft: 10 }}>
-              <Text
-                style={[
-                  style.apptitle,
-                  { color: isDarkMode ? Colors.secondary : Colors.active },
-                ]}
-              >
-                {user?.username}
-              </Text>
-              <Text
-                style={[
-                  style.r14,
-                  { color: isDarkMode ? Colors.secondary : Colors.lable },
-                ]}
-              >
-                {user?.email}
-              </Text>
-            </View>
-            <View style={{ alignItems: "flex-end", flex: 1 }}>
-              <Ionicons
-                name="chevron-forward"
-                size={20}
-                color={isDarkMode ? Colors.secondary : Colors.lable}
+            {loading ? (
+              <AppSkeleton width={66} height={66} borderRadius={50} />
+            ) : (
+              <Avatar.Image
+                source={
+                  user?.profile_picture ? { uri: user.profile_picture } : null
+                }
+                style={{
+                  backgroundColor: isDarkMode
+                    ? Colors.secondary
+                    : Colors.unSelect,
+                }}
               />
+            )}
+            <View style={{ marginLeft: 10 }}>
+              {loading ? (
+                <AppSkeleton width={220} height={20} />
+              ) : (
+                <Text
+                  style={[
+                    style.apptitle,
+                    { color: isDarkMode ? Colors.secondary : Colors.active },
+                  ]}
+                >
+                  {user?.username}
+                </Text>
+              )}
+              {loading ? (
+                <AppSkeleton width={160} height={14} />
+              ) : (
+                <Text
+                  style={[
+                    style.r14,
+                    { color: isDarkMode ? Colors.secondary : Colors.lable },
+                  ]}
+                >
+                  {user?.email}
+                </Text>
+              )}
             </View>
+            {!loading && (
+              <View style={{ alignItems: "flex-end", flex: 1 }}>
+                <Ionicons
+                  name="chevron-forward"
+                  size={20}
+                  color={isDarkMode ? Colors.secondary : Colors.lable}
+                />
+              </View>
+            )}
           </TouchableOpacity>
         </View>
         <View style={[style.divider, { marginTop: 20 }]}></View>

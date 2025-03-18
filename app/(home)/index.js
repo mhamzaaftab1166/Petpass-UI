@@ -32,7 +32,6 @@ const Index = () => {
     }, [])
   );
 
-  if(loading) return <Loader isLoad={loading}/>
   return (
     <>
       <ScrollView
@@ -47,7 +46,7 @@ const Index = () => {
         <Categories />
         <PetBanner />
         <View style={{ paddingBottom: "5%" }}>
-        <RecentPets pets={homeData?.recent_pets} />
+        <RecentPets pets={homeData?.recent_pets} isLoading={loading}/>
         </View>
         <View style={{ paddingBottom: "30%" }}>
           <PetTips tips={homeData?.pet_tips} loading={loading} />

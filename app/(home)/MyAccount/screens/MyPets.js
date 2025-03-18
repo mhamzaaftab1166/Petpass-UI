@@ -22,6 +22,7 @@ import AppErrorMessage from "../../../components/forms/AppErrorMessage";
 import AppAlert from "../../../components/AppAlert/index";
 import NoItem from "../../../components/NoItem/NoItem";
 import { useFocusEffect } from "expo-router";
+import PetListingSkeletonCard from "../../../components/SkeletonCards/PetListingCards";
 
 const { width, height } = Dimensions.get("screen");
 
@@ -94,7 +95,7 @@ export default function MyPets({ isDelete = true }) {
         { backgroundColor: isDarkMode ? Colors.active : Colors.secondary },
       ]}
     >
-      <Loader isLoad={loading || isloading} />
+      <Loader isLoad={isloading} />
       <View
         style={[
           style.main,
@@ -139,7 +140,13 @@ export default function MyPets({ isDelete = true }) {
           error={petError || delError}
           visible={petErrorVisible || delErrorVisible}
         />
-        {pets?.length > 0 ? (
+        {loading ? (
+          <>
+            {[...Array(3)].map((_, index) => (
+              <PetListingSkeletonCard key={index}/>
+            ))}
+          </>
+        ) : pets?.length > 0 ? (
           <SwipeListView
             data={pets}
             renderItem={renderItem}
