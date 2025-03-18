@@ -10,6 +10,7 @@ import {
 } from "react-native";
 import * as ImagePicker from "expo-image-picker";
 import * as DocumentPicker from "expo-document-picker";
+import * as FileSystem from "expo-file-system"; // Import FileSystem for size checking
 import { Colors } from "../../theme/color";
 import AppAlert from "../AppAlert/index";
 import { Linking } from "react-native";
@@ -24,6 +25,10 @@ const AppPassportPicker = ({
   const [permissionAlertVisible, setPermissionAlertVisible] = useState(false);
   const [permissionMessage, setPermissionMessage] = useState("");
   const [isLoading, setIsLoading] = useState(false); // Loader state
+
+  // New states for file size error alert
+  const [sizeAlertVisible, setSizeAlertVisible] = useState(false);
+  const [sizeAlertMessage, setSizeAlertMessage] = useState("");
 
   useEffect(() => {
     (async () => {
@@ -64,6 +69,22 @@ const AppPassportPicker = ({
     }
   };
 
+  // Function to check file size (returns true if size is less than 2MB)
+  const checkFileSize = async (uri) => {
+    try {
+      const fileInfo = await FileSystem.getInfoAsync(uri);
+      // 2 MB = 2 * 1024 * 1024 bytes
+      if (fileInfo.size && fileInfo.size > 2 * 1024 * 1024) {
+        return false;
+      }
+      return true;
+    } catch (error) {
+      console.error("Error checking file size", error);
+      // In case of error, let the file pass (or handle accordingly)
+      return true;
+    }
+  };
+
   const pickFromGallery = async () => {
     if (!hasGalleryPermission) {
       await requestGalleryPermission();
@@ -74,7 +95,16 @@ const AppPassportPicker = ({
         mediaTypes: ImagePicker.MediaTypeOptions.Images,
         quality: 0.5,
       });
-      if (!result.canceled) onSelectPassport(result.assets[0].uri);
+      if (!result.canceled) {
+        const uri = result.assets[0].uri;
+        const isValidSize = await checkFileSize(uri);
+        if (!isValidSize) {
+          setSizeAlertMessage("Image/document should be less than 2 MB");
+          setSizeAlertVisible(true);
+          return;
+        }
+        onSelectPassport(uri);
+      }
     } catch (error) {
       console.log("Error picking image from gallery", error);
     }
@@ -90,7 +120,16 @@ const AppPassportPicker = ({
         mediaTypes: ImagePicker.MediaTypeOptions.Images,
         quality: 0.5,
       });
-      if (!result.canceled) onSelectPassport(result.assets[0].uri);
+      if (!result.canceled) {
+        const uri = result.assets[0].uri;
+        const isValidSize = await checkFileSize(uri);
+        if (!isValidSize) {
+          setSizeAlertMessage("Image/document should be less than 2 MB");
+          setSizeAlertVisible(true);
+          return;
+        }
+        onSelectPassport(uri);
+      }
     } catch (error) {
       console.log("Error picking image from camera", error);
     }
@@ -106,6 +145,12 @@ const AppPassportPicker = ({
       console.log("DocumentPicker result:", result);
       if (!result.canceled && result.assets && result.assets.length > 0) {
         const fileUri = result.assets[0].uri;
+        const isValidSize = await checkFileSize(fileUri);
+        if (!isValidSize) {
+          setSizeAlertMessage("Image/document should be less than 2 MB");
+          setSizeAlertVisible(true);
+          return;
+        }
         onSelectPassport(fileUri);
       } else {
         console.log("Document picking cancelled or not successful");
@@ -141,12 +186,13 @@ const AppPassportPicker = ({
           <Text style={styles.buttonText}>Camera</Text>
         </Pressable>
         <Pressable style={styles.optionButton} onPress={pickFile}>
-          <Text style={styles.buttonText}>{`${
-            isLoading ? "Loading..." : "File"
-          }`}</Text>
+          <Text style={styles.buttonText}>
+            {isLoading ? "Loading..." : "File"}
+          </Text>
         </Pressable>
       </View>
 
+      {/* Permission Alert */}
       {permissionAlertVisible && (
         <AppAlert
           showAlert={permissionAlertVisible}
@@ -162,6 +208,23 @@ const AppPassportPicker = ({
           confirmButtonColor={Colors.primary}
           onCancelPressed={() => setPermissionAlertVisible(false)}
           onConfirmPressed={redirectToSettings}
+        />
+      )}
+
+      {/* File Size Error Alert */}
+      {sizeAlertVisible && (
+        <AppAlert
+          showAlert={sizeAlertVisible}
+          showProgress={false}
+          title="File Size Error"
+          message={sizeAlertMessage}
+          closeOnTouchOutside={true}
+          closeOnHardwareBackPress={false}
+          showCancelButton={false}
+          showConfirmButton={true}
+          confirmText="OK"
+          confirmButtonColor={Colors.primary}
+          onConfirmPressed={() => setSizeAlertVisible(false)}
         />
       )}
     </View>
@@ -185,7 +248,7 @@ const styles = StyleSheet.create({
   image: {
     width: "100%",
     height: "100%",
-    marginTop: 20
+    marginTop: 20,
   },
   placeholderText: {
     color: Colors.placeholder || "#aaa",
@@ -193,7 +256,7 @@ const styles = StyleSheet.create({
   },
   titleText: {
     fontSize: 16,
-    fontFamily:"Avenir-Bold",
+    fontFamily: "Avenir-Bold",
     color: Colors.primary,
   },
   buttonContainer: {
@@ -216,7 +279,7 @@ const styles = StyleSheet.create({
     color: "#fff",
     fontSize: 14,
     textAlign: "center",
-    fontFamily:"Avenir-Regular"
+    fontFamily: "Avenir-Regular",
   },
   loaderContainer: {
     marginTop: 10,
