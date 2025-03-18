@@ -107,23 +107,21 @@ const Map = () => {
   }, [params.filter]);
 
   const fetchPetPlaces = async (lat, lng, type) => {
-    setLoading(true);
+    console.log("fetching places: " + lat);
     const url = `https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=${lat},${lng}&radius=${radius}&type=${type}&keyword=pet&key=${API_KEY}`;
     try {
       const response = await fetch(url);
       const data = await response.json();
+      console.log(data);
       if (data.results) {
-        setPlaces([]);
         setPlaces(data.results);
       }
     } catch (error) {
       console.error("Error fetching pet places:", error);
     }
-    setLoading(false);
   };
 
   const fetchPlaceDetails = async (placeId) => {
-    setLoading(true);
     const url = `https://maps.googleapis.com/maps/api/place/details/json?place_id=${placeId}&fields=name,rating,formatted_phone_number,opening_hours,photos,formatted_address&key=${API_KEY}`;
     try {
       const response = await fetch(url);
@@ -173,17 +171,15 @@ const Map = () => {
     } catch (error) {
       console.error("Error fetching place details:", error);
     }
-    setLoading(false);
   };
 
   const recenterMap = () => {
     if (mapRef.current && location) {
-      mapRef.current.animateToRegion(location, 1000);
+      mapRef.current.animateToRegion(location, 2500);
     }
   };
 
   const handleSearchResult = (data, details = null) => {
-    setLoading(true);
     setSearchResult({
       latitude: details.geometry.location.lat,
       longitude: details.geometry.location.lng,
@@ -191,6 +187,13 @@ const Map = () => {
       address: details.formatted_address,
     });
     setIsSearchModalVisible(false);
+    fetchPetPlaces(
+      details.geometry.location.lat,
+      details.geometry.location.lng,
+      selectedOptions.length > 0
+        ? selectedOptions.join("|")
+        : filterValue || petOptions[0].type
+    );
     if (mapRef.current) {
       mapRef.current.animateToRegion(
         {
@@ -202,27 +205,16 @@ const Map = () => {
         1000
       );
     }
-
-    setPlaces([]);
-
-    fetchPetPlaces(
-      details.geometry.location.lat,
-      details.geometry.location.lng,
-      selectedOptions.length > 0
-        ? selectedOptions.join("|")
-        : filterValue || petOptions[0].type
-    );
-    setLoading(false);
   };
 
   const clearMarkers = () => {
     setPlaces([]);
     setSearchResult(null);
     setSelectedOptions([]);
+    recenterMap();
   };
 
   const handleConfirmSelection = () => {
-    setLoading(true);
     setIsPetOptionsVisible(false);
     if (selectedOptions.length > 0) {
       if (searchResult !== null) {
@@ -239,7 +231,6 @@ const Map = () => {
         );
       }
     }
-    setLoading(false);
   };
 
   const handleToggleSelect = (option) => {
