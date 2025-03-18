@@ -7,12 +7,12 @@ import {
   StyleSheet,
   Dimensions,
   TouchableOpacity,
-  Alert,
   Pressable,
 } from "react-native";
 import { Colors } from "../../theme/color";
 import style from "../../theme/style";
 import { useTheme } from "../../helper/themeProvider";
+import { Feather } from "@expo/vector-icons"; // Import Expo icon
 import petEdit from "../../../assets/images/pets/petEdit.png";
 
 const { height, width } = Dimensions.get("window");
@@ -58,7 +58,9 @@ const PhotoGallery = ({ photos = [], router, pet, isEdit }) => {
             })
           }
         >
-          {isEdit && <Image source={petEdit} style={{ width: 20, height: 20 }} />}
+          {isEdit && (
+            <Image source={petEdit} style={{ width: 20, height: 20 }} />
+          )}
         </Pressable>
       </View>
 
@@ -79,7 +81,6 @@ const PhotoGallery = ({ photos = [], router, pet, isEdit }) => {
         <View style={styles.container}>
           {photos.slice(0, 3).map((photo, index) => (
             <View key={index} style={index % 2 !== 0 ? styles.spacing : null}>
-              {/* Use the image_url key from the photo object */}
               <Image
                 source={{ uri: photo.image_url }}
                 resizeMode="cover"
@@ -88,28 +89,25 @@ const PhotoGallery = ({ photos = [], router, pet, isEdit }) => {
             </View>
           ))}
 
-          {remainingCount > 0 && (
+          {totalPhotos >= 4 ? (
             <TouchableOpacity onPress={handleMorePress} style={styles.spacing}>
               <ImageBackground
-                source={{ uri: photos[3].image_url }} // Use the image_url key here
+                source={{ uri: photos[3]?.image_url }} // Use the image_url key here
                 resizeMode="cover"
                 style={[styles.image, { borderRadius: 10 }]}
               >
                 <View style={styles.overlay}>
-                  <Text style={styles.overlayText}>+{remainingCount}</Text>
+                  <Text style={styles.overlayText}>+{remainingCount || 1}</Text>
                 </View>
               </ImageBackground>
             </TouchableOpacity>
-          )}
-
-          {totalPhotos === 4 && (
-            <View style={styles.spacing}>
-              <Image
-                source={{ uri: photos[3].image_url }} // Use the image_url key here as well
-                resizeMode="cover"
-                style={styles.image}
-              />
-            </View>
+          ) : (
+            <TouchableOpacity
+              onPress={handleMorePress}
+              style={styles.moreContainer}
+            >
+              <Feather name="arrow-right" size={24} color="white" />
+            </TouchableOpacity>
           )}
         </View>
       )}
@@ -150,6 +148,15 @@ const styles = StyleSheet.create({
     fontSize: 14,
     color: "#fff",
     fontWeight: "bold",
+  },
+  moreContainer: {
+    width: width / 5,
+    height: height / 12,
+    backgroundColor: Colors.primary,
+    alignItems: "center",
+    justifyContent: "center",
+    borderRadius: 10,
+    marginLeft:10
   },
 });
 

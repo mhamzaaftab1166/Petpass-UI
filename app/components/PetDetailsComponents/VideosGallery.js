@@ -8,50 +8,32 @@ import {
   Pressable,
   Alert,
   Image,
-  TouchableWithoutFeedback,
 } from "react-native";
 import { useVideoPlayer, VideoView } from "expo-video";
-import { useEvent } from "expo";
 import { Colors } from "../../theme/color";
 import style from "../../theme/style";
 import petEdit from "../../../assets/images/pets/petEdit.png";
 import { useTheme } from "../../helper/themeProvider";
+import { MaterialIcons } from "@expo/vector-icons"; // Import right arrow icon
 
 const { height, width } = Dimensions.get("window");
 
 const VideoItem = ({ videoUrl, onPress }) => {
-  // Create a video player with looping enabled
   const player = useVideoPlayer(videoUrl, (player) => {
     player.loop = true;
     player.play();
   });
 
-  const { isPlaying } = useEvent(player, "playingChange", {
-    isPlaying: player.playing,
-  });
-
-  const handlePress = () => {
-    if (onPress) {
-      onPress();
-    } else {
-      if (isPlaying) {
-        player.pause();
-      } else {
-        player.play();
-      }
-    }
-  };
-
   return (
-    <TouchableWithoutFeedback onPress={handlePress}>
+    <TouchableOpacity onPress={onPress}>
       <VideoView
         style={styles.video}
         player={player}
-        allowsFullscreen={true}
+        allowsFullscreen
         allowsPictureInPicture
-        nativeControls={true}
+        nativeControls
       />
-    </TouchableWithoutFeedback>
+    </TouchableOpacity>
   );
 };
 
@@ -59,7 +41,9 @@ const VideoGallery = ({ videos = [], router, pet, isEdit }) => {
   const { isDarkMode } = useTheme();
   const formattedVideos = videos.map((videoObj) => videoObj.video_url);
   const totalVideos = formattedVideos.length;
-  const remainingCount = totalVideos > 4 ? totalVideos - 3 : 0;
+  const remainingCount =
+    totalVideos > 4 ? totalVideos - 3 : totalVideos === 4 ? 1 : 0;
+
 
   const handleMorePress = () => {
     router.push({
@@ -70,14 +54,7 @@ const VideoGallery = ({ videos = [], router, pet, isEdit }) => {
 
   return (
     <View>
-      <View
-        style={{
-          flexDirection: "row",
-          justifyContent: "space-between",
-          alignItems: "center",
-          marginTop: 20,
-        }}
-      >
+      <View style={styles.header}>
         <Text
           style={[
             style.s16,
@@ -97,62 +74,64 @@ const VideoGallery = ({ videos = [], router, pet, isEdit }) => {
             })
           }
         >
-          {isEdit && <Image source={petEdit} style={{ width: 20, height: 20 }} />}
+          {isEdit && (
+            <Image source={petEdit} style={{ width: 20, height: 20 }} />
+          )}
         </Pressable>
       </View>
-      <View style={styles.container}>
-        {totalVideos === 0 ? (
-          <Text
-            style={[
-              style.r16,
-              {
-                color: isDarkMode ? Colors.secondary : Colors.disable,
-                marginTop: 10,
-                fontFamily: "Avenir-Regular",
-              },
-            ]}
-          >
-            No Videos Added Yet.
-          </Text>
-        ) : (
-          <>
-            {formattedVideos.slice(0, 3).map((videoUrl, index) => (
-              <View key={index} style={index % 2 !== 0 ? styles.spacing : null}>
-                <VideoItem videoUrl={videoUrl} />
-              </View>
-            ))}
 
-            {remainingCount > 0 && (
-              <TouchableOpacity
-                onPress={handleMorePress}
-                style={styles.spacing}
-              >
-                <View style={styles.videoWrapper}>
-                  <VideoItem
-                    videoUrl={formattedVideos[3]}
-                    onPress={handleMorePress}
-                  />
-                  <View style={styles.overlay}>
-                    <Text style={styles.overlayText}>+{remainingCount}</Text>
-                  </View>
+      {totalVideos === 0 ? (
+        <Text style={[style.r16, styles.noVideosText]}>
+          No Videos Added Yet.
+        </Text>
+      ) : (
+        <View style={styles.container}>
+          {formattedVideos.slice(0, 3).map((videoUrl, index) => (
+            <View key={index} style={index % 2 !== 0 ? styles.spacing : null}>
+              <VideoItem videoUrl={videoUrl} onPress={handleMorePress} />
+            </View>
+          ))}
+
+          {totalVideos >= 4 ? (
+            <TouchableOpacity onPress={handleMorePress} style={styles.spacing}>
+              <View style={styles.videoWrapper}>
+                <VideoItem
+                  videoUrl={formattedVideos[3]}
+                  onPress={handleMorePress}
+                />
+                <View style={styles.overlay}>
+                  <Text style={styles.overlayText}>+{remainingCount}</Text>
                 </View>
-              </TouchableOpacity>
-            )}
-
-            {totalVideos === 4 && (
-              <View style={styles.spacing}>
-                <VideoItem videoUrl={formattedVideos[3]} />
               </View>
-            )}
-          </>
-        )}
-      </View>
+            </TouchableOpacity>
+          ) : (
+            <TouchableOpacity
+              onPress={handleMorePress}
+              style={styles.moreContainer}
+            >
+              <MaterialIcons name="arrow-forward" size={24} color="white" />
+            </TouchableOpacity>
+          )}
+        </View>
+      )}
+
       <View style={[style.divider, { marginTop: 20 }]} />
     </View>
   );
 };
 
 const styles = StyleSheet.create({
+  header: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+    marginTop: 20,
+  },
+  noVideosText: {
+    color: Colors.disable,
+    marginTop: 10,
+    fontFamily: "Avenir-Regular",
+  },
   container: {
     flexDirection: "row",
     alignItems: "center",
@@ -166,7 +145,7 @@ const styles = StyleSheet.create({
   },
   videoWrapper: {
     position: "relative",
-    borderRadius: 20,
+    borderRadius: 10,
   },
   spacing: {
     marginHorizontal: 10,
@@ -186,6 +165,15 @@ const styles = StyleSheet.create({
     fontSize: 14,
     color: "#fff",
     fontWeight: "bold",
+  },
+  moreContainer: {
+    width: width / 5,
+    height: height / 12,
+    backgroundColor: Colors.primary,
+    alignItems: "center",
+    justifyContent: "center",
+    borderRadius: 10,
+    marginLeft: 10,
   },
 });
 
