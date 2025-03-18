@@ -1,4 +1,4 @@
-import { Dimensions } from "react-native";
+import { Dimensions, Platform } from "react-native";
 import { useFonts } from "expo-font";
 import React, { useEffect, useState } from "react";
 import storage from "./helper/localStorage";
@@ -72,22 +72,40 @@ export default function Introduction() {
                   setToken(data.accessToken);
                 } else {
                   console.log("Failed to refresh token, logging out...");
-                  setShowAlert(true);
+                  if (Platform.OS === "ios") {
+                    clearUser();
+                    setShowAlert(false);
+                    router.replace("Authentication/Login");
+                  }else{
+                    setShowAlert(true);
+                  }
                 }
               } catch (refreshError) {
                 console.log("Refresh token failed:", refreshError);
-                setShowAlert(true);
+                 if (Platform.OS === "ios") {
+                   clearUser();
+                   setShowAlert(false);
+                   router.replace("Authentication/Login");
+                 } else {
+                   setShowAlert(true);
+                 }
               }
             } else {
               console.log("Session expired. Logging out...");
-              setShowAlert(true);
+               if (Platform.OS === "ios") {
+                 clearUser();
+                 setShowAlert(false);
+                 router.replace("Authentication/Login");
+               } else {
+                 setShowAlert(true);
+               }
             }
           }
         }
       };
 
       checkToken();
-      const interval = setInterval(checkToken, 3 * 60 * 1000);
+      const interval = setInterval(checkToken, 30 * 1000);
 
       return () => {
         console.log("Screen is unfocused");
@@ -110,6 +128,9 @@ export default function Introduction() {
     rememberMe,
     "settokens"
   );
+
+  console.log(`Running on: ${Platform.OS}`);
+
 
   if (showAlert) {
     return (
