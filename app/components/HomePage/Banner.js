@@ -82,9 +82,10 @@ const Banner = () => {
           style.s18,
           {
             color: Colors.secondary,
-            marginTop: 50,
+            marginTop: 60,
             marginLeft: 20,
             fontWeight: 800,
+            fontFamily: "Avenir-Bold",
           },
         ]}
       >
@@ -92,7 +93,7 @@ const Banner = () => {
       </Text>
       <View
         style={{
-          width: width / 6,
+          width: width / 5.5,
           backgroundColor: Colors.secondary,
           height: 3,
           marginLeft: 20,
@@ -104,9 +105,10 @@ const Banner = () => {
           style.title,
           {
             color: Colors.secondary,
-            marginTop: 15,
+            marginTop: 25,
             marginLeft: 20,
             fontSize: 28,
+            fontFamily: "Avenir-Bold",
           },
         ]}
       >

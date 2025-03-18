@@ -2,6 +2,7 @@ import React from "react";
 import {
   Dimensions,
   ImageBackground,
+  Pressable,
   StyleSheet,
   Text,
   View,
@@ -13,7 +14,7 @@ import { Colors } from "../../theme/color";
 
 const width = Dimensions.get("screen").width;
 const height = Dimensions.get("screen").height;
-const Banner = ({ router, profileImg, isPublic }) => {
+const Banner = ({ router, profileImg, isPublic,onDownload }) => {
   return (
     <View>
       <ImageBackground
@@ -31,7 +32,11 @@ const Banner = ({ router, profileImg, isPublic }) => {
           elevation={0}
           leading={
             <TouchableOpacity
-            onPress={() => isPublic ? router.back() : router.replace("/MyAccount/screens/MyPets")}
+              onPress={() =>
+                isPublic
+                  ? router.back()
+                  : router.replace("/MyAccount/screens/MyPets")
+              }
             >
               <Ionicons
                 name="chevron-back"
@@ -42,17 +47,15 @@ const Banner = ({ router, profileImg, isPublic }) => {
           }
           trailing={
             <HStack style={{ gap: 16 }}>
-              <Ionicons
-                name="cloud-download-outline"
-                color={Colors.secondary}
-                size={25}
-                style={{ marginRight: 15, marginTop: 2 }}
-              />
-              <MaterialIcons
-                name="share"
-                color={Colors.secondary}
-                size={25}
-              />
+              <Pressable onPress={onDownload}>
+                <Ionicons
+                  name="cloud-download-outline"
+                  color={Colors.secondary}
+                  size={25}
+                  style={{ marginRight: 15, marginTop: 2 }}
+                />
+              </Pressable>
+              <MaterialIcons name="share" color={Colors.secondary} size={25} />
             </HStack>
           }
         />

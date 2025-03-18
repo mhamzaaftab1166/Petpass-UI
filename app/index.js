@@ -93,7 +93,7 @@ export default function Introduction() {
       };
 
       checkToken();
-      const interval = setInterval(checkToken, 30 * 1000);
+      const interval = setInterval(checkToken, 3 * 60 * 1000);
 
       return () => {
         console.log("Screen is unfocused");

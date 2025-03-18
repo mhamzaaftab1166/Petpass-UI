@@ -21,7 +21,9 @@ const { height, width } = Dimensions.get("window");
 const VideoItem = ({ videoUrl, onPress }) => {
   const player = useVideoPlayer(videoUrl, (player) => {
     player.loop = true;
+    player.muted = true;
     player.play();
+    
   });
 
   return (

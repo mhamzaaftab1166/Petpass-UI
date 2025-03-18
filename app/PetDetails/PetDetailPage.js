@@ -37,7 +37,6 @@ export default function PetDetailPage() {
     clearPets,
   } = usePetStore();
   const { id, userId, isPublic } = useLocalSearchParams();
-console.log(pet);
 
   const { isDarkMode } = useTheme();
   const router = useRouter();
@@ -53,6 +52,10 @@ console.log(pet);
     }, [id])
   );
 
+  const handleDownlaod=()=>{
+
+  }
+
   if (loading) return <Loader isLoad={loading} />;
 
   return (
@@ -67,7 +70,7 @@ console.log(pet);
       <StatusBar backgroundColor="transparent" translucent={true} />
       <View>
         <ScrollView showsVerticalScrollIndicator={false}>
-          <Banner profileImg={pet?.pet_profile_picture} router={router} isPublic={isPublic} />
+          <Banner profileImg={pet?.pet_profile_picture} router={router} isPublic={isPublic} onDownload={handleDownlaod} />
           <View
             style={[
               style.main,

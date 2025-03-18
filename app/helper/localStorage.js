@@ -1,12 +1,15 @@
 import * as SecureStore from "expo-secure-store";
 
 const storeAppData = async (key, authToken) => {
-    try {
-      await SecureStore.setItemAsync(key, authToken);
-    } catch (error) {
-      console.log("error storing auth token", error);
-    }
-  };
+  const tokenString =
+    typeof authToken === "string" ? authToken : JSON.stringify(authToken);
+
+  try {
+    await SecureStore.setItemAsync(key, tokenString);
+  } catch (error) {
+    console.log("Error storing auth token", error);
+  }
+};
   
   const getAppData = async (key) => {
     try {
