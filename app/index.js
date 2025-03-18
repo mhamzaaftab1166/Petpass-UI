@@ -37,6 +37,12 @@ export default function Introduction() {
     fetchToken();
   }, []);
 
+  const handleLogout = () => {
+    clearUser();
+    setShowAlert(false);
+    router.replace("Authentication/Login");
+  };
+
   useEffect(
     React.useCallback(() => {
       console.log("Screen is focused");
@@ -72,33 +78,15 @@ export default function Introduction() {
                   setToken(data.accessToken);
                 } else {
                   console.log("Failed to refresh token, logging out...");
-                  if (Platform.OS === "ios") {
-                    clearUser();
-                    setShowAlert(false);
-                    router.replace("Authentication/Login");
-                  }else{
-                    setShowAlert(true);
-                  }
+                    handleLogout();
                 }
               } catch (refreshError) {
                 console.log("Refresh token failed:", refreshError);
-                 if (Platform.OS === "ios") {
-                   clearUser();
-                   setShowAlert(false);
-                   router.replace("Authentication/Login");
-                 } else {
-                   setShowAlert(true);
-                 }
+                  handleLogout();
               }
             } else {
               console.log("Session expired. Logging out...");
-               if (Platform.OS === "ios") {
-                 clearUser();
-                 setShowAlert(false);
-                 router.replace("Authentication/Login");
-               } else {
-                 setShowAlert(true);
-               }
+                handleLogout();
             }
           }
         }
@@ -114,11 +102,7 @@ export default function Introduction() {
     }, [rememberMe, refreshToken])
   );
 
-  const handleLogout = () => {
-    clearUser();
-    setShowAlert(false);
-    router.replace("Authentication/Login");
-  };
+ 
 
   console.log(
     refreshToken,
@@ -129,8 +113,8 @@ export default function Introduction() {
     "settokens"
   );
 
-  console.log(`Running on: ${Platform.OS}`);
-
+  console.log(showAlert, `showAlert on ${Platform.OS}`);
+  
 
   if (showAlert) {
     return (
@@ -152,5 +136,5 @@ export default function Introduction() {
     return <Loader size="large" />;
   }
 
-  return token ? <Redirect href="(home)" /> : <Sliders />;
+  return token && !showAlert ? <Redirect href="(home)" /> : <Sliders />;
 }
