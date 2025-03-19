@@ -78,15 +78,18 @@ export default function Introduction() {
                   setToken(data.accessToken);
                 } else {
                   console.log("Failed to refresh token, logging out...");
-                    handleLogout();
+                  clearUser();
+                  router.replace("Authentication/Login");
                 }
               } catch (refreshError) {
                 console.log("Refresh token failed:", refreshError);
-                  handleLogout();
+                clearUser();
+                router.replace("Authentication/Login");
               }
             } else {
               console.log("Session expired. Logging out...");
-                handleLogout();
+              clearUser();
+              router.replace("Authentication/Login");
             }
           }
         }

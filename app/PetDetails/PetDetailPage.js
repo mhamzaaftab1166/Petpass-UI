@@ -22,6 +22,7 @@ import Loader from "../components/Loader/Loader";
 import Passport from "../components/PetDetailsComponents/Passport";
 import { isLoading } from "expo-font";
 import ProfileCompletionBar from "../components/PetDetailsComponents/ProfileCompletionBar";
+import { PetDetailSkeleton } from "../components/SkeletonCards/PetDetailSkeleton";
 
 const width = Dimensions.get("screen").width;
 const height = Dimensions.get("screen").height;
@@ -56,7 +57,9 @@ export default function PetDetailPage() {
 
   }
 
-  if (loading) return <Loader isLoad={loading} />;
+  if (loading) return (
+    <PetDetailSkeleton />
+  );
 
   return (
     <SafeAreaView
@@ -65,7 +68,6 @@ export default function PetDetailPage() {
         { backgroundColor: isDarkMode ? Colors.active : Colors.secondary },
       ]}
     >
-      <Loader isLoad={loading} />
 
       <StatusBar backgroundColor="transparent" translucent={true} />
       <View>

@@ -16,6 +16,7 @@ import { useTheme } from "../../helper/themeProvider";
 import { router, useFocusEffect } from "expo-router";
 import homeService from "../../services/homeService";
 import Loader from "../../components/Loader/Loader";
+import AppSkeleton from "../../components/AppSkeleton";
 
 const width = Dimensions.get("screen").width;
 const height = Dimensions.get("screen").height;
@@ -51,7 +52,74 @@ export default function PetListing() {
       : text;
   };
 
-  if (loading) return <Loader isLoad={loading} />;
+  if (loading)
+    return (
+      <>
+        <AppBar
+          color={isDarkMode ? Colors.active : Colors.secondary}
+          titleStyle={[
+            style.apptitle,
+            { color: isDarkMode ? Colors.secondary : Colors.active },
+          ]}
+          centerTitle={true}
+          elevation={0}
+          title="Pet Tips"
+          leading={
+            <TouchableOpacity onPress={() => router.back()}>
+              <Icon
+                name="chevron-back"
+                color={isDarkMode ? Colors.secondary : Colors.active}
+                size={30}
+              />
+            </TouchableOpacity>
+          }
+        />
+        <View
+          style={{
+            paddingHorizontal: 20,
+            marginTop: 20,
+            flexDirection: "row",
+            justifyContent: "space-between",
+            marginBottom: 16,
+          }}
+        >
+          {[...Array(2)].map((_, index) => (
+            <View key={index}>
+              <AppSkeleton
+                width={width / 2.3}
+                height={height / 5.8}
+                borderRadius={10}
+              />
+              <AppSkeleton width={width / 2.3} height={20} />
+              <AppSkeleton width={width / 2.3} height={20} />
+              <AppSkeleton width={width / 2.3} height={20} />
+            </View>
+          ))}
+        </View>
+        <View
+          style={{
+            paddingHorizontal: 20,
+            marginTop: 5,
+            flexDirection: "row",
+            justifyContent: "space-between",
+            marginBottom: 16,
+          }}
+        >
+          {[...Array(2)].map((_, index) => (
+            <View key={index}>
+              <AppSkeleton
+                width={width / 2.3}
+                height={height / 5.8}
+                borderRadius={10}
+              />
+              <AppSkeleton width={width / 2.3} height={20} />
+              <AppSkeleton width={width / 2.3} height={20} />
+              <AppSkeleton width={width / 2.3} height={20} />
+            </View>
+          ))}
+        </View>
+      </>
+    );
   if (error) return <Text>Error: {error}</Text>;
 
   // Filter tips based on selected tab (convert both to lowercase before comparing)
@@ -137,7 +205,7 @@ export default function PetListing() {
               <Text
                 style={{
                   color: selectedTab === tab ? "white" : Colors.primary,
-                  fontWeight: "bold",
+                  fontFamily: "Avenir-Bold",
                 }}
               >
                 {tab}
@@ -170,7 +238,11 @@ export default function PetListing() {
                     <ImageBackground
                       source={{ uri: tip.image }}
                       resizeMode="cover"
-                      style={{ height: height / 5.8,borderRadius: 10, overflow: 'hidden' }}
+                      style={{
+                        height: height / 5.8,
+                        borderRadius: 10,
+                        overflow: "hidden",
+                      }}
                     />
                     <Text
                       numberOfLines={1}
