@@ -11,6 +11,7 @@ import authService from "./services/authService";
 import AppAlert from "./components/AppAlert";
 import storeage from "./helper/localStorage";
 import { Colors } from "./theme/color";
+import  messaging, { firebase }  from "@react-native-firebase/messaging";
 
 const width = Dimensions.get("screen").width;
 
@@ -105,7 +106,51 @@ export default function Introduction() {
     }, [rememberMe, refreshToken])
   );
 
- 
+  async function requestUserPermission() {
+
+  
+    const authStatus = await messaging().requestPermission();
+    const enabled =
+      authStatus === messaging.AuthorizationStatus.AUTHORIZED ||
+      authStatus === messaging.AuthorizationStatus.PROVISIONAL;
+  
+    if (enabled) {
+      console.log('Authorization status:', authStatus);
+    }
+  }
+
+ useEffect(() => {
+  
+  if(requestUserPermission){
+    messaging().getToken().then((token) => {console.log("Token from FireBase = ", token)});
+  }else{
+    console.log("Permission not granted", authStatus);
+  }
+
+  messaging().getInitialNotification().then(async (remoteMessage) =>{
+    if(remoteMessage){
+      console.log("Notification caused app to open from quit state:", remoteMessage.notification);
+    }
+  })
+
+  messaging().onNotificationOpenedApp().then(async (remoteMessage) =>{
+    if(remoteMessage){
+      console.log("Notification caused app to open from Background state:", remoteMessage.notification);
+    }
+  })
+
+  messaging().setBackgroundMessageHandler().then(async (remoteMessage) =>{
+    if(remoteMessage){
+      console.log("Notification caused app to open from Background:", remoteMessage.notification);
+    }
+  })
+
+  const unsubscribe = messaging().onMessage(async (remoteMessage) => {
+    Alert.alert("A new FCM message arrived!", JSON.stringify(remoteMessage))
+  })
+
+  return unsubscribe;
+ }, [])
 
   console.log(
     refreshToken,
@@ -114,10 +159,7 @@ export default function Introduction() {
     "token",
     rememberMe,
     "settokens"
-  );
-
-  console.log(showAlert, `showAlert on ${Platform.OS}`);
-  
+  );  
 
   if (showAlert) {
     return (
@@ -138,6 +180,11 @@ export default function Introduction() {
   if (!fontsLoaded) {
     return <Loader size="large" />;
   }
+
+  if (!firebase.apps.length) {
+    firebase.initializeApp();
+  }
+
 
   return token && !showAlert ? <Redirect href="(home)" /> : <Sliders />;
 }
