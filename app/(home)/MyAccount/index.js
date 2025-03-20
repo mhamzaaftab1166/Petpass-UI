@@ -19,8 +19,8 @@ import notyIcon from "../../../assets/images/profile/noty.png";
 import notyDark from "../../../assets/images/profile/notyDark.png";
 import settingsIcon from "../../../assets/images/profile/settings.png";
 import settingDark from "../../../assets/images/profile/settingDark.png";
-import helpIcon from "../../../assets/images/profile/help.png";
-import helpDark from "../../../assets/images/profile/helpDark.png";
+import helpIcon from "../../../assets/images/profile/helplight.png";
+import helpDark from "../../../assets/images/profile/helpdark.png";
 import logoutIcon from "../../../assets/images/profile/logout.png";
 import logoutDark from "../../../assets/images/profile/logoutDark.png";
 import style from "../../theme/style";
@@ -89,7 +89,9 @@ export default function MyAccount() {
         >
           <TouchableOpacity
             style={{ flexDirection: "row", alignItems: "center" }}
-            onPress={() => loading ? null : router.push("/MyAccount/screens/ProfileInfo")}
+            onPress={() =>
+              loading ? null : router.push("/MyAccount/screens/ProfileInfo")
+            }
           >
             {loading ? (
               <AppSkeleton width={66} height={66} borderRadius={50} />
@@ -245,9 +247,9 @@ export default function MyAccount() {
               route: "/MyAccount/screens/Settings",
             },
             {
-              name: "Help Center",
+              name: "Frequently Asked Questions",
               icon: "Help Center",
-              route: "/setting",
+              route: "/MyAccount/screens/Faq",
             },
             {
               name: "Log Out",
