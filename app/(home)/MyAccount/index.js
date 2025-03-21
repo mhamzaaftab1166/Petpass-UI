@@ -20,7 +20,7 @@ import notyDark from "../../../assets/images/profile/notyDark.png";
 import settingsIcon from "../../../assets/images/profile/settings.png";
 import settingDark from "../../../assets/images/profile/settingDark.png";
 import helpIcon from "../../../assets/images/profile/helplight.png";
-import helpDark from "../../../assets/images/profile/helpdark.png";
+import helpDark from "../../../assets/images/profile/helpDark.png";
 import logoutIcon from "../../../assets/images/profile/logout.png";
 import logoutDark from "../../../assets/images/profile/logoutDark.png";
 import style from "../../theme/style";
