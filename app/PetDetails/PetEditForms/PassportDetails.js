@@ -6,6 +6,7 @@ import {
   KeyboardAvoidingView,
   Platform,
   StyleSheet,
+  TouchableOpacity,
 } from "react-native";
 import React, { useState } from "react";
 import { Colors } from "../../theme/color";
@@ -21,6 +22,8 @@ import { useTheme } from "../../helper/themeProvider";
 import petServices from "../../services/petServices";
 import * as FileSystem from "expo-file-system";
 import Loader from "../../components/Loader/Loader";
+import { AppBar } from "@react-native-material/core";
+import Icon from "react-native-vector-icons/Ionicons";
 
 const width = Dimensions.get("screen").width;
 const height = Dimensions.get("screen").height;
@@ -105,12 +108,36 @@ export default function Login() {
         <Loader isLoad={isLoading} />
         <View style={{ flex: 1, marginHorizontal: 20 }}>
           <ScrollView showsVerticalScrollIndicator={false}>
+            <AppBar
+              color={isDarkMode ? Colors.active : Colors.secondary}
+              title={`Upload Passport`}
+              titleStyle={[
+                style.b18,
+                { color: isDarkMode ? Colors.secondary : Colors.active },
+              ]}
+              centerTitle={true}
+              elevation={0}
+              leading={
+                <TouchableOpacity
+                  onPress={() =>
+                    router.replace(
+                      `/PetDetails/PetDetailPage?id=${petData?.id})`
+                    )
+                  }
+                >
+                  <Icon
+                    name="chevron-back"
+                    color={isDarkMode ? Colors.secondary : Colors.active}
+                    size={30}
+                  />
+                </TouchableOpacity>
+              }
+            />
             <AppForm
               initialValues={{ passport: null }}
               onSubmit={handleSubmit}
               validationSchema={validationSchema}
             >
-              <AppTitle title={"Pet Passport Details"} style={style} />
               <AppErrorMessage error={error} visible={errorVisible} />
               <AppFormPassportPicker name={"passport"} />
               <SubmitButton title="Upload" style={style} />

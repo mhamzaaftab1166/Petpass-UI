@@ -27,6 +27,7 @@ const AppAlert = ({
       borderRadius: 12,
       backgroundColor: isDarkMode ? Colors.active : Colors.secondary, 
       padding: 20,
+      zIndex: 1000,
     },
     title: {
       fontSize: 20,

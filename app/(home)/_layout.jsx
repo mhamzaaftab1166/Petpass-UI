@@ -6,6 +6,9 @@ import { Tabs } from "expo-router";
 import { MaterialCommunityIcons, Ionicons, Feather } from "@expo/vector-icons";
 import { Colors } from "../theme/color";
 import { useTheme } from "../helper/themeProvider";
+import { useAlertStore } from "../store/useStore";
+import  useAuthValidation  from "../hooks/useAuthValidation";
+import AppAlert from "../components/AppAlert/index";
 
 const AnimatedTabIcon = ({ focused, children }) => {
   const iconScale = useRef(new Animated.Value(1)).current;
@@ -66,9 +69,25 @@ const AnimatedTabIcon = ({ focused, children }) => {
 
 export default function TabLayout() {
   const { isDarkMode } = useTheme();
-
+  const { token, handleLogout } = useAuthValidation();
+  const { showAlert } = useAlertStore();
+  console.log(showAlert);
+  
   return (
     <>
+      {showAlert && (
+        <AppAlert
+          showAlert={showAlert}
+          title="Session Expired!"
+          message="Your session has expired. Please log in again."
+          closeOnTouchOutside={false}
+          closeOnHardwareBackPress={false}
+          showConfirmButton
+          confirmText="Got It"
+          confirmButtonColor={Colors.primary}
+          onConfirmPressed={handleLogout}
+        />
+      )}
       <Tabs
         screenOptions={{
           tabBarActiveTintColor: Colors.primary,

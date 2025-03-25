@@ -25,9 +25,11 @@ import logoutIcon from "../../../assets/images/profile/logout.png";
 import logoutDark from "../../../assets/images/profile/logoutDark.png";
 import style from "../../theme/style";
 import { useRouter } from "expo-router";
-import { useUserStore } from "../../store/useStore";
+import { useAlertStore, useUserStore } from "../../store/useStore";
 import { useTheme } from "../../helper/themeProvider";
 import AppSkeleton from "../../components/AppSkeleton";
+import Icon from "react-native-vector-icons/Ionicons";
+import AppAlert from "../../components/AppAlert";
 
 const { width, height } = Dimensions.get("screen");
 
@@ -35,6 +37,14 @@ export default function MyAccount() {
   const router = useRouter();
   const { isDarkMode } = useTheme();
   const { user, loading, fetchUser, clearUser } = useUserStore();
+  // const { showAlert, setShowAlert } = useAlertStore();
+  
+
+  // const handleLogout = () => {
+  //   setShowAlert(false);
+  //   clearUser();
+  //   router.replace("Authentication/Login");
+  // };
 
   useEffect(() => {
     fetchUser();
@@ -55,6 +65,19 @@ export default function MyAccount() {
         { backgroundColor: isDarkMode ? Colors.active : Colors.secondary },
       ]}
     >
+      {/* {showAlert && (
+        <AppAlert
+          showAlert={showAlert}
+          title="Session Expired!"
+          message="Your session has expired. Please log in again."
+          closeOnTouchOutside={false}
+          closeOnHardwareBackPress={false}
+          showConfirmButton
+          confirmText="Got It"
+          confirmButtonColor={Colors.primary}
+          onConfirmPressed={handleLogout}
+        />
+      )} */}
       <StatusBar barStyle={isDarkMode ? "light-content" : "dark-content"} />
 
       <View
@@ -66,23 +89,25 @@ export default function MyAccount() {
           },
         ]}
       >
-        {/* <AppBar
+        <AppBar
           color={isDarkMode ? Colors.active : Colors.secondary}
+          // title={`Upload Passport`}
+          titleStyle={[
+            style.b18,
+            { color: isDarkMode ? Colors.secondary : Colors.active },
+          ]}
+          centerTitle={true}
           elevation={0}
-          trailing={
-            <View style={{ flexDirection: "row", alignItems: "center" }}>
-              <TouchableOpacity
-                onPress={() => router.push("/MyAccount/screens/Notifications")}
-              >
-                <Image
-                  source={iconMap["Notifications"]}
-                  style={{ width: 25, height: 25 }}
-                  resizeMode="contain"
-                />
-              </TouchableOpacity>
-            </View>
+          leading={
+            <TouchableOpacity onPress={() => router.back()}>
+              <Icon
+                name="chevron-back"
+                color={isDarkMode ? Colors.secondary : Colors.active}
+                size={30}
+              />
+            </TouchableOpacity>
           }
-        /> */}
+        />
 
         <View
           style={{ flexDirection: "row", alignItems: "center", marginTop: 10 }}

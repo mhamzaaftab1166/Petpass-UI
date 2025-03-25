@@ -1,4 +1,4 @@
-import React, { useCallback } from "react";
+import React, { useCallback, useEffect } from "react";
 import { Dimensions, ScrollView, StatusBar, View } from "react-native";
 import Banner from "../components/HomePage/Banner";
 import Categories from "../components/HomePage/Categories";
@@ -8,9 +8,11 @@ import PetTips from "../components/HomePage/PetTips";
 import { useTheme } from "../helper/themeProvider";
 import { Colors } from "../theme/color";
 import "react-native-get-random-values";
-import { useHomeStore } from "../store/useStore";
+import { useAlertStore, useHomeStore } from "../store/useStore";
 import { useFocusEffect } from "expo-router";
 import Loader from "../components/Loader/Loader";
+import useAuthValidation from "../hooks/useAuthValidation";
+import AppAlert from "../components/AppAlert";
 
 const { width, height } = Dimensions.get("screen");
 
@@ -24,7 +26,8 @@ const Index = () => {
     clearHomeData,
   } = useHomeStore();
   const { isDarkMode } = useTheme();
-
+  // const { token, handleLogout } = useAuthValidation();
+  // const { showAlert } = useAlertStore();
   useFocusEffect(
     useCallback(() => {
       fetchHomeData();
@@ -34,6 +37,19 @@ const Index = () => {
 
   return (
     <>
+      {/* {showAlert && (
+        <AppAlert
+          showAlert={showAlert}
+          title="Session Expired!"
+          message="Your session has expired. Please log in again."
+          closeOnTouchOutside={false}
+          closeOnHardwareBackPress={false}
+          showConfirmButton
+          confirmText="Got It"
+          confirmButtonColor={Colors.primary}
+          onConfirmPressed={handleLogout}
+        />
+      )} */}
       <ScrollView
         showsVerticalScrollIndicator={false}
         style={{
@@ -46,7 +62,7 @@ const Index = () => {
         <Categories />
         <PetBanner />
         <View style={{ paddingBottom: "5%" }}>
-        <RecentPets pets={homeData?.recent_pets} isLoading={loading}/>
+          <RecentPets pets={homeData?.recent_pets} isLoading={loading} />
         </View>
         <View style={{ paddingBottom: "30%" }}>
           <PetTips tips={homeData?.pet_tips} loading={loading} />
