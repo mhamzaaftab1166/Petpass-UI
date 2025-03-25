@@ -33,7 +33,10 @@ export default function Security() {
           title="Security"
           titleStyle={[
             style.apptitle,
-            { color: isDarkMode ? Colors.secondary : Colors.active },
+            {
+              color: isDarkMode ? Colors.secondary : Colors.active,
+              fontFamily: "Avenir-Bold",
+            },
           ]}
           centerTitle={true}
           elevation={0}

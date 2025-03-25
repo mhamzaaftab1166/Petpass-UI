@@ -80,7 +80,10 @@ export default function EditPassword() {
             title="Password"
             titleStyle={[
               style.apptitle,
-              { color: isDarkMode ? Colors.secondary : Colors.active },
+              {
+                color: isDarkMode ? Colors.secondary : Colors.active,
+                fontFamily: "Avenir-Bold",
+              },
             ]}
             centerTitle={true}
             elevation={0}

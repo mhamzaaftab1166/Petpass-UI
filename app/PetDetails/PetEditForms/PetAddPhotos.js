@@ -82,17 +82,24 @@ export default function PetAddPhotos() {
       >
         <Loader isLoad={isLoading} />
         <View style={{ flex: 1, marginHorizontal: 20 }}>
-        <AppBar
+          <AppBar
             color={isDarkMode ? Colors.active : Colors.secondary}
             title={`Add Pet Images`}
             titleStyle={[
               style.b18,
-              { color: isDarkMode ? Colors.secondary : Colors.active },
+              {
+                color: isDarkMode ? Colors.secondary : Colors.active,
+                fontFamily: "Avenir-Bold",
+              },
             ]}
             centerTitle={true}
             elevation={0}
             leading={
-              <TouchableOpacity onPress={() => router.replace(`/PetDetails/PetDetailPage?id=${petData?.id})`)}>
+              <TouchableOpacity
+                onPress={() =>
+                  router.replace(`/PetDetails/PetDetailPage?id=${petData?.id})`)
+                }
+              >
                 <Icon
                   name="chevron-back"
                   color={isDarkMode ? Colors.secondary : Colors.active}
@@ -107,8 +114,7 @@ export default function PetAddPhotos() {
               onSubmit={handleSubmit}
               validationSchema={validationSchema}
             >
-              <View style={{ marginBottom: 30 }}>
-              </View>
+              <View style={{ marginBottom: 30 }}></View>
               <AppErrorMessage error={error} visible={errorVisible} />
               <AppFormImagePicker name={"images"} />
               <SubmitButton title="SAVE" style={style} />

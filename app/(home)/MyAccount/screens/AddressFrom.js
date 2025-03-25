@@ -173,7 +173,10 @@ export default function AddressFrom() {
             title={`${isEdit ? "Edit" : "New"} Address`}
             titleStyle={[
               style.b18,
-              { color: isDarkMode ? Colors.secondary : Colors.active },
+              {
+                color: isDarkMode ? Colors.secondary : Colors.active,
+                fontFamily: "Avenir-Bold",
+              },
             ]}
             centerTitle={true}
             elevation={0}
@@ -248,8 +251,8 @@ export default function AddressFrom() {
 
               <AppMapLocationPicker name="location_url" />
 
-             <View style={{paddingBottom: 60}}>
-              <SubmitButton title="SAVE" style={style} />
+              <View style={{ paddingBottom: 60 }}>
+                <SubmitButton title="SAVE" style={style} />
               </View>
             </AppForm>
           </ScrollView>

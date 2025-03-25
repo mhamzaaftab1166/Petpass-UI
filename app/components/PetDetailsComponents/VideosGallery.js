@@ -23,7 +23,6 @@ const VideoItem = ({ videoUrl, onPress }) => {
     player.loop = true;
     player.muted = true;
     player.play();
-    
   });
 
   return (
@@ -90,7 +89,7 @@ const VideoGallery = ({ videos = [], router, pet, isEdit }) => {
         <View style={styles.container}>
           {formattedVideos.slice(0, 3).map((videoUrl, index) => (
             <View key={index} style={index % 2 !== 0 ? styles.spacing : null}>
-              <VideoItem videoUrl={videoUrl} onPress={handleMorePress} />
+              <VideoItem videoUrl={videoUrl} />
             </View>
           ))}
 

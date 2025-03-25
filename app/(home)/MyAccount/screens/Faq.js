@@ -97,7 +97,7 @@ export default function FAQ() {
         title="FAQ"
         titleStyle={[
           style.b18,
-          { color: isDarkMode ? Colors.secondary : Colors.active },
+          { color: isDarkMode ? Colors.secondary : Colors.active,fontFamily: "Avenir-Bold" },
         ]}
         centerTitle={true}
         elevation={0}
@@ -135,12 +135,14 @@ const styles = StyleSheet.create({
     color: Colors.primary,
     marginBottom: 8,
     textAlign: "center",
+    fontFamily: "Avenir-Bold",
   },
   headerSubtitle: {
     fontSize: 16,
     color: Colors.lable,
     marginBottom: 20,
     textAlign: "center",
+    fontFamily: "Avenir-Regular",
   },
   faqItemContainer: {
     backgroundColor: Colors.secondary,
@@ -164,6 +166,7 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: "600",
     color: Colors.dark,
+    fontFamily: "Avenir-Bold",
     flex: 1,
   },
   faqAnswerContainer: {
@@ -174,5 +177,6 @@ const styles = StyleSheet.create({
     fontSize: 14,
     color: Colors.dark,
     lineHeight: 20,
+    fontFamily: "Avenir-Regular",
   },
 });

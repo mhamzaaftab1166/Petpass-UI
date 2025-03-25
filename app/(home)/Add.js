@@ -176,7 +176,10 @@ export default function Add() {
                 title="Add Your Pets Here"
                 titleStyle={[
                   style.b18,
-                  { color: isDarkMode ? Colors.secondary : Colors.active },
+                  {
+                    color: isDarkMode ? Colors.secondary : Colors.active,
+                    fontFamily: "Avenir-Bold",
+                  },
                 ]}
                 centerTitle={true}
                 elevation={0}

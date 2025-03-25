@@ -148,7 +148,10 @@ export default function AccountInfo() {
             title="My Profile"
             titleStyle={[
               style.b18,
-              { color: isDarkMode ? Colors.secondary : Colors.active },
+              {
+                color: isDarkMode ? Colors.secondary : Colors.active,
+                fontFamily: "Avenir-Bold",
+              },
             ]}
             centerTitle={true}
             elevation={0}
@@ -177,7 +180,7 @@ export default function AccountInfo() {
             <AppErrorMessage error={error} visible={errorVisible} />
             <AppFormImagePicker name="profile_picture" />
 
-            <AppText 
+            <AppText
               style={{
                 color: isDarkMode ? Colors.secondary : Colors.active,
                 marginLeft: 5,

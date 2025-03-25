@@ -11,7 +11,6 @@ const Passport = ({ pet, router }) => {
   const [modalVisible, setModalVisible] = useState(false);
 
   const passportUrl = pet?.pet_passport?.passport;
-  console.log(passportUrl);
   
   const isImage = passportUrl?.match(/\.(jpeg|jpg|png)$/i);
 
@@ -71,9 +70,9 @@ const Passport = ({ pet, router }) => {
                   style={styles.imageStyle}
                 />
               ) : (
-                <WebView
+                <Image
                   source={{ uri: passportUrl }}
-                  style={styles.webviewStyle}
+                  style={styles.imageStyle}
                 />
               )}
             </View>

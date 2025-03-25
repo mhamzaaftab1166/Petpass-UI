@@ -110,7 +110,10 @@ export default function MyPets({ isDelete = true }) {
           title="Your Pet List"
           titleStyle={[
             style.b18,
-            { color: isDarkMode ? Colors.secondary : Colors.active },
+            {
+              color: isDarkMode ? Colors.secondary : Colors.active,
+              fontFamily: "Avenir-Bold",
+            },
           ]}
           centerTitle={true}
           elevation={0}
@@ -143,7 +146,7 @@ export default function MyPets({ isDelete = true }) {
         {loading ? (
           <>
             {[...Array(3)].map((_, index) => (
-              <PetListingSkeletonCard key={index}/>
+              <PetListingSkeletonCard key={index} />
             ))}
           </>
         ) : pets?.length > 0 ? (

@@ -156,17 +156,24 @@ export default function AboutEdit() {
       >
         <Loader isLoad={isLoading} />
         <View style={{ flex: 1, marginHorizontal: 20 }}>
-        <AppBar
+          <AppBar
             color={isDarkMode ? Colors.active : Colors.secondary}
             title={`Edit Your Pet Profile`}
             titleStyle={[
               style.b18,
-              { color: isDarkMode ? Colors.secondary : Colors.active },
+              {
+                color: isDarkMode ? Colors.secondary : Colors.active,
+                fontFamily: "Avenir-Bold",
+              },
             ]}
             centerTitle={true}
-            elevation={0} 
+            elevation={0}
             leading={
-              <TouchableOpacity onPress={() => router.replace(`/PetDetails/PetDetailPage?id=${petData?.id})`)}>
+              <TouchableOpacity
+                onPress={() =>
+                  router.replace(`/PetDetails/PetDetailPage?id=${petData?.id})`)
+                }
+              >
                 <Icon
                   name="chevron-back"
                   color={isDarkMode ? Colors.secondary : Colors.active}
@@ -197,7 +204,10 @@ export default function AboutEdit() {
               {/* <AppTitle title={"PET ABOUT"} style={style} /> */}
               <AppErrorMessage error={error} visible={errorVisible} />
               <View style={{ marginTop: 20 }}>
-                <AppFormImagePicker name="pet_profile_picture" pickerName={"Pet Profile Picture"} />
+                <AppFormImagePicker
+                  name="pet_profile_picture"
+                  pickerName={"Pet Profile Picture"}
+                />
               </View>
               <AppFormPicker
                 items={petTypes}

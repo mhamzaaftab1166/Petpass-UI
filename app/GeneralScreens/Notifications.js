@@ -75,18 +75,33 @@ export default function Notification() {
   const { isDarkMode } = useTheme();
 
   return (
-    <SafeAreaView style={[style.area, { backgroundColor: isDarkMode ? Colors.active : Colors.secondary }]}>
+    <SafeAreaView
+      style={[
+        style.area,
+        { backgroundColor: isDarkMode ? Colors.active : Colors.secondary },
+      ]}
+    >
       {/* App Bar */}
       <AppBar
         color={isDarkMode ? Colors.active : Colors.secondary}
         title="Notification"
-        titleStyle={[style.apptitle, { color: isDarkMode ? Colors.secondary : Colors.active }]}
+        titleStyle={[
+          style.apptitle,
+          {
+            color: isDarkMode ? Colors.secondary : Colors.active,
+            fontFamily: "Avenir-Bold",
+          },
+        ]}
         centerTitle={true}
         elevation={0}
         style={{ marginHorizontal: 20, marginTop: 10 }}
         leading={
           <TouchableOpacity onPress={() => router.back()}>
-            <Icon name="chevron-back" color={isDarkMode ? Colors.secondary : Colors.active} size={30} />
+            <Icon
+              name="chevron-back"
+              color={isDarkMode ? Colors.secondary : Colors.active}
+              size={30}
+            />
           </TouchableOpacity>
         }
       />
@@ -116,17 +131,28 @@ export default function Notification() {
                 }}
               />
               <View style={{ marginLeft: 10, flex: 1 }}>
-                <Text style={[style.r16, { color: isDarkMode ? Colors.secondary : Colors.active }]}>
+                <Text
+                  style={[
+                    style.r16,
+                    { color: isDarkMode ? Colors.secondary : Colors.active },
+                  ]}
+                >
                   {item.message}
                 </Text>
                 <Text
-                  style={[style.r12, { color: isDarkMode ? Colors.secondary : Colors.disable, marginTop: 10 }]}
+                  style={[
+                    style.r12,
+                    {
+                      color: isDarkMode ? Colors.secondary : Colors.disable,
+                      marginTop: 10,
+                    },
+                  ]}
                 >
                   {item.time}
                 </Text>
               </View>
             </View>
-            
+
             {index !== notifications.length - 1 && (
               <View style={[style.divider, { marginVertical: 10 }]} />
             )}
