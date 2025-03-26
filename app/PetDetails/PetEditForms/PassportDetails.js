@@ -41,55 +41,99 @@ export default function Login() {
   const petData = pet ? JSON.parse(pet) : null;
   
 
-  const handleSubmit = async (info) => {
-    const { passport } = info;
-    console.log(passport, 'pass');
-    let fileUri = passport
+  // const handleSubmit = async (info) => {
+  //   const { passport } = info;
+  //   console.log(passport, 'pass');
+  //   let fileUri = passport
 
-    if (!fileUri) {
-      console.error("No file URI found");
-      return;
-    }
+  //   if (!fileUri) {
+  //     console.error("No file URI found");
+  //     return;
+  //   }
   
-    if (fileUri.startsWith("content://")) {
-      const fileName = `passport_${Date.now()}.jpg`;
-      const newPath = `${FileSystem.cacheDirectory}${fileName}`;
-      try {
-        await FileSystem.copyAsync({
-          from: fileUri,
-          to: newPath,
-        });
-        fileUri = newPath;
-      } catch (error) {
-        console.error("Failed to copy file from content URI:", error);
-        return;
-      }
-    }
+  //   if (fileUri.startsWith("content://")) {
+  //     const fileName = `passport_${Date.now()}.jpg`;
+  //     const newPath = `${FileSystem.cacheDirectory}${fileName}`;
+  //     try {
+  //       await FileSystem.copyAsync({
+  //         from: fileUri,
+  //         to: newPath,
+  //       });
+  //       fileUri = newPath;
+  //     } catch (error) {
+  //       console.error("Failed to copy file from content URI:", error);
+  //       return;
+  //     }
+  //   }
 
-    try {
-      const base64 = await FileSystem.readAsStringAsync(fileUri, {
-        encoding: FileSystem.EncodingType.Base64,
+  //   try {
+  //     const base64 = await FileSystem.readAsStringAsync(fileUri, {
+  //       encoding: FileSystem.EncodingType.Base64,
+  //     });
+  
+  //     const payload = {
+  //       pet_id: petData?.id,
+  //       pet_passport_id : petData?.pet_passport?.id || null,
+  //       passport: `data:image/jpeg;base64,${base64}`,
+  //     };
+  //       setIsLoading(true);
+  //       const res = await petServices.addPassport(payload)
+  //       if(res.message === "Pet Passport saved successfully."){
+  //         setIsLoading(false);
+  //         router.replace(`/PetDetails/PetDetailPage?id=${petData?.id}`);
+  //       }
+  //     } catch (error) {
+  //     setErrorVisible(true);
+  //     setError(error.message);
+  //   } finally {
+  //     setIsLoading(false);
+  //   }
+  // };
+  
+
+
+const handleSubmit = async (info) => {
+  const { passport } = info;
+  console.log(passport, "pass");
+
+  try {
+    const formData = new FormData();
+
+    formData.append("pet_id", petData?.id);
+    formData.append("pet_passport_id", petData?.pet_passport?.id || null);
+
+    if (passport) {
+      const fileUri = passport.startsWith("file://")
+        ? passport
+        : `file://${passport}`;
+      const uriParts = fileUri.split(".");
+      const fileType = uriParts[uriParts.length - 1].toLowerCase();
+      const mimeType =
+        fileType === "pdf" ? "application/pdf" : `image/${fileType}`;
+
+      formData.append("passport", {
+        uri: Platform.OS === "ios" ? fileUri.replace("file://", "") : fileUri, // iOS fix
+        name: `passport.${fileType}`,
+        type: mimeType,
       });
-  
-      const payload = {
-        pet_id: petData?.id,
-        pet_passport_id : petData?.pet_passport?.id || null,
-        passport: `data:image/jpeg;base64,${base64}`,
-      };
-        setIsLoading(true);
-        const res = await petServices.addPassport(payload)
-        if(res.message === "Pet Passport saved successfully."){
-          setIsLoading(false);
-          router.replace(`/PetDetails/PetDetailPage?id=${petData?.id}`);
-        }
-      } catch (error) {
-      setErrorVisible(true);
-      setError(error.message);
-    } finally {
-      setIsLoading(false);
     }
-  };
-  
+    console.log("🚀 FormData Ready:");
+    for (let pair of formData.entries()) {
+      console.log(pair[0], ":", pair[1]);
+    }
+    setIsLoading(true);
+    const res = await petServices.addPassport(formData);
+    if (res.message === "Pet Passport saved successfully.") {
+      setIsLoading(false);
+      router.replace(`/PetDetails/PetDetailPage?id=${petData?.id}`);
+    }
+  } catch (error) {
+    setErrorVisible(true);
+    setError(error.message);
+  } finally {
+    setIsLoading(false);
+  }
+};
 
   return (
     <SafeAreaView
