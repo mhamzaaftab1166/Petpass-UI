@@ -47,7 +47,7 @@ export default function Login() {
   const [isLoading, setIsLoading] = useState(false);
   const [rememberMe, setRememberMe] = useState(false);
 
-  const handleSubmit = async (userInfo) => {
+  const handleSubmit = async (userInfo) => { 
     try {
       setIsLoading(true);
       const data = await authService.login(userInfo);

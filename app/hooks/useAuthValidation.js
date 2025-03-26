@@ -9,19 +9,37 @@ import { useAlertStore } from "../store/useStore";
 export default function useAuthValidation() {
   const router = useRouter();
   const { setShowAlert, showAlert } = useAlertStore();
-  const { token, refreshToken, rememberMe, clearUser, setToken } =
-    useUserStore();
+  const [rememberMe, setRememberMe] = useState(false);
+  const [refreshToken, setRefreshToken] = useState(null);
+  const { token, clearUser, setToken } = useUserStore();
 
   const handleLogout = () => {
     setShowAlert(false);
-    clearUser();
+    clearUser(); 
     router.replace("Authentication/Login");
   };
 
   useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const rememberem = await storage.getAppData(localStorageConst.REMEMBER);
+        const refreshToken = await storage.getAppData(
+          localStorageConst.REFRESHTOKEN
+        );
+        setRefreshToken(refreshToken);
+        setRememberMe(rememberem);
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      }
+    };
+
+    fetchData();
+  }, []);
+
+  useEffect(() => {
     const checkToken = async () => {
       try {
-        console.log("Checking token...");
+        console.log("Checking token...",rememberMe);
         const isValid = await authService.validateToken();
 
         if (isValid.message === "Valid token") {
