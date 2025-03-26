@@ -12,10 +12,11 @@ export default function useAuthValidation() {
   const [rememberMe, setRememberMe] = useState(false);
   const [refreshToken, setRefreshToken] = useState(null);
   const { token, clearUser, setToken } = useUserStore();
+  const [startValidate, setStartValidate] = useState(false);
 
   const handleLogout = () => {
     setShowAlert(false);
-    clearUser(); 
+    clearUser();
     router.replace("Authentication/Login");
   };
 
@@ -26,6 +27,7 @@ export default function useAuthValidation() {
         const refreshToken = await storage.getAppData(
           localStorageConst.REFRESHTOKEN
         );
+        setStartValidate(true);
         setRefreshToken(refreshToken);
         setRememberMe(rememberem);
       } catch (error) {
@@ -39,7 +41,7 @@ export default function useAuthValidation() {
   useEffect(() => {
     const checkToken = async () => {
       try {
-        console.log("Checking token...",rememberMe);
+        console.log("Checking token...", rememberMe);
         const isValid = await authService.validateToken();
 
         if (isValid.message === "Valid token") {
@@ -75,8 +77,9 @@ export default function useAuthValidation() {
         }
       }
     };
-
-    checkToken();
+    if (startValidate) {
+      checkToken();
+    }
     const interval = setInterval(checkToken, 180000);
 
     return () => clearInterval(interval);
