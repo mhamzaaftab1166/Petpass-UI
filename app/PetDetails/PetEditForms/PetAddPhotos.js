@@ -45,27 +45,6 @@ export default function PetAddPhotos() {
       )
       .min(1, "Please select at least one image."),
   });
-  // const handleSubmit = async (values) => {
-  //   try {
-  //     setIsLoading(true);
-  //     // const base64Images = await Promise.all(
-  //     //   values?.images.map((image) => convertImageToBase64(image))
-  //     // );
-  //     // const payload = {
-  //     //   pet_id: petData?.id,
-  //     //   images_url: base64Images,
-  //     // };
-  //     await petServices.addImages(payload);
-  //     setIsLoading(false);
-  //     router.replace(`/PetDetails/PetDetailPage?id=${petData?.id}`);
-  //   } catch (error) {
-  //     setErrorVisible(true);
-  //     setError(error.message);
-  //   } finally {
-  //     setIsLoading(false);
-  //   }
-  // };
-
 const handleSubmit = async (values) => {
   try {
     setIsLoading(true);
@@ -88,10 +67,6 @@ const handleSubmit = async (values) => {
         type: `image/${fileType}`,
       });
     });
-    for (let [key, value] of formData.entries()) {
-      console.log(`${key}:`, value);
-    }
-
     await petServices.addImages(formData);
     router.replace(`/PetDetails/PetDetailPage?id=${petData?.id}`);
   } catch (error) {

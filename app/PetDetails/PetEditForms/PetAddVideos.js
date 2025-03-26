@@ -51,15 +51,32 @@ export default function PetAddVideos() {
   const handleSubmit = async (values) => {
     try {
       setIsLoading(true);
-      const base64Videos = await Promise.all(
-        values?.videos.map((video) => convertVideoToBase64(video))
-      );
-      const payload = {
-        pet_id: petData?.id,
-        videos_url: base64Videos,
-        type: "videos",
-      };
-      const res = await petServices.addVideos(payload);
+      const formData = new FormData();
+      formData.append("pet_id", petData?.id);
+      formData.append("type", "videos");
+      values?.videos.forEach((video, index) => {
+        const videoUri = typeof video === "string" ? video : video.uri;
+
+        if (!videoUri) {
+          console.warn(`Video at index ${index} has no URI.`);
+          return;
+        }
+
+        const uriParts = videoUri.split(".");
+        const fileType = uriParts[uriParts.length - 1];
+
+        if (!fileType || !["mp4", "mov"].includes(fileType.toLowerCase())) {
+          console.warn(`Invalid video file type at index ${index}`);
+          return; 
+        }
+
+        formData.append(`videos_url[${index}]`, {
+          uri: videoUri,
+          name: `video_${index}.${fileType}`,
+          type: `video/${fileType}`,
+        });
+      });
+      const res = await petServices.addVideos(formData);
       setIsLoading(false);
       router.replace(`/PetDetails/PetDetailPage?id=${petData?.id}`);
     } catch (error) {
