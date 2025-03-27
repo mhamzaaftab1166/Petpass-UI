@@ -26,7 +26,7 @@ const Banner = ({ router, profileImg, isPublic,onDownload }) => {
           style={{
             backgroundColor: "transparent",
             marginTop: 35,
-            marginHorizontal: 20,
+            marginHorizontal: 10,
             justifyContent: "center",
           }}
           elevation={0}
@@ -53,10 +53,10 @@ const Banner = ({ router, profileImg, isPublic,onDownload }) => {
                   color={Colors.secondary}
                   size={25}
                   style={{ marginRight: 15, marginTop: 2 }}
-                  
+
                 />
               </Pressable>
-              <MaterialIcons name="share" color={Colors.secondary} size={25} />
+              {/* <MaterialIcons name="share" color={Colors.secondary} size={25} /> */}
             </HStack>
           }
         />
