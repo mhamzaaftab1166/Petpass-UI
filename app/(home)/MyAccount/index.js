@@ -25,11 +25,12 @@ import logoutIcon from "../../../assets/images/profile/logout.png";
 import logoutDark from "../../../assets/images/profile/logoutDark.png";
 import style from "../../theme/style";
 import { useRouter } from "expo-router";
-import { useAlertStore, useUserStore } from "../../store/useStore";
+import { useUserStore } from "../../store/useStore";
 import { useTheme } from "../../helper/themeProvider";
 import AppSkeleton from "../../components/AppSkeleton";
 import Icon from "react-native-vector-icons/Ionicons";
-import AppAlert from "../../components/AppAlert";
+import { unregisterIndieDevice } from "native-notify";
+import notificationData from "../../constants/notification";
 
 const { width, height } = Dimensions.get("screen");
 
@@ -37,8 +38,8 @@ export default function MyAccount() {
   const router = useRouter();
   const { isDarkMode } = useTheme();
   const { user, loading, fetchUser, clearUser } = useUserStore();
+
   // const { showAlert, setShowAlert } = useAlertStore();
-  
 
   // const handleLogout = () => {
   //   setShowAlert(false);
@@ -286,6 +287,12 @@ export default function MyAccount() {
               <TouchableOpacity
                 onPress={() => {
                   if (item.name === "Log Out") {
+                    console.log(String(user?.id));
+                    unregisterIndieDevice(
+                      String(user?.id),
+                      notificationData.appId,
+                      notificationData.appToken
+                    );
                     clearUser();
                     router.replace("/Authentication/Login");
                   } else if (item.route) {

@@ -5,20 +5,31 @@ import { useUserStore } from "../store/useStore";
 import authService from "../services/authService";
 import { localStorageConst } from "../constants/storageConstant";
 import { useAlertStore } from "../store/useStore";
+import { unregisterIndieDevice } from "native-notify";
+import notificationData from "../constants/notification"
 
 export default function useAuthValidation() {
   const router = useRouter();
   const { setShowAlert, showAlert } = useAlertStore();
   const [rememberMe, setRememberMe] = useState(false);
   const [refreshToken, setRefreshToken] = useState(null);
-  const { token, clearUser, setToken } = useUserStore();
+  const { user, token, clearUser, setToken, fetchUser } = useUserStore();
   const [startValidate, setStartValidate] = useState(false);
 
   const handleLogout = () => {
+    unregisterIndieDevice(
+      String(user?.id),
+      notificationData.appId,
+      notificationData.appToken
+    );
     setShowAlert(false);
     clearUser();
     router.replace("Authentication/Login");
   };
+
+  useEffect(() => {
+    fetchUser();
+  }, []);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -42,6 +53,7 @@ export default function useAuthValidation() {
     const checkToken = async () => {
       try {
         console.log("Checking token...", rememberMe);
+
         const isValid = await authService.validateToken();
 
         if (isValid.message === "Valid token") {
@@ -64,11 +76,11 @@ export default function useAuthValidation() {
                 setToken(data.accessToken);
               } else {
                 console.log("Failed to refresh token, logging out...");
-                handleLogout();
+                setShowAlert(true);
               }
             } catch (refreshError) {
               console.log("Refresh token failed:", refreshError);
-              handleLogout();
+              setShowAlert(true);
             }
           } else {
             console.log("Session expired. Logging out...");
