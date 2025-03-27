@@ -1,3 +1,4 @@
+import React, { useCallback, useEffect, useRef, useState } from "react";
 import {
   Dimensions,
   SafeAreaView,
@@ -5,7 +6,6 @@ import {
   StatusBar,
   View,
 } from "react-native";
-import React, { useCallback } from "react";
 import { useRouter, useLocalSearchParams, useFocusEffect } from "expo-router";
 import style from "../theme/style";
 import { Colors } from "../theme/color";
@@ -20,27 +20,33 @@ import VaccinationDetail from "../components/PetDetailsComponents/VaccinationDet
 import { usePetStore } from "../store/useStore";
 import Loader from "../components/Loader/Loader";
 import Passport from "../components/PetDetailsComponents/Passport";
-import { isLoading } from "expo-font";
 import ProfileCompletionBar from "../components/PetDetailsComponents/ProfileCompletionBar";
 import { PetDetailSkeleton } from "../components/SkeletonCards/PetDetailSkeleton";
+import * as MediaLibrary from "expo-media-library";
+import ViewShot, { captureRef, captureScreen } from "react-native-view-shot";
+import AppAlert from "../components/AppAlert/index";
 
 const width = Dimensions.get("screen").width;
 const height = Dimensions.get("screen").height;
 
 export default function PetDetailPage() {
-  const {
-    pet,
-    loading,
-    fetchPetById,
-    fetchPublicPetById,
-    singlePetError,
-    singlePetErrorVisible,
-    clearPets,
-  } = usePetStore();
+  const scrollViewRef = useRef();
+  const [status, requestPermission] = MediaLibrary.usePermissions();
+  const { pet, loading, fetchPetById, fetchPublicPetById, clearPets } =
+    usePetStore();
   const { id, userId, isPublic } = useLocalSearchParams();
-
   const { isDarkMode } = useTheme();
   const router = useRouter();
+
+  const [showDownloadAlert, setShowDownloadAlert] = useState(false);
+  const [alertMessage, setAlertMessage] = useState("");
+  const [showMessageAlert, setShowMessageAlert] = useState(false);
+
+  useEffect(() => {
+    if (status?.granted === false) {
+      requestPermission();
+    }
+  }, [status]);
 
   useFocusEffect(
     useCallback(() => {
@@ -52,14 +58,35 @@ export default function PetDetailPage() {
       return () => clearPets();
     }, [id])
   );
+  const handleDownloadTrigger = () => {
+    setShowDownloadAlert(true);
+  };
 
-  const handleDownlaod=()=>{
+  const onDownloadConfirm = async () => {
+    setShowDownloadAlert(false);
 
-  }
+    if (!scrollViewRef.current) {
+      setAlertMessage("View reference not found");
+      setShowMessageAlert(true);
+      return;
+    }
+    try {
+      const uri = await captureRef(scrollViewRef.current, {
+        format: "jpeg",
+        quality: 0.8,
+      });
+      console.log("Image saved to", uri);
+      await MediaLibrary.createAssetAsync(uri);
+      setAlertMessage("Image saved to your gallery!");
+      setShowMessageAlert(true);
+    } catch (error) {
+      console.error("Snapshot failed", error);
+      setAlertMessage("Snapshot failed. Please try again.");
+      setShowMessageAlert(true);
+    }
+  };
 
-  if (loading) return (
-    <PetDetailSkeleton />
-  );
+  if (loading) return <PetDetailSkeleton />;
 
   return (
     <SafeAreaView
@@ -68,65 +95,103 @@ export default function PetDetailPage() {
         { backgroundColor: isDarkMode ? Colors.active : Colors.secondary },
       ]}
     >
-
       <StatusBar backgroundColor="transparent" translucent={true} />
       <View>
         <ScrollView showsVerticalScrollIndicator={false}>
-          <Banner profileImg={pet?.pet_profile_picture} router={router} isPublic={isPublic} onDownload={handleDownlaod} />
-          <View
-            style={[
-              style.main,
-              {
-                backgroundColor: isDarkMode ? Colors.active : Colors.secondary,
-                marginTop: isPublic ? 0 : 10,
-              },
-            ]}
-          >
-            {!isPublic && (
-              <ProfileCompletionBar
-                router={router}
-                pet={pet}
-                value={pet?.pet_profile_completeion}
-              />
-            )}
+          <ViewShot captureMode="mount" ref={scrollViewRef}>
+            <Banner
+              profileImg={pet?.pet_profile_picture}
+              router={router}
+              isPublic={isPublic}
+              onDownload={handleDownloadTrigger}
+            />
             <View
               style={[
-                style.divider,
-                { marginTop: isPublic ? 0 : 20, marginBottom: 10 },
+                style.main,
+                {
+                  backgroundColor: isDarkMode
+                    ? Colors.active
+                    : Colors.secondary,
+                  marginTop: isPublic ? 0 : 10,
+                },
               ]}
-            ></View>
-            <Bio pet={pet} router={router} />
-            <About pet={pet} router={router} isEdit={isPublic ? false : true} />
-            <Description
-              router={router}
-              title="Description"
-              pet={pet}
-              isEdit={isPublic ? false : true}
-            />
-            <PhotoGallery
-              isEdit={isPublic ? false : true}
-              router={router}
-              pet={pet}
-              photos={pet?.pet_gallery?.images}
-            />
-            <VideoGallery
-              isEdit={isPublic ? false : true}
-              pet={pet}
-              router={router}
-              videos={pet?.pet_gallery?.video}
-            />
-            {!isPublic && (
-              <VaccinationDetail
+            >
+              {!isPublic && (
+                <ProfileCompletionBar
+                  router={router}
+                  pet={pet}
+                  value={pet?.pet_profile_completeion}
+                />
+              )}
+              <View
+                style={[
+                  style.divider,
+                  { marginTop: isPublic ? 0 : 20, marginBottom: 10 },
+                ]}
+              ></View>
+              <Bio pet={pet} router={router} />
+              <About pet={pet} router={router} isEdit={!isPublic} />
+              <Description
+                router={router}
+                title="Description"
+                pet={pet}
+                isEdit={!isPublic}
+              />
+              <PhotoGallery
+                isEdit={!isPublic}
+                router={router}
+                pet={pet}
+                photos={pet?.pet_gallery?.images}
+              />
+              <VideoGallery
+                isEdit={!isPublic}
                 pet={pet}
                 router={router}
-                isEdit={isPublic ? false : true}
+                videos={pet?.pet_gallery?.video}
               />
-            )}
-            {!isPublic && <Passport pet={pet} router={router} />}
-          </View>
-          {isPublic && <View style={{ marginBottom: 20 }}></View>}
+              {!isPublic && (
+                <VaccinationDetail
+                  pet={pet}
+                  router={router}
+                  isEdit={!isPublic}
+                />
+              )}
+              {!isPublic && <Passport pet={pet} router={router} />}
+            </View>
+            {isPublic && <View style={{ marginBottom: 20 }}></View>}
+          </ViewShot>
         </ScrollView>
       </View>
+
+      {/* Custom Alert for Download Confirmation */}
+      <AppAlert
+        showAlert={showDownloadAlert}
+        showProgress={false}
+        title="Download"
+        message="Are you sure you want to download pet detail screen?"
+        closeOnTouchOutside={false}
+        closeOnHardwareBackPress={false}
+        showCancelButton={true}
+        showConfirmButton={true}
+        cancelText="No"
+        confirmText="Yes"
+        confirmButtonColor={Colors.primary}
+        onCancelPressed={() => setShowDownloadAlert(false)}
+        onConfirmPressed={onDownloadConfirm}
+      />
+      <AppAlert
+        showAlert={showMessageAlert}
+        showProgress={false}
+        title="Download"
+        message={alertMessage}
+        closeOnTouchOutside={false}
+        closeOnHardwareBackPress={false}
+        showCancelButton={false}
+        showConfirmButton={true}
+        confirmText="Sure"
+        confirmButtonColor={Colors.primary}
+        onConfirmPressed={() => setShowMessageAlert(false)}
+      />
     </SafeAreaView>
   );
 }

@@ -53,6 +53,7 @@ const Banner = ({ router, profileImg, isPublic,onDownload }) => {
                   color={Colors.secondary}
                   size={25}
                   style={{ marginRight: 15, marginTop: 2 }}
+                  
                 />
               </Pressable>
               <MaterialIcons name="share" color={Colors.secondary} size={25} />
