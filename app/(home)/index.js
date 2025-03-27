@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect } from "react";
+import React, { useCallback } from "react";
 import { Dimensions, ScrollView, StatusBar, View } from "react-native";
 import Banner from "../components/HomePage/Banner";
 import Categories from "../components/HomePage/Categories";
@@ -8,17 +8,15 @@ import PetTips from "../components/HomePage/PetTips";
 import { useTheme } from "../helper/themeProvider";
 import { Colors } from "../theme/color";
 import "react-native-get-random-values";
-import { useAlertStore, useHomeStore } from "../store/useStore";
+import { useHomeStore } from "../store/useStore";
 import { useFocusEffect } from "expo-router";
-import Loader from "../components/Loader/Loader";
-import useAuthValidation from "../hooks/useAuthValidation";
-import AppAlert from "../components/AppAlert";
 import registerNNPushToken from "native-notify";
+import notificationData from "../constants/notification";
 
 const { width, height } = Dimensions.get("screen");
 
 const Index = () => {
-  registerNNPushToken(28718, "bOjDgjcbEoQ3kbAOHxmZfu");
+  registerNNPushToken(notificationData.appId, notificationData.appToken);
   const {
     homeData,
     loading,

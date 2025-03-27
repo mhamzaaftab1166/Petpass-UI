@@ -30,6 +30,8 @@ import { useUserStore } from "../store/useStore";
 import { localStorageConst } from "../constants/storageConstant";
 import Checkbox from "expo-checkbox";
 import { useTheme } from "../helper/themeProvider";
+import { registerIndieID, unregisterIndieDevice } from "native-notify";
+import notificationData from "../constants/notification";
 
 const width = Dimensions.get("screen").width;
 const height = Dimensions.get("screen").height;
@@ -51,6 +53,7 @@ export default function Login() {
     try {
       setIsLoading(true);
       const data = await authService.login(userInfo);
+      
       if (data?.message === AuthenticationSuccess.loginSuccess) {
         await storeage.storeAppData(
           localStorageConst.JWTUSER,  data?.accessToken
@@ -58,6 +61,11 @@ export default function Login() {
         await storeage.storeAppData(localStorageConst.REMEMBER, rememberMe)
         await storeage.storeAppData(localStorageConst.REFRESHTOKEN, rememberMe ? data?.refreshToken  : null)
       }
+      registerIndieID(
+        String(data?.user?.id),
+        notificationData.appId,
+        notificationData.appToken
+      );
       setToken(data?.accessToken);
       setRefreshToken(data?.refreshToken)
       setRemember(rememberMe)
