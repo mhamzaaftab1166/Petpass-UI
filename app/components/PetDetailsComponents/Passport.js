@@ -66,11 +66,13 @@ const Passport = ({ pet, router }) => {
             <View style={styles.contentContainer}>
               {isImage ? (
                 <Image
+                  resizeMode="cover"
                   source={{ uri: passportUrl }}
                   style={styles.imageStyle}
                 />
               ) : (
                 <Image
+                  resizeMode="cover"
                   source={{ uri: passportUrl }}
                   style={styles.imageStyle}
                 />
@@ -137,7 +139,6 @@ const styles = StyleSheet.create({
     width: "100%",
     height: 400,
     borderRadius: 8,
-    resizeMode: "stretch",
   },
   webviewStyle: {
     width: "100%",

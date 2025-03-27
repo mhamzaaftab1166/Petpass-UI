@@ -40,49 +40,73 @@ export default function Login() {
   const { pet } = useLocalSearchParams();
   const petData = pet ? JSON.parse(pet) : null;
 
+  const getMimeType = (uri) => {
+    const extension = uri.split(".").pop().toLowerCase();
+  
+    const mimeTypes = {
+      pdf: "application/pdf",
+      jpg: "image/jpeg",
+      jpeg: "image/jpeg",
+      png: "image/png",
+      gif: "image/gif",
+      webp: "image/webp",
+      doc: "application/msword",
+      docx: "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+    };
+  
+    return mimeTypes[extension] || "application/octet-stream";
+  };
 
-const handleSubmit = async (info) => {
-  const { passport } = info;
-  console.log(passport, "pass");
-
-  try {
-    const formData = new FormData();
-
-    formData.append("pet_id", petData?.id);
-    formData.append("pet_passport_id", petData?.pet_passport?.id || null);
-
-    if (passport) {
-      const fileUri = passport.startsWith("file://")
-        ? passport
-        : `file://${passport}`;
-      const uriParts = fileUri.split(".");
-      const fileType = uriParts[uriParts.length - 1].toLowerCase();
-      const mimeType =
-        fileType === "pdf" ? "application/pdf" : `image/${fileType}`;
-
-      formData.append("passport", {
-        uri: Platform.OS === "ios" ? fileUri.replace("file://", "") : fileUri, // iOS fix
-        name: `passport.${fileType}`,
-        type: mimeType,
-      });
-    }
-    console.log("🚀 FormData Ready:");
-    for (let pair of formData.entries()) {
-      console.log(pair[0], ":", pair[1]);
-    }
-    setIsLoading(true);
-    const res = await petServices.addPassport(formData);
-    if (res.message === "Pet Passport saved successfully.") {
+  const handleSubmit = async (info) => {
+    const { passport } = info;
+    console.log(passport, "pass");
+  
+    try {
+      const formData = new FormData();
+  
+      formData.append("pet_id", petData?.id);
+      formData.append("pet_passport_id", petData?.pet_passport?.id || null);
+  
+      if (passport) {
+        let fileUri = passport;
+  
+        // ✅ Fix for content:// URIs (Android)
+        if (passport.startsWith("content://")) {
+          const fileInfo = await FileSystem.getInfoAsync(passport);
+          if (!fileInfo.exists) {
+            throw new Error("File does not exist at the provided URI.");
+          }
+          fileUri = fileInfo.uri;
+        }
+  
+        const mimeType = getMimeType(fileUri);
+        const fileType = mimeType.split("/").pop(); // Get file extension from MIME
+  
+        formData.append("passport", {
+          uri: Platform.OS === "ios" ? fileUri.replace("file://", "") : fileUri,
+          name: `passport.${fileType}`,
+          type: mimeType,
+        });
+      }
+  
+      console.log("🚀 FormData Ready:");
+      for (let pair of formData.entries()) {
+        console.log(pair[0], ":", pair[1]);
+      }
+  
+      setIsLoading(true);
+      const res = await petServices.addPassport(formData);
+      if (res.message === "Pet Passport saved successfully.") {
+        setIsLoading(false);
+        router.replace(`/PetDetails/PetDetailPage?id=${petData?.id}`);
+      }
+    } catch (error) {
+      setErrorVisible(true);
+      setError(error.message);
+    } finally {
       setIsLoading(false);
-      router.replace(`/PetDetails/PetDetailPage?id=${petData?.id}`);
     }
-  } catch (error) {
-    setErrorVisible(true);
-    setError(error.message);
-  } finally {
-    setIsLoading(false);
-  }
-};
+  };
 
   return (
     <SafeAreaView

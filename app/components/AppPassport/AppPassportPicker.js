@@ -167,7 +167,7 @@ const AppPassportPicker = ({
       <TouchableOpacity onPress={pickFromGallery} style={styles.container}>
         {passportUri ? (
           <Image
-            resizeMode="stretch"
+            resizeMode="cover"
             style={styles.image}
             source={{ uri: passportUri }}
           />
@@ -248,11 +248,11 @@ const styles = StyleSheet.create({
   image: {
     width: "100%",
     height: "100%",
-    marginTop: 20,
   },
   placeholderText: {
     color: Colors.placeholder || "#aaa",
     fontSize: 14,
+    fontFamily: "Avenir-Regular"
   },
   titleText: {
     fontSize: 16,
