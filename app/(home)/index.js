@@ -13,10 +13,12 @@ import { useFocusEffect } from "expo-router";
 import Loader from "../components/Loader/Loader";
 import useAuthValidation from "../hooks/useAuthValidation";
 import AppAlert from "../components/AppAlert";
+import registerNNPushToken from "native-notify";
 
 const { width, height } = Dimensions.get("screen");
 
 const Index = () => {
+  registerNNPushToken(28718, "bOjDgjcbEoQ3kbAOHxmZfu");
   const {
     homeData,
     loading,
