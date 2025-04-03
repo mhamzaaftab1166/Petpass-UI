@@ -118,7 +118,7 @@ export default function MyPets({ isDelete = true }) {
           centerTitle={true}
           elevation={0}
           leading={
-            <TouchableOpacity onPress={() => router.replace("MyAccount")}>
+            <TouchableOpacity onPress={() => router.back()}>
               <Icon
                 name="chevron-back"
                 color={isDarkMode ? Colors.secondary : Colors.active}
