@@ -79,47 +79,56 @@ export default function PetListing() {
         />
         <View
           style={{
-            paddingHorizontal: 20,
-            marginTop: 20,
-            flexDirection: "row",
-            justifyContent: "space-between",
-            marginBottom: 16,
+            backgroundColor: isDarkMode ? Colors.active : Colors.secondary,
+            flex: 1,
           }}
         >
-          {[...Array(2)].map((_, index) => (
-            <View key={index}>
-              <AppSkeleton
-                width={width / 2.3}
-                height={height / 5.8}
-                borderRadius={10}
-              />
-              <AppSkeleton width={width / 2.3} height={20} />
-              <AppSkeleton width={width / 2.3} height={20} />
-              <AppSkeleton width={width / 2.3} height={20} />
-            </View>
-          ))}
-        </View>
-        <View
-          style={{
-            paddingHorizontal: 20,
-            marginTop: 5,
-            flexDirection: "row",
-            justifyContent: "space-between",
-            marginBottom: 16,
-          }}
-        >
-          {[...Array(2)].map((_, index) => (
-            <View key={index}>
-              <AppSkeleton
-                width={width / 2.3}
-                height={height / 5.8}
-                borderRadius={10}
-              />
-              <AppSkeleton width={width / 2.3} height={20} />
-              <AppSkeleton width={width / 2.3} height={20} />
-              <AppSkeleton width={width / 2.3} height={20} />
-            </View>
-          ))}
+          <View
+            style={{
+              backgroundColor: isDarkMode ? Colors.active : Colors.secondary,
+              paddingHorizontal: 20,
+              marginTop: 20,
+              flexDirection: "row",
+              justifyContent: "space-between",
+              marginBottom: 16,
+            }}
+          >
+            {[...Array(2)].map((_, index) => (
+              <View key={index}>
+                <AppSkeleton
+                  width={width / 2.3}
+                  height={height / 5.8}
+                  borderRadius={10}
+                />
+                <AppSkeleton width={width / 2.3} height={20} />
+                <AppSkeleton width={width / 2.3} height={20} />
+                <AppSkeleton width={width / 2.3} height={20} />
+              </View>
+            ))}
+          </View>
+          <View
+            style={{
+              backgroundColor: isDarkMode ? Colors.active : Colors.secondary,
+              paddingHorizontal: 20,
+              marginTop: 5,
+              flexDirection: "row",
+              justifyContent: "space-between",
+              marginBottom: 16,
+            }}
+          >
+            {[...Array(2)].map((_, index) => (
+              <View key={index}>
+                <AppSkeleton
+                  width={width / 2.3}
+                  height={height / 5.8}
+                  borderRadius={10}
+                />
+                <AppSkeleton width={width / 2.3} height={20} />
+                <AppSkeleton width={width / 2.3} height={20} />
+                <AppSkeleton width={width / 2.3} height={20} />
+              </View>
+            ))}
+          </View>
         </View>
       </>
     );

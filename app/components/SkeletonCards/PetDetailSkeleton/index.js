@@ -2,13 +2,15 @@ import React from "react";
 import { Dimensions, StyleSheet, View } from "react-native";
 import AppSkeleton from "../../AppSkeleton";
 import { Colors } from "../../../theme/color";
+import { useTheme } from "../../../helper/themeProvider";
 
 const width = Dimensions.get("screen").width;
 const height = Dimensions.get("screen").height;
 
 export const PetDetailSkeleton = () => {
+    const { isDarkMode } = useTheme();
   return (
-    <View>
+    <View style={{ flex: 1, backgroundColor: isDarkMode ? Colors.active : Colors.secondary }}>
       <AppSkeleton width={width} height={height / 3.2} />
       <View style={{ marginTop: 10, marginLeft: 20, marginRight: 20 }}>
         <View style={styles.topRow}>
