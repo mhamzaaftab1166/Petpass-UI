@@ -14,14 +14,15 @@ import { Colors } from "../../theme/color";
 import style from "../../theme/style";
 import petEdit from "../../../assets/images/pets/petEdit.png";
 import { useTheme } from "../../helper/themeProvider";
-import { MaterialIcons } from "@expo/vector-icons"; // Import right arrow icon
+import { MaterialIcons } from "@expo/vector-icons";
 
 const { height, width } = Dimensions.get("window");
 
 const VideoItem = ({ videoUrl, onPress }) => {
   const player = useVideoPlayer(videoUrl, (player) => {
-    player.loop = true;
+    player.loop = false;
     player.muted = true;
+    player.play();
   });
 
   return (
@@ -32,6 +33,7 @@ const VideoItem = ({ videoUrl, onPress }) => {
         allowsFullscreen
         allowsPictureInPicture
         nativeControls
+        
       />
     </TouchableOpacity>
   );

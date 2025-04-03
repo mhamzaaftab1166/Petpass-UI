@@ -199,7 +199,7 @@ export default function Address() {
                     justifyContent: "flex-end",
                     alignItems: "center",
                     height: 80,
-                    backgroundColor: Colors.secondary,
+                   backgroundColor: isDarkMode ? Colors.active : Colors.secondary,
                     paddingHorizontal: 10,
                     marginTop: 20,
                     borderRadius: 10,
