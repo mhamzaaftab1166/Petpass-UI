@@ -74,6 +74,10 @@ const updatePassport = (payload, id) => {
   return _axios("put", `/user-pet-passport/${id}`, payload, "multipart/form-data");
 };
 
+const getPetsVaccines = () => {
+  return _axios("get", `/user-pets-vaccination`);
+};
+
 export default {
   createUserPet,
   getPets,
@@ -92,5 +96,6 @@ export default {
   getPublicPets,
   getPublicPetById,
   addPassport,
-  updatePassport
+  updatePassport,
+  getPetsVaccines,
 };
