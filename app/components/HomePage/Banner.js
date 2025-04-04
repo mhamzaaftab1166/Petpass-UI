@@ -17,6 +17,8 @@ const { width, height } = Dimensions.get("screen");
 
 const Banner = () => {
   const router = useRouter();
+  const notificationCount = 37;
+
   return (
     <ImageBackground
       source={require("../../../assets/images/home/banner1.png")}
@@ -58,9 +60,9 @@ const Banner = () => {
           />
         </View>
 
-        {/* Notification Icon */}
+        {/* Notification Icon with count badge */}
         <TouchableOpacity
-          style={{ marginHorizontal: 10 }}
+          style={styles.notificationContainer}
           onPress={() => router.push("/GeneralScreens/Notifications")}
         >
           <Icon
@@ -68,12 +70,12 @@ const Banner = () => {
             color={Colors.secondary}
             size={30}
           />
+          {notificationCount > 0 && (
+            <View style={styles.badge}>
+              <Text style={styles.badgeText}>{notificationCount}</Text>
+            </View>
+          )}
         </TouchableOpacity>
-
-        {/* Cart Icon */}
-        {/* <TouchableOpacity onPress={() => navigation.navigate("Cart")}>
-          <Icon name="cart-outline" color={Colors.secondary} size={30} />
-        </TouchableOpacity> */}
       </View>
 
       {/* Banner Text */}
@@ -84,7 +86,7 @@ const Banner = () => {
             color: Colors.secondary,
             marginTop: 60,
             marginLeft: 20,
-            fontWeight: 800,
+            fontWeight: "800",
             fontFamily: "Avenir-Bold",
           },
         ]}
@@ -120,4 +122,26 @@ const Banner = () => {
 
 export default Banner;
 
-const styles = StyleSheet.create({});
+const styles = StyleSheet.create({
+  notificationContainer: {
+    marginHorizontal: 10,
+    position: "relative",
+  },
+  badge: {
+    position: "absolute",
+    top: -5,
+    right: -5,
+    backgroundColor: "red",
+    borderRadius: 10,
+    paddingHorizontal: 5,
+    paddingVertical: 1,
+    minWidth: 20,
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  badgeText: {
+    color: "white",
+    fontSize: 12,
+    fontWeight: "bold",
+  },
+});

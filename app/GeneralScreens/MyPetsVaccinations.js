@@ -237,6 +237,6 @@ const localStyles = StyleSheet.create({
   errorText: {
     color: "red",
     textAlign: "center",
-    marginTop: 20,
+    marginTop: 100,
   },
 });

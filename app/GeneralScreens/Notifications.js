@@ -1,24 +1,25 @@
+import React, { useState } from "react";
 import {
   View,
   Text,
   Image,
-  ScrollView,
-  Dimensions,
   SafeAreaView,
+  Dimensions,
   TouchableOpacity,
+  RefreshControl,
+  StyleSheet,
 } from "react-native";
-import React from "react";
+import { SwipeListView } from "react-native-swipe-list-view";
 import { useRouter } from "expo-router";
-import style from "../theme/style"
+import style from "../theme/style";
 import { Colors } from "../theme/color";
 import Icon from "react-native-vector-icons/Ionicons";
 import { AppBar } from "@react-native-material/core";
-import { useTheme } from "../helper/themeProvider"
+import { useTheme } from "../helper/themeProvider";
 
 const width = Dimensions.get("screen").width;
 const height = Dimensions.get("screen").height;
 
-// Notification Data
 const notifications = [
   {
     id: 1,
@@ -73,6 +74,77 @@ const notifications = [
 export default function Notification() {
   const router = useRouter();
   const { isDarkMode } = useTheme();
+  const [refreshing, setRefreshing] = useState(false);
+
+  const onRefresh = () => {
+    console.log("Refresh pressed");
+    setRefreshing(true);
+    setTimeout(() => {
+      setRefreshing(false);
+    }, 1000);
+  };
+
+  const handleDeleteNotification = (notificationId) => {
+    console.log("Delete pressed for notification", notificationId);
+  };
+
+  const renderItem = (data) => (
+    <View
+      style={[
+        styles.rowFront,
+        { backgroundColor: isDarkMode ? Colors.active : Colors.secondary },
+      ]}
+    >
+      <View
+        style={{
+          flexDirection: "row",
+          alignItems: "center",
+          marginHorizontal: 20,
+        }}
+      >
+        <Image
+          source={data.item.image}
+          style={{
+            resizeMode: "stretch",
+            height: height / 12,
+            width: width / 5,
+          }}
+        />
+        <View style={{ marginLeft: 10, flex: 1 }}>
+          <Text
+            style={[
+              style.r16,
+              { color: isDarkMode ? Colors.secondary : Colors.active },
+            ]}
+          >
+            {data.item.message}
+          </Text>
+          <Text
+            style={[
+              style.r12,
+              {
+                color: isDarkMode ? Colors.secondary : Colors.disable,
+                marginTop: 10,
+              },
+            ]}
+          >
+            {data.item.time}
+          </Text>
+        </View>
+      </View>
+    </View>
+  );
+
+  const renderHiddenItem = (data) => (
+    <View style={styles.rowBack}>
+      <TouchableOpacity
+        style={styles.deleteButton}
+        onPress={() => handleDeleteNotification(data.item.id)}
+      >
+        <Icon name="trash" color="#FA6262" size={30} />
+      </TouchableOpacity>
+    </View>
+  );
 
   return (
     <SafeAreaView
@@ -106,59 +178,44 @@ export default function Notification() {
         }
       />
 
-      <ScrollView showsVerticalScrollIndicator={false}>
-        {notifications.map((item, index) => (
-          <View
-            key={item.id}
-            style={{
-              backgroundColor: item.background || "transparent",
-              paddingVertical: 10,
-            }}
-          >
-            <View
-              style={{
-                flexDirection: "row",
-                alignItems: "center",
-                marginHorizontal: 20,
-              }}
-            >
-              <Image
-                source={item.image}
-                style={{
-                  resizeMode: "stretch",
-                  height: height / 12,
-                  width: width / 5,
-                }}
-              />
-              <View style={{ marginLeft: 10, flex: 1 }}>
-                <Text
-                  style={[
-                    style.r16,
-                    { color: isDarkMode ? Colors.secondary : Colors.active },
-                  ]}
-                >
-                  {item.message}
-                </Text>
-                <Text
-                  style={[
-                    style.r12,
-                    {
-                      color: isDarkMode ? Colors.secondary : Colors.disable,
-                      marginTop: 10,
-                    },
-                  ]}
-                >
-                  {item.time}
-                </Text>
-              </View>
-            </View>
-
-            {index !== notifications.length - 1 && (
-              <View style={[style.divider, { marginVertical: 10 }]} />
-            )}
-          </View>
-        ))}
-      </ScrollView>
+      <SwipeListView
+        data={notifications}
+        renderItem={renderItem}
+        renderHiddenItem={renderHiddenItem}
+        rightOpenValue={-75}
+        disableRightSwipe
+        keyExtractor={(item) => item.id.toString()}
+        refreshControl={
+          <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+        }
+        ItemSeparatorComponent={() => (
+          <View style={[style.divider, { marginVertical: 10 }]} />
+        )}
+      />
     </SafeAreaView>
   );
 }
+
+const styles = StyleSheet.create({
+  rowFront: {
+    borderBottomColor: "#CCC",
+   
+    zIndex: 2,
+    elevation: 2,
+    paddingVertical: 10,
+  },
+  rowBack: {
+    alignItems: "center",
+    backgroundColor: "transparent",
+    flex: 1,
+    flexDirection: "row",
+    justifyContent: "flex-end",
+    paddingRight: 15,
+    marginVertical: 10,
+  },
+  deleteButton: {
+    width: 75,
+    alignItems: "center",
+    justifyContent: "center",
+  },
+});
