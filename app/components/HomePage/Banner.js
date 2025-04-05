@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import {
   View,
   Text,
@@ -11,13 +11,35 @@ import {
 import Icon from "react-native-vector-icons/Ionicons";
 import { Colors } from "../../theme/color";
 import style from "../../theme/style";
+import { useUserStore } from "../../store/useStore";
 import { useRouter } from "expo-router";
+import { getUnreadIndieNotificationInboxCount } from "native-notify";
+import notificationData from "../../constants/notification";
 
 const { width, height } = Dimensions.get("screen");
 
 const Banner = () => {
+  const { user } = useUserStore();
+  const [unreadNotificationCount, setUnreadNotificationCount] = useState(0);
   const router = useRouter();
-  const notificationCount = 37;
+
+   useEffect(() => {
+     async function fetchUnreadCount() {
+       try {
+         const unreadCount = await getUnreadIndieNotificationInboxCount(
+           String(user?.id),
+           notificationData.appId,
+           notificationData.appToken
+         );
+         console.log("unreadCount: ", unreadCount);
+         setUnreadNotificationCount(unreadCount);
+       } catch (error) {
+         console.error("Error fetching unread count:", error);
+       }
+     }
+     fetchUnreadCount();
+   }, [user]);
+
 
   return (
     <ImageBackground
@@ -70,9 +92,9 @@ const Banner = () => {
             color={Colors.secondary}
             size={30}
           />
-          {notificationCount > 0 && (
+          {unreadNotificationCount > 0 && (
             <View style={styles.badge}>
-              <Text style={styles.badgeText}>{notificationCount}</Text>
+              <Text style={styles.badgeText}>{unreadNotificationCount}</Text>
             </View>
           )}
         </TouchableOpacity>

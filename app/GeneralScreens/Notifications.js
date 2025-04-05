@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   View,
   Text,
@@ -13,6 +13,14 @@ import { SwipeListView } from "react-native-swipe-list-view";
 import { useRouter } from "expo-router";
 import style from "../theme/style";
 import { Colors } from "../theme/color";
+import {
+  getIndieNotificationInbox,
+  deleteIndieNotificationInbox,
+} from "native-notify";
+import { useUserStore } from "../store/useStore";
+import notification from "../constants/notification";
+import Appsk from "../components/AppSkeleton/index";
+
 import Icon from "react-native-vector-icons/Ionicons";
 import { AppBar } from "@react-native-material/core";
 import { useTheme } from "../helper/themeProvider";
@@ -20,75 +28,73 @@ import { useTheme } from "../helper/themeProvider";
 const width = Dimensions.get("screen").width;
 const height = Dimensions.get("screen").height;
 
-const notifications = [
-  {
-    id: 1,
-    image: require("../../assets/images/profile/notification.png"),
-    message: "The order has been confirmed, please check the delivery time.",
-    time: "1 hour ago",
-  },
-  {
-    id: 2,
-    image: require("../../assets/images/profile/notification.png"),
-    message: "Sam commented on the post: ‘Wow, this article is useful’.",
-    time: "1 hour ago",
-  },
-  {
-    id: 3,
-    image: require("../../assets/images/profile/notification.png"),
-    message: "The order has been confirmed, please check the delivery time.",
-    time: "4 hours ago",
-  },
-  {
-    id: 4,
-    image: require("../../assets/images/profile/notification.png"),
-    message: "The order has been confirmed, please check the delivery time.",
-    time: "1 day ago",
-  },
-  {
-    id: 5,
-    image: require("../../assets/images/profile/notification.png"),
-    message: "Sam commented on the post: ‘Wow, this article is useful’.",
-    time: "1 day ago",
-  },
-  {
-    id: 6,
-    image: require("../../assets/images/profile/notification.png"),
-    message: "Sam commented on the post: ‘Wow, this article is useful’.",
-    time: "2 days ago",
-  },
-  {
-    id: 7,
-    image: require("../../assets/images/profile/notification.png"),
-    message: "The order has been confirmed, please check the delivery time.",
-    time: "5 days ago",
-  },
-  {
-    id: 8,
-    image: require("../../assets/images/profile/notification.png"),
-    message: "The order has been successfully canceled.",
-    time: "1 hour ago",
-  },
-];
-
 export default function Notification() {
+  const { user } = useUserStore();
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
+  const [data, setData] = useState([]);
+  console.log(data);
+  
   const router = useRouter();
   const { isDarkMode } = useTheme();
   const [refreshing, setRefreshing] = useState(false);
 
+  const fetchNotifications = async () => {
+    try {
+      setLoading(true);
+      const notificationsData = await getIndieNotificationInbox(
+        String(user?.id),
+        notification.appId,
+        notification.appToken,
+        50
+      );
+      setData(notificationsData);
+    } catch (error) {
+      console.error("Failed to fetch notifications:", error);
+      setError(error.message);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    fetchNotifications();
+  }, []);
+
   const onRefresh = () => {
     console.log("Refresh pressed");
     setRefreshing(true);
-    setTimeout(() => {
-      setRefreshing(false);
+    setTimeout(async () => {
+      try {
+        await fetchNotifications();
+      } catch (error) {
+        setError(error.message);
+      } finally {
+        setRefreshing(false);
+      }
     }, 1000);
   };
 
-  const handleDeleteNotification = (notificationId) => {
+  const handleDeleteNotification = async (notificationId) => {
     console.log("Delete pressed for notification", notificationId);
+    try {
+      setLoading(true);
+      await deleteIndieNotificationInbox(
+        String(user?.id),
+        notificationId,
+        notification.appId,
+        notification.appToken,
+        50
+      );
+      await fetchNotifications();
+    } catch (error) {
+      setError(error.message);
+    } finally {
+      setLoading(false);
+    }
   };
 
-  const renderItem = (data) => (
+  const renderItem = ({ item }) => (
     <View
       style={[
         styles.rowFront,
@@ -103,9 +109,9 @@ export default function Notification() {
         }}
       >
         <Image
-          source={data.item.image}
+          source={require("../../assets/images/profile/notification.png")}
           style={{
-            resizeMode: "stretch",
+            resizeMode: "contain",
             height: height / 12,
             width: width / 5,
           }}
@@ -117,18 +123,29 @@ export default function Notification() {
               { color: isDarkMode ? Colors.secondary : Colors.active },
             ]}
           >
-            {data.item.message}
+            {item.title}
           </Text>
           <Text
             style={[
               style.r12,
               {
                 color: isDarkMode ? Colors.secondary : Colors.disable,
-                marginTop: 10,
+                marginTop: 5,
               },
             ]}
           >
-            {data.item.time}
+            {item.message}
+          </Text>
+          <Text
+            style={[
+              style.r10,
+              {
+                color: isDarkMode ? Colors.secondary : Colors.disable,
+                marginTop: 5,
+              },
+            ]}
+          >
+            {item.date}
           </Text>
         </View>
       </View>
@@ -139,13 +156,53 @@ export default function Notification() {
     <View style={styles.rowBack}>
       <TouchableOpacity
         style={styles.deleteButton}
-        onPress={() => handleDeleteNotification(data.item.id)}
+        onPress={() => handleDeleteNotification(data.item.notification_id)}
       >
         <Icon name="trash" color="#FA6262" size={30} />
       </TouchableOpacity>
     </View>
   );
 
+  const renderSkeleton = (key) => (
+    <View key={key} style={[styles.rowFront, { paddingVertical: 10 }]}>
+      <View
+        style={{
+          flexDirection: "row",
+          alignItems: "center",
+          marginHorizontal: 20,
+        }}
+      >
+        <Appsk width={width / 5} height={height / 12} borderRadius={4} />
+        <View style={{ marginLeft: 10, flex: 1 }}>
+          <Appsk
+            width="80%"
+            height={20}
+            borderRadius={4}
+            style={{ marginTop: 5 }}
+          />
+          <Appsk
+            width="60%"
+            height={15}
+            borderRadius={4}
+            style={{ marginTop: 5 }}
+          />
+          <Appsk
+            width="40%"
+            height={15}
+            borderRadius={4}
+            style={{ marginTop: 5 }}
+          />
+        </View>
+      </View>
+    </View>
+  );
+
+  if (error)
+    return (
+      <Text style={{ color: "red", textAlign: "center", marginTop: 100 }}>
+        {error}
+      </Text>
+    );
   return (
     <SafeAreaView
       style={[
@@ -153,7 +210,6 @@ export default function Notification() {
         { backgroundColor: isDarkMode ? Colors.active : Colors.secondary },
       ]}
     >
-      {/* App Bar */}
       <AppBar
         color={isDarkMode ? Colors.active : Colors.secondary}
         title="Notification"
@@ -178,20 +234,24 @@ export default function Notification() {
         }
       />
 
-      <SwipeListView
-        data={notifications}
-        renderItem={renderItem}
-        renderHiddenItem={renderHiddenItem}
-        rightOpenValue={-75}
-        disableRightSwipe
-        keyExtractor={(item) => item.id.toString()}
-        refreshControl={
-          <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
-        }
-        ItemSeparatorComponent={() => (
-          <View style={[style.divider, { marginVertical: 10 }]} />
-        )}
-      />
+      {loading ? (
+        <View>{[1, 2, 3, 4, 5, 6].map((item) => renderSkeleton(item))}</View>
+      ) : (
+        <SwipeListView
+          data={data}
+          renderItem={renderItem}
+          renderHiddenItem={renderHiddenItem}
+          rightOpenValue={-75}
+          disableRightSwipe
+          keyExtractor={(item) => item.notification_id.toString()}
+          refreshControl={
+            <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+          }
+          ItemSeparatorComponent={() => (
+            <View style={[style.divider, { marginVertical: 10 }]} />
+          )}
+        />
+      )}
     </SafeAreaView>
   );
 }
@@ -199,10 +259,8 @@ export default function Notification() {
 const styles = StyleSheet.create({
   rowFront: {
     borderBottomColor: "#CCC",
-   
     zIndex: 2,
     elevation: 2,
-    paddingVertical: 10,
   },
   rowBack: {
     alignItems: "center",
