@@ -20,7 +20,7 @@ import { formatDate } from "../../utils/generalUtils";
 
 const { width, height } = Dimensions.get("screen");
 
-const PetListingItem = ({ pet, isPublic = false }) => {
+const PetListingItem = ({ pet, isPublic = false, home }) => {
   const router = useRouter();
   const { isDarkMode } = useTheme();
 
@@ -29,8 +29,8 @@ const PetListingItem = ({ pet, isPublic = false }) => {
       onPress={() =>
         router.push(
           isPublic
-            ? `/PetDetails/PetDetailPage?id=${pet?.id}&isPublic=true&userId=${pet.user_id}`
-            : `/PetDetails/PetDetailPage?id=${pet?.id}`
+            ? `/PetDetails/PetDetailPage?id=${pet?.id}&isPublic=true&userId=${pet.user_id}&home=${home}`
+            : `/PetDetails/PetDetailPage?id=${pet?.id}&home=${home}`
         )
       }
       style={styles.outerContainer}

@@ -14,7 +14,7 @@ import { Colors } from "../../theme/color";
 
 const width = Dimensions.get("screen").width;
 const height = Dimensions.get("screen").height;
-const Banner = ({ router, profileImg, isPublic,onDownload }) => {
+const Banner = ({ router, profileImg, isPublic, onDownload, home }) => {
   return (
     <View>
       <ImageBackground
@@ -32,11 +32,17 @@ const Banner = ({ router, profileImg, isPublic,onDownload }) => {
           elevation={0}
           leading={
             <TouchableOpacity
-              onPress={() =>
-                isPublic
-                  ? router.back()
-                  : router.replace("/MyAccount/screens/MyPets")
-              }
+              onPress={() => {
+                if (isPublic) {
+                  router.back();
+                } else {
+                  if (home) {
+                    router.back()
+                  } else {
+                    router.replace("/MyAccount/screens/MyPets");
+                  }
+                }
+              }}
             >
               <Ionicons
                 name="chevron-back"
@@ -53,7 +59,6 @@ const Banner = ({ router, profileImg, isPublic,onDownload }) => {
                   color={Colors.secondary}
                   size={25}
                   style={{ marginRight: 15, marginTop: 2 }}
-
                 />
               </Pressable>
               {/* <MaterialIcons name="share" color={Colors.secondary} size={25} /> */}

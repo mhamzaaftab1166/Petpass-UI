@@ -6,8 +6,20 @@ import style from "../../theme/style";
 
 const { width, height } = Dimensions.get("screen");
 
-const CategoryItem = ({ imageSource, title, routing="" }) => {
+const CategoryItem = ({ imageSource, title, routing = "", params = null }) => {
   const router = useRouter();
+
+  const handlePress = () => {
+    const routeConfig = {
+      pathname: routing,
+    };
+
+    if (params) {
+      routeConfig.params = params;
+    }
+
+    router.push(routeConfig);
+  };
 
   return (
     <View
@@ -22,14 +34,7 @@ const CategoryItem = ({ imageSource, title, routing="" }) => {
         },
       ]}
     >
-      <TouchableOpacity
-        style={{ alignItems: "center" }}
-        onPress={() =>
-          router.push({
-            pathname: routing,
-          })
-        }
-      >
+      <TouchableOpacity style={{ alignItems: "center" }} onPress={handlePress}>
         <Image
           source={imageSource}
           resizeMode="contain"
@@ -48,6 +53,7 @@ const CategoryItem = ({ imageSource, title, routing="" }) => {
   );
 };
 
+
 const Categories = () => {
   return (
     <View style={{ paddingVertical: 16, paddingHorizontal: 20 }}>
@@ -57,13 +63,15 @@ const Categories = () => {
         <CategoryItem
           imageSource={require("../../../assets/images/home/profile.png")}
           title="My Profile"
-          routing="/MyAccount/screens/ProfileInfo"
+          routing="/GeneralScreens/Home/ProfileInfo"
+          params={{ home: JSON.stringify(true) }}
         />
         <View style={{ margin: 8 }}></View>
         <CategoryItem
           imageSource={require("../../../assets/images/home/walking.png")}
           title="My Pets"
-          routing="/MyAccount/screens/MyPets"
+          routing="/GeneralScreens/Home/MyPets"
+          params={{ home: JSON.stringify(true) }}
         />
         <View style={{ margin: 8 }}></View>
         <CategoryItem

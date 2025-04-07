@@ -34,7 +34,8 @@ export default function PetDetailPage() {
   const [status, requestPermission] = MediaLibrary.usePermissions();
   const { pet, loading, fetchPetById, fetchPublicPetById, clearPets } =
     usePetStore();
-  const { id, userId, isPublic } = useLocalSearchParams();
+  const { id, userId, isPublic,home } = useLocalSearchParams();
+  
   const { isDarkMode } = useTheme();
   const router = useRouter();
 
@@ -104,6 +105,7 @@ export default function PetDetailPage() {
               router={router}
               isPublic={isPublic}
               onDownload={handleDownloadTrigger}
+              home={home}
             />
             <View
               style={[
