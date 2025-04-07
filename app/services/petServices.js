@@ -78,6 +78,10 @@ const getPetsVaccines = () => {
   return _axios("get", `/user-pets-vaccination`);
 };
 
+const getPetsAddresses = (id) => {
+  return _axios("get", `/user-address-option/${id}`);
+};
+
 export default {
   createUserPet,
   getPets,
@@ -98,4 +102,5 @@ export default {
   addPassport,
   updatePassport,
   getPetsVaccines,
+  getPetsAddresses,
 };

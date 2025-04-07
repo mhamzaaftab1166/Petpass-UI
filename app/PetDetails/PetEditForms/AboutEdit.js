@@ -7,7 +7,7 @@ import {
   Platform,
   TouchableOpacity,
 } from "react-native";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Colors } from "../../theme/color";
 import style from "../../theme/style";
 import AppTitle from "../../components/AppTitle/AppTitle";
@@ -30,6 +30,8 @@ import Loader from "../../components/Loader/Loader";
 import { convertImageToBase64 } from "../../utils/generalUtils";
 import petServices from "../../services/petServices";
 import { AppBar } from "@react-native-material/core";
+import AutoUpdateFields from "../../components/forms/AutoUpdate";
+import ResetBreedColorOnTypeChange from "../../components/forms/PetBreedTypeColorAutoUpdate";
 
 const validationSchema = Yup.object({
   pet_type: Yup.object().required().label("Pet Type"),
@@ -54,7 +56,12 @@ export default function AboutEdit() {
   const [error, setError] = useState();
   const [errorVisible, setErrorVisible] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+  const [petTypes, setPetTypes] = useState([]);
+  const [petColors, setPetColors] = useState([]);
+  const [petBreeds, setPetBreeds] = useState([]);
+  const [selectedPetType, setSelectedPetType] = useState(null);
   const { pet } = useLocalSearchParams();
+
   const petData = pet ? JSON.parse(pet) : null;
 
   const { isDarkMode } = useTheme();
@@ -89,12 +96,37 @@ export default function AboutEdit() {
       setIsLoading(false);
       router.replace(`/PetDetails/PetDetailPage?id=${petData?.id}`);
     } catch (error) {
+      console.log(error, "error");
+      
       setErrorVisible(true);
       setError(error.message);
     } finally {
       setIsLoading(false);
     }
   };
+
+  useEffect(() => {
+    const fetchData = async () => {
+      setIsLoading(true);
+      try {
+        const data = await petServices.getPetsTypes();
+        const colors = await petServices.getPetsColor(
+          selectedPetType || petData?.pet_type
+        );
+        const breeds = await petServices.getPetsBreeds(
+          selectedPetType || petData?.pet_type
+        );
+        setPetBreeds(breeds?.pet_breeds);
+        setPetTypes(data?.pet_types);
+        setPetColors(colors?.pet_colors);
+      } catch (error) {
+        console.log(error, "error");
+      } finally {
+        setIsLoading(false);
+      }
+    };
+    fetchData();
+  }, [pet, selectedPetType]);
 
   const roles = {
     isOne: true,
@@ -112,24 +144,24 @@ export default function AboutEdit() {
     ],
   };
 
-  const petTypes = [
-    { label: "Dog", value: "dog" },
-    { label: "Cat", value: "cat" },
-  ];
   const petType =
     petTypes.find((type) => type.value === petData?.pet_type) || null;
-  const petBreeds = [
-    { label: "Dog", value: "dog" },
-    { label: "Cat", value: "cat" },
-  ];
-  const petBreed =
-    petBreeds.find((breed) => breed.value === petData?.pet_breed) || null;
-  const petColors = [
-    { label: "Brown", value: "brown" },
-    { label: "White", value: "white" },
-  ];
-  const petColor =
-    petColors.find((color) => color.value === petData?.color) || null;
+
+  const petBreed = petBreeds.find((breed) => breed.value === petData?.pet_breed)
+    ? {
+        label: petBreeds.find((breed) => breed.value === petData?.pet_breed)
+          .label,
+        value: petBreeds.find((breed) => breed.value === petData?.pet_breed)
+          .value,
+      }
+    : null;
+
+  const petColor = petColors.find((color) => color.value === petData?.color)
+    ? {
+        label: petColors.find((color) => color.value === petData?.color).label,
+        value: petColors.find((color) => color.value === petData?.color).value,
+      }
+    : null;
 
   const petNuetered = [{ label: "Yes", value: "yes" }];
   const petNut =
@@ -140,6 +172,11 @@ export default function AboutEdit() {
     petActiveness.find(
       (active) => active.value === petData?.physically_active
     ) || "";
+
+  if (!petTypes.length || !petBreeds.length || !petColors.length) {
+    return <Loader isLoad={true} />;
+  }
+
   return (
     <SafeAreaView
       style={[
@@ -201,8 +238,8 @@ export default function AboutEdit() {
               onSubmit={handleSubmit}
               validationSchema={validationSchema}
             >
-              {/* <AppTitle title={"PET ABOUT"} style={style} /> */}
               <AppErrorMessage error={error} visible={errorVisible} />
+              <ResetBreedColorOnTypeChange />
               <View style={{ marginTop: 20 }}>
                 <AppFormImagePicker
                   name="pet_profile_picture"
@@ -210,6 +247,7 @@ export default function AboutEdit() {
                 />
               </View>
               <AppFormPicker
+                setState={(selected) => setSelectedPetType(selected.value)}
                 items={petTypes}
                 name={"pet_type"}
                 placeholder={"PET TYPE"}

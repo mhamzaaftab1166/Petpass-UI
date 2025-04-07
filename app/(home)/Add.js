@@ -31,6 +31,7 @@ import OnSuccess from "../components/OnSuccess/OnSuccess";
 import petServices from "../services/petServices";
 import { convertImageToBase64 } from "../utils/generalUtils";
 import AutoUpdateFields from "../components/forms/AutoUpdate";
+import { useUserStore } from "../store/useStore";
 
 const validationSchema = Yup.object({
   pet_profile_picture: Yup.string().required().label("Pet Profile Image"),
@@ -44,10 +45,16 @@ const validationSchema = Yup.object({
     .min(4)
     .max(30)
     .label("Micro Chip Number"),
+  pet_address: Yup.object()
+    .required(
+      "Pet address is required. Please add an address in the Address section before adding a pet."
+    )
+    .label("Pet Address"),
   color: Yup.object().required().label("Pet Color"),
 });
 
 export default function Add() {
+  const { user } = useUserStore();
   const router = useRouter();
   const { isDarkMode } = useTheme();
   const [submitted, setSubmitted] = useState(false);
@@ -57,6 +64,7 @@ export default function Add() {
   const [petTypes, setPetTypes] = useState([]);
   const [selectedPetType, setSelectedPetType] = useState("");
   const [selectedPetBreedType, setSelectedPetBreedType] = useState("");
+  const [petAddresses, setPetAddresses] = useState([]);
   const [petColor, setPetColor] = useState("");
   const roles = {
     isOne: true,
@@ -91,7 +99,9 @@ export default function Add() {
           : "",
         microchip_number: values.microchip_number || "",
         pet_profile_picture: pet_profile_picture,
+        pet_address: values.pet_address?.value || "",
       };
+      
       const res = await petServices.createUserPet(payload);
       setIsLoading(false);
       setSubmitted(true);
@@ -104,31 +114,33 @@ export default function Add() {
     }
   };
 
-  useFocusEffect(
-    useCallback(() => {
-      setSubmitted(false);
-    }, [])
-  );
+ useFocusEffect(
+   useCallback(() => {
+     setSubmitted(false);
 
-  useFocusEffect(
-    useCallback(() => {
-      const fetchTips = async () => {
-        try {
-          const data = await petServices.getPetsTypes();
-          setPetTypes(data?.pet_types);
-        } catch (err) {
-          console.log(err);
-        } finally {
-        }
-      };
-      fetchTips();
-    }, [])
-  );
+     const fetchAll = async () => {
+       try {
+         const [addressesRes, typesRes] = await Promise.all([
+           petServices.getPetsAddresses(user?.id),
+           petServices.getPetsTypes(),
+         ]);
+
+         setPetAddresses(addressesRes?.data);
+         setPetTypes(typesRes?.pet_types);
+       } catch (err) {
+         console.log(err);
+       }
+     };
+
+     fetchAll();
+   }, [user?.id])
+ );
 
   useEffect(() => {
     const fetchPetData = async () => {
       try {
         if (selectedPetType) {
+          
           const breedData = await petServices.getPetsBreeds(selectedPetType);
           setSelectedPetBreedType(breedData?.pet_breeds);
           const colorData = await petServices.getPetsColor(selectedPetType);
@@ -204,6 +216,7 @@ export default function Add() {
                   date_of_birth: "",
                   microchip_number: "",
                   color: null,
+                  pet_address: null,
                 }}
                 onSubmit={(values) => handleSubmit(values)}
                 validationSchema={validationSchema}
@@ -279,6 +292,12 @@ export default function Add() {
                   items={petColor}
                   name={"color"}
                   placeholder={"COLOUR"}
+                />
+
+                <AppFormPicker
+                  items={petAddresses}
+                  name={"pet_address"}
+                  placeholder={"PET ADDRESS"}
                 />
                 <AppFormRoleSelector roles={roles} name={"gender"} />
 

@@ -32,7 +32,9 @@ const About = ({  router, pet, isEdit }) => {
             })
           }
         >
-          {isEdit && <Image source={petEdit} style={{ width: 20, height: 20 }} />}
+          {isEdit && (
+            <Image source={petEdit} style={{ width: 20, height: 20 }} />
+          )}
         </Pressable>
       </View>
 
@@ -45,6 +47,15 @@ const About = ({  router, pet, isEdit }) => {
       <InfoItem
         label="Microchip Number"
         value={pet?.microchip_number || "Not Provided"}
+      />
+      
+      <InfoItem
+        label="Pet Location"
+        value={
+          pet?.pet_address
+            ? `${pet.pet_address.city?.toUpperCase()}, ${pet.pet_address.country?.toUpperCase()}`
+            : "NOT PROVIDED"
+        }
       />
 
       <View style={styles.boxContainer}>

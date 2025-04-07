@@ -85,11 +85,9 @@ const Categories = () => {
         style={{ flexDirection: "row", alignItems: "center", marginTop: 10 }}
       >
         <CategoryItem
-          imageSource={require("../../../assets/images/home/walking.png")}
-          title="Walking"
-          categoryPayload={{
-            filterValue: "pet_walking",
-          }}
+          imageSource={require("../../../assets/images/home/connect.png")}
+          title="Connections"
+          routing="/GeneralScreens/Home/Connections"
         />
         <View style={{ margin: 8 }}></View>
         <CategoryItem
