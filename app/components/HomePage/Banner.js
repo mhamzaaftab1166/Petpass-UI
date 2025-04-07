@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import {
   View,
   Text,
@@ -12,7 +12,7 @@ import Icon from "react-native-vector-icons/Ionicons";
 import { Colors } from "../../theme/color";
 import style from "../../theme/style";
 import { useUserStore } from "../../store/useStore";
-import { useRouter } from "expo-router";
+import { useFocusEffect, useRouter } from "expo-router";
 import { getUnreadIndieNotificationInboxCount } from "native-notify";
 import notificationData from "../../constants/notification";
 
@@ -22,23 +22,26 @@ const Banner = () => {
   const { user } = useUserStore();
   const [unreadNotificationCount, setUnreadNotificationCount] = useState(0);
   const router = useRouter();
-
-   useEffect(() => {
-     async function fetchUnreadCount() {
-       try {
-         const unreadCount = await getUnreadIndieNotificationInboxCount(
-           String(user?.id),
-           notificationData.appId,
-           notificationData.appToken
-         );
-         console.log("unreadCount: ", unreadCount);
-         setUnreadNotificationCount(unreadCount);
-       } catch (error) {
-         console.error("Error fetching unread count:", error);
-       }
-     }
-     fetchUnreadCount();
-   }, [user]);
+    useFocusEffect(
+      useCallback(() => {
+        async function fetchUnreadCount() {
+          console.log("focused-------");
+          
+          try {
+            const unreadCount = await getUnreadIndieNotificationInboxCount(
+              String(user?.id),
+              notificationData.appId,
+              notificationData.appToken
+            );
+            console.log("unreadCount: ", unreadCount);
+            setUnreadNotificationCount(unreadCount);
+          } catch (error) {
+            console.error("Error fetching unread count:", error);
+          }
+        }
+        fetchUnreadCount();
+      }, [user])
+    );
 
 
   return (
