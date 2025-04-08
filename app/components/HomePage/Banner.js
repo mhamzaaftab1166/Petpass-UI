@@ -25,7 +25,6 @@ const Banner = () => {
     useFocusEffect(
       useCallback(() => {
         async function fetchUnreadCount() {
-          console.log("focused-------");
           
           try {
             const unreadCount = await getUnreadIndieNotificationInboxCount(

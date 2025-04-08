@@ -32,7 +32,9 @@ import petServices from "../../services/petServices";
 import { AppBar } from "@react-native-material/core";
 import AutoUpdateFields from "../../components/forms/AutoUpdate";
 import ResetBreedColorOnTypeChange from "../../components/forms/PetBreedTypeColorAutoUpdate";
-
+import { useUserStore } from "../../store/useStore";
+import { petActiveness, petNuetered } from "../../constants/pet";
+import usePetSelections from "../../hooks/usePetSelections";
 const validationSchema = Yup.object({
   pet_type: Yup.object().required().label("Pet Type"),
   pet_name: Yup.string().required().min(3).max(15).label("Pet Name"),
@@ -50,15 +52,37 @@ const validationSchema = Yup.object({
   weight: Yup.object().label("Pet Weight"),
   height: Yup.object().label("Pet Height"),
   pet_profile_picture: Yup.string().label("Pet Profile Image"),
+  pet_address: Yup.object()
+    .required(
+      "Pet address is required. Please add an address in the Address section before adding a pet."
+    )
+    .label("Pet Address"),
 });
+const roles = {
+  isOne: true,
+  data: [
+    {
+      title: "Male",
+      role: "male",
+      imageSrc: maleLight,
+    },
+    {
+      title: "Female",
+      role: "female",
+      imageSrc: femaleLight,
+    },
+  ],
+};
 
 export default function AboutEdit() {
+  const { user } = useUserStore();
   const [error, setError] = useState();
   const [errorVisible, setErrorVisible] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [petTypes, setPetTypes] = useState([]);
   const [petColors, setPetColors] = useState([]);
   const [petBreeds, setPetBreeds] = useState([]);
+  const [petaddresses, setPetaddresses] = useState([]);
   const [selectedPetType, setSelectedPetType] = useState(null);
   const { pet } = useLocalSearchParams();
 
@@ -66,44 +90,60 @@ export default function AboutEdit() {
 
   const { isDarkMode } = useTheme();
 
-  const handleSubmit = async (values) => {
-    try {
-      setIsLoading(true);
-      const pet_profile_picture = await convertImageToBase64(
-        values.pet_profile_picture
-      );
-      const payload = {
-        pet_profile_picture,
-        microchip_number: values.microchip_number,
-        date_of_birth: values,
-        date_of_birth: new Date(values.date_of_birth)
-          .toISOString()
-          .split("T")[0],
+ const handleSubmit = async (values) => {
+   setIsLoading(true);
+   try {
+     const image = values.pet_profile_picture;
+     const isNetworkImage =
+       typeof image === "string" && image.startsWith("http");
+     const formData = new FormData();
 
-        physically_active: values.physically_active?.value || "",
-        gender: values?.gender,
-        color: values?.color.value,
-        pet_breed: values?.pet_breed.value || "",
-        pet_name: values?.pet_name,
-        pet_type: values?.pet_type.value || "",
-        nuetered: values?.nuetered.value || "",
-        height: values?.height,
-        weight: values?.weight,
-        description: petData?.description,
-      };
+     if (!isNetworkImage && image) {
+       const imageUri = typeof image === "string" ? image : image.uri;
+       if (imageUri) {
+         const uriParts = imageUri.split(".");
+         const fileType = uriParts[uriParts.length - 1];
+         formData.append("pet_profile_picture", {
+           uri: imageUri,
+           name: `profile_picture.${fileType}`,
+           type: `image/${fileType}`,
+         });
+       }
+     } else {
+       formData.append("pet_profile_picture", image);
+     }
 
-      const res = await petServices.updatePetAbout(payload, petData?.id);
-      setIsLoading(false);
-      router.replace(`/PetDetails/PetDetailPage?id=${petData?.id}`);
-    } catch (error) {
-      console.log(error, "error");
-      
-      setErrorVisible(true);
-      setError(error.message);
-    } finally {
-      setIsLoading(false);
-    }
-  };
+     formData.append("microchip_number", values.microchip_number || "");
+     const dob = new Date(values.date_of_birth).toISOString().split("T")[0];
+     formData.append("date_of_birth", dob);
+     formData.append(
+       "physically_active",
+       values.physically_active?.value || ""
+     );
+     formData.append("gender", values.gender || "");
+     formData.append("color", values.color?.value || "");
+     formData.append("pet_breed", values.pet_breed?.value || "");
+     formData.append("pet_name", values.pet_name || "");
+     formData.append("pet_type", values.pet_type?.value || "");
+     formData.append("nuetered", values.nuetered?.value || "");
+     formData.append("height", values.height || "");
+     formData.append("weight", values.weight || "");
+     formData.append("description", petData?.description || "");
+     formData.append("pet_address", values.pet_address?.value || "");
+for (let [key, value] of formData.entries()) {
+  console.log(key, value);
+}
+     const res = await petServices.updatePetAbout(formData, petData?.id);
+     router.replace(`/PetDetails/PetDetailPage?id=${petData?.id}`);
+   } catch (error) {
+     console.error("An error occurred:", error);
+     setErrorVisible(true);
+     setError(error.message);
+   } finally {
+     setIsLoading(false);
+   }
+ };
+
 
   useEffect(() => {
     const fetchData = async () => {
@@ -128,50 +168,28 @@ export default function AboutEdit() {
     fetchData();
   }, [pet, selectedPetType]);
 
-  const roles = {
-    isOne: true,
-    data: [
-      {
-        title: "Male",
-        role: "male",
-        imageSrc: maleLight,
-      },
-      {
-        title: "Female",
-        role: "female",
-        imageSrc: femaleLight,
-      },
-    ],
-  };
-
-  const petType =
-    petTypes.find((type) => type.value === petData?.pet_type) || null;
-
-  const petBreed = petBreeds.find((breed) => breed.value === petData?.pet_breed)
-    ? {
-        label: petBreeds.find((breed) => breed.value === petData?.pet_breed)
-          .label,
-        value: petBreeds.find((breed) => breed.value === petData?.pet_breed)
-          .value,
+  useEffect(() => {
+    const fetchPetAddresses = async () => {
+      try {
+        const addresses = await petServices.getPetsAddresses(user?.id);
+        setPetaddresses(addresses?.data);
+      } catch (error) {
+        console.log(error, "error");
       }
-    : null;
+    };
+    fetchPetAddresses();
+  }, []);
 
-  const petColor = petColors.find((color) => color.value === petData?.color)
-    ? {
-        label: petColors.find((color) => color.value === petData?.color).label,
-        value: petColors.find((color) => color.value === petData?.color).value,
-      }
-    : null;
-
-  const petNuetered = [{ label: "Yes", value: "yes" }];
-  const petNut =
-    petNuetered.find((nut) => nut.value === petData?.nuetered) || "";
-
-  const petActiveness = [{ label: "Very Active", value: "very active" }];
-  const petActive =
-    petActiveness.find(
-      (active) => active.value === petData?.physically_active
-    ) || "";
+  const { petType, petBreed, petColor, petAddress, petNut, petActive } =
+    usePetSelections({
+      petData,
+      petTypes,
+      petBreeds,
+      petColors,
+      petaddresses,
+      petNuetered,
+      petActiveness,
+    });
 
   if (!petTypes.length || !petBreeds.length || !petColors.length) {
     return <Loader isLoad={true} />;
@@ -232,6 +250,7 @@ export default function AboutEdit() {
                 physically_active: petActive || "",
                 microchip_number: petData?.microchip_number.toString() || "",
                 color: petColor || "",
+                pet_address: petAddress,
                 weight: petData?.weight || "",
                 height: petData?.height || "",
               }}
@@ -276,6 +295,11 @@ export default function AboutEdit() {
                 items={petColors}
                 name={"color"}
                 placeholder={"COLOUR"}
+              />
+              <AppFormPicker
+                items={petaddresses}
+                name={"pet_address"}
+                placeholder={"PET ADDRESS"}
               />
               <AppFormPicker
                 items={petNuetered}
