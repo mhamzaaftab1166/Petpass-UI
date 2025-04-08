@@ -255,8 +255,8 @@ export default function AboutEdit() {
                 microchip_number: petData?.microchip_number.toString() || "",
                 color: petColor || "",
                 pet_address: petAddress,
-                weight: petData?.weight || "",
-                height: petData?.height || "",
+                weight: petData?.weight || { from: 0, to: 0 },
+                height: petData?.height || { from: 0, to: 0 },
               }}
               onSubmit={handleSubmit}
               validationSchema={validationSchema}
