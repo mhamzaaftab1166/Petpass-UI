@@ -126,13 +126,18 @@ export default function AboutEdit() {
      formData.append("pet_name", values.pet_name || "");
      formData.append("pet_type", values.pet_type?.value || "");
      formData.append("nuetered", values.nuetered?.value || "");
-     formData.append("height", values.height || "");
-     formData.append("weight", values.weight || "");
+      formData.append(
+        "height",
+        values.height ? JSON.stringify(values.height) : ""
+      );
+      formData.append(
+        "weight",
+        values.weight ? JSON.stringify(values.weight) : ""
+      );
+
      formData.append("description", petData?.description || "");
      formData.append("pet_address", values.pet_address?.value || "");
-for (let [key, value] of formData.entries()) {
-  console.log(key, value);
-}
+
      const res = await petServices.updatePetAbout(formData, petData?.id);
      router.replace(`/PetDetails/PetDetailPage?id=${petData?.id}`);
    } catch (error) {
