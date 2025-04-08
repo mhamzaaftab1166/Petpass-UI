@@ -141,7 +141,6 @@ export default function AboutEdit() {
      const res = await petServices.updatePetAbout(formData, petData?.id);
      router.replace(`/PetDetails/PetDetailPage?id=${petData?.id}`);
    } catch (error) {
-     console.error("An error occurred:", error);
      setErrorVisible(true);
      setError(error.message);
    } finally {

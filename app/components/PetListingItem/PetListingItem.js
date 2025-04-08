@@ -112,7 +112,7 @@ const PetListingItem = ({ pet, isPublic = false, home }) => {
                   { color: isDarkMode ? Colors.secondary : Colors.lable },
                 ]}
               >
-                United Arab Emirates
+                {`${pet?.pet_address?.city}, ${pet?.pet_address?.country}`}
               </Text>
             </View>
             <Image source={detailcon} style={styles.detailIcon} />

@@ -53,7 +53,7 @@ const About = ({  router, pet, isEdit }) => {
         label="Pet Location"
         value={
           pet?.pet_address
-            ? `${pet.pet_address.city?.toUpperCase()}, ${pet.pet_address.country?.toUpperCase()}`
+            ? `${pet.pet_address.city}, ${pet.pet_address.country}`
             : "NOT PROVIDED"
         }
       />

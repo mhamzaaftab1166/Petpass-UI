@@ -82,37 +82,52 @@ export default function Add() {
     ],
   };
 
-  const handleSubmit = async (values) => {
-    try {
-      setIsLoading(true);
-      const pet_profile_picture = await convertImageToBase64(
-        values.pet_profile_picture
-      );
-      const payload = {
-        pet_type: values.pet_type?.value || "",
-        pet_name: values.pet_name || "",
-        pet_breed: values.pet_breed?.value || "",
-        color: values.color?.value || "",
-        gender: values.gender || "",
-        date_of_birth: values.date_of_birth
-          ? new Date(values.date_of_birth).toISOString().split("T")[0]
-          : "",
-        microchip_number: values.microchip_number || "",
-        pet_profile_picture: pet_profile_picture,
-        pet_address: values.pet_address?.value || "",
-      };
-      
-      const res = await petServices.createUserPet(payload);
-      setIsLoading(false);
-      setSubmitted(true);
-    } catch (error) {
-      setErrorVisible(true);
-      setError(error.message);
-      setSubmitted(false);
-    } finally {
-      setIsLoading(false);
-    }
-  };
+ const handleSubmit = async (values) => {
+   try {
+     setIsLoading(true);
+
+     const formData = new FormData();
+     const image = values.pet_profile_picture;
+
+     if (image) {
+       const imageUri = typeof image === "string" ? image : image.uri;
+       const uriParts = imageUri.split(".");
+       const fileType = uriParts[uriParts.length - 1];
+
+       formData.append("pet_profile_picture", {
+         uri: imageUri,
+         name: `profile_picture.${fileType}`,
+         type: `image/${fileType}`,
+       });
+     }
+
+     formData.append("pet_type", values.pet_type?.value || "");
+     formData.append("pet_name", values.pet_name || "");
+     formData.append("pet_breed", values.pet_breed?.value || "");
+     formData.append("color", values.color?.value || "");
+     formData.append("gender", values.gender || "");
+     formData.append(
+       "date_of_birth",
+       values.date_of_birth
+         ? new Date(values.date_of_birth).toISOString().split("T")[0]
+         : ""
+     );
+     formData.append("microchip_number", values.microchip_number || "");
+     formData.append("pet_address", values.pet_address?.value || "");
+
+     const res = await petServices.createUserPet(formData);
+
+     setIsLoading(false);
+     setSubmitted(true);
+   } catch (error) {
+     setErrorVisible(true);
+     setError(error.message);
+     setSubmitted(false);
+   } finally {
+     setIsLoading(false);
+   }
+ };
+
 
  useFocusEffect(
    useCallback(() => {

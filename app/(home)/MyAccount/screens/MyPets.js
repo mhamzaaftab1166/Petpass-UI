@@ -29,7 +29,6 @@ const { width, height } = Dimensions.get("screen");
 export default function MyPets({ isDelete = true }) {
   const { pets, loading, petError, petErrorVisible, fetchPets, clearPets } =
     usePetStore();
-    console.log(pets);
     
   const [isloading, setIsLoading] = useState(false);
   const [delError, setDelError] = useState();
