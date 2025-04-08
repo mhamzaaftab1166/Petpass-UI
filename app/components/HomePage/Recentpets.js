@@ -14,6 +14,7 @@ import Title from "../Title/Title";
 import { useTheme } from "../../helper/themeProvider";
 import { useRouter } from "expo-router";
 import AppSkeleton from "../AppSkeleton";
+import AppIcon from "../Likes/AppLike";
 
 const RecentPets = ({ pets = [], isLoading }) => {
   const { width, height } = Dimensions.get("screen");
@@ -96,6 +97,34 @@ const RecentPets = ({ pets = [], isLoading }) => {
                 >
                   <View
                     style={{
+                      position: "absolute",
+                      top: 12,
+                      right: 10,
+                      flexDirection: "row",
+                      gap: 10,
+                    }}
+                  >
+                    <AppIcon
+                      type="FontAwesome"
+                      name="heart"
+                      size={25}
+                      color={Colors.secondary}
+                      activeColor="red"
+                      onPress={() => console.log("Pressed heart")}
+                    />
+                    <AppIcon
+                      type="Entypo"
+                      name="shield"
+                      size={27}
+                      color={Colors.secondary}
+                      activeColor="#eab308"
+                      variant="superlike"
+                      onPress={() => console.log("Pressed shield-heart")}
+                    />
+                  </View>
+
+                  <View
+                    style={{
                       justifyContent: "flex-end",
                       flex: 1,
                       marginBottom: 10,
@@ -118,9 +147,6 @@ const RecentPets = ({ pets = [], isLoading }) => {
                         <View
                           style={{ flexDirection: "row", alignItems: "center" }}
                         >
-                          <Icon name="star" color={"#FFCE00"} size={12}></Icon>
-                          <Icon name="star" color={"#FFCE00"} size={12}></Icon>
-                          <Icon name="star" color={"#FFCE00"} size={12}></Icon>
                           <Icon
                             name="star-outline"
                             color={Colors.secondary}
