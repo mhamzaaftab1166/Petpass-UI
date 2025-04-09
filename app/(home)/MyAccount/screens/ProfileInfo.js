@@ -62,34 +62,41 @@ export default function AccountInfo() {
     profile_types,
     username,
   }) => {
+    
     const phoneParts = phone_number.split(" ");
     const countryCode = phoneParts[0];
     const phoneNumber = phoneParts.slice(1).join("");
-  
-    if (profile_picture && !profile_picture.startsWith("http")) {
-      try {
-        const fileInfo = await FileSystem.getInfoAsync(profile_picture);
-        const mimeType = fileInfo.uri.endsWith(".png") ? "image/png" : "image/jpeg";
-        const base64Image = await FileSystem.readAsStringAsync(profile_picture, {
-          encoding: FileSystem.EncodingType.Base64,
+    const formData = new FormData();
+
+    formData.append("userId", user.id);
+    formData.append("phone_number", phoneNumber);
+    formData.append("username", username);
+    formData.append("country_code", countryCode);
+
+    (Array.isArray(profile_types) ? profile_types : [profile_types]).forEach(
+      (type, index) => formData.append(`profile_types[${index}]`, type)
+    );
+
+    if (profile_picture) {
+      if (!profile_picture.startsWith("http")) {
+        const fileType = profile_picture.split(".").pop();
+        formData.append("profile_picture", {
+          uri: profile_picture,
+          name: `profile_picture.${fileType}`,
+          type: `image/${fileType}`,
         });
-        profile_picture = `data:${mimeType};base64,${base64Image}`;
-      } catch (fileError) {
-        console.log("Error reading file:", fileError);
+      } else {
+        formData.append("profile_picture", profile_picture);
       }
     }
-  
+
+    for (const [key, value] of formData.entries()) {
+      console.log(`${key}:`, value);
+    }
+
     try {
       setIsLoading(true);
-      const res = await userService.editProfile({
-        userId: user.id,
-        phone_number: phoneNumber,
-        profile_picture,
-        profile_types,
-        username,
-        country_code: countryCode,
-      });
-  
+      const res = await userService.editProfile(formData);
       console.log(res, "res");
     } catch (error) {
       console.log(error, "error");
@@ -100,6 +107,7 @@ export default function AccountInfo() {
       setIsLoading(false);
     }
   };
+
   
    const roles = {
        isOne: false,
