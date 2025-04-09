@@ -32,11 +32,13 @@ const Banner = ({
 }) => {
   console.log(pet);
 
- const { activeLike, handleLike } = usePetLike({
+ const { activeLike, handleLike, localHeartCount,localSuperLikeCount } = usePetLike({
    petId: pet?.id,
    initialLike: like,
    initialSuperLike: superLike,
    onUpdate,
+   heartCount,
+   superLikeCount,
  });
 
   return (
@@ -111,7 +113,7 @@ const Banner = ({
                 { color: Colors.secondary, fontFamily: "Avenir-Bold" },
               ]}
             >
-              {heartCount}
+              {localHeartCount}
             </Text>
           </View>
           <View style={[styles.iconContainer, { marginLeft: 16 }]}>
@@ -127,7 +129,7 @@ const Banner = ({
                 { color: Colors.secondary, fontFamily: "Avenir-Bold" },
               ]}
             >
-              {superLikeCount}
+              {localSuperLikeCount}
             </Text>
           </View>
         </View>
