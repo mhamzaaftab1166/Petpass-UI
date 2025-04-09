@@ -13,6 +13,7 @@ import { AppBar, HStack } from "@react-native-material/core";
 import { Colors } from "../../theme/color";
 import AppIcon from "../../components/Likes/AppLike";
 import petServices from "../../services/petServices";
+import usePetLike from "../../hooks/usePetLike";
 
 const width = Dimensions.get("screen").width;
 const height = Dimensions.get("screen").height;
@@ -29,41 +30,14 @@ const Banner = ({
   like = false,
   onUpdate,
 }) => {
-  console.log(pet);
+  console.log(pet?.super_liked, pet?.liked);
 
-  const [activeLike, setActiveLike] = useState(
-    like ? "like" : superLike ? "super_like" : null
-  );
-
-  const handleLike = async (type) => {
-    const previousState = activeLike;
-    if (activeLike === type) {
-      setActiveLike(null);
-      try {
-        await petServices.removeLike(pet?.id);
-        if (typeof onUpdate === "function") {
-          onUpdate();
-        }
-      } catch (error) {
-        console.log("Reverting to previous state:", previousState);
-        setActiveLike(previousState);
-        console.log("Failed to update like (remove):", error);
-      }
-    } else {
-      setActiveLike(type);
-      try {
-        const res = await petServices.addLike({ type }, pet?.id);
-        console.log("Like updated successfully:", res);
-        if (typeof onUpdate === "function") {
-          onUpdate();
-        }
-      } catch (error) {
-        console.log("Reverting to previous state:", previousState);
-        setActiveLike(previousState);
-        console.log("Failed to update like (add/switch):", error);
-      }
-    }
-  };
+ const { activeLike, handleLike } = usePetLike({
+   petId: pet?.id,
+   initialLike: like,
+   initialSuperLike: superLike,
+   onUpdate,
+ });
 
   return (
     <View>
