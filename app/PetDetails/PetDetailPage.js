@@ -117,6 +117,8 @@ export default function PetDetailPage() {
               onUpdate={handleUpdate}
               like={pet?.liked}
               superLike={pet?.super_liked}
+              superLikeCount={pet?.super_liked_count}
+              heartCount={pet?.liked_count}
             />
             <View
               style={[

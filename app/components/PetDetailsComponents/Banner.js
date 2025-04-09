@@ -24,13 +24,13 @@ const Banner = ({
   isPublic,
   onDownload,
   home,
-  heartCount = 12,
-  superLikeCount = 44,
+  heartCount = 0,
+  superLikeCount = 0,
   superLike = false,
   like = false,
   onUpdate,
 }) => {
-  console.log(pet?.super_liked, pet?.liked);
+  console.log(pet);
 
  const { activeLike, handleLike } = usePetLike({
    petId: pet?.id,
