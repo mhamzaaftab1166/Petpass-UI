@@ -12,62 +12,94 @@ const usePetStore = create((set) => ({
   singlePetError: null,
   singlePetErrorVisible: false,
 
-  fetchPets: async () => {
-    set({ loading: true, petError: null, petErrorVisible: false });
+  // Fetch Pets with an optional config
+  fetchPets: async (config = { showLoading: true }) => {
+    if (config.showLoading) {
+      set({ loading: true, petError: null, petErrorVisible: false });
+    }
     try {
       const response = await petServices.getPets();
-      set({ pets: response.pets, loading: false });
+      set({
+        pets: response.pets,
+        ...(config.showLoading && { loading: false }),
+      });
     } catch (error) {
       set({
         petError: error.message,
-        loading: false,
-        petErrorVisible: true,
+        ...(config.showLoading && { loading: false, petErrorVisible: true }),
       });
     }
   },
 
-  fetchPublicPets: async () => {
-    set({ loading: true, petError: null, petErrorVisible: false });
+  // Fetch Public Pets with an optional config
+  fetchPublicPets: async (config = { showLoading: true }) => {
+    if (config.showLoading) {
+      set({ loading: true, petError: null, petErrorVisible: false });
+    }
     try {
       const response = await petServices.getPublicPets();
-      set({ publicPets: response.pets, loading: false });
+      set({
+        publicPets: response.pets,
+        ...(config.showLoading && { loading: false }),
+      });
     } catch (error) {
       set({
         petError: error.message,
-        loading: false,
-        petErrorVisible: true,
+        ...(config.showLoading && { loading: false, petErrorVisible: true }),
       });
     }
   },
 
-  fetchPetById: async (id) => {
-    set({ loading: true, singlePetError: null, singlePetErrorVisible: false });
+  // Fetch a single pet by ID (private pet) with an optional config
+  fetchPetById: async (id, config = { showLoading: true }) => {
+    if (config.showLoading) {
+      set({
+        loading: true,
+        singlePetError: null,
+        singlePetErrorVisible: false,
+      });
+    }
     try {
       const response = await petServices.getPetById(id);
-      set({ pet: response.pet, loading: false });
+      set({
+        pet: response.pet,
+        ...(config.showLoading && { loading: false }),
+      });
     } catch (error) {
       console.log(error);
-      
       set({
         singlePetError: error.message,
-        loading: false,
-        singlePetErrorVisible: true,
+        ...(config.showLoading && {
+          loading: false,
+          singlePetErrorVisible: true,
+        }),
       });
     }
   },
 
-  fetchPublicPetById: async (id, userId) => {
-    set({ loading: true, singlePetError: null, singlePetErrorVisible: false });
+  // Fetch a public pet by ID with an optional config
+  fetchPublicPetById: async (id, userId, config = { showLoading: true }) => {
+    if (config.showLoading) {
+      set({
+        loading: true,
+        singlePetError: null,
+        singlePetErrorVisible: false,
+      });
+    }
     try {
       const response = await petServices.getPublicPetById(id, userId);
-      set({ pet: response.pet, loading: false });
+      set({
+        pet: response.pet,
+        ...(config.showLoading && { loading: false }),
+      });
     } catch (error) {
       console.log(error);
-      
       set({
         singlePetError: error.message,
-        loading: false,
-        singlePetErrorVisible: true,
+        ...(config.showLoading && {
+          loading: false,
+          singlePetErrorVisible: true,
+        }),
       });
     }
   },

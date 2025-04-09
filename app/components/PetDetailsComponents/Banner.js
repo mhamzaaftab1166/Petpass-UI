@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import {
   Dimensions,
   ImageBackground,
@@ -12,23 +12,63 @@ import { Ionicons, Entypo } from "@expo/vector-icons";
 import { AppBar, HStack } from "@react-native-material/core";
 import { Colors } from "../../theme/color";
 import AppIcon from "../../components/Likes/AppLike";
+import petServices from "../../services/petServices";
 
 const width = Dimensions.get("screen").width;
 const height = Dimensions.get("screen").height;
 
 const Banner = ({
   router,
-  profileImg,
+  pet,
   isPublic,
   onDownload,
   home,
   heartCount = 12,
   superLikeCount = 44,
+  superLike = false,
+  like = false,
+  onUpdate,
 }) => {
+  console.log(pet);
+
+  const [activeLike, setActiveLike] = useState(
+    like ? "like" : superLike ? "super_like" : null
+  );
+
+  const handleLike = async (type) => {
+    const previousState = activeLike;
+    if (activeLike === type) {
+      setActiveLike(null);
+      try {
+        await petServices.removeLike(pet?.id);
+        if (typeof onUpdate === "function") {
+          onUpdate();
+        }
+      } catch (error) {
+        console.log("Reverting to previous state:", previousState);
+        setActiveLike(previousState);
+        console.log("Failed to update like (remove):", error);
+      }
+    } else {
+      setActiveLike(type);
+      try {
+        const res = await petServices.addLike({ type }, pet?.id);
+        console.log("Like updated successfully:", res);
+        if (typeof onUpdate === "function") {
+          onUpdate();
+        }
+      } catch (error) {
+        console.log("Reverting to previous state:", previousState);
+        setActiveLike(previousState);
+        console.log("Failed to update like (add/switch):", error);
+      }
+    }
+  };
+
   return (
     <View>
       <ImageBackground
-        source={{ uri: profileImg }}
+        source={{ uri: pet?.pet_profile_picture }}
         resizeMode="cover"
         style={{ width, height: height / 3.2 }}
       >
@@ -72,7 +112,8 @@ const Banner = ({
                 size={25}
                 color={Colors.secondary}
                 activeColor="red"
-                onPress={() => console.log("Pressed heart")}
+                alreadyActive={activeLike === "like"}
+                onPress={() => handleLike("like")}
               />
               <AppIcon
                 type="Entypo"
@@ -81,12 +122,12 @@ const Banner = ({
                 color={Colors.secondary}
                 activeColor="#eab308"
                 variant="superlike"
-                onPress={() => console.log("Pressed shield-heart")}
+                alreadyActive={activeLike === "super_like"}
+                onPress={() => handleLike("super_like")}
               />
             </HStack>
           }
         />
-        {/* Bottom Right Display in Row */}
         <View style={styles.bottomRightContainer}>
           <View style={styles.iconContainer}>
             <Ionicons name="heart" size={22} color="red" style={styles.icon} />

@@ -1,4 +1,4 @@
-import React, { useState, useRef } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import {
   TouchableOpacity,
   Animated,
@@ -32,10 +32,16 @@ const AppIcon = ({
   onPress,
   style,
   variant,
+  alreadyActive = false,
 }) => {
   const IconComponent = ICONS[type];
-  const [isPressed, setIsPressed] = useState(false);
+  // Initialize the state with alreadyActive, and update when it changes.
+  const [isPressed, setIsPressed] = useState(alreadyActive);
   const starAnim = useRef(new Animated.Value(0)).current;
+
+  useEffect(() => {
+    setIsPressed(alreadyActive);
+  }, [alreadyActive]);
 
   const animateStar = () => {
     starAnim.setValue(0);
@@ -47,14 +53,14 @@ const AppIcon = ({
     }).start();
   };
 
- const handlePress = () => {
-   if (!isPressed && variant === "superlike") {
-     animateStar();
-   }
-   setIsPressed(!isPressed);
-   if (onPress) onPress();
- };
-
+  const handlePress = () => {
+    if (!isPressed && variant === "superlike") {
+      animateStar();
+    }
+    // Toggle state locally, and let the parent know via onPress callback.
+    setIsPressed(!isPressed);
+    if (onPress) onPress();
+  };
 
   const getStarStyle = (x, y, delay) => ({
     opacity: starAnim.interpolate({

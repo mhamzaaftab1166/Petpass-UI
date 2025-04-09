@@ -34,8 +34,8 @@ export default function PetDetailPage() {
   const [status, requestPermission] = MediaLibrary.usePermissions();
   const { pet, loading, fetchPetById, fetchPublicPetById, clearPets } =
     usePetStore();
-  const { id, userId, isPublic,home } = useLocalSearchParams();
-  
+  const { id, userId, isPublic, home } = useLocalSearchParams();
+
   const { isDarkMode } = useTheme();
   const router = useRouter();
 
@@ -59,6 +59,14 @@ export default function PetDetailPage() {
       return () => clearPets();
     }, [id])
   );
+  const handleUpdate = () => {
+    if (isPublic) {
+      fetchPublicPetById(id, userId, { showLoading: false });
+    } else {
+      fetchPetById(id, { showLoading: false });
+    }
+  };
+
   const handleDownloadTrigger = () => {
     setShowDownloadAlert(true);
   };
@@ -101,11 +109,14 @@ export default function PetDetailPage() {
         <ScrollView showsVerticalScrollIndicator={false}>
           <ViewShot captureMode="mount" ref={scrollViewRef}>
             <Banner
-              profileImg={pet?.pet_profile_picture}
+              pet={pet}
               router={router}
               isPublic={isPublic}
               onDownload={handleDownloadTrigger}
               home={home}
+              onUpdate={handleUpdate}
+              like={pet?.liked}
+              superLike={pet?.super_liked}
             />
             <View
               style={[

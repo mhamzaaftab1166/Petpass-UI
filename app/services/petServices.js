@@ -12,7 +12,6 @@ const getPublicPets = () => {
   return _axios("get", "/live-pets");
 };
 
-
 const deletePets = (id) => {
   return _axios("delete", `/user-pets/${id}`);
 };
@@ -24,7 +23,6 @@ const getPetById = (id) => {
 const getPublicPetById = (id, userId) => {
   return _axios("get", `/user-pets/${id}/${userId}`);
 };
-
 
 const updatePetAbout = (payload, id) => {
   return _axios("put", `/user-pets/${id}`, payload, "multipart/form-data");
@@ -70,8 +68,13 @@ const addPassport = (payload) => {
   return _axios("post", "/user-pet-passport", payload, "multipart/form-data");
 };
 
-const updatePassport = (payload, id) => {  
-  return _axios("put", `/user-pet-passport/${id}`, payload, "multipart/form-data");
+const updatePassport = (payload, id) => {
+  return _axios(
+    "put",
+    `/user-pet-passport/${id}`,
+    payload,
+    "multipart/form-data"
+  );
 };
 
 const getPetsVaccines = () => {
@@ -82,9 +85,19 @@ const getPetsAddresses = (id) => {
   return _axios("get", `/user-address-option/${id}`);
 };
 
+const addLike = (payload, id) => {
+  return _axios("post", `/pet-likes/${id}`, payload);
+};
+
+const removeLike = (id) => {
+  return _axios("delete", `/pet-likes/${id}/remove`);
+};
+
 export default {
   createUserPet,
   getPets,
+  addLike,
+  removeLike,
   deletePets,
   getPetById,
   updatePetAbout,
