@@ -90,10 +90,6 @@ export default function AccountInfo() {
       }
     }
 
-    for (const [key, value] of formData.entries()) {
-      console.log(`${key}:`, value);
-    }
-
     try {
       setIsLoading(true);
       const res = await userService.editProfile(formData);
