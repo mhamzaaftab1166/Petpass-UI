@@ -70,7 +70,7 @@ export default function Connected({ onFilterPress }) {
         style.area,
         {
           flex: 1,
-          backgroundColor: isDarkMode ? Colors.dark : Colors.secondary,
+          backgroundColor: isDarkMode ? Colors.active : Colors.secondary,
         },
       ]}
     >
@@ -141,7 +141,6 @@ export default function Connected({ onFilterPress }) {
           </View>
         </ScrollView>
 
-        {/* Bottom Sheet Modal */}
         <Modal
           visible={isMenuVisible}
           transparent
@@ -149,10 +148,17 @@ export default function Connected({ onFilterPress }) {
           onRequestClose={() => setMenuVisible(false)}
         >
           <Pressable
-            style={styles.overlay}
+            style={[styles.overlay]}
             onPress={() => setMenuVisible(false)}
           >
-            <View style={styles.bottomSheet}>
+            <View
+              style={[
+                styles.bottomSheet,
+                {
+                  backgroundColor: isDarkMode ? Colors.light : Colors.secondary,
+                },
+              ]}
+            >
               <TouchableOpacity
                 style={styles.option}
                 onPress={() => handleRemoveConnect(selectedUserId)}
@@ -220,7 +226,7 @@ const styles = StyleSheet.create({
     padding: 20,
     borderTopLeftRadius: 16,
     borderTopRightRadius: 16,
-    height:"12%"
+    height: "12%",
   },
   option: {
     paddingVertical: 10,
@@ -229,5 +235,6 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: "500",
     color: Colors.primary,
+    fontFamily: "Avenir-Bold",
   },
 });
