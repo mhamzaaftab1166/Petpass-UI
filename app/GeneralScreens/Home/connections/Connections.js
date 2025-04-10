@@ -16,6 +16,7 @@ import ConnectionTabs from "../../../components/Connections/Tabs";
 import AddConnections from "./AddConnection";
 import FilterDrawer from "./FilterDrawer";
 import UserRequests from "./RequestConnections";
+import Connected from "./ConnectedUsers";
 
 export default function Connections() {
   const { isDarkMode } = useTheme();
@@ -89,7 +90,9 @@ export default function Connections() {
             <AddConnections onFilterPress={handleOpenFilter} />
           )}
 
-          {selectedTab === "request" && <UserRequests/>}
+          {selectedTab === "request" && <UserRequests />}
+
+          {selectedTab === "yourConnects" && <Connected />}
         </View>
       </View>
 
