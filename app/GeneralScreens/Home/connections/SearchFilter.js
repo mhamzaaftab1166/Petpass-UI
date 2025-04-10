@@ -31,11 +31,11 @@ export default function SearchFilterBar({
           style={[
             styles.searchInput,
             {
-              color: isDarkMode ? Colors.secondary : Colors.active,
+              color: isDarkMode ? Colors.active : Colors.active,
             },
           ]}
           placeholder="Search..."
-          placeholderTextColor={isDarkMode ? Colors.secondary : Colors.disable}
+          placeholderTextColor={isDarkMode ? Colors.lable : Colors.disable}
           value={searchText}
           onChangeText={onSearchChange}
         />
@@ -82,10 +82,11 @@ const styles = StyleSheet.create({
     flex: 1,
     fontSize: width < 360 ? 14 : 16,
     paddingVertical: 0,
+    fontFamily: "Avenir-SemiBold",
   },
   filterIconContainer: {
     padding: 5,
-    paddingRight:0,
+    paddingRight: 0,
     justifyContent: "center",
     alignItems: "center",
   },

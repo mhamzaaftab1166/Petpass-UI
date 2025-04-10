@@ -49,7 +49,7 @@ export default function Connections() {
         { backgroundColor: isDarkMode ? Colors.dark : Colors.secondary },
       ]}
     >
-      <ScrollView style={{ flex: 1 }}>
+      <View style={{ flex: 1 }}>
         <AppBar
           color={isDarkMode ? Colors.active : Colors.secondary}
           titleStyle={[
@@ -88,7 +88,7 @@ export default function Connections() {
             <AddConnections onFilterPress={handleOpenFilter} />
           )}
         </View>
-      </ScrollView>
+      </View>
 
       <FilterDrawer visible={isFilterVisible} onClose={handleCloseFilter} />
     </SafeAreaView>

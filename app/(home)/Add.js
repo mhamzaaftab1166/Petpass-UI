@@ -29,7 +29,6 @@ import maleLight from "../../assets/images/pets/maleLight.png";
 import AppFormDatePicker from "../components/forms/AppFormDatePicker";
 import OnSuccess from "../components/OnSuccess/OnSuccess";
 import petServices from "../services/petServices";
-import { convertImageToBase64 } from "../utils/generalUtils";
 import AutoUpdateFields from "../components/forms/AutoUpdate";
 import { useUserStore } from "../store/useStore";
 
