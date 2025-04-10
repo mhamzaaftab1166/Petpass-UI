@@ -13,12 +13,16 @@ const TabItem = ({ label, badge, isSelected, onPress }) => {
         <View style={[styles.requestBadge, isSelected && styles.bagheActive]}>
           <Text
             style={[styles.requestBadgeText, isSelected && styles.textActive]}
+            numberOfLines={1}
           >
             {badge}
           </Text>
         </View>
       )}
-      <Text style={[styles.tabText, isSelected && styles.selectedTabText]}>
+      <Text
+        style={[styles.tabText, isSelected && styles.selectedTabText]}
+        numberOfLines={1}
+      >
         {label}
       </Text>
     </TouchableOpacity>
@@ -29,12 +33,12 @@ const ConnectionTabs = ({ selectedTab, onTabSelect }) => {
   return (
     <View style={styles.tabsContainer}>
       <TabItem
-        label="Add Connect"
+        label="Invite"
         isSelected={selectedTab === "addConnections"}
         onPress={() => onTabSelect("addConnections")}
       />
       <TabItem
-        label="Request"
+        label="Requests"
         badge="3"
         isSelected={selectedTab === "request"}
         onPress={() => onTabSelect("request")}
@@ -54,11 +58,13 @@ export default ConnectionTabs;
 const styles = StyleSheet.create({
   tabsContainer: {
     flexDirection: "row",
-    justifyContent: "space-evenly",
+    justifyContent: "space-between",
     alignItems: "center",
     paddingVertical: 10,
+    paddingHorizontal: 5,
   },
   tabItem: {
+    flex: 1,
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "center",
@@ -67,8 +73,9 @@ const styles = StyleSheet.create({
     borderRadius: 20,
     paddingVertical: 8,
     paddingHorizontal: 5,
-    flex: 1,
     marginHorizontal: 5,
+    minWidth: 0,
+    position: "relative", // Allow positioning of badge
   },
   selectedTab: {
     backgroundColor: Colors.primary,
@@ -79,19 +86,24 @@ const styles = StyleSheet.create({
     fontSize: 14,
     color: Colors.lable,
     textAlign: "center",
+    flexShrink: 1,
   },
   selectedTabText: {
     color: Colors.secondary,
   },
   requestBadge: {
+  marginTop:5,
+    position: "absolute",
+    top: -15,
+    right: -6,
     backgroundColor: Colors.primary,
     borderRadius: 10,
     paddingHorizontal: 6,
     paddingVertical: 2,
-    marginRight: 5,
+    alignSelf: "center",
   },
   bagheActive: {
-    backgroundColor: Colors.secondary,
+    backgroundColor: Colors.light,
   },
   textActive: {
     color: Colors.primary,

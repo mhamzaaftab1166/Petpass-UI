@@ -27,7 +27,7 @@ export default function FilterDrawer({ visible, onClose }) {
   if (!visible) return null;
 
   const statusBarHeight =
-    Platform.OS === "android" ? StatusBar.currentHeight || 0 : 44;
+    Platform.OS === "android" ? StatusBar.currentHeight-10 || 0 : 44;
 
   return (
     <TouchableWithoutFeedback onPress={onClose}>
@@ -37,7 +37,7 @@ export default function FilterDrawer({ visible, onClose }) {
             styles.drawer,
             {
               transform: [{ translateX: drawerAnim }],
-              paddingTop: statusBarHeight + 10, // Add 10 extra padding if needed
+              paddingTop: statusBarHeight + 10,
             },
           ]}
         >
@@ -70,7 +70,7 @@ const styles = StyleSheet.create({
     width: width * 0.8,
     backgroundColor: Colors.secondary,
     padding: 20,
-    paddingTop: 0, // will be overridden inline
+    paddingTop: 0,
   },
   drawerTitle: {
     fontSize: 20,

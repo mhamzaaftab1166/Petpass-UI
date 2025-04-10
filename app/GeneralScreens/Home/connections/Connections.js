@@ -14,7 +14,7 @@ import { useTheme } from "../../../helper/themeProvider";
 import { router, useFocusEffect } from "expo-router";
 import ConnectionTabs from "../../../components/Connections/Tabs";
 import AddConnections from "./AddConnection";
-import FilterDrawer from "./Filter";
+import FilterDrawer from "./FilterDrawer";
 
 export default function Connections() {
   const { isDarkMode } = useTheme();

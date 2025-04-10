@@ -1,7 +1,16 @@
 import React from "react";
-import { View, TextInput, TouchableOpacity, StyleSheet } from "react-native";
+import {
+  View,
+  TextInput,
+  TouchableOpacity,
+  StyleSheet,
+  Dimensions,
+  Platform,
+} from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import { Colors } from "../../../theme/color";
+
+const { width } = Dimensions.get("window");
 
 export default function SearchFilterBar({
   searchText,
@@ -21,7 +30,9 @@ export default function SearchFilterBar({
         <TextInput
           style={[
             styles.searchInput,
-            { color: isDarkMode ? Colors.secondary : Colors.active },
+            {
+              color: isDarkMode ? Colors.secondary : Colors.active,
+            },
           ]}
           placeholder="Search..."
           placeholderTextColor={isDarkMode ? Colors.secondary : Colors.disable}
@@ -29,11 +40,16 @@ export default function SearchFilterBar({
           onChangeText={onSearchChange}
         />
       </View>
+
       <TouchableOpacity
         style={styles.filterIconContainer}
         onPress={onFilterPress}
       >
-        <Ionicons name="filter-circle" size={35} color={Colors.primary} />
+        <Ionicons
+          name="filter-circle"
+          size={Platform.OS === "ios" ? 30 : 32}
+          color={Colors.primary}
+        />
       </TouchableOpacity>
     </View>
   );
@@ -42,31 +58,35 @@ export default function SearchFilterBar({
 const styles = StyleSheet.create({
   searchRow: {
     flexDirection: "row",
-    paddingVertical: 20,
-    paddingHorizontal: 10,
-    justifyContent: "space-between",
     alignItems: "center",
+    justifyContent: "space-between",
+    paddingVertical: 10,
+    paddingHorizontal: 12,
   },
   searchInputContainer: {
-    flex: 6,
+    flex: 1,
     flexDirection: "row",
+    alignItems: "center",
     borderWidth: 1,
     borderColor: Colors.lable,
     borderRadius: 10,
     paddingHorizontal: 10,
-    paddingVertical: 8,
+    paddingVertical: Platform.OS === "ios" ? 10 : 6,
+    backgroundColor: "#fff",
+    marginRight: 10,
   },
   searchIcon: {
-    marginRight: 8,
+    marginRight: 6,
   },
   searchInput: {
     flex: 1,
-    fontSize: 16,
+    fontSize: width < 360 ? 14 : 16,
+    paddingVertical: 0,
   },
   filterIconContainer: {
-    flex: 1,
+    padding: 5,
+    paddingRight:0,
+    justifyContent: "center",
     alignItems: "center",
-    justifyContent: "flex-end",
-    marginLeft: 5,
   },
 });
