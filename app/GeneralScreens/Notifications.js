@@ -21,10 +21,10 @@ import {
 import { useUserStore } from "../store/useStore";
 import notification from "../constants/notification";
 import Appsk from "../components/AppSkeleton/index";
-
 import Icon from "react-native-vector-icons/Ionicons";
 import { AppBar } from "@react-native-material/core";
 import { useTheme } from "../helper/themeProvider";
+import notyPLaceholder from "../../assets/images/notyPLaceholder.png";
 
 const width = Dimensions.get("screen").width;
 const height = Dimensions.get("screen").height;
@@ -108,7 +108,6 @@ export default function Notification() {
     } catch (err) {
       console.error("Error parsing pushData:", err);
     }
-    console.log(pushDataObj);
 
     return (
       <Pressable
@@ -125,15 +124,28 @@ export default function Notification() {
             marginHorizontal: 20,
           }}
         >
-          <Image
-            source={{ uri: pushDataObj?.pet_profile_picture }}
-            style={{
-              resizeMode: "cover",
-              height: height / 12,
-              width: width / 5,
-              borderRadius: 5,
-            }}
-          />
+          {pushDataObj?.pet_profile_picture && (
+            <Image
+              source={{ uri: pushDataObj?.pet_profile_picture }}
+              style={{
+                resizeMode: "cover",
+                height: height / 12,
+                width: width / 5,
+                borderRadius: 5,
+              }}
+            />
+          )}
+          {!pushDataObj?.pet_profile_picture && (
+            <Image
+              source={notyPLaceholder}
+              style={{
+                resizeMode: "cover",
+                height: height / 12,
+                width: width / 5,
+                borderRadius: 5,
+              }}
+            />
+          )}
           <View style={{ marginLeft: 10, flex: 1 }}>
             <Text
               style={[

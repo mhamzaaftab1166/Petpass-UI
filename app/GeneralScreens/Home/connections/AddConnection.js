@@ -14,50 +14,55 @@ import { useTheme } from "../../../helper/themeProvider";
 import SearchFilterBar from "./SearchFilter";
 import ProfilePlaceholer from "../../../../assets/images/profilePlaceHolder.png";
 
-const dummyUsers = [
+const initialUsers = [
   {
     id: 1,
     name: "Alex Johnson",
     type: "Designer",
     profilePic: ProfilePlaceholer,
+    isConnected: false,
   },
   {
     id: 2,
     name: "Sophie Miller",
     type: "Photographer",
     profilePic: ProfilePlaceholer,
+    isConnected: false,
   },
   {
     id: 3,
     name: "Daniel Smith",
     type: "Developer",
     profilePic: ProfilePlaceholer,
+    isConnected: false,
   },
   {
     id: 6,
     name: "Alex Johnson",
     type: "Designer",
     profilePic: ProfilePlaceholer,
+    isConnected: false,
   },
 ];
 
 export default function AddConnections({ onFilterPress }) {
   const { isDarkMode } = useTheme();
   const [searchText, setSearchText] = useState("");
-  const [connections, setConnections] = useState({});
+  const [users, setUsers] = useState(initialUsers);
 
   const handleSearchChange = (text) => {
     setSearchText(text);
   };
 
   const handleConnect = (id) => {
-    setConnections((prev) => ({
-      ...prev,
-      [id]: true,
-    }));
+    setUsers((prevUsers) =>
+      prevUsers.map((user) =>
+        user.id === id ? { ...user, isConnected: !user.isConnected } : user
+      )
+    );
   };
 
-  const filteredUsers = dummyUsers.filter((user) =>
+  const filteredUsers = users.filter((user) =>
     user.name.toLowerCase().includes(searchText.toLowerCase())
   );
 
@@ -81,7 +86,7 @@ export default function AddConnections({ onFilterPress }) {
           />
 
           <View style={{ paddingHorizontal: 16, paddingTop: 8 }}>
-            {filteredUsers.map((user, index) => (
+            {filteredUsers.map((user) => (
               <View key={user.id}>
                 <View
                   style={[
@@ -121,16 +126,16 @@ export default function AddConnections({ onFilterPress }) {
                     style={[
                       styles.connectButton,
                       {
-                        backgroundColor: connections[user.id]
+                        backgroundColor: user.isConnected
                           ? Colors.disable
                           : Colors.primary,
                       },
                     ]}
                     onPress={() => handleConnect(user.id)}
-                    disabled={connections[user.id]}
+                    disabled={user.isConnected}
                   >
                     <Text style={styles.connectButtonText}>
-                      {connections[user.id] ? "Sent" : "Connect"}
+                      {user.isConnected ? "Sent" : "Connect"}
                     </Text>
                   </TouchableOpacity>
                 </View>

@@ -15,6 +15,7 @@ import { router, useFocusEffect } from "expo-router";
 import ConnectionTabs from "../../../components/Connections/Tabs";
 import AddConnections from "./AddConnection";
 import FilterDrawer from "./FilterDrawer";
+import UserRequests from "./RequestConnections";
 
 export default function Connections() {
   const { isDarkMode } = useTheme();
@@ -87,6 +88,8 @@ export default function Connections() {
           {selectedTab === "addConnections" && (
             <AddConnections onFilterPress={handleOpenFilter} />
           )}
+
+          {selectedTab === "request" && <UserRequests/>}
         </View>
       </View>
 
