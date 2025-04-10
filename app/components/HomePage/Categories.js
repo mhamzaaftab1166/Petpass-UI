@@ -87,7 +87,7 @@ const Categories = () => {
         <CategoryItem
           imageSource={require("../../../assets/images/home/connect.png")}
           title="Connections"
-          routing="/GeneralScreens/Home/Connections"
+          routing="/GeneralScreens/Home/connections/Connections"
         />
         <View style={{ margin: 8 }}></View>
         <CategoryItem

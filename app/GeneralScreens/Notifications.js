@@ -8,6 +8,7 @@ import {
   TouchableOpacity,
   RefreshControl,
   StyleSheet,
+  Pressable,
 } from "react-native";
 import { SwipeListView } from "react-native-swipe-list-view";
 import { useRouter } from "expo-router";
@@ -34,7 +35,7 @@ export default function Notification() {
   const [error, setError] = useState(null);
   const [data, setData] = useState([]);
   console.log(data);
-  
+
   const router = useRouter();
   const { isDarkMode } = useTheme();
   const [refreshing, setRefreshing] = useState(false);
@@ -62,7 +63,6 @@ export default function Notification() {
   }, []);
 
   const onRefresh = () => {
-    console.log("Refresh pressed");
     setRefreshing(true);
     setTimeout(async () => {
       try {
@@ -93,64 +93,83 @@ export default function Notification() {
       setLoading(false);
     }
   };
+  const handleNotificationPress = (pushDataObj) => {
+    if (pushDataObj?.category === "vaccination") {
+      router.push(
+        `/PetDetails/PetDetailPage?id=${pushDataObj?.id}&home=${pushDataObj?.home}`
+      );
+    }
+  };
 
-  const renderItem = ({ item }) => (
-    <View
-      style={[
-        styles.rowFront,
-        { backgroundColor: isDarkMode ? Colors.active : Colors.secondary },
-      ]}
-    >
-      <View
-        style={{
-          flexDirection: "row",
-          alignItems: "center",
-          marginHorizontal: 20,
-        }}
+  const renderItem = ({ item }) => {
+    let pushDataObj = {};
+    try {
+      pushDataObj = JSON.parse(item.pushData);
+    } catch (err) {
+      console.error("Error parsing pushData:", err);
+    }
+    console.log(pushDataObj);
+
+    return (
+      <Pressable
+        onPress={() => handleNotificationPress(pushDataObj)}
+        style={[
+          styles.rowFront,
+          { backgroundColor: isDarkMode ? Colors.active : Colors.secondary },
+        ]}
       >
-        <Image
-          source={require("../../assets/images/profile/notification.png")}
+        <View
           style={{
-            resizeMode: "contain",
-            height: height / 12,
-            width: width / 5,
+            flexDirection: "row",
+            alignItems: "center",
+            marginHorizontal: 20,
           }}
-        />
-        <View style={{ marginLeft: 10, flex: 1 }}>
-          <Text
-            style={[
-              style.r16,
-              { color: isDarkMode ? Colors.secondary : Colors.active },
-            ]}
-          >
-            {item.title}
-          </Text>
-          <Text
-            style={[
-              style.r12,
-              {
-                color: isDarkMode ? Colors.secondary : Colors.disable,
-                marginTop: 5,
-              },
-            ]}
-          >
-            {item.message}
-          </Text>
-          <Text
-            style={[
-              style.r10,
-              {
-                color: isDarkMode ? Colors.secondary : Colors.disable,
-                marginTop: 5,
-              },
-            ]}
-          >
-            {item.date}
-          </Text>
+        >
+          <Image
+            source={{ uri: pushDataObj?.pet_profile_picture }}
+            style={{
+              resizeMode: "cover",
+              height: height / 12,
+              width: width / 5,
+              borderRadius: 5,
+            }}
+          />
+          <View style={{ marginLeft: 10, flex: 1 }}>
+            <Text
+              style={[
+                style.r16,
+                { color: isDarkMode ? Colors.secondary : Colors.active },
+              ]}
+            >
+              {item.title}
+            </Text>
+            <Text
+              style={[
+                style.r12,
+                {
+                  color: isDarkMode ? Colors.secondary : Colors.disable,
+                  marginTop: 5,
+                },
+              ]}
+            >
+              {item.message}
+            </Text>
+            <Text
+              style={[
+                style.r10,
+                {
+                  color: isDarkMode ? Colors.secondary : Colors.disable,
+                  marginTop: 5,
+                },
+              ]}
+            >
+              {item.date}
+            </Text>
+          </View>
         </View>
-      </View>
-    </View>
-  );
+      </Pressable>
+    );
+  };
 
   const renderHiddenItem = (data) => (
     <View style={styles.rowBack}>
