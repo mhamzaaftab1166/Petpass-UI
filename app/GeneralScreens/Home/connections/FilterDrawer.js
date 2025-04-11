@@ -19,36 +19,23 @@ import {
   userTypeOptions,
   petAgeRangeOptions,
 } from "../../../constants/pet";
-import petService from "../../../services/petServices";
 import Loader from "../../../components/Loader/Loader";
-import AntDesign from "@expo/vector-icons/AntDesign";
+import { MaterialIcons, AntDesign } from "@expo/vector-icons";
+import BreedMultiSelect from "../../../components/MultiSelect/MultiSelect";
+import usePetTypesAndBreeds from "../../../hooks/usePetFilters";
+import { useTheme } from "../../../helper/themeProvider";
 
 const { width, height } = Dimensions.get("window");
 
 export default function FilterDrawer({ visible, onClose, onApplyFilters }) {
+  const { isDarkMode } = useTheme();
   const drawerAnim = useRef(new Animated.Value(width)).current;
-  const [petTypes, setPetTypes] = useState([]);
   const [selectedUserTypes, setSelectedUserTypes] = useState([]);
   const [selectedAgeRanges, setSelectedAgeRanges] = useState([]);
   const [selectedLocations, setSelectedLocations] = useState([]);
   const [selectedPetTypes, setSelectedPetTypes] = useState([]);
-  const [loading, setLoading] = useState(false);
-
-  useEffect(() => {
-    setLoading(true);
-
-    petService
-      .getPetsTypes()
-      .then((types) => {
-        setPetTypes(types?.pet_types || []);
-      })
-      .catch((error) => {
-        console.error("Error fetching pet types: ", error);
-      })
-      .finally(() => {
-        setLoading(false);
-      });
-  }, []);
+  const [selectedBreeds, setSelectedBreeds] = useState([]);
+  const { petTypes, petBreeds, loading } = usePetTypesAndBreeds(selectedPetTypes);
 
   useEffect(() => {
     Animated.timing(drawerAnim, {
@@ -57,6 +44,7 @@ export default function FilterDrawer({ visible, onClose, onApplyFilters }) {
       useNativeDriver: true,
     }).start();
   }, [visible, drawerAnim]);
+
 
   if (!visible) return null;
 
@@ -67,30 +55,32 @@ export default function FilterDrawer({ visible, onClose, onApplyFilters }) {
         : 0
       : 44;
 
- const handleApplyFilters = () => {
-   const allSelectedFilters = {
-     userType: selectedUserTypes.map((opt) => opt.value),
-     petAgeRange: selectedAgeRanges.map((opt) => opt.value),
-     petLocation: selectedLocations.map((opt) => opt.value),
-     petType: selectedPetTypes.map((opt) => opt.value),
-   };
-
-   if (onApplyFilters) {
-     onApplyFilters(allSelectedFilters);
-   }
-  handleClose();
- };
-
-
   const handleClose = () => {
     setSelectedUserTypes([]);
     setSelectedAgeRanges([]);
     setSelectedLocations([]);
     setSelectedPetTypes([]);
+    setSelectedBreeds([]);
     if (onClose) {
       onClose();
     }
   };
+
+  const handleApplyFilters = () => {
+    const allSelectedFilters = {
+      userType: selectedUserTypes.map((opt) => opt.value),
+      petAgeRange: selectedAgeRanges.map((opt) => opt.value),
+      petLocation: selectedLocations.map((opt) => opt.value),
+      petType: selectedPetTypes.map((opt) => opt.value),
+      petBreed: selectedBreeds,
+    };
+
+    if (onApplyFilters) {
+      onApplyFilters(allSelectedFilters);
+    }
+    handleClose();
+  };
+
   return (
     <TouchableWithoutFeedback>
       <View style={styles.overlay}>
@@ -101,13 +91,14 @@ export default function FilterDrawer({ visible, onClose, onApplyFilters }) {
             {
               transform: [{ translateX: drawerAnim }],
               paddingTop: statusBarHeight + 10,
+               backgroundColor: isDarkMode ? Colors.dark : Colors.secondary
             },
           ]}
         >
           <View style={styles.header}>
-            <Text style={styles.drawerTitle}>Filter Options</Text>
+            <Text style={[styles.drawerTitle,{color: isDarkMode ? Colors.secondary : Colors.active,}]}>Filter Options</Text>
             <TouchableOpacity onPress={handleClose}>
-              <AntDesign name="close" size={28} color={Colors.active} />
+              <AntDesign name="close" size={28} color={isDarkMode ? Colors.secondary : Colors.active} />
             </TouchableOpacity>
           </View>
           <ScrollView
@@ -124,6 +115,14 @@ export default function FilterDrawer({ visible, onClose, onApplyFilters }) {
                 title="Pet Types"
                 options={petTypes}
                 onSelectionChange={(selected) => setSelectedPetTypes(selected)}
+                isOneSelected={true}
+              />
+            )}
+            {petBreeds.length > 0 && (
+              <BreedMultiSelect
+                data={petBreeds}
+                value={selectedBreeds}
+                onChange={(item) => setSelectedBreeds(item)}
               />
             )}
             <FilterCategory
@@ -185,7 +184,7 @@ const styles = StyleSheet.create({
     textAlign: "left",
   },
   scrollViewContent: {
-    paddingBottom: 20
+    paddingBottom: 20,
   },
   applyButton: {
     marginTop: 20,
@@ -199,5 +198,5 @@ const styles = StyleSheet.create({
     color: Colors.secondary,
     fontSize: 16,
     fontFamily: "Avenir-SemiBold",
-  },
+  }
 });
