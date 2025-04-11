@@ -33,7 +33,6 @@ export default function Connections() {
     useCallback(() => {
       const fetchVaccines = async () => {
         try {
-          // load data
         } catch (err) {
           setError(err.message);
         } finally {
@@ -96,7 +95,11 @@ export default function Connections() {
         </View>
       </View>
 
-      <FilterDrawer visible={isFilterVisible} onClose={handleCloseFilter} />
+      <FilterDrawer
+        visible={isFilterVisible}
+        onClose={handleCloseFilter}
+        onApplyFilters={(filters) => console.log(filters)}
+      />
     </SafeAreaView>
   );
 }

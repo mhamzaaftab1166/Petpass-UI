@@ -184,7 +184,6 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.07,
     shadowOffset: { width: 0, height: 3 },
     shadowRadius: 6,
-    elevation: 4,
     position: "relative",
   },
   avatar: {
