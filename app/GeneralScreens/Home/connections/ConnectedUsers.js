@@ -20,6 +20,7 @@ import NoItem from "../../../components/NoItem/NoItem";
 
 
 export default function Connected({ connects }) {
+  
   const { isDarkMode } = useTheme();
   const [selectedUserId, setSelectedUserId] = useState(null);
   const [isMenuVisible, setMenuVisible] = useState(false);
@@ -100,7 +101,18 @@ export default function Connected({ connects }) {
                         },
                       ]}
                     >
-                      {"Pet Owner"}
+                      {user?.profile_types?.length > 0
+                        ? user.profile_types
+                            .map((type) => {
+                              const typeMap = {
+                                pet_owner: "Pet Owner",
+                                pet_breeder: "Pet Breeder",
+                                pet_shop: "Pet Shop",
+                              };
+                              return typeMap[type] || type;
+                            })
+                            .join(", ")
+                        : "User Type Not Specified"}
                     </Text>
                   </View>
 

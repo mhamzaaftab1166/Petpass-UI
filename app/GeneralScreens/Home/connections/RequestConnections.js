@@ -17,7 +17,6 @@ import NoItem from "../../../components/NoItem/NoItem";
 const dummyRequests = [];
 
 export default function AddConnections({ requests }) {
-  
   const { isDarkMode } = useTheme();
 
   const handleRequestResponse = (id, response) => {
@@ -89,7 +88,21 @@ export default function AddConnections({ requests }) {
                           },
                         ]}
                       >
-                        {"Pet Owner"}
+                        {request?.profile_types?.length > 0
+                          ? (() => {
+                              const typeMap = {
+                                pet_owner: "Pet Owner",
+                                pet_breeder: "Pet Breeder",
+                                pet_shop: "Pet Shop",
+                              };
+                              const displayText = request.profile_types
+                                .map((type) => typeMap[type] || type)
+                                .join(", ");
+                              return displayText.length > 10
+                                ? displayText.slice(0, 20) + "..."
+                                : displayText;
+                            })()
+                          : "User Type Not Specified"}
                       </Text>
                     </View>
                     <View style={styles.buttonsContainer}>

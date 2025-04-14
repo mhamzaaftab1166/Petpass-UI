@@ -78,7 +78,12 @@ export default function AddConnections({ onFilterPress,users=[] }) {
                     },
                   ]}
                 >
-                  {!user?.profile_picture&&<Image source={profilePicPlaceholder} style={styles.avatar} />}
+                  {!user?.profile_picture && (
+                    <Image
+                      source={profilePicPlaceholder}
+                      style={styles.avatar}
+                    />
+                  )}
                   {user?.profile_picture && (
                     <Image
                       source={{ uri: user?.profile_picture }}
@@ -104,7 +109,18 @@ export default function AddConnections({ onFilterPress,users=[] }) {
                         },
                       ]}
                     >
-                      {"Pet Owner"}
+                      {user?.profile_types?.length > 0
+                        ? user.profile_types
+                            .map((type) => {
+                              const typeMap = {
+                                pet_owner: "Pet Owner",
+                                pet_breeder: "Pet Breeder",
+                                pet_shop: "Pet Shop",
+                              };
+                              return typeMap[type] || type;
+                            })
+                            .join(", ")
+                        : "User Type Not Specified"}
                     </Text>
                   </View>
                   <TouchableOpacity
