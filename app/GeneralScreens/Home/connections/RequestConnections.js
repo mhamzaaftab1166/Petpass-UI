@@ -12,29 +12,12 @@ import style from "../../../theme/style";
 import { Colors } from "../../../theme/color";
 import { useTheme } from "../../../helper/themeProvider";
 import ProfilePlaceholer from "../../../../assets/images/profilePlaceHolder.png";
+import NoItem from "../../../components/NoItem/NoItem";
 
-const dummyRequests = [
-  {
-    id: 1,
-    name: "Hamza Ali",
-    role: "Pet Owner",
-    profilePic: ProfilePlaceholer,
-  },
-  {
-    id: 2,
-    name: "Sophie Miller",
-    role: "Pet Breeder",
-    profilePic: ProfilePlaceholer,
-  },
-  {
-    id: 3,
-    name: "Daniel Smith",
-    role: "Pet Shop",
-    profilePic: ProfilePlaceholer,
-  },
-];
+const dummyRequests = [];
 
-export default function AddConnections() {
+export default function AddConnections({ requests }) {
+  
   const { isDarkMode } = useTheme();
 
   const handleRequestResponse = (id, response) => {
@@ -53,8 +36,17 @@ export default function AddConnections() {
     >
       <View style={{ flex: 1 }}>
         <ScrollView showsVerticalScrollIndicator={false}>
+          {requests?.length <= 0 && (
+            <View
+              style={{
+                marginTop: "50%",
+              }}
+            >
+              <NoItem title={"Users"} />
+            </View>
+          )}
           <View style={{ paddingHorizontal: 16, paddingTop: 8 }}>
-            {dummyRequests.map((request) => (
+            {requests.map((request) => (
               <View key={request.id}>
                 <View
                   style={[
@@ -66,7 +58,15 @@ export default function AddConnections() {
                     },
                   ]}
                 >
-                  <Image source={request.profilePic} style={styles.avatar} />
+                  {!request?.profile_picture && (
+                    <Image source={ProfilePlaceholer} style={styles.avatar} />
+                  )}
+                  {request?.profile_picture && (
+                    <Image
+                      source={{ uri: request?.profile_picture }}
+                      style={styles.avatar}
+                    />
+                  )}
                   <View style={styles.userInfo}>
                     <View style={styles.nameRoleContainer}>
                       <Text
@@ -77,7 +77,7 @@ export default function AddConnections() {
                           },
                         ]}
                       >
-                        {request.name}
+                        {request?.username}
                       </Text>
                       <Text
                         style={[
@@ -89,7 +89,7 @@ export default function AddConnections() {
                           },
                         ]}
                       >
-                        {request.role}
+                        {"Pet Owner"}
                       </Text>
                     </View>
                     <View style={styles.buttonsContainer}>
@@ -167,7 +167,7 @@ const styles = StyleSheet.create({
     fontWeight: "600",
     marginBottom: 4,
     fontFamily: "Avenir-Bold",
-    paddingLeft:8
+    paddingLeft: 8,
   },
   userRole: {
     fontSize: 13,

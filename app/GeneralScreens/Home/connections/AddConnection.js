@@ -12,43 +12,13 @@ import style from "../../../theme/style";
 import { Colors } from "../../../theme/color";
 import { useTheme } from "../../../helper/themeProvider";
 import SearchFilterBar from "./SearchFilter";
-import ProfilePlaceholer from "../../../../assets/images/profilePlaceHolder.png";
+import profilePicPlaceholder from "../../../../assets/images/profilePlaceHolder.png";
+import NoItem from "../../../components/NoItem/NoItem";
 
-const initialUsers = [
-  {
-    id: 1,
-    name: "Alex Johnson",
-    type: "Designer",
-    profilePic: ProfilePlaceholer,
-    isConnected: false,
-  },
-  {
-    id: 2,
-    name: "Sophie Miller",
-    type: "Photographer",
-    profilePic: ProfilePlaceholer,
-    isConnected: false,
-  },
-  {
-    id: 3,
-    name: "Daniel Smith",
-    type: "Developer",
-    profilePic: ProfilePlaceholer,
-    isConnected: false,
-  },
-  {
-    id: 6,
-    name: "Alex Johnson",
-    type: "Designer",
-    profilePic: ProfilePlaceholer,
-    isConnected: false,
-  },
-];
 
-export default function AddConnections({ onFilterPress }) {
+export default function AddConnections({ onFilterPress,users=[] }) {
   const { isDarkMode } = useTheme();
   const [searchText, setSearchText] = useState("");
-  const [users, setUsers] = useState(initialUsers);
 
   const handleSearchChange = (text) => {
     setSearchText(text);
@@ -63,7 +33,7 @@ export default function AddConnections({ onFilterPress }) {
   };
 
   const filteredUsers = users.filter((user) =>
-    user.name.toLowerCase().includes(searchText.toLowerCase())
+    user.username.toLowerCase().includes(searchText.toLowerCase())
   );
 
   return (
@@ -85,6 +55,16 @@ export default function AddConnections({ onFilterPress }) {
             isDarkMode={isDarkMode}
           />
 
+          {users?.length <= 0 && (
+            <View
+              style={{
+                marginTop: "50%",
+              }}
+            >
+              <NoItem title={"Users"} />
+            </View>
+          )}
+
           <View style={{ paddingHorizontal: 16, paddingTop: 8 }}>
             {filteredUsers.map((user) => (
               <View key={user.id}>
@@ -98,7 +78,13 @@ export default function AddConnections({ onFilterPress }) {
                     },
                   ]}
                 >
-                  <Image source={user.profilePic} style={styles.avatar} />
+                  {!user?.profile_picture&&<Image source={profilePicPlaceholder} style={styles.avatar} />}
+                  {user?.profile_picture && (
+                    <Image
+                      source={{ uri: user?.profile_picture }}
+                      style={styles.avatar}
+                    />
+                  )}
                   <View style={styles.userInfo}>
                     <Text
                       style={[
@@ -108,7 +94,7 @@ export default function AddConnections({ onFilterPress }) {
                         },
                       ]}
                     >
-                      {user.name}
+                      {user?.username}
                     </Text>
                     <Text
                       style={[
@@ -118,7 +104,7 @@ export default function AddConnections({ onFilterPress }) {
                         },
                       ]}
                     >
-                      {user.type}
+                      {"Pet Owner"}
                     </Text>
                   </View>
                   <TouchableOpacity

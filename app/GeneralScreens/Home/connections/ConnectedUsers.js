@@ -16,37 +16,11 @@ import { useTheme } from "../../../helper/themeProvider";
 import ProfilePlaceholer from "../../../../assets/images/profilePlaceHolder.png";
 import Detail from "../../../../assets/images/pets/detailcon.png";
 import { Entypo } from "@expo/vector-icons"; // for 3-dot icon
+import NoItem from "../../../components/NoItem/NoItem";
 
-const initialUsers = [
-  {
-    id: 1,
-    name: "Alex Johnson",
-    type: "Designer",
-    profilePic: ProfilePlaceholer,
-  },
-  {
-    id: 2,
-    name: "Sophie Miller",
-    type: "Photographer",
-    profilePic: ProfilePlaceholer,
-  },
-  {
-    id: 3,
-    name: "Daniel Smith",
-    type: "Developer",
-    profilePic: ProfilePlaceholer,
-  },
-  {
-    id: 6,
-    name: "Alex Johnson",
-    type: "Designer",
-    profilePic: ProfilePlaceholer,
-  },
-];
 
-export default function Connected({ onFilterPress }) {
+export default function Connected({ connects }) {
   const { isDarkMode } = useTheme();
-  const [users, setUsers] = useState(initialUsers);
   const [selectedUserId, setSelectedUserId] = useState(null);
   const [isMenuVisible, setMenuVisible] = useState(false);
 
@@ -76,8 +50,17 @@ export default function Connected({ onFilterPress }) {
     >
       <View style={{ flex: 1 }}>
         <ScrollView showsVerticalScrollIndicator={false}>
+          {connects?.length <= 0 && (
+            <View
+              style={{
+                marginTop: "50%",
+              }}
+            >
+              <NoItem title={"Connects"} />
+            </View>
+          )}
           <View style={{ paddingHorizontal: 16, paddingTop: 8 }}>
-            {users.map((user) => (
+            {connects.map((user) => (
               <View key={user.id}>
                 <View
                   style={[
@@ -89,7 +72,15 @@ export default function Connected({ onFilterPress }) {
                     },
                   ]}
                 >
-                  <Image source={user.profilePic} style={styles.avatar} />
+                  {!user?.profile_picture && (
+                    <Image source={ProfilePlaceholer} style={styles.avatar} />
+                  )}
+                  {user?.profile_picture && (
+                    <Image
+                      source={{ uri: user?.profile_picture }}
+                      style={styles.avatar}
+                    />
+                  )}
                   <View style={styles.userInfo}>
                     <Text
                       style={[
@@ -99,7 +90,7 @@ export default function Connected({ onFilterPress }) {
                         },
                       ]}
                     >
-                      {user.name}
+                      {user.username}
                     </Text>
                     <Text
                       style={[
@@ -109,7 +100,7 @@ export default function Connected({ onFilterPress }) {
                         },
                       ]}
                     >
-                      {user.type}
+                      {"Pet Owner"}
                     </Text>
                   </View>
 

@@ -29,7 +29,7 @@ const TabItem = ({ label, badge, isSelected, onPress }) => {
   );
 };
 
-const ConnectionTabs = ({ selectedTab, onTabSelect }) => {
+const ConnectionTabs = ({ selectedTab, onTabSelect, requestsCount=0,connectionCount=0 }) => {
   return (
     <View style={styles.tabsContainer}>
       <TabItem
@@ -39,13 +39,13 @@ const ConnectionTabs = ({ selectedTab, onTabSelect }) => {
       />
       <TabItem
         label="Requests"
-        badge="3"
+        badge={requestsCount}
         isSelected={selectedTab === "request"}
         onPress={() => onTabSelect("request")}
       />
       <TabItem
         label="Connects"
-        badge="12"
+        badge={connectionCount}
         isSelected={selectedTab === "yourConnects"}
         onPress={() => onTabSelect("yourConnects")}
       />
