@@ -50,7 +50,7 @@ const RecentPetCard = ({ pet, superLike = false, like = false, onUpdate }) => {
             top: 12,
             right: 10,
             flexDirection: "row",
-            gap: 10,
+            gap: 7,
           }}
         >
           <AppIcon
@@ -58,16 +58,17 @@ const RecentPetCard = ({ pet, superLike = false, like = false, onUpdate }) => {
             name="heart"
             size={25}
             color={Colors.secondary}
-            activeColor="red"
+            activeColor="#FF69B4"
             alreadyActive={activeLike === "like"}
             onPress={() => handleLike("like")}
+            style={{marginTop:5}}
           />
           <AppIcon
-            type="Entypo"
-            name="shield"
-            size={27}
+            type="MaterialCommunityIcons"
+            name="heart-flash"
+            size={40}
             color={Colors.secondary}
-            activeColor="#eab308"
+            activeColor="red"
             variant="superlike"
             alreadyActive={activeLike === "super_like"}
             onPress={() => handleLike("super_like")}

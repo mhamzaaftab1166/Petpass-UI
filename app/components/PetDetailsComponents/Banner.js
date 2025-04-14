@@ -30,7 +30,6 @@ const Banner = ({
   like = false,
   onUpdate,
 }) => {
-  console.log(pet);
 
  const { activeLike, handleLike, localHeartCount,localSuperLikeCount } = usePetLike({
    petId: pet?.id,
@@ -82,31 +81,20 @@ const Banner = ({
                   style={{ marginTop: 2 }}
                 />
               </Pressable>
-              <AppIcon
-                type="FontAwesome"
-                name="heart"
-                size={25}
-                color={Colors.secondary}
-                activeColor="red"
-                alreadyActive={activeLike === "like"}
-                onPress={() => handleLike("like")}
-              />
-              <AppIcon
-                type="Entypo"
-                name="shield"
-                size={27}
-                color={Colors.secondary}
-                activeColor="#eab308"
-                variant="superlike"
-                alreadyActive={activeLike === "super_like"}
-                onPress={() => handleLike("super_like")}
-              />
             </HStack>
           }
         />
         <View style={styles.bottomRightContainer}>
           <View style={styles.iconContainer}>
-            <Ionicons name="heart" size={22} color="red" style={styles.icon} />
+            <AppIcon
+              type="FontAwesome"
+              name="heart"
+              size={25}
+              color={Colors.secondary} 
+              activeColor="#FF69B4"
+              alreadyActive={activeLike === "like"}
+              onPress={() => handleLike("like")}
+            />
             <Text
               style={[
                 styles.countText,
@@ -117,11 +105,15 @@ const Banner = ({
             </Text>
           </View>
           <View style={[styles.iconContainer, { marginLeft: 16 }]}>
-            <Entypo
-              name="shield"
-              size={22}
-              color="#eab308"
-              style={styles.icon}
+            <AppIcon
+              type="MaterialCommunityIcons"
+              name="heart-flash"
+              size={40}
+              color={Colors.secondary}
+              activeColor="red"
+              variant="superlike"
+              alreadyActive={activeLike === "super_like"}
+              onPress={() => handleLike("super_like")}
             />
             <Text
               style={[
@@ -151,7 +143,7 @@ const styles = StyleSheet.create({
     right: 10,
     flexDirection: "row",
     alignItems: "center",
-    backgroundColor: "rgba(0,0,0,0.3)",
+    backgroundColor: "rgba(240, 233, 233, 0.3)",
     paddingVertical: 6,
     paddingHorizontal: 10,
     borderRadius: 8,
@@ -159,6 +151,7 @@ const styles = StyleSheet.create({
   iconContainer: {
     flexDirection: "row",
     alignItems: "center",
+    gap:10
   },
   icon: {
     opacity: 0.9,

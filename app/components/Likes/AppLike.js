@@ -12,6 +12,7 @@ import {
   Entypo,
   MaterialIcons,
   FontAwesome6,
+  MaterialCommunityIcons,
   FontAwesome,
 } from "@expo/vector-icons";
 
@@ -21,6 +22,7 @@ const ICONS = {
   MaterialIcons,
   Ionicons,
   Entypo,
+  MaterialCommunityIcons,
 };
 
 const AppIcon = ({
@@ -122,7 +124,7 @@ const AppIcon = ({
                 key={index}
                 style={[styles.starOverlay, getStarStyle(x, y, index * 100)]}
               >
-                <Text style={styles.starText}>✨</Text>
+                <Text style={styles.starText}>♥️</Text>
               </Animated.View>
             ))}
           </>
