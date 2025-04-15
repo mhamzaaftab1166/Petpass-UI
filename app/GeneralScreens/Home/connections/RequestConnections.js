@@ -102,7 +102,7 @@ export default function AddConnections({ requests }) {
                                 ? displayText.slice(0, 20) + "..."
                                 : displayText;
                             })()
-                          : "User Type Not Specified"}
+                          : "Not Specified"}
                       </Text>
                     </View>
                     <View style={styles.buttonsContainer}>

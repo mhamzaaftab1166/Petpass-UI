@@ -12,8 +12,19 @@ const getRequesedUsers = () => {
   return _axios("get", "/user-pending");
 };
 
+const sendInvite = (senderId,payload) => {
+  return _axios("post", `/user-connection/${senderId}`, payload);
+};
+
+const cancelInvite = (connectionId) => {
+  return _axios("delete", `/connections/${connectionId}/withdraw`);
+};
+
+
 export default {
   getUsers,
   getConnectedUsers,
   getRequesedUsers,
+  sendInvite,
+  cancelInvite,
 };

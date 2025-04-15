@@ -9,7 +9,7 @@ const TabItem = ({ label, badge, isSelected, onPress }) => {
       onPress={onPress}
       activeOpacity={0.8}
     >
-      {badge && (
+      {(typeof badge === "number" || typeof badge === "string") && (
         <View style={[styles.requestBadge, isSelected && styles.bagheActive]}>
           <Text
             style={[styles.requestBadgeText, isSelected && styles.textActive]}
@@ -19,6 +19,7 @@ const TabItem = ({ label, badge, isSelected, onPress }) => {
           </Text>
         </View>
       )}
+
       <Text
         style={[styles.tabText, isSelected && styles.selectedTabText]}
         numberOfLines={1}

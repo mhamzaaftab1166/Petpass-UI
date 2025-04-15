@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   SafeAreaView,
   ScrollView,
@@ -14,26 +14,92 @@ import { useTheme } from "../../../helper/themeProvider";
 import SearchFilterBar from "./SearchFilter";
 import profilePicPlaceholder from "../../../../assets/images/profilePlaceHolder.png";
 import NoItem from "../../../components/NoItem/NoItem";
+import connectionService from "../../../services/connectionService";
+import { useUserStore } from "../../../store/useStore";
 
-
-export default function AddConnections({ onFilterPress,users=[] }) {
+export default function AddConnections({
+  onFilterPress,
+  onRequestSent,
+  users = [],
+}) {
+  const { user } = useUserStore();
   const { isDarkMode } = useTheme();
   const [searchText, setSearchText] = useState("");
+  const [localUsers, setLocalUsers] = useState(users);
+
+  useEffect(() => {
+    setLocalUsers(users);
+  }, [users]);
 
   const handleSearchChange = (text) => {
     setSearchText(text);
   };
 
-  const handleConnect = (id) => {
-    setUsers((prevUsers) =>
-      prevUsers.map((user) =>
-        user.id === id ? { ...user, isConnected: !user.isConnected } : user
-      )
-    );
+  const handleConnect = async (userId) => {
+    const index = localUsers.findIndex((u) => u.id === userId);
+    if (index === -1) return;
+
+    const previousStatus = localUsers[index].status;
+    const optimisticStatus = previousStatus ? previousStatus : "pending";
+
+    setLocalUsers((prevUsers) => {
+      const updatedUsers = [...prevUsers];
+      updatedUsers[index] = {
+        ...updatedUsers[index],
+        status: optimisticStatus,
+      };
+      return updatedUsers;
+    });
+
+    try {
+      await connectionService.sendInvite(user?.id, { receiver_id: userId });
+      if (onRequestSent) {
+        onRequestSent();
+      }
+    } catch (error) {
+      console.log("Failed to send invite", error.message);
+      setLocalUsers((prevUsers) => {
+        const updatedUsers = [...prevUsers];
+        updatedUsers[index] = {
+          ...updatedUsers[index],
+          status: previousStatus,
+        };
+        return updatedUsers;
+      });
+    }
   };
 
-  const filteredUsers = users.filter((user) =>
-    user.username.toLowerCase().includes(searchText.toLowerCase())
+  const handleCancel = async (connectionId) => {
+    const index = localUsers.findIndex((u) => u.connection_id === connectionId);
+    if (index === -1) return;
+
+    const previousStatus = localUsers[index].status;
+    setLocalUsers((prevUsers) => {
+      const updatedUsers = [...prevUsers];
+      updatedUsers[index] = { ...updatedUsers[index], status: null };
+      return updatedUsers;
+    });
+
+    try {
+     const res= await connectionService.cancelInvite(connectionId);  
+      if (onRequestSent) {
+        onRequestSent();
+      }
+    } catch (error) {
+      console.log("Failed to cancel invite", error.message);
+      setLocalUsers((prevUsers) => {
+        const updatedUsers = [...prevUsers];
+        updatedUsers[index] = {
+          ...updatedUsers[index],
+          status: previousStatus,
+        };
+        return updatedUsers;
+      });
+    }
+  };
+
+  const filteredUsers = localUsers.filter((u) =>
+    u.username.toLowerCase().includes(searchText.toLowerCase())
   );
 
   return (
@@ -55,96 +121,100 @@ export default function AddConnections({ onFilterPress,users=[] }) {
             isDarkMode={isDarkMode}
           />
 
-          {users?.length <= 0 && (
-            <View
-              style={{
-                marginTop: "50%",
-              }}
-            >
+          {localUsers?.length <= 0 && (
+            <View style={{ marginTop: "50%" }}>
               <NoItem title={"Users"} />
             </View>
           )}
 
           <View style={{ paddingHorizontal: 16, paddingTop: 8 }}>
-            {filteredUsers.map((user) => (
-              <View key={user.id}>
-                <View
-                  style={[
-                    styles.userCard,
-                    {
-                      backgroundColor: isDarkMode
-                        ? Colors.dark2
-                        : Colors.lightGrey,
-                    },
-                  ]}
-                >
-                  {!user?.profile_picture && (
-                    <Image
-                      source={profilePicPlaceholder}
-                      style={styles.avatar}
-                    />
-                  )}
-                  {user?.profile_picture && (
-                    <Image
-                      source={{ uri: user?.profile_picture }}
-                      style={styles.avatar}
-                    />
-                  )}
-                  <View style={styles.userInfo}>
-                    <Text
-                      style={[
-                        styles.userName,
-                        {
-                          color: isDarkMode ? Colors.secondary : Colors.title,
-                        },
-                      ]}
-                    >
-                      {user?.username}
-                    </Text>
-                    <Text
-                      style={[
-                        styles.userType,
-                        {
-                          color: isDarkMode ? Colors.disable : Colors.textGrey,
-                        },
-                      ]}
-                    >
-                      {user?.profile_types?.length > 0
-                        ? user.profile_types
-                            .map((type) => {
-                              const typeMap = {
-                                pet_owner: "Pet Owner",
-                                pet_breeder: "Pet Breeder",
-                                pet_shop: "Pet Shop",
-                              };
-                              return typeMap[type] || type;
-                            })
-                            .join(", ")
-                        : "User Type Not Specified"}
-                    </Text>
-                  </View>
-                  <TouchableOpacity
-                    activeOpacity={0.8}
+            {filteredUsers.map((userItem) => {
+              const buttonText =
+                userItem.status === "pending" ? "Cancel" : "Connect";
+              const buttonColor =
+                userItem.status === "pending" ? Colors.disable : Colors.primary;
+
+              return (
+                <View key={userItem.id}>
+                  <View
                     style={[
-                      styles.connectButton,
+                      styles.userCard,
                       {
-                        backgroundColor: user.isConnected
-                          ? Colors.disable
-                          : Colors.primary,
+                        backgroundColor: isDarkMode
+                          ? Colors.dark2
+                          : Colors.lightGrey,
                       },
                     ]}
-                    onPress={() => handleConnect(user.id)}
-                    disabled={user.isConnected}
                   >
-                    <Text style={styles.connectButtonText}>
-                      {user.isConnected ? "Sent" : "Connect"}
-                    </Text>
-                  </TouchableOpacity>
-                </View>
+                    {!userItem?.profile_picture && (
+                      <Image
+                        source={profilePicPlaceholder}
+                        style={styles.avatar}
+                      />
+                    )}
+                    {userItem?.profile_picture && (
+                      <Image
+                        source={{ uri: userItem?.profile_picture }}
+                        style={styles.avatar}
+                      />
+                    )}
+                    <View style={styles.userInfo}>
+                      <Text
+                        style={[
+                          styles.userName,
+                          {
+                            color: isDarkMode ? Colors.secondary : Colors.title,
+                          },
+                        ]}
+                      >
+                        {userItem?.username}
+                      </Text>
+                      <Text
+                        style={[
+                          styles.userType,
+                          {
+                            color: isDarkMode
+                              ? Colors.disable
+                              : Colors.textGrey,
+                          },
+                        ]}
+                      >
+                        {userItem?.profile_types?.length > 0
+                          ? userItem.profile_types
+                              .map((type) => {
+                                const typeMap = {
+                                  pet_owner: "Pet Owner",
+                                  pet_breeder: "Pet Breeder",
+                                  pet_shop: "Pet Shop",
+                                };
+                                return typeMap[type] || type;
+                              })
+                              .join(", ")
+                          : "User Type Not Specified"}
+                      </Text>
+                    </View>
+                    <TouchableOpacity
+                      activeOpacity={0.8}
+                      style={[
+                        styles.connectButton,
+                        { backgroundColor: buttonColor },
+                      ]}
+                      onPress={() => {
+                        if (!userItem.status) {
+                          handleConnect(userItem.id);
+                        } else if (userItem.status === "pending") {
+                          handleCancel(userItem.connection_id);
+                        }
+                      }}
+                    >
+                      <Text style={styles.connectButtonText}>{buttonText}</Text>
+                    </TouchableOpacity>
+                  </View>
 
-                <View style={[style.divider, { marginVertical: 10 }]} />
-              </View>
-            ))}
+                  <View style={[style.divider, { marginVertical: 10 }]} />
+                </View>
+              );
+            })}
           </View>
         </ScrollView>
       </View>

@@ -25,7 +25,8 @@ const { width } = Dimensions.get("window");
 
 export default function Connections() {
   const { isDarkMode } = useTheme();
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false);
+  const [showLoading, setshowLoading] = useState(true);
   const [error, setError] = useState(null);
   const [users, setUsers] = useState([]);
   const [requests, setRequests] = useState([]);
@@ -57,7 +58,15 @@ export default function Connections() {
     }, [])
   );
 
-  if (loading) {
+  const handleRefetchUsers = async () => {
+    const usersData = await connectionService.getUsers();
+    console.log(usersData,"hhaaok");
+    
+    setUsers(usersData?.users);
+  };
+
+
+  if (loading && showLoading) {
     return (
       <SafeAreaView
         style={[
@@ -159,7 +168,11 @@ export default function Connections() {
           />
 
           {selectedTab === "addConnections" && (
-            <AddConnections users={users} onFilterPress={handleOpenFilter} />
+            <AddConnections
+              users={users}
+              onFilterPress={handleRefetchUsers}
+              onRequestSent={handleRefetchUsers}
+            />
           )}
 
           {selectedTab === "request" && <UserRequests requests={requests} />}

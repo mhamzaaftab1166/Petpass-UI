@@ -291,7 +291,6 @@ const styles = StyleSheet.create({
   rowFront: {
     borderBottomColor: "#CCC",
     zIndex: 2,
-    elevation: 2,
   },
   rowBack: {
     alignItems: "center",
