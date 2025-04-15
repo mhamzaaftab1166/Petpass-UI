@@ -170,7 +170,7 @@ export default function Connections() {
           {selectedTab === "addConnections" && (
             <AddConnections
               users={users}
-              onFilterPress={handleRefetchUsers}
+              onFilterPress={handleOpenFilter}
               onRequestSent={handleRefetchUsers}
             />
           )}

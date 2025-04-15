@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import {
   SafeAreaView,
   ScrollView,
+  RefreshControl,
   View,
   Text,
   Image,
@@ -26,6 +27,7 @@ export default function AddConnections({
   const { isDarkMode } = useTheme();
   const [searchText, setSearchText] = useState("");
   const [localUsers, setLocalUsers] = useState(users);
+  const [refreshing, setRefreshing] = useState(false);
 
   useEffect(() => {
     setLocalUsers(users);
@@ -81,7 +83,7 @@ export default function AddConnections({
     });
 
     try {
-     const res= await connectionService.cancelInvite(connectionId);  
+      await connectionService.cancelInvite(connectionId);
       if (onRequestSent) {
         onRequestSent();
       }
@@ -96,6 +98,16 @@ export default function AddConnections({
         return updatedUsers;
       });
     }
+  };
+
+  // Pull-to-refresh: when the user pulls from top to bottom,
+  // call the parent's onRequestSent function to refresh data.
+  const handleRefresh = async () => {
+    setRefreshing(true);
+    if (onRequestSent) {
+      await onRequestSent();
+    }
+    setRefreshing(false);
   };
 
   const filteredUsers = localUsers.filter((u) =>
@@ -113,7 +125,12 @@ export default function AddConnections({
       ]}
     >
       <View style={{ flex: 1 }}>
-        <ScrollView showsVerticalScrollIndicator={false}>
+        <ScrollView
+          showsVerticalScrollIndicator={false}
+          refreshControl={
+            <RefreshControl refreshing={refreshing} onRefresh={handleRefresh} />
+          }
+        >
           <SearchFilterBar
             searchText={searchText}
             onSearchChange={handleSearchChange}
@@ -210,7 +227,6 @@ export default function AddConnections({
                       <Text style={styles.connectButtonText}>{buttonText}</Text>
                     </TouchableOpacity>
                   </View>
-
                   <View style={[style.divider, { marginVertical: 10 }]} />
                 </View>
               );

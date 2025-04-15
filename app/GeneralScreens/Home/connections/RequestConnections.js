@@ -14,8 +14,6 @@ import { useTheme } from "../../../helper/themeProvider";
 import ProfilePlaceholer from "../../../../assets/images/profilePlaceHolder.png";
 import NoItem from "../../../components/NoItem/NoItem";
 
-const dummyRequests = [];
-
 export default function AddConnections({ requests }) {
   const { isDarkMode } = useTheme();
 
