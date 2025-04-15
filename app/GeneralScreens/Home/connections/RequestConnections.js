@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   SafeAreaView,
   ScrollView,
@@ -13,12 +13,57 @@ import { Colors } from "../../../theme/color";
 import { useTheme } from "../../../helper/themeProvider";
 import ProfilePlaceholer from "../../../../assets/images/profilePlaceHolder.png";
 import NoItem from "../../../components/NoItem/NoItem";
+import connectionService from "../../../services/connectionService";
 
-export default function AddConnections({ requests }) {
+export default function AddConnections({ requests, onUpdate }) {
+
   const { isDarkMode } = useTheme();
+  const [localRequests, setLocalRequests] = useState(requests);
 
-  const handleRequestResponse = (id, response) => {
-    console.log(`${response} request from user with id: ${id}`);
+  useEffect(() => {
+    setLocalRequests(requests);
+  }, [requests]);
+
+  const handleRequestResponse = async (req, response) => {
+    const index = localRequests.findIndex((r) => r.id === req.id);
+    if (index === -1) return;
+
+    const previousStatus = localRequests[index].status;
+    const optimisticStatus = response === "Accepted" ? "accepted" : "rejected";
+
+    setLocalRequests((prev) => {
+      const updated = [...prev];
+      updated[index] = { ...updated[index], status: optimisticStatus };
+      return updated;
+    });
+
+    try {
+      if (response === "Accepted") {
+       const res= await connectionService.acceptInvite(
+          req?.connection_id,
+          req?.sender_id,
+          req?.receiver_id
+        );
+        console.log(res);
+        
+      } else if (response === "Rejected") {
+        await connectionService.rejectInvite(
+          req?.connection_id,
+          req?.sender_id,
+          req?.receiver_id
+        );
+      }
+      if (onUpdate) {
+        onUpdate();
+      }
+    } catch (error) {
+      console.log("Failed to update request:", error.message);
+      setLocalRequests((prev) => {
+        const updated = [...prev];
+        updated[index] = { ...updated[index], status: previousStatus };
+        return updated;
+      });
+    }
   };
 
   return (
@@ -33,17 +78,14 @@ export default function AddConnections({ requests }) {
     >
       <View style={{ flex: 1 }}>
         <ScrollView showsVerticalScrollIndicator={false}>
-          {requests?.length <= 0 && (
-            <View
-              style={{
-                marginTop: "50%",
-              }}
-            >
+          {localRequests?.length <= 0 && (
+            <View style={{ marginTop: "50%" }}>
               <NoItem title={"Users"} />
             </View>
           )}
+
           <View style={{ paddingHorizontal: 16, paddingTop: 8 }}>
-            {requests.map((request) => (
+            {localRequests.map((request) => (
               <View key={request.id}>
                 <View
                   style={[
@@ -96,44 +138,63 @@ export default function AddConnections({ requests }) {
                               const displayText = request.profile_types
                                 .map((type) => typeMap[type] || type)
                                 .join(", ");
-                              return displayText.length > 10
+                              return displayText.length > 20
                                 ? displayText.slice(0, 20) + "..."
                                 : displayText;
                             })()
                           : "Not Specified"}
                       </Text>
                     </View>
-                    <View style={styles.buttonsContainer}>
-                      <TouchableOpacity
-                        activeOpacity={0.8}
-                        style={[
-                          styles.acceptButton,
-                          {
-                            backgroundColor: Colors.primary,
-                          },
-                        ]}
-                        onPress={() =>
-                          handleRequestResponse(request.id, "Accepted")
-                        }
-                      >
-                        <Text style={styles.buttonText}>Accept</Text>
-                      </TouchableOpacity>
+                    {!request.status || request.status === "pending" ? (
+                      <View style={styles.buttonsContainer}>
+                        <TouchableOpacity
+                          activeOpacity={0.8}
+                          style={[
+                            styles.acceptButton,
+                            { backgroundColor: Colors.primary },
+                          ]}
+                          onPress={() =>
+                            handleRequestResponse(request, "Accepted")
+                          }
+                        >
+                          <Text style={styles.buttonText}>Accept</Text>
+                        </TouchableOpacity>
 
+                        <TouchableOpacity
+                          activeOpacity={0.8}
+                          style={[
+                            styles.rejectButton,
+                            { backgroundColor: Colors.disable },
+                          ]}
+                          onPress={() =>
+                            handleRequestResponse(request, "Rejected")
+                          }
+                        >
+                          <Text style={styles.buttonText}>Reject</Text>
+                        </TouchableOpacity>
+                      </View>
+                    ) : (
+                      // If the request has already been updated, show a disabled button.
                       <TouchableOpacity
                         activeOpacity={0.8}
                         style={[
-                          styles.rejectButton,
+                          styles.responseButton,
                           {
-                            backgroundColor: Colors.disable,
+                            backgroundColor:
+                              request.status === "accepted"
+                                ? Colors.primary
+                                : Colors.disable,
                           },
                         ]}
-                        onPress={() =>
-                          handleRequestResponse(request.id, "Rejected")
-                        }
+                        disabled={true}
                       >
-                        <Text style={styles.buttonText}>Reject</Text>
+                        <Text style={styles.buttonText}>
+                          {request.status === "accepted"
+                            ? "Accepted"
+                            : "Rejected"}
+                        </Text>
                       </TouchableOpacity>
-                    </View>
+                    )}
                   </View>
                 </View>
 
@@ -202,6 +263,12 @@ const styles = StyleSheet.create({
     paddingVertical: 8,
     borderRadius: 20,
     flex: 1,
+  },
+  responseButton: {
+    paddingHorizontal: 16,
+    paddingVertical: 8,
+    borderRadius: 20,
+    marginTop: 10,
   },
   buttonText: {
     color: Colors.secondary,

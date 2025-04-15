@@ -100,8 +100,6 @@ export default function AddConnections({
     }
   };
 
-  // Pull-to-refresh: when the user pulls from top to bottom,
-  // call the parent's onRequestSent function to refresh data.
   const handleRefresh = async () => {
     setRefreshing(true);
     if (onRequestSent) {
@@ -125,25 +123,24 @@ export default function AddConnections({
       ]}
     >
       <View style={{ flex: 1 }}>
+        <SearchFilterBar
+          searchText={searchText}
+          onSearchChange={handleSearchChange}
+          onFilterPress={onFilterPress}
+          isDarkMode={isDarkMode}
+        />
+
+        {localUsers?.length <= 0 && (
+          <View style={{ marginTop: "50%" }}>
+            <NoItem title={"Users"} />
+          </View>
+        )}
         <ScrollView
           showsVerticalScrollIndicator={false}
           refreshControl={
             <RefreshControl refreshing={refreshing} onRefresh={handleRefresh} />
           }
         >
-          <SearchFilterBar
-            searchText={searchText}
-            onSearchChange={handleSearchChange}
-            onFilterPress={onFilterPress}
-            isDarkMode={isDarkMode}
-          />
-
-          {localUsers?.length <= 0 && (
-            <View style={{ marginTop: "50%" }}>
-              <NoItem title={"Users"} />
-            </View>
-          )}
-
           <View style={{ paddingHorizontal: 16, paddingTop: 8 }}>
             {filteredUsers.map((userItem) => {
               const buttonText =

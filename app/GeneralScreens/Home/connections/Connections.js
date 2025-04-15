@@ -44,7 +44,7 @@ export default function Connections() {
           setLoading(true);
           const usersData = await connectionService.getUsers();
           const requestsData = await connectionService.getRequesedUsers();
-          const connectsData= await connectionService.getConnectedUsers();
+          const connectsData = await connectionService.getConnectedUsers();
           setUsers(usersData?.users);
           setRequests(requestsData?.connections);
           setConnects(connectsData?.connections);
@@ -60,11 +60,15 @@ export default function Connections() {
 
   const handleRefetchUsers = async () => {
     const usersData = await connectionService.getUsers();
-    console.log(usersData,"hhaaok");
-    
     setUsers(usersData?.users);
   };
 
+  const handleRefresh = async () => {
+    const requestsData = await connectionService.getRequesedUsers();
+    const connectsData = await connectionService.getConnectedUsers();
+    setRequests(requestsData?.connections);
+    setConnects(connectsData?.connections);
+  };
 
   if (loading && showLoading) {
     return (
@@ -175,7 +179,9 @@ export default function Connections() {
             />
           )}
 
-          {selectedTab === "request" && <UserRequests requests={requests} />}
+          {selectedTab === "request" && (
+            <UserRequests requests={requests} onUpdate={handleRefresh} />
+          )}
 
           {selectedTab === "yourConnects" && <Connected connects={connects} />}
         </View>
