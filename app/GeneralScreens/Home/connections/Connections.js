@@ -75,17 +75,14 @@ export default function Connections() {
     setRequests(requestsData?.connections);
     setConnects(connectsData?.connections);
     console.log("kkk");
-    
   };
 
   if (loading && showLoading) {
     return (
       <SafeAreaView
         style={[
-          style.area,
           {
             backgroundColor: isDarkMode ? Colors.dark : Colors.secondary,
-            marginTop: 20,
           },
         ]}
       >
@@ -169,7 +166,10 @@ export default function Connections() {
         <View
           style={[
             style.main,
-            { backgroundColor: isDarkMode ? Colors.dark : Colors.secondary,marginHorizontal:10 },
+            {
+              backgroundColor: isDarkMode ? Colors.dark : Colors.secondary,
+              marginHorizontal: 10,
+            },
           ]}
         >
           <ConnectionTabs

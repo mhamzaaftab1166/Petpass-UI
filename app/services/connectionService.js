@@ -1,7 +1,7 @@
 import { _axios } from "../helper/httpService";
 
-const getUsers = () => {
-  return _axios("get", "/users");
+const getUsers = (payload) => {
+  return _axios("post", "/users", payload);
 };
 
 const getConnectedUsers = () => {

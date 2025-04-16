@@ -16,7 +16,6 @@ import NoItem from "../../../components/NoItem/NoItem";
 import connectionService from "../../../services/connectionService";
 
 export default function AddConnections({ requests, onUpdate }) {
-
   const { isDarkMode } = useTheme();
   const [localRequests, setLocalRequests] = useState(requests);
 
@@ -39,13 +38,12 @@ export default function AddConnections({ requests, onUpdate }) {
 
     try {
       if (response === "Accepted") {
-       const res= await connectionService.acceptInvite(
+        const res = await connectionService.acceptInvite(
           req?.connection_id,
           req?.sender_id,
           req?.receiver_id
         );
         console.log(res);
-        
       } else if (response === "Rejected") {
         await connectionService.rejectInvite(
           req?.connection_id,
@@ -120,11 +118,9 @@ export default function AddConnections({ requests, onUpdate }) {
                       </Text>
                       <Text
                         style={[
-                          styles.userRole,
+                          styles.detailText,
                           {
-                            color: isDarkMode
-                              ? Colors.disable
-                              : Colors.textGrey,
+                            color: isDarkMode ? Colors.secondary : Colors.lable,
                           },
                         ]}
                       >
@@ -233,6 +229,12 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
+  },
+  detailText: {
+    fontSize: 14,
+    width: 200,
+    fontFamily: "Avenir-Regular",
+    textTransform: "capitalize",
   },
   userName: {
     fontSize: 16,

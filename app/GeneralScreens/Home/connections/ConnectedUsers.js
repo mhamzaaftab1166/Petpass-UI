@@ -18,6 +18,7 @@ import Detail from "../../../../assets/images/pets/detailcon.png";
 import { Entypo } from "@expo/vector-icons"; // for 3-dot icon
 import NoItem from "../../../components/NoItem/NoItem";
 import connectionService from "../../../services/connectionService";
+import { router } from "expo-router";
 
 export default function Connected({ connects, onUpdate }) {
   const { isDarkMode } = useTheme();
@@ -31,7 +32,7 @@ export default function Connected({ connects, onUpdate }) {
 
   const handleRemoveConnect = async (user) => {
     console.log(user);
-    
+
     const prevConnects = [...localConnects];
     const updatedConnects = localConnects.filter((u) => u.id !== user.id);
     setLocalConnects(updatedConnects);
@@ -50,6 +51,7 @@ export default function Connected({ connects, onUpdate }) {
 
   const handleDetailPress = (id) => {
     console.log(`Detail pressed for user with id: ${id}`);
+    router.push("/GeneralScreens/Home/connections/UserProfile");
   };
 
   const openMenu = (user) => {
@@ -109,10 +111,8 @@ export default function Connected({ connects, onUpdate }) {
                     </Text>
                     <Text
                       style={[
-                        styles.userType,
-                        {
-                          color: isDarkMode ? Colors.disable : Colors.textGrey,
-                        },
+                        styles.detailText,
+                        { color: isDarkMode ? Colors.secondary : Colors.lable },
                       ]}
                     >
                       {user?.profile_types?.length > 0
@@ -210,6 +210,12 @@ const styles = StyleSheet.create({
   },
   userInfo: {
     flex: 1,
+  },
+  detailText: {
+    fontSize: 14,
+    width: 200,
+    fontFamily: "Avenir-Regular",
+    textTransform: "capitalize",
   },
   userName: {
     fontSize: 16,

@@ -19,7 +19,7 @@ import connectionService from "../../../services/connectionService";
 import { useUserStore } from "../../../store/useStore";
 
 export default function AddConnections({
-  onFilterPress, 
+  onFilterPress,
   onRequestSent,
   users = [],
 }) {
@@ -185,11 +185,9 @@ export default function AddConnections({
                       </Text>
                       <Text
                         style={[
-                          styles.userType,
+                          styles.detailText,
                           {
-                            color: isDarkMode
-                              ? Colors.disable
-                              : Colors.textGrey,
+                            color: isDarkMode ? Colors.secondary : Colors.lable,
                           },
                         ]}
                       >
@@ -260,6 +258,12 @@ const styles = StyleSheet.create({
     fontWeight: "600",
     marginBottom: 4,
     fontFamily: "Avenir-Bold",
+  },
+  detailText: {
+    fontSize: 14,
+    width: 200,
+    fontFamily: "Avenir-Regular",
+    textTransform: "capitalize",
   },
   userType: {
     fontSize: 13,
