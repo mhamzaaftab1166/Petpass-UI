@@ -20,6 +20,10 @@ const cancelInvite = (connectionId) => {
   return _axios("delete", `/connections/${connectionId}/withdraw`);
 };
 
+const removeConnect = (connectionId) => {
+  return _axios("delete", `/connections/${connectionId}/remove`);
+};
+
 const acceptInvite = (connection_id, sender_id, reciver_id) => {
   return _axios(
     "post",
@@ -42,4 +46,5 @@ export default {
   cancelInvite,
   acceptInvite,
   rejectInvite,
+  removeConnect,
 };

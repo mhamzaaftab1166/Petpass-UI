@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   SafeAreaView,
   ScrollView,
@@ -17,25 +17,43 @@ import ProfilePlaceholer from "../../../../assets/images/profilePlaceHolder.png"
 import Detail from "../../../../assets/images/pets/detailcon.png";
 import { Entypo } from "@expo/vector-icons"; // for 3-dot icon
 import NoItem from "../../../components/NoItem/NoItem";
+import connectionService from "../../../services/connectionService";
 
-
-export default function Connected({ connects }) {
-  
+export default function Connected({ connects, onUpdate }) {
   const { isDarkMode } = useTheme();
-  const [selectedUserId, setSelectedUserId] = useState(null);
+  const [localConnects, setLocalConnects] = useState(connects);
+  const [selectedUser, setSelectedUser] = useState(null);
   const [isMenuVisible, setMenuVisible] = useState(false);
 
-  const handleRemoveConnect = (id) => {
-    console.log(`Removed connection for user with id: ${id}`);
+  useEffect(() => {
+    setLocalConnects(connects);
+  }, [connects]);
+
+  const handleRemoveConnect = async (user) => {
+    console.log(user);
+    
+    const prevConnects = [...localConnects];
+    const updatedConnects = localConnects.filter((u) => u.id !== user.id);
+    setLocalConnects(updatedConnects);
     setMenuVisible(false);
+
+    try {
+      await connectionService.removeConnect(user?.connection_id);
+      if (onUpdate) {
+        onUpdate();
+      }
+    } catch (error) {
+      console.log("Error removing connection:", error.message);
+      setLocalConnects(prevConnects);
+    }
   };
 
   const handleDetailPress = (id) => {
     console.log(`Detail pressed for user with id: ${id}`);
   };
 
-  const openMenu = (id) => {
-    setSelectedUserId(id);
+  const openMenu = (user) => {
+    setSelectedUser(user);
     setMenuVisible(true);
   };
 
@@ -51,17 +69,13 @@ export default function Connected({ connects }) {
     >
       <View style={{ flex: 1 }}>
         <ScrollView showsVerticalScrollIndicator={false}>
-          {connects?.length <= 0 && (
-            <View
-              style={{
-                marginTop: "50%",
-              }}
-            >
+          {localConnects?.length <= 0 && (
+            <View style={{ marginTop: "50%" }}>
               <NoItem title={"Connects"} />
             </View>
           )}
           <View style={{ paddingHorizontal: 16, paddingTop: 8 }}>
-            {connects.map((user) => (
+            {localConnects.map((user) => (
               <View key={user.id}>
                 <View
                   style={[
@@ -116,11 +130,10 @@ export default function Connected({ connects }) {
                     </Text>
                   </View>
 
-                  {/* Right side icons container */}
                   <View style={styles.rightIcons}>
                     <TouchableOpacity
                       activeOpacity={0.8}
-                      onPress={() => openMenu(user.id)}
+                      onPress={() => openMenu(user)}
                     >
                       <Entypo
                         name="dots-three-horizontal"
@@ -164,7 +177,7 @@ export default function Connected({ connects }) {
             >
               <TouchableOpacity
                 style={styles.option}
-                onPress={() => handleRemoveConnect(selectedUserId)}
+                onPress={() => handleRemoveConnect(selectedUser)}
               >
                 <Text style={styles.optionText}>Remove Connect</Text>
               </TouchableOpacity>
@@ -224,7 +237,6 @@ const styles = StyleSheet.create({
     backgroundColor: "rgba(0,0,0,0.3)",
   },
   bottomSheet: {
-    backgroundColor: "#fff",
     padding: 20,
     borderTopLeftRadius: 16,
     borderTopRightRadius: 16,

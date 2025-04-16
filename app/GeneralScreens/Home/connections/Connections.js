@@ -60,14 +60,22 @@ export default function Connections() {
 
   const handleRefetchUsers = async () => {
     const usersData = await connectionService.getUsers();
+    const requestsData = await connectionService.getRequesedUsers();
+    const connectsData = await connectionService.getConnectedUsers();
     setUsers(usersData?.users);
+    setRequests(requestsData?.connections);
+    setConnects(connectsData?.connections);
   };
 
   const handleRefresh = async () => {
     const requestsData = await connectionService.getRequesedUsers();
     const connectsData = await connectionService.getConnectedUsers();
+    const usersData = await connectionService.getUsers();
+    setUsers(usersData?.users);
     setRequests(requestsData?.connections);
     setConnects(connectsData?.connections);
+    console.log("kkk");
+    
   };
 
   if (loading && showLoading) {
@@ -183,7 +191,9 @@ export default function Connections() {
             <UserRequests requests={requests} onUpdate={handleRefresh} />
           )}
 
-          {selectedTab === "yourConnects" && <Connected connects={connects} />}
+          {selectedTab === "yourConnects" && (
+            <Connected connects={connects} onUpdate={handleRefresh} />
+          )}
         </View>
       </View>
 

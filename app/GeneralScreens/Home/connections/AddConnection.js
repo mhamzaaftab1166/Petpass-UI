@@ -19,7 +19,7 @@ import connectionService from "../../../services/connectionService";
 import { useUserStore } from "../../../store/useStore";
 
 export default function AddConnections({
-  onFilterPress,
+  onFilterPress, 
   onRequestSent,
   users = [],
 }) {
