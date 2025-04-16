@@ -169,7 +169,7 @@ export default function Connections() {
         <View
           style={[
             style.main,
-            { backgroundColor: isDarkMode ? Colors.dark : Colors.secondary },
+            { backgroundColor: isDarkMode ? Colors.dark : Colors.secondary,marginHorizontal:10 },
           ]}
         >
           <ConnectionTabs
