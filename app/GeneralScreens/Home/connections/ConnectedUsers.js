@@ -20,23 +20,19 @@ import NoItem from "../../../components/NoItem/NoItem";
 import connectionService from "../../../services/connectionService";
 import { router } from "expo-router";
 
-export default function Connected({ connects, onUpdate }) {
+export default function Connected({ connects=[], onUpdate }) {
+  
   const { isDarkMode } = useTheme();
   const [localConnects, setLocalConnects] = useState(connects);
   const [selectedUser, setSelectedUser] = useState(null);
   const [isMenuVisible, setMenuVisible] = useState(false);
 
-  useEffect(() => {
-    setLocalConnects(connects);
-  }, [connects]);
-
   const handleRemoveConnect = async (user) => {
-    console.log(user);
-
     const prevConnects = [...localConnects];
     const updatedConnects = localConnects.filter((u) => u.id !== user.id);
     setLocalConnects(updatedConnects);
     setMenuVisible(false);
+
 
     try {
       await connectionService.removeConnect(user?.connection_id);
@@ -77,7 +73,7 @@ export default function Connected({ connects, onUpdate }) {
             </View>
           )}
           <View style={{ paddingHorizontal: 16, paddingTop: 8 }}>
-            {localConnects.map((user) => (
+            {localConnects?.map((user) => (
               <View key={user.id}>
                 <View
                   style={[

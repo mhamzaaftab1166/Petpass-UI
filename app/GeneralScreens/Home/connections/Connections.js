@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import {
   View,
   SafeAreaView,
@@ -26,13 +26,19 @@ const { width } = Dimensions.get("window");
 export default function Connections() {
   const { isDarkMode } = useTheme();
   const [loading, setLoading] = useState(false);
-  const [showLoading, setshowLoading] = useState(true);
   const [error, setError] = useState(null);
   const [users, setUsers] = useState([]);
   const [requests, setRequests] = useState([]);
   const [connects, setConnects] = useState([]);
   const [selectedTab, setSelectedTab] = useState("addConnections");
   const [isFilterVisible, setIsFilterVisible] = useState(false);
+  const [filterState, setFilterState] = useState({
+    locations: [],
+    pet_ages: [],
+    pet_types: [],
+    pet_breeds: [],
+    user_types: [],
+  });
 
   const handleOpenFilter = () => setIsFilterVisible(true);
   const handleCloseFilter = () => setIsFilterVisible(false);
@@ -59,25 +65,66 @@ export default function Connections() {
   );
 
   const handleRefetchUsers = async () => {
-    const usersData = await connectionService.getUsers();
-    const requestsData = await connectionService.getRequesedUsers();
-    const connectsData = await connectionService.getConnectedUsers();
-    setUsers(usersData?.users);
-    setRequests(requestsData?.connections);
-    setConnects(connectsData?.connections);
+    try {
+    } catch (error) {
+      setError(err.message);
+    }
   };
 
   const handleRefresh = async () => {
+    try {
+      const usersData = await connectionService.getUsers();
+      const requestsData = await connectionService.getRequesedUsers();
+      const connectsData = await connectionService.getConnectedUsers();
+      setUsers(usersData?.users);
+      setRequests(requestsData?.connections);
+      setConnects(connectsData?.connections);
+    } catch (error) {
+      setError(err.message);
+    }
     const requestsData = await connectionService.getRequesedUsers();
     const connectsData = await connectionService.getConnectedUsers();
     const usersData = await connectionService.getUsers();
     setUsers(usersData?.users);
     setRequests(requestsData?.connections);
     setConnects(connectsData?.connections);
-    console.log("kkk");
   };
 
-  if (loading && showLoading) {
+  const handleClearFilters = async () => {
+    try {
+      setLoading(true);
+      setIsFilterVisible(false);
+      setFilterState({
+        locations: [],
+        pet_ages: [],
+        pet_types: [],
+        pet_breeds: [],
+        user_types: [],
+      });
+      const usersData = await connectionService.getUsers();
+      setUsers(usersData?.users);
+    } catch (error) {
+      setError(err.message);
+    }
+  };
+
+  useEffect(() => {
+    const fetchUsers = async () => {
+      try {
+        setLoading(true);
+        const usersData = await connectionService.getUsers(filterState);
+        setUsers(usersData?.users);
+      } catch (error) {
+        setError(err.message);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchUsers();
+  }, [filterState]);
+
+  if (loading) {
     return (
       <SafeAreaView
         style={[
@@ -200,7 +247,9 @@ export default function Connections() {
       <FilterDrawer
         visible={isFilterVisible}
         onClose={handleCloseFilter}
-        onApplyFilters={(filters) => console.log(filters)}
+        filters={filterState}
+        onApplyFilters={(filters) => setFilterState(filters)}
+        onClearFilter={handleClearFilters}
       />
     </SafeAreaView>
   );

@@ -29,10 +29,6 @@ export default function AddConnections({
   const [localUsers, setLocalUsers] = useState(users);
   const [refreshing, setRefreshing] = useState(false);
 
-  useEffect(() => {
-    setLocalUsers(users);
-  }, [users]);
-
   const handleSearchChange = (text) => {
     setSearchText(text);
   };
@@ -130,19 +126,19 @@ export default function AddConnections({
           isDarkMode={isDarkMode}
         />
 
-        {localUsers?.length <= 0 && (
-          <View style={{ marginTop: "50%" }}>
-            <NoItem title={"Users"} />
-          </View>
-        )}
         <ScrollView
           showsVerticalScrollIndicator={false}
           refreshControl={
             <RefreshControl refreshing={refreshing} onRefresh={handleRefresh} />
           }
         >
+          {localUsers?.length <= 0 && (
+            <View style={{ marginTop: "50%" }}>
+              <NoItem title={"Users"} />
+            </View>
+          )}
           <View style={{ paddingHorizontal: 16, paddingTop: 8 }}>
-            {filteredUsers.map((userItem) => {
+            {filteredUsers?.map((userItem) => {
               const buttonText =
                 userItem.status === "pending" ? "Cancel" : "Connect";
               const buttonColor =

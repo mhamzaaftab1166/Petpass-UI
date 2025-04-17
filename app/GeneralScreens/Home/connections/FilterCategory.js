@@ -1,4 +1,5 @@
-import React, { useState } from "react";
+// FilterCategory.js
+import React from "react";
 import { View, Text, StyleSheet, TouchableWithoutFeedback } from "react-native";
 import { Colors } from "../../../theme/color";
 import { useTheme } from "../../../helper/themeProvider";
@@ -6,58 +7,52 @@ import { useTheme } from "../../../helper/themeProvider";
 export default function FilterCategory({
   title,
   options,
+  selectedValues = [],
   onSelectionChange,
   isOneSelected = false,
 }) {
-  const [selectedOptions, setSelectedOptions] = useState([]);
   const { isDarkMode } = useTheme();
 
   const toggleOption = (option) => {
     let newSelected = [];
 
     if (isOneSelected) {
-      if (selectedOptions.find((o) => o.value === option.value)) {
+      if (selectedValues.some((o) => o.value === option.value)) {
         newSelected = [];
       } else {
         newSelected = [option];
       }
     } else {
-      if (selectedOptions.find((o) => o.value === option.value)) {
-        newSelected = selectedOptions.filter((o) => o.value !== option.value);
+      if (selectedValues.some((o) => o.value === option.value)) {
+        newSelected = selectedValues.filter((o) => o.value !== option.value);
       } else {
-        newSelected = [...selectedOptions, option];
+        newSelected = [...selectedValues, option];
       }
     }
 
-    setSelectedOptions(newSelected);
     onSelectionChange(newSelected);
   };
 
-  const dynamicStyles = getStyles(isDarkMode);
+  const styles = getStyles(isDarkMode);
 
   return (
-    <View style={dynamicStyles.filterCategoryContainer}>
-      <Text style={dynamicStyles.categoryTitle}>{title}</Text>
-      <View style={dynamicStyles.optionsContainer}>
+    <View style={styles.filterCategoryContainer}>
+      <Text style={styles.categoryTitle}>{title}</Text>
+      <View style={styles.optionsContainer}>
         {options.map((option) => {
-          const selected = !!selectedOptions.find(
-            (o) => o.value === option.value
-          );
+          const selected = selectedValues.some((o) => o.value === option.value);
           return (
             <TouchableWithoutFeedback
               key={option.value}
               onPress={() => toggleOption(option)}
             >
               <View
-                style={[
-                  dynamicStyles.optionLabel,
-                  selected && dynamicStyles.optionSelected,
-                ]}
+                style={[styles.optionLabel, selected && styles.optionSelected]}
               >
                 <Text
                   style={[
-                    dynamicStyles.optionText,
-                    selected && dynamicStyles.optionTextSelected,
+                    styles.optionText,
+                    selected && styles.optionTextSelected,
                   ]}
                 >
                   {option.label}

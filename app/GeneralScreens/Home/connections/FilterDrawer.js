@@ -20,22 +20,31 @@ import {
   petAgeRangeOptions,
 } from "../../../constants/pet";
 import Loader from "../../../components/Loader/Loader";
-import { MaterialIcons, AntDesign } from "@expo/vector-icons";
+import { AntDesign } from "@expo/vector-icons";
 import BreedMultiSelect from "../../../components/MultiSelect/MultiSelect";
 import usePetTypesAndBreeds from "../../../hooks/usePetFilters";
 import { useTheme } from "../../../helper/themeProvider";
 
 const { width, height } = Dimensions.get("window");
 
-export default function FilterDrawer({ visible, onClose, onApplyFilters }) {
+export default function FilterDrawer({
+  visible,
+  onClose,
+  onApplyFilters,
+  onClearFilter,
+  filters,
+}) {
   const { isDarkMode } = useTheme();
   const drawerAnim = useRef(new Animated.Value(width)).current;
+
   const [selectedUserTypes, setSelectedUserTypes] = useState([]);
   const [selectedAgeRanges, setSelectedAgeRanges] = useState([]);
   const [selectedLocations, setSelectedLocations] = useState([]);
   const [selectedPetTypes, setSelectedPetTypes] = useState([]);
   const [selectedBreeds, setSelectedBreeds] = useState([]);
-  const { petTypes, petBreeds, loading } = usePetTypesAndBreeds(selectedPetTypes);
+
+  const { petTypes, petBreeds, loading } =
+    usePetTypesAndBreeds(selectedPetTypes);
 
   useEffect(() => {
     Animated.timing(drawerAnim, {
@@ -43,64 +52,95 @@ export default function FilterDrawer({ visible, onClose, onApplyFilters }) {
       duration: 300,
       useNativeDriver: true,
     }).start();
-  }, [visible, drawerAnim]);
+  }, [visible]);
 
+  useEffect(() => {
+    if (!visible) return;
+
+    setSelectedUserTypes(
+      userTypeOptions.filter((opt) => filters?.user_types?.includes(opt.value))
+    );
+    setSelectedAgeRanges(
+      petAgeRangeOptions.filter((opt) => filters?.pet_ages?.includes(opt.value))
+    );
+    setSelectedLocations(
+      petLocationOptions.filter((opt) =>
+        filters?.locations?.includes(opt.value)
+      )
+    );
+    setSelectedPetTypes(
+      petTypes.filter((opt) => filters?.pet_types?.includes(opt.value))
+    );
+    setSelectedBreeds(filters?.pet_breeds || []);
+  }, [visible, filters, petTypes]);
 
   if (!visible) return null;
 
   const statusBarHeight =
-    Platform.OS === "android"
-      ? StatusBar.currentHeight
-        ? StatusBar.currentHeight - 10
-        : 0
-      : 44;
+    Platform.OS === "android" ? (StatusBar.currentHeight ?? 0) - 10 : 44;
 
-  const handleClose = () => {
+  const areFiltersSelected = [
+    filters?.locations,
+    filters?.user_types,
+    filters?.pet_ages,
+    filters?.pet_types,
+    filters?.pet_breeds,
+  ].some((arr) => arr.length > 0);
+
+  const handleClearFilters = () => {
     setSelectedUserTypes([]);
     setSelectedAgeRanges([]);
     setSelectedLocations([]);
     setSelectedPetTypes([]);
     setSelectedBreeds([]);
-    if (onClose) {
-      onClose();
-    }
+    onClearFilter?.();
   };
 
   const handleApplyFilters = () => {
     const allSelectedFilters = {
-      userType: selectedUserTypes.map((opt) => opt.value),
-      petAgeRange: selectedAgeRanges.map((opt) => opt.value),
-      petLocation: selectedLocations.map((opt) => opt.value),
-      petType: selectedPetTypes.map((opt) => opt.value),
-      petBreed: selectedBreeds,
+      user_types: selectedUserTypes.map((o) => o.value),
+      pet_ages: selectedAgeRanges.map((o) => o.value),
+      locations: selectedLocations.map((o) => o.value),
+      pet_types: selectedPetTypes.map((o) => o.value),
+      pet_breeds: selectedBreeds,
     };
-
-    if (onApplyFilters) {
-      onApplyFilters(allSelectedFilters);
-    }
-    handleClose();
+    onApplyFilters?.(allSelectedFilters);
+    onClose?.();
   };
 
   return (
     <TouchableWithoutFeedback>
       <View style={styles.overlay}>
         <Loader isLoad={loading} />
+
         <Animated.View
           style={[
             styles.drawer,
             {
               transform: [{ translateX: drawerAnim }],
               paddingTop: statusBarHeight + 10,
-               backgroundColor: isDarkMode ? Colors.dark : Colors.secondary
+              backgroundColor: isDarkMode ? Colors.dark : Colors.secondary,
             },
           ]}
         >
           <View style={styles.header}>
-            <Text style={[styles.drawerTitle,{color: isDarkMode ? Colors.secondary : Colors.active,}]}>Filter Options</Text>
-            <TouchableOpacity onPress={handleClose}>
-              <AntDesign name="close" size={28} color={isDarkMode ? Colors.secondary : Colors.active} />
+            <Text
+              style={[
+                styles.drawerTitle,
+                { color: isDarkMode ? Colors.secondary : Colors.active },
+              ]}
+            >
+              Filter Options
+            </Text>
+            <TouchableOpacity onPress={onClose}>
+              <AntDesign
+                name="close"
+                size={28}
+                color={isDarkMode ? Colors.secondary : Colors.active}
+              />
             </TouchableOpacity>
           </View>
+
           <ScrollView
             contentContainerStyle={styles.scrollViewContent}
             showsVerticalScrollIndicator={false}
@@ -108,40 +148,62 @@ export default function FilterDrawer({ visible, onClose, onApplyFilters }) {
             <FilterCategory
               title="User Type"
               options={userTypeOptions}
-              onSelectionChange={(selected) => setSelectedUserTypes(selected)}
+              selectedValues={selectedUserTypes}
+              onSelectionChange={setSelectedUserTypes}
             />
+
             {petTypes.length > 0 && (
               <FilterCategory
                 title="Pet Types"
                 options={petTypes}
-                onSelectionChange={(selected) => setSelectedPetTypes(selected)}
-                isOneSelected={true}
+                isOneSelected
+                selectedValues={selectedPetTypes}
+                onSelectionChange={setSelectedPetTypes}
               />
             )}
+
             {petBreeds.length > 0 && (
               <BreedMultiSelect
                 data={petBreeds}
                 value={selectedBreeds}
-                onChange={(item) => setSelectedBreeds(item)}
+                onChange={setSelectedBreeds}
               />
             )}
+
             <FilterCategory
               title="Pet Age Range"
               options={petAgeRangeOptions}
-              onSelectionChange={(selected) => setSelectedAgeRanges(selected)}
+              selectedValues={selectedAgeRanges}
+              onSelectionChange={setSelectedAgeRanges}
             />
+
             <FilterCategory
               title="Pet Location"
               options={petLocationOptions}
-              onSelectionChange={(selected) => setSelectedLocations(selected)}
+              selectedValues={selectedLocations}
+              onSelectionChange={setSelectedLocations}
             />
           </ScrollView>
-          <TouchableOpacity
-            style={styles.applyButton}
-            onPress={handleApplyFilters}
-          >
-            <Text style={styles.applyButtonText}>Apply Filters</Text>
-          </TouchableOpacity>
+
+          <View style={styles.buttonRow}>
+            <TouchableOpacity
+              style={[styles.applyButton]}
+              onPress={handleApplyFilters}
+            >
+              <Text style={styles.applyButtonText}>Apply Filters</Text>
+            </TouchableOpacity>
+
+            <TouchableOpacity
+              style={[
+                styles.clearButton,
+                !areFiltersSelected && styles.disabledButton,
+              ]}
+              onPress={handleClearFilters}
+              disabled={!areFiltersSelected}
+            >
+              <Text style={styles.clearButtonText}>Clear Filters</Text>
+            </TouchableOpacity>
+          </View>
         </Animated.View>
       </View>
     </TouchableWithoutFeedback>
@@ -155,8 +217,8 @@ const styles = StyleSheet.create({
     left: 0,
     right: 0,
     bottom: 0,
-    height: height,
-    width: width,
+    height,
+    width,
     backgroundColor: "rgba(0, 0, 0, 0.5)",
     zIndex: 9999,
     justifyContent: "flex-end",
@@ -165,7 +227,6 @@ const styles = StyleSheet.create({
   drawer: {
     height: "100%",
     width: width * 0.8,
-    backgroundColor: Colors.secondary,
     padding: 20,
     paddingTop: 0,
   },
@@ -180,23 +241,45 @@ const styles = StyleSheet.create({
   drawerTitle: {
     fontSize: 20,
     fontFamily: "Avenir-Bold",
-    color: Colors.active,
-    textAlign: "left",
   },
   scrollViewContent: {
     paddingBottom: 20,
   },
-  applyButton: {
+  buttonRow: {
+    flexDirection: "row",
+    justifyContent: "space-between",
     marginTop: 20,
+  },
+  applyButton: {
+    flex: 1,
+    marginRight: 10,
     backgroundColor: Colors.primary,
     paddingVertical: 10,
+    marginBottom: "10%",
     borderRadius: 25,
     justifyContent: "center",
     alignItems: "center",
+  },
+  clearButton: {
+    flex: 1,
+    backgroundColor: Colors.light,
+    paddingVertical: 10,
+    marginBottom: "10%",
+    borderRadius: 25,
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  disabledButton: {
+    opacity: 0.5,
   },
   applyButtonText: {
     color: Colors.secondary,
     fontSize: 16,
     fontFamily: "Avenir-SemiBold",
-  }
+  },
+  clearButtonText: {
+    color: Colors.primary,
+    fontSize: 16,
+    fontFamily: "Avenir-SemiBold",
+  },
 });

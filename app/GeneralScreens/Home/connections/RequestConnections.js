@@ -15,7 +15,7 @@ import ProfilePlaceholer from "../../../../assets/images/profilePlaceHolder.png"
 import NoItem from "../../../components/NoItem/NoItem";
 import connectionService from "../../../services/connectionService";
 
-export default function AddConnections({ requests, onUpdate }) {
+export default function AddConnections({ requests=[], onUpdate }) {
   const { isDarkMode } = useTheme();
   const [localRequests, setLocalRequests] = useState(requests);
 
@@ -83,7 +83,7 @@ export default function AddConnections({ requests, onUpdate }) {
           )}
 
           <View style={{ paddingHorizontal: 16, paddingTop: 8 }}>
-            {localRequests.map((request) => (
+            {localRequests?.map((request) => (
               <View key={request.id}>
                 <View
                   style={[
