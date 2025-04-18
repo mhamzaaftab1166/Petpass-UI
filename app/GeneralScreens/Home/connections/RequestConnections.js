@@ -7,6 +7,7 @@ import {
   Image,
   TouchableOpacity,
   StyleSheet,
+  RefreshControl,
 } from "react-native";
 import style from "../../../theme/style";
 import { Colors } from "../../../theme/color";
@@ -15,9 +16,10 @@ import ProfilePlaceholer from "../../../../assets/images/profilePlaceHolder.png"
 import NoItem from "../../../components/NoItem/NoItem";
 import connectionService from "../../../services/connectionService";
 
-export default function AddConnections({ requests=[], onUpdate }) {
+export default function AddConnections({ requests = [], onUpdate }) {
   const { isDarkMode } = useTheme();
   const [localRequests, setLocalRequests] = useState(requests);
+  const [refreshing, setRefreshing] = useState(false);
 
   useEffect(() => {
     setLocalRequests(requests);
@@ -64,6 +66,14 @@ export default function AddConnections({ requests=[], onUpdate }) {
     }
   };
 
+  const handleRefresh = async () => {
+    setRefreshing(true);
+    if (onUpdate) {
+      await onUpdate();
+    }
+    setRefreshing(false);
+  };
+
   return (
     <SafeAreaView
       style={[
@@ -75,7 +85,12 @@ export default function AddConnections({ requests=[], onUpdate }) {
       ]}
     >
       <View style={{ flex: 1 }}>
-        <ScrollView showsVerticalScrollIndicator={false}>
+        <ScrollView
+          showsVerticalScrollIndicator={false}
+          refreshControl={
+            <RefreshControl refreshing={refreshing} onRefresh={handleRefresh} />
+          }
+        >
           {localRequests?.length <= 0 && (
             <View style={{ marginTop: "50%" }}>
               <NoItem title={"Users"} />

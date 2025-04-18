@@ -20,6 +20,7 @@ import UserRequests from "./RequestConnections";
 import Connected from "./ConnectedUsers";
 import connectionService from "../../../services/connectionService";
 import AppSkeleton from "../../../components/AppSkeleton";
+import { Text } from "react-native";
 
 const { width } = Dimensions.get("window");
 
@@ -82,12 +83,6 @@ export default function Connections() {
     } catch (error) {
       setError(err.message);
     }
-    const requestsData = await connectionService.getRequesedUsers();
-    const connectsData = await connectionService.getConnectedUsers();
-    const usersData = await connectionService.getUsers();
-    setUsers(usersData?.users);
-    setRequests(requestsData?.connections);
-    setConnects(connectsData?.connections);
   };
 
   const handleClearFilters = async () => {
@@ -209,6 +204,7 @@ export default function Connections() {
             </TouchableOpacity>
           }
         />
+        {error && <Text style={{color:"red"}}>{error}</Text>}
 
         <View
           style={[

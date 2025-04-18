@@ -9,6 +9,7 @@ import {
   StyleSheet,
   Modal,
   Pressable,
+  RefreshControl,
 } from "react-native";
 import style from "../../../theme/style";
 import { Colors } from "../../../theme/color";
@@ -20,8 +21,8 @@ import NoItem from "../../../components/NoItem/NoItem";
 import connectionService from "../../../services/connectionService";
 import { router } from "expo-router";
 
-export default function Connected({ connects=[], onUpdate }) {
-  
+export default function Connected({ connects = [], onUpdate }) {
+  const [refreshing, setRefreshing] = useState(false);
   const { isDarkMode } = useTheme();
   const [localConnects, setLocalConnects] = useState(connects);
   const [selectedUser, setSelectedUser] = useState(null);
@@ -32,7 +33,6 @@ export default function Connected({ connects=[], onUpdate }) {
     const updatedConnects = localConnects.filter((u) => u.id !== user.id);
     setLocalConnects(updatedConnects);
     setMenuVisible(false);
-
 
     try {
       await connectionService.removeConnect(user?.connection_id);
@@ -55,6 +55,14 @@ export default function Connected({ connects=[], onUpdate }) {
     setMenuVisible(true);
   };
 
+  const handleRefresh = async () => {
+    setRefreshing(true);
+    if (onUpdate) {
+      await onUpdate();
+    }
+    setRefreshing(false);
+  };
+
   return (
     <SafeAreaView
       style={[
@@ -66,7 +74,12 @@ export default function Connected({ connects=[], onUpdate }) {
       ]}
     >
       <View style={{ flex: 1 }}>
-        <ScrollView showsVerticalScrollIndicator={false}>
+        <ScrollView
+          showsVerticalScrollIndicator={false}
+          refreshControl={
+            <RefreshControl refreshing={refreshing} onRefresh={handleRefresh} />
+          }
+        >
           {localConnects?.length <= 0 && (
             <View style={{ marginTop: "50%" }}>
               <NoItem title={"Connects"} />
