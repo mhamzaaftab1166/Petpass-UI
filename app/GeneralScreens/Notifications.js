@@ -99,6 +99,11 @@ export default function Notification() {
         `/PetDetails/PetDetailPage?id=${pushDataObj?.id}&home=${pushDataObj?.home}`
       );
     }
+    if (pushDataObj?.category === "user connection") {
+      router.push(
+        `/GeneralScreens/Home/connections/Connections`
+      );
+    }
   };
 
   const renderItem = ({ item }) => {
@@ -124,33 +129,30 @@ export default function Notification() {
             marginHorizontal: 20,
           }}
         >
-          {pushDataObj?.pet_profile_picture && (
-            <Image
-              source={{ uri: pushDataObj?.pet_profile_picture }}
-              style={{
-                resizeMode: "cover",
-                height: height / 12,
-                width: width / 5,
-                borderRadius: 5,
-              }}
-            />
-          )}
-          {!pushDataObj?.pet_profile_picture && (
-            <Image
-              source={notyPLaceholder}
-              style={{
-                resizeMode: "cover",
-                height: height / 12,
-                width: width / 5,
-                borderRadius: 5,
-              }}
-            />
-          )}
+          <Image
+            source={
+              pushDataObj?.pet_profile_picture
+                ? { uri: pushDataObj.pet_profile_picture }
+                : pushDataObj?.profile_picture
+                ? { uri: pushDataObj.profile_picture }
+                : notyPLaceholder
+            }
+            style={{
+              resizeMode: "cover",
+              height: width / 6,
+              width: width / 6,
+              borderRadius: 50,
+            }}
+          />
+
           <View style={{ marginLeft: 10, flex: 1 }}>
             <Text
               style={[
                 style.r16,
-                { color: isDarkMode ? Colors.secondary : Colors.active },
+                {
+                  color: isDarkMode ? Colors.secondary : Colors.active,
+                  fontFamily: "Avenir-Bold",
+                },
               ]}
             >
               {item.title}
@@ -161,6 +163,7 @@ export default function Notification() {
                 {
                   color: isDarkMode ? Colors.secondary : Colors.disable,
                   marginTop: 5,
+                  fontFamily: "Avenir-SemiBold",
                 },
               ]}
             >
@@ -172,6 +175,7 @@ export default function Notification() {
                 {
                   color: isDarkMode ? Colors.secondary : Colors.disable,
                   marginTop: 5,
+                  fontFamily: "Avenir-Regular",
                 },
               ]}
             >

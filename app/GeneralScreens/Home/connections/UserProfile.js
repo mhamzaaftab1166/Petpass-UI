@@ -324,9 +324,7 @@ const s = StyleSheet.create({
     marginBottom: 20,
     shadowColor: "#000",
     shadowOpacity: 0.25,
-    shadowOffset: { width: 0, height: 2 },
     shadowRadius: 5,
-    elevation: 5,
     borderRadius: 100,
   },
   profileImage: {
@@ -344,7 +342,6 @@ const s = StyleSheet.create({
     shadowOpacity: 0.1,
     shadowOffset: { width: 0, height: 2 },
     shadowRadius: 8,
-    elevation: 3,
     marginBottom: 20,
   },
   nameRow: {

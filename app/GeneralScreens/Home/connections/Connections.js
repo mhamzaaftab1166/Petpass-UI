@@ -65,13 +65,6 @@ export default function Connections() {
     }, [])
   );
 
-  const handleRefetchUsers = async () => {
-    try {
-    } catch (error) {
-      setError(err.message);
-    }
-  };
-
   const handleRefresh = async () => {
     try {
       const usersData = await connectionService.getUsers();
@@ -205,7 +198,7 @@ export default function Connections() {
             </TouchableOpacity>
           }
         />
-        {error && <Text style={{color:"red"}}>{error}</Text>}
+        {error && <Text style={{ color: "red" }}>{error}</Text>}
 
         <View
           style={[
@@ -227,7 +220,7 @@ export default function Connections() {
             <AddConnections
               users={users}
               onFilterPress={handleOpenFilter}
-              onRequestSent={handleRefetchUsers}
+              onRequestSent={handleRefresh}
             />
           )}
 
