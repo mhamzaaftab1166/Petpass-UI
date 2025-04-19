@@ -23,6 +23,8 @@ export default function PetVaccinations() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [vaccines, setVaccines] = useState(null);
+  console.log(vaccines);
+  
   useFocusEffect(
     useCallback(() => {
       const fetchVaccines = async () => {

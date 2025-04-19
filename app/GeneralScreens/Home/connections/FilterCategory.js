@@ -83,7 +83,7 @@ const getStyles = (isDarkMode) =>
     },
     optionLabel: {
       borderWidth: 1,
-      borderColor: isDarkMode ? Colors.white : Colors.active,
+      borderColor: isDarkMode ? Colors.white : Colors.lable,
       borderRadius: 20,
       paddingVertical: 6,
       paddingHorizontal: 12,
@@ -97,7 +97,7 @@ const getStyles = (isDarkMode) =>
     },
     optionText: {
       fontSize: 14,
-      color: isDarkMode ? Colors.white : Colors.active,
+      color: isDarkMode ? Colors.white : Colors.lable,
       fontFamily: "Avenir-Regular",
     },
     optionTextSelected: {

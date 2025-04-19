@@ -93,7 +93,7 @@ export default function AddConnections({ requests = [], onUpdate }) {
         >
           {localRequests?.length <= 0 && (
             <View style={{ marginTop: "50%" }}>
-              <NoItem title={"Users"} />
+              <NoItem title={"Requests"} />
             </View>
           )}
 
