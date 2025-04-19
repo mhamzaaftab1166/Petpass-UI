@@ -125,6 +125,7 @@ export default function Connections() {
         style={[
           {
             backgroundColor: isDarkMode ? Colors.dark : Colors.secondary,
+            flex:1
           },
         ]}
       >

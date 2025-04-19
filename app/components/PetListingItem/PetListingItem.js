@@ -21,6 +21,8 @@ import { formatDate } from "../../utils/generalUtils";
 const { width, height } = Dimensions.get("screen");
 
 const PetListingItem = ({ pet, isPublic = false, home }) => {
+  console.log(pet);
+  
   const router = useRouter();
   const { isDarkMode } = useTheme();
 

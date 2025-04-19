@@ -38,6 +38,10 @@ const rejectInvite = (connection_id, sender_id, reciver_id) => {
   );
 };
 
+const getUserDetail = (user_id) => {
+  return _axios("get", `/user-profile/${user_id}`);
+};
+
 export default {
   getUsers,
   getConnectedUsers,
@@ -47,4 +51,5 @@ export default {
   acceptInvite,
   rejectInvite,
   removeConnect,
+  getUserDetail,
 };

@@ -29,6 +29,7 @@ export default function Connected({ connects = [], onUpdate }) {
   const [isMenuVisible, setMenuVisible] = useState(false);
 
   const handleRemoveConnect = async (user) => {
+    
     const prevConnects = [...localConnects];
     const updatedConnects = localConnects.filter((u) => u.id !== user.id);
     setLocalConnects(updatedConnects);
@@ -46,8 +47,7 @@ export default function Connected({ connects = [], onUpdate }) {
   };
 
   const handleDetailPress = (id) => {
-    console.log(`Detail pressed for user with id: ${id}`);
-    router.push("/GeneralScreens/Home/connections/UserProfile");
+    router.push(`/GeneralScreens/Home/connections/UserProfile?userId=${id}`);
   };
 
   const openMenu = (user) => {
@@ -154,7 +154,7 @@ export default function Connected({ connects = [], onUpdate }) {
                     <TouchableOpacity
                       style={{ marginLeft: 12 }}
                       activeOpacity={0.8}
-                      onPress={() => handleDetailPress(user.id)}
+                      onPress={() => handleDetailPress(user.user_id)}
                     >
                       <Image source={Detail} style={styles.detailImage} />
                     </TouchableOpacity>

@@ -164,13 +164,9 @@ export default function PetDetailPage() {
                 router={router}
                 videos={pet?.pet_gallery?.video}
               />
-              {!isPublic && (
-                <VaccinationDetail
-                  pet={pet}
-                  router={router}
-                  isEdit={!isPublic}
-                />
-              )}
+
+              <VaccinationDetail pet={pet} router={router} isEdit={!isPublic} />
+
               {!isPublic && <Passport pet={pet} router={router} />}
             </View>
             {isPublic && <View style={{ marginBottom: 20 }}></View>}

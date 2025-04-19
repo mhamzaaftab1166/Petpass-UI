@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useCallback, useState } from "react";
 import {
   View,
   SafeAreaView,
@@ -12,11 +12,13 @@ import { AppBar } from "@react-native-material/core";
 import Icon from "react-native-vector-icons/Ionicons";
 import MaterialCommunityIcons from "@expo/vector-icons/MaterialCommunityIcons";
 import { useTheme } from "../../../helper/themeProvider";
-import { router } from "expo-router";
+import { router, useFocusEffect, useLocalSearchParams } from "expo-router";
 import style from "../../../theme/style";
 import { Colors } from "../../../theme/color";
 import profilePlaceholder from "../../../../assets/images/profilePlaceHolder.png";
 import PetListingItem from "../../../components/PetListingItem/PetListingItem";
+import connectionService from "../../../services/connectionService";
+import AppSkeleton from "../../../components/AppSkeleton";
 
 const userData = {
   fullName: "M Hamza Aftab",
@@ -61,7 +63,75 @@ const petData = [
 ];
 
 export default function UserProfile() {
+  const { userId } = useLocalSearchParams();
+  const [userDetails, setUserDetails] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
   const { isDarkMode } = useTheme();
+
+  useFocusEffect(
+    useCallback(() => {
+      const fetchUser = async () => {
+        try {
+          setLoading(true);
+          const res = await connectionService.getUserDetail(userId);
+          setUserDetails(res?.user);
+          console.log(res);
+        } catch (err) {
+          setError(err.message);
+        } finally {
+          setLoading(false);
+        }
+      };
+      fetchUser();
+    }, [])
+  );
+
+  const typeMap = {
+    pet_owner: "Pet Owner",
+    pet_breeder: "Pet Breeder",
+    pet_shop: "Pet Shop",
+  };
+
+  if (loading) {
+    return (
+      <SafeAreaView
+        style={[
+          style.area,
+          {
+            flex: 1,
+            backgroundColor: isDarkMode ? Colors.dark : Colors.secondary,
+          },
+        ]}
+      >
+        <ScrollView contentContainerStyle={s.container}>
+          <AppSkeleton
+            width={140}
+            height={140}
+            borderRadius={70}
+            style={{ marginVertical: 20 }}
+          />
+
+          <AppSkeleton
+            width="95%"
+            height={200}
+            borderRadius={15}
+            style={{ marginBottom: 20 }}
+          />
+
+          {[...Array(3)].map((_, i) => (
+            <AppSkeleton
+              key={i}
+              width="95%"
+              height={120}
+              borderRadius={15}
+              style={{ marginBottom: 15 }}
+            />
+          ))}
+        </ScrollView>
+      </SafeAreaView>
+    );
+  }
 
   return (
     <SafeAreaView
@@ -96,14 +166,13 @@ export default function UserProfile() {
             </TouchableOpacity>
           }
         />
-
+        {error && <Text style={{ color: "red" }}>{error}</Text>}
         <ScrollView contentContainerStyle={s.container}>
-          {/* Profile Image */}
           <View style={s.profileImageContainer}>
             <Image
               source={
-                userData.profile_picture
-                  ? { uri: userData.profile_picture }
+                userDetails?.profile_picture
+                  ? { uri: userDetails?.profile_picture }
                   : profilePlaceholder
               }
               style={s.profileImage}
@@ -127,7 +196,7 @@ export default function UserProfile() {
                   { color: isDarkMode ? Colors.secondary : Colors.title },
                 ]}
               >
-                {userData.fullName}
+                {userDetails?.username}
               </Text>
               <Text
                 style={[
@@ -135,7 +204,7 @@ export default function UserProfile() {
                   { color: isDarkMode ? Colors.disable : Colors.primary },
                 ]}
               >
-                Connections ({userData.connections})
+                Connections ({userDetails?.connection_count || 0})
               </Text>
             </View>
             <View style={[style.divider, { marginBottom: 15 }]} />
@@ -151,7 +220,7 @@ export default function UserProfile() {
                   { color: isDarkMode ? Colors.secondary : Colors.lable },
                 ]}
               >
-                {userData.email}
+                {userDetails?.email}
               </Text>
             </View>
             <View style={s.detailRow}>
@@ -166,7 +235,7 @@ export default function UserProfile() {
                   { color: isDarkMode ? Colors.secondary : Colors.lable },
                 ]}
               >
-                {userData.phone}
+                {`${userDetails?.country_code} ${userDetails?.phone_number}`}
               </Text>
             </View>
             <View style={s.rolesContainer}>
@@ -175,7 +244,8 @@ export default function UserProfile() {
                 size={25}
                 color={isDarkMode ? Colors.disable : Colors.primary}
               />
-              {userData.roles.map((role, index) => (
+
+              {userDetails?.profile_types?.map((role, index) => (
                 <View
                   key={index}
                   style={[
@@ -191,14 +261,12 @@ export default function UserProfile() {
                       { color: isDarkMode ? Colors.secondary : "#fff" },
                     ]}
                   >
-                    {role}
+                    {typeMap[role] || role}
                   </Text>
                 </View>
               ))}
             </View>
           </View>
-
-          {/* Added Pets Card */}
           <View
             style={[
               s.card,
@@ -224,11 +292,11 @@ export default function UserProfile() {
                   { color: isDarkMode ? Colors.disable : Colors.primary },
                 ]}
               >
-                (20)
+                ({userDetails?.user_pets?.length || 0})
               </Text>
             </View>
             <View style={[style.divider, { marginVertical: 10 }]} />
-            {petData.map((item) => (
+            {userDetails?.user_pets?.map((item) => (
               <View
                 key={item.id}
                 style={[
@@ -236,7 +304,7 @@ export default function UserProfile() {
                   { backgroundColor: isDarkMode ? Colors.dark : Colors.white },
                 ]}
               >
-                <PetListingItem pet={item} home={true} />
+                <PetListingItem pet={item} isPublic={true} home={true} />
               </View>
             ))}
           </View>
