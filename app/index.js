@@ -8,8 +8,6 @@ import { localStorageConst } from "./constants/storageConstant";
 import Loader from "./components/Loader/Loader";
 import useAuthValidation from "./hooks/useAuthValidation";
 import { useUserStore } from "./store/useStore";
-import AppAlert from "./components/AppAlert";
-import { Colors } from "./theme/color";
 
 const width = Dimensions.get("screen").width;
 

@@ -1,53 +1,74 @@
-import {
-  View,
-  Text,
-  FlatList,
-  SafeAreaView,
-  Dimensions,
-  TouchableOpacity,
-} from "react-native";
-import React, { useState, useRef } from "react";
+import React, { useEffect, useState, useCallback, useRef } from "react";
+import { View, SafeAreaView, FlatList, Dimensions } from "react-native";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useRouter } from "expo-router";
-import style from "../theme/style";
-import { Colors } from "../theme/color";
+import { sliders } from "../constants/slidersConstant";
 import IntroItem from "../components/IntroItem/IntroItem";
 import AppButton from "../components/AppButton/AppButton";
-import { sliders } from "../constants/slidersConstant";
-import {useTheme} from "../helper/themeProvider"
+import style from "../theme/style";
+import { Colors } from "../theme/color";
+import { useTheme } from "../helper/themeProvider";
 
-const width = Dimensions.get("screen").width;
+const { width } = Dimensions.get("screen");
 
-const Sliders = () => {
-  const ref = useRef(null);
+export default function Sliders() {
+  const listRef = useRef(null);
   const router = useRouter();
-  const { isDarkMode } = useTheme()
+  const { isDarkMode } = useTheme();
+
   const [currentSlideIndex, setCurrentSlideIndex] = useState(0);
+  const [showSlider, setShowSlider] = useState(null);
+
+  useEffect(() => {
+    async function checkOnboarding() {
+      try {
+        const seen = await AsyncStorage.getItem("hasSeenOnboarding");
+        if (seen === "true") {
+          setShowSlider(false);
+          router.replace("/Authentication/Login");
+        } else {
+          setShowSlider(true);
+        }
+      } catch (err) {
+        console.error(err);
+        setShowSlider(true);
+      }
+    }
+    checkOnboarding();
+  }, [router]);
+
+  if (showSlider === null) return null;
 
   const updateCurrentSlideIndex = (e) => {
-    const contentOffsetX = e.nativeEvent.contentOffset.x;
-    const currentIndex = Math.round(contentOffsetX / width);
-    setCurrentSlideIndex(currentIndex);
+    const offsetX = e.nativeEvent.contentOffset.x;
+    const index = Math.round(offsetX / width);
+    setCurrentSlideIndex(index);
   };
 
-  const goNextSlide = () => {
-    const nextSlideIndex = currentSlideIndex + 1;
-    if (nextSlideIndex < Slides.length) {
-      const offset = nextSlideIndex * width;
-      ref?.current?.scrollToOffset({ offset });
-      setCurrentSlideIndex(nextSlideIndex);
+  const completeOnboarding = useCallback(async () => {
+    try {
+      await AsyncStorage.setItem("hasSeenOnboarding", "true");
+      router.replace("/Authentication/Login");
+    } catch (err) {
+      console.error(err);
     }
-  };
+  }, [router]);
 
   const Footer = () => (
-    <View style={{paddingHorizontal: 20,  paddingVertical: 20, backgroundColor: isDarkMode ? Colors.active : Colors.secondary }}>
-      {/* Indicator Dots */}
+    <View
+      style={{
+        paddingHorizontal: 20,
+        paddingVertical: 20,
+        backgroundColor: isDarkMode ? Colors.active : Colors.secondary,
+      }}
+    >
       <View style={{ flexDirection: "row", alignSelf: "center" }}>
-        {sliders.map((_, index) => (
+        {sliders.map((_, i) => (
           <View
-            key={index}
+            key={i}
             style={[
               style.indicator,
-              currentSlideIndex === index && {
+              currentSlideIndex === i && {
                 borderColor: Colors.primary,
                 borderWidth: 1,
                 paddingHorizontal: 12,
@@ -59,10 +80,11 @@ const Sliders = () => {
           />
         ))}
       </View>
+
       {currentSlideIndex === sliders.length - 1 && (
         <AppButton
           title="Get Started"
-          onPress={() => router.push("/Authentication/Login")}
+          onPress={completeOnboarding}
           style={style}
           paddingVertical={10}
         />
@@ -74,8 +96,10 @@ const Sliders = () => {
     <SafeAreaView style={{ flex: 1 }}>
       <FlatList
         data={sliders}
-        ref={ref}
-        renderItem={({ item }) => <IntroItem item={item} />}
+        ref={listRef}
+        renderItem={({ item }) => (
+          <IntroItem item={item} onSkip={completeOnboarding} />
+        )}
         horizontal
         showsHorizontalScrollIndicator={false}
         pagingEnabled
@@ -86,7 +110,4 @@ const Sliders = () => {
       <Footer />
     </SafeAreaView>
   );
-};
-
-export default Sliders;
-
+}
