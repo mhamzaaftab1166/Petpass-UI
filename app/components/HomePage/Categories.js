@@ -75,9 +75,9 @@ const Categories = () => {
         />
         <View style={{ margin: 8 }}></View>
         <CategoryItem
-          imageSource={require("../../../assets/images/home/vet.png")}
-          title="Pet Vaccines"
-          routing="/GeneralScreens/MyPetsVaccinations"
+          imageSource={require("../../../assets/images/home/connect.png")}
+          title="Connections"
+          routing="/GeneralScreens/Home/connections/Connections"
         />
       </View>
 
@@ -85,18 +85,17 @@ const Categories = () => {
         style={{ flexDirection: "row", alignItems: "center", marginTop: 10 }}
       >
         <CategoryItem
-          imageSource={require("../../../assets/images/home/connect.png")}
-          title="Connections"
-          routing="/GeneralScreens/Home/connections/Connections"
+          imageSource={require("../../../assets/images/home/events.png")}
+          title="Future Events"
+          routing="/GeneralScreens/events/EventsList"
         />
         <View style={{ margin: 8 }}></View>
         <CategoryItem
           imageSource={require("../../../assets/images/home/vet.png")}
-          title="Veterinary"
-          categoryPayload={{
-            filterValue: "veterinary_care",
-          }}
+          title="Pet Vaccines"
+          routing="/GeneralScreens/MyPetsVaccinations"
         />
+
         <View style={{ margin: 8 }}></View>
         <CategoryItem
           imageSource={require("../../../assets/images/home/more.png")}
