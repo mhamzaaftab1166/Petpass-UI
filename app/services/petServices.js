@@ -24,11 +24,14 @@ const getPublicPetById = (id, userId) => {
   return _axios("get", `/user-pets/${id}/${userId}`);
 };
 
-const updatePetAbout = (payload, id) => {
-  console.log(payload);
-  
+const updatePetAbout = (payload, id) => {  
   return _axios("put", `/user-pets/${id}`, payload, "multipart/form-data");
 };
+
+const updatePetDescription = (payload, id) => {  
+  return _axios("put", `/user-pets-description/${id}`, payload);
+};
+
 
 const addVaccinations = (payload) => {
   return _axios("post", "/user-pets-vaccination", payload);
@@ -118,4 +121,5 @@ export default {
   updatePassport,
   getPetsVaccines,
   getPetsAddresses,
+  updatePetDescription,
 };

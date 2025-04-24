@@ -38,8 +38,8 @@ export default function DescriptionEdit() {
   const handleSubmit = async (values) => {
     try {
       setIsLoading(true);
-      await petServices.updatePetAbout(
-        { ...petData, description: values?.description },
+      await petServices.updatePetDescription(
+        {description: values?.description },
         petData?.id
       );
       setIsLoading(false);

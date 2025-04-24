@@ -43,7 +43,7 @@ const Description = ({ title = "Description", pet, router, isEdit }) => {
         style={[
           style.r16,
           {
-            color: isDarkMode ? Colors.secondary : Colors.disable,
+            color: isDarkMode ? Colors.secondary : Colors.lable,
             marginTop: 10,
             fontFamily: "Avenir-Regular",
           },
