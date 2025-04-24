@@ -133,10 +133,7 @@ export default function RecentPetListing({ isDelete = true }) {
             </TouchableOpacity>
           }
         />
-        <AppErrorMessage
-          error={petError || delError}
-          visible={petErrorVisible || delErrorVisible}
-        />
+
         {loading ? (
           <>
             {[...Array(3)].map((_, index) => (

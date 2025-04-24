@@ -11,7 +11,7 @@ import {
 const PetBanner = () => {
   const router = useRouter();
   return (
-    <View style={{ paddingVertical: 16, paddingHorizontal: 20 }}>
+    <View style={{ paddingBottom: 16, paddingHorizontal: 20 }}>
       <ImageBackground
         source={require("../../../assets/images/home/petBanner.png")}
         style={styles.container}

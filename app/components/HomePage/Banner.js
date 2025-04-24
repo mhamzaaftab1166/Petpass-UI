@@ -47,7 +47,7 @@ const Banner = () => {
     <ImageBackground
       source={require("../../../assets/images/home/banner1.png")}
       resizeMode="stretch"
-      style={{ width, height: height / 3, paddingTop: 40 }}
+      style={{ width, height: height / 2.5, paddingTop: 50 }}
     >
       <View
         style={{
@@ -102,7 +102,6 @@ const Banner = () => {
         </TouchableOpacity>
       </View>
 
-      {/* Banner Text */}
       <Text
         style={[
           style.s18,

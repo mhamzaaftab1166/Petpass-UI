@@ -17,6 +17,7 @@ import { router, useFocusEffect } from "expo-router";
 import homeService from "../../services/homeService";
 import Loader from "../../components/Loader/Loader";
 import AppSkeleton from "../../components/AppSkeleton";
+import NoItem from "../../components/NoItem/NoItem";
 
 const width = Dimensions.get("screen").width;
 const height = Dimensions.get("screen").height;
@@ -227,67 +228,84 @@ export default function PetListing() {
         </View>
 
         <ScrollView showsVerticalScrollIndicator={false}>
-          <View style={{ marginTop: 20 }}>
-            {tipRows.map((row, rowIndex) => (
-              <View
-                key={rowIndex}
-                style={{
-                  flexDirection: "row",
-                  justifyContent: "space-between",
-                  marginBottom: 16,
-                }}
-              >
-                {row.map((tip, colIndex) => (
-                  <TouchableOpacity
-                    onPress={() =>
-                      router.push(
-                        `/GeneralScreens/Tips/TipDetailPage?id=${tip?.id}`
-                      )
-                    }
-                    key={colIndex}
-                    style={{ width: width / 2.3 }}
-                  >
-                    <ImageBackground
-                      source={{ uri: tip.image }}
-                      resizeMode="cover"
-                      style={{
-                        height: height / 5.8,
-                        borderRadius: 10,
-                        overflow: "hidden",
-                      }}
-                    />
-                    <Text
-                      numberOfLines={1}
-                      ellipsizeMode="tail"
-                      style={[
-                        style.b14,
-                        {
-                          color: isDarkMode ? Colors.secondary : Colors.active,
-                          marginTop: 10,
-                          paddingLeft: 2,
-                        },
-                      ]}
+          {tipRows.length === 0 ? (
+            <View
+              style={{
+                marginTop: 40,
+                alignItems: "center",
+                justifyContent: "center",
+                flex: 1,
+              }}
+            >
+              <NoItem title="Tips" />
+            </View>
+          ) : (
+            <View style={{ marginTop: 20 }}>
+              {tipRows.map((row, rowIndex) => (
+                <View
+                  key={rowIndex}
+                  style={{
+                    flexDirection: "row",
+                    justifyContent: "space-between",
+                    marginBottom: 16,
+                  }}
+                >
+                  {row.map((tip, colIndex) => (
+                    <TouchableOpacity
+                      onPress={() =>
+                        router.push(
+                          `/GeneralScreens/Tips/TipDetailPage?id=${tip?.id}`
+                        )
+                      }
+                      key={colIndex}
+                      style={{ width: width / 2.3 }}
                     >
-                      {truncateText(tip.title, 25)}
-                    </Text>
-                    <Text
-                      numberOfLines={2}
-                      ellipsizeMode="tail"
-                      style={[
-                        style.r14,
-                        {
-                          color: isDarkMode ? Colors.secondary : Colors.disable,
-                          gap: 3,
-                        },
-                      ]}
-                    >
-                      {truncateText(tip.overview, 60)}
-                    </Text>
-                  </TouchableOpacity>
-                ))}
-              </View>
-            ))}
-          </View>
+                      <ImageBackground
+                        source={{ uri: tip.image }}
+                        resizeMode="cover"
+                        style={{
+                          height: height / 5.8,
+                          borderRadius: 10,
+                          overflow: "hidden",
+                        }}
+                      />
+                      <Text
+                        numberOfLines={1}
+                        ellipsizeMode="tail"
+                        style={[
+                          style.b14,
+                          {
+                            color: isDarkMode
+                              ? Colors.secondary
+                              : Colors.active,
+                            marginTop: 10,
+                            paddingLeft: 2,
+                          },
+                        ]}
+                      >
+                        {truncateText(tip.title, 25)}
+                      </Text>
+                      <Text
+                        numberOfLines={2}
+                        ellipsizeMode="tail"
+                        style={[
+                          style.r14,
+                          {
+                            color: isDarkMode
+                              ? Colors.secondary
+                              : Colors.disable,
+                            gap: 3,
+                          },
+                        ]}
+                      >
+                        {truncateText(tip.overview, 60)}
+                      </Text>
+                    </TouchableOpacity>
+                  ))}
+                </View>
+              ))}
+            </View>
+          )}
         </ScrollView>
       </View>
     </SafeAreaView>

@@ -26,8 +26,6 @@ const Index = () => {
     clearHomeData,
   } = useHomeStore();
   const { isDarkMode } = useTheme();
-  // const { token, handleLogout } = useAuthValidation();
-  // const { showAlert } = useAlertStore();
   useFocusEffect(
     useCallback(() => {
       fetchHomeData();
@@ -37,23 +35,9 @@ const Index = () => {
 
   return (
     <>
-      {/* {showAlert && (
-        <AppAlert
-          showAlert={showAlert}
-          title="Session Expired!"
-          message="Your session has expired. Please log in again."
-          closeOnTouchOutside={false}
-          closeOnHardwareBackPress={false}
-          showConfirmButton
-          confirmText="Got It"
-          confirmButtonColor={Colors.primary}
-          onConfirmPressed={handleLogout}
-        />
-      )} */}
       <ScrollView
         showsVerticalScrollIndicator={false}
         style={{
-          marginTop: 20,
           backgroundColor: isDarkMode ? Colors.dark : Colors.secondary,
         }}
       >
