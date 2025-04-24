@@ -56,7 +56,7 @@ export default function Signup() {
 
       const data = await authService.register(formattedPayload);
       if (data?.message === AuthenticationSuccess.registrationSuccess) {
-        router.push(
+        router.replace(
           `/Authentication/EmailVerify?email=${formattedPayload.email}&username=${formattedPayload.username}`
         );
       }

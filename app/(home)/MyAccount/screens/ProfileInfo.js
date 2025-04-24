@@ -40,6 +40,7 @@ const validationSchema = Yup.object({
 
 export default function AccountInfo() {
   const { user, loading, fetchUser, clearUserData } = useUserStore();
+  
   const router = useRouter();
   const { isDarkMode } = useTheme();
   const [error, setError] = useState();

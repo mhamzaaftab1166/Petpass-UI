@@ -69,7 +69,7 @@ export default function Login() {
       setToken(data?.accessToken);
       setRefreshToken(data?.refreshToken)
       setRemember(rememberMe)
-      router.replace("(home)");
+      router.dismissTo("(home)");
     } catch (error) {
       setErrorVisible(true);
       setError(error.message);

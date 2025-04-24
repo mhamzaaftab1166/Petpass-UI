@@ -64,7 +64,7 @@ export default function Verify2() {
       if (email&&!newPass) {
         const data = await authService.emailVerify({ email, otp });
         if (AuthenticationSuccess.otpVerify === data?.message) {
-          router.push("/Authentication/Login");
+          router.replace("/Authentication/Login");
         }
       } else {
         router.replace(`/Authentication/NewPassword?email=${email}`);
