@@ -14,6 +14,9 @@ import { router, useFocusEffect } from "expo-router";
 import { useTheme } from "../../helper/themeProvider";
 import { Colors } from "../../theme/color";
 import style from "../../theme/style";
+import eventsService from "../../services/eventsService";
+import { formatDateRange, formatDayRange, formatMonthRange, formatTimeRange } from "../../utils/generalUtils";
+import AppSkeleton from "../../components/AppSkeleton";
 
 const { width: SCREEN_WIDTH } = Dimensions.get("window");
 
@@ -61,6 +64,7 @@ export default function Events() {
   const { isDarkMode } = useTheme();
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [events, setEvents] = useState([]);
 
   const themedStyles = useMemo(() => createStyles(isDarkMode), [isDarkMode]);
 
@@ -69,7 +73,8 @@ export default function Events() {
       (async () => {
         try {
           setLoading(true);
-          await new Promise((r) => setTimeout(r, 400));
+          const data = await eventsService.getUpcommingEvents();
+          setEvents(data?.upcoming_events);
         } catch (e) {
           setError(e.message);
         } finally {
@@ -79,9 +84,29 @@ export default function Events() {
     }, [])
   );
 
-  const handlePress = (ev) => {
-    router.push("/GeneralScreens/events/EventDetail");
+  const handlePress = ({ id }) => {
+    router.push({
+      pathname: "/GeneralScreens/events/EventDetail",
+      params: { id },
+    });
   };
+
+   const renderSkeleton = () =>
+     Array.from({ length: 5 }).map((_, i) => (
+       <View key={i} style={themedStyles.card}>
+         <View style={themedStyles.left}>
+           <AppSkeleton width="80%" height={12} />
+           <AppSkeleton width="60%" height={12} style={{ marginVertical: 6 }} />
+           <AppSkeleton width="50%" height={12} />
+         </View>
+         <View style={themedStyles.divider} />
+         <View style={themedStyles.right}>
+           <AppSkeleton width="90%" height={14} />
+           <AppSkeleton width="70%" height={12} style={{ marginTop: 6 }} />
+         </View>
+       </View>
+     ));
+
 
   return (
     <SafeAreaView style={[themedStyles.container]}>
@@ -109,45 +134,46 @@ export default function Events() {
       />
 
       <ScrollView contentContainerStyle={themedStyles.scroll}>
-
+        {loading && renderSkeleton()}
         {!loading &&
           !error &&
-          DUMMY_EVENTS.map((ev, i) => (
-            <TouchableOpacity
-              key={i}
-              onPress={() => handlePress(ev)}
-              activeOpacity={0.7}
-              style={themedStyles.card}
-            >
-              {/* LEFT */}
-              <View style={themedStyles.left}>
-                <View
-                  style={[
-                    themedStyles.pill,
-                    { backgroundColor: PILL_COLORS[i % PILL_COLORS.length] },
-                  ]}
-                >
-                  <Text style={themedStyles.pillText}>
-                    {ev.day.toUpperCase()}
-                  </Text>
+          events.map((ev, i) => {
+            const timeLabel = formatTimeRange(ev?.start_time, ev?.end_time);
+            const monthLabel = formatMonthRange(ev.start_date, ev.end_date);
+            const dateLabel = formatDateRange(ev.start_date, ev.end_date);
+            const dayLabel = formatDayRange(ev.start_date, ev.end_date);
+            return (
+              <TouchableOpacity
+                key={i}
+                onPress={() => handlePress(ev)}
+                activeOpacity={0.7}
+                style={themedStyles.card}
+              >
+                <View style={themedStyles.left}>
+                  <View
+                    style={[
+                      themedStyles.pill,
+                      { backgroundColor: PILL_COLORS[i % PILL_COLORS.length] },
+                    ]}
+                  >
+                    <Text style={themedStyles.pillText}>{dayLabel}</Text>
+                  </View>
+                  <Text style={themedStyles.month}>{monthLabel}</Text>
+                  <Text style={themedStyles.dateNum}>{dateLabel}</Text>
                 </View>
-                <Text style={themedStyles.month}>{ev.month}</Text>
-                <Text style={themedStyles.dateNum}>{ev.dateNum}</Text>
-              </View>
 
-              {/* DIVIDER */}
-              <View style={themedStyles.divider} />
+                <View style={themedStyles.divider} />
 
-              {/* RIGHT */}
-              <View style={themedStyles.right}>
-                <Text style={themedStyles.title}>{ev.title}</Text>
-                <View style={themedStyles.timeRow}>
-                  <Icon name="time-outline" size={16} color={Colors.lable} />
-                  <Text style={themedStyles.timeText}>{ev.time}</Text>
+                <View style={themedStyles.right}>
+                  <Text style={themedStyles.title}>{ev?.event_title}</Text>
+                  <View style={themedStyles.timeRow}>
+                    <Icon name="time-outline" size={16} color={Colors.lable} />
+                    <Text style={themedStyles.timeText}>{timeLabel}</Text>
+                  </View>
                 </View>
-              </View>
-            </TouchableOpacity>
-          ))}
+              </TouchableOpacity>
+            );
+          })}
       </ScrollView>
     </SafeAreaView>
   );
@@ -190,14 +216,14 @@ const createStyles = (isDarkMode) => {
       paddingHorizontal: 10,
       paddingVertical: 4,
       borderTopRightRadius: 5,
-      borderBottomRightRadius:5,
+      borderBottomRightRadius: 5,
       marginBottom: 6,
     },
     pillText: {
       color: Colors.secondary,
       fontFamily: "Avenir-Bold",
       fontSize: 11,
-      padding:2
+      padding: 2,
     },
     month: {
       fontFamily: "Avenir-Regular",
