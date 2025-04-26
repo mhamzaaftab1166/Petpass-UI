@@ -33,7 +33,7 @@ export default function EventDetails() {
   const { isDarkMode } = useTheme();
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const [event, setEvent] = useState(null);
+  const [event, setEvent] = useState({});
 
   const [currentIndex, setCurrentIndex] = useState(0);
   const scrollRef = useRef(null);
@@ -165,7 +165,7 @@ export default function EventDetails() {
           >
             <Text style={styles.cardLabel}>Description</Text>
             <Text style={[styles.cardLabel, { textAlign: "right" }]}>
-              {event?.pet_types.join(", ")}
+              {event?.pet_types?.join(", ")}
             </Text>
           </View>
           <Text style={styles.cardText}>{event?.event_description}</Text>

@@ -15,8 +15,14 @@ import { useTheme } from "../../helper/themeProvider";
 import { Colors } from "../../theme/color";
 import style from "../../theme/style";
 import eventsService from "../../services/eventsService";
-import { formatDateRange, formatDayRange, formatMonthRange, formatTimeRange } from "../../utils/generalUtils";
+import {
+  formatDateRange,
+  formatDayRange,
+  formatMonthRange,
+  formatTimeRange,
+} from "../../utils/generalUtils";
 import AppSkeleton from "../../components/AppSkeleton";
+import NoItem from "../../components/NoItem/NoItem";
 
 const { width: SCREEN_WIDTH } = Dimensions.get("window");
 
@@ -91,22 +97,21 @@ export default function Events() {
     });
   };
 
-   const renderSkeleton = () =>
-     Array.from({ length: 5 }).map((_, i) => (
-       <View key={i} style={themedStyles.card}>
-         <View style={themedStyles.left}>
-           <AppSkeleton width="80%" height={12} />
-           <AppSkeleton width="60%" height={12} style={{ marginVertical: 6 }} />
-           <AppSkeleton width="50%" height={12} />
-         </View>
-         <View style={themedStyles.divider} />
-         <View style={themedStyles.right}>
-           <AppSkeleton width="90%" height={14} />
-           <AppSkeleton width="70%" height={12} style={{ marginTop: 6 }} />
-         </View>
-       </View>
-     ));
-
+  const renderSkeleton = () =>
+    Array.from({ length: 5 }).map((_, i) => (
+      <View key={i} style={themedStyles.card}>
+        <View style={themedStyles.left}>
+          <AppSkeleton width="80%" height={12} />
+          <AppSkeleton width="60%" height={12} style={{ marginVertical: 6 }} />
+          <AppSkeleton width="50%" height={12} />
+        </View>
+        <View style={themedStyles.divider} />
+        <View style={themedStyles.right}>
+          <AppSkeleton width="90%" height={14} />
+          <AppSkeleton width="70%" height={12} style={{ marginTop: 6 }} />
+        </View>
+      </View>
+    ));
 
   return (
     <SafeAreaView style={[themedStyles.container]}>
@@ -135,6 +140,11 @@ export default function Events() {
 
       <ScrollView contentContainerStyle={themedStyles.scroll}>
         {loading && renderSkeleton()}
+        {events.length === 0 && !loading && (
+          <View style={{ marginTop:"50%" }}>
+            <NoItem title={"Events"} />
+          </View>
+        )}
         {!loading &&
           !error &&
           events.map((ev, i) => {
