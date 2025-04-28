@@ -335,7 +335,7 @@ export default function Add() {
           </ScrollView>
         </KeyboardAvoidingView>
       ) : (
-        <OnSuccess route={"/MyAccount/screens/MyPets"} />
+        <OnSuccess route={"/GeneralScreens/Home/MyPets"} />
       )}
     </SafeAreaView>
   );

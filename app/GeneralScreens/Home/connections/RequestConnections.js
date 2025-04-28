@@ -17,6 +17,8 @@ import NoItem from "../../../components/NoItem/NoItem";
 import connectionService from "../../../services/connectionService";
 
 export default function AddConnections({ requests = [], onUpdate }) {
+  console.log(requests, "requests");  
+  
   const { isDarkMode } = useTheme();
   const [localRequests, setLocalRequests] = useState(requests);
   const [refreshing, setRefreshing] = useState(false);
@@ -88,7 +90,12 @@ export default function AddConnections({ requests = [], onUpdate }) {
         <ScrollView
           showsVerticalScrollIndicator={false}
           refreshControl={
-            <RefreshControl refreshing={refreshing} onRefresh={handleRefresh} />
+            <RefreshControl
+              refreshing={refreshing}
+              onRefresh={handleRefresh}
+              colors={[isDarkMode ? Colors.secondary : Colors.active]}
+              tintColor={isDarkMode ? Colors.secondary : Colors.active}
+            />
           }
         >
           {localRequests?.length <= 0 && (
@@ -120,14 +127,24 @@ export default function AddConnections({ requests = [], onUpdate }) {
                     />
                   )}
                   <View style={styles.userInfo}>
-                    <View style={styles.nameRoleContainer}>
+                    <View
+                      style={{
+                        flexDirection: "row",
+                        justifyContent: "space-between",
+                        alignItems: "center",
+                        width: "100%",
+                        marginBottom: 8,
+                      }}
+                    >
                       <Text
                         style={[
                           styles.userName,
                           {
                             color: isDarkMode ? Colors.secondary : Colors.title,
+                            flexShrink: 0,
                           },
                         ]}
+                        numberOfLines={1}
                       >
                         {request?.username}
                       </Text>
@@ -136,8 +153,11 @@ export default function AddConnections({ requests = [], onUpdate }) {
                           styles.detailText,
                           {
                             color: isDarkMode ? Colors.secondary : Colors.lable,
+                            flexShrink: 1, 
+                            textAlign: "right",
                           },
                         ]}
+                        numberOfLines={1}
                       >
                         {request?.profile_types?.length > 0
                           ? (() => {
@@ -156,6 +176,7 @@ export default function AddConnections({ requests = [], onUpdate }) {
                           : "Not Specified"}
                       </Text>
                     </View>
+
                     {!request.status || request.status === "pending" ? (
                       <View style={styles.buttonsContainer}>
                         <TouchableOpacity
@@ -239,11 +260,6 @@ const styles = StyleSheet.create({
   },
   userInfo: {
     flex: 1,
-  },
-  nameRoleContainer: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    alignItems: "center",
   },
   detailText: {
     fontSize: 14,

@@ -29,7 +29,6 @@ export default function Connected({ connects = [], onUpdate }) {
   const [isMenuVisible, setMenuVisible] = useState(false);
 
   const handleRemoveConnect = async (user) => {
-    
     const prevConnects = [...localConnects];
     const updatedConnects = localConnects.filter((u) => u.id !== user.id);
     setLocalConnects(updatedConnects);
@@ -77,7 +76,12 @@ export default function Connected({ connects = [], onUpdate }) {
         <ScrollView
           showsVerticalScrollIndicator={false}
           refreshControl={
-            <RefreshControl refreshing={refreshing} onRefresh={handleRefresh} />
+            <RefreshControl
+              refreshing={refreshing}
+              onRefresh={handleRefresh}
+              colors={[isDarkMode ? Colors.secondary : Colors.active]}
+              tintColor={isDarkMode ? Colors.secondary : Colors.active}
+            />
           }
         >
           {localConnects?.length <= 0 && (

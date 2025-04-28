@@ -23,6 +23,7 @@ export default function AddConnections({
   onRequestSent,
   users = [],
 }) {
+  
   const { user } = useUserStore();
   const { isDarkMode } = useTheme();
   const [searchText, setSearchText] = useState("");
@@ -129,7 +130,12 @@ export default function AddConnections({
         <ScrollView
           showsVerticalScrollIndicator={false}
           refreshControl={
-            <RefreshControl refreshing={refreshing} onRefresh={handleRefresh} />
+            <RefreshControl
+              refreshing={refreshing}
+              onRefresh={handleRefresh}
+              colors={[isDarkMode ? Colors.secondary : Colors.active]}
+              tintColor={isDarkMode ? Colors.secondary : Colors.active}
+            />
           }
         >
           {localUsers?.length <= 0 && (
@@ -199,6 +205,40 @@ export default function AddConnections({
                               })
                               .join(", ")
                           : "User Type Not Specified"}
+                      </Text>
+                      <Text
+                        style={[
+                          styles.detailText,
+                          {
+                            color: isDarkMode ? Colors.secondary : Colors.lable,
+                            marginTop: 4,
+                          },
+                        ]}
+                      >
+                        {userItem.user_pets?.length > 0
+                          ? [
+                              ...new Set(
+                                userItem.user_pets.map((pet) => pet.pet_type)
+                              ),
+                            ].join(" | ")
+                          : "No pet added"}
+                      </Text>
+                      <Text
+                        style={[
+                          styles.detailText,
+                          {
+                            color: isDarkMode ? Colors.secondary : Colors.lable,
+                            marginTop: 4,
+                          },
+                        ]}
+                      >
+                        {userItem?.location?.length > 0
+                          ? [
+                              ...new Set(
+                                userItem.location.map((loc) => loc.city)
+                              ),
+                            ].join(" | ")
+                          : "No location Available"}
                       </Text>
                     </View>
                     <TouchableOpacity

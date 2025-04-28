@@ -127,6 +127,7 @@ export default function MyPets({ isDelete = true }) {
             </TouchableOpacity>
           }
         />
+
         <Text
           style={[
             styles.text,

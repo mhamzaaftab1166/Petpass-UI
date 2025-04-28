@@ -100,9 +100,7 @@ export default function Notification() {
       );
     }
     if (pushDataObj?.category === "user connection") {
-      router.push(
-        `/GeneralScreens/Home/connections/Connections`
-      );
+      router.push(`/GeneralScreens/Home/connections/Connections`);
     }
   };
 
@@ -280,7 +278,12 @@ export default function Notification() {
           disableRightSwipe
           keyExtractor={(item) => item.notification_id.toString()}
           refreshControl={
-            <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+            <RefreshControl
+              refreshing={refreshing}
+              onRefresh={onRefresh}
+              colors={[isDarkMode ? Colors.secondary : Colors.active]}
+              tintColor={isDarkMode ? Colors.secondary : Colors.active}
+            />
           }
           ItemSeparatorComponent={() => (
             <View style={[style.divider, { marginVertical: 10 }]} />

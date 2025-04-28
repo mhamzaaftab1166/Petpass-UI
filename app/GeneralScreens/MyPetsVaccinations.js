@@ -6,6 +6,7 @@ import {
   ScrollView,
   Text,
   StyleSheet,
+  Image,
 } from "react-native";
 import style from "../theme/style";
 import { Colors } from "../theme/color";
@@ -156,55 +157,75 @@ export default function PetVaccinations() {
               </TouchableOpacity>
             }
           />
+          {Object.keys(groupedVaccines).map((petName) => {
+            const picUri = groupedVaccines[petName][0].pet_profile_picture;
 
-          {/* Loop through each pet group */}
-          {Object.keys(groupedVaccines).map((petName) => (
-            <View key={petName} style={localStyles.petContainer}>
-              <Text
-                style={[
-                  localStyles.petName,
-                  { color: isDarkMode ? Colors.secondary : Colors.active },
-                ]}
-              >
-                {petName}
-              </Text>
-
-              {/* Loop through each vaccination for the pet */}
-              {groupedVaccines[petName].map((vaccination) => (
+            return (
+              <View key={petName} style={localStyles.petContainer}>
                 <View
-                  key={vaccination.id}
-                  style={localStyles.vaccinationContainer}
+                  style={{
+                    flexDirection: "row",
+                    alignItems: "center",
+                    justifyContent: "flex-start",
+                    width: "100%",
+                    marginBottom: 10,
+                  }}
                 >
+                  <Image
+                    source={picUri ? { uri: picUri } : ProfilePlaceholer}
+                    style={{
+                      width: 32,
+                      height: 32,
+                      borderRadius: 16,
+                      marginRight: 8,
+                    }}
+                  />
                   <Text
                     style={[
-                      localStyles.vaccinationTitle,
-                      { color: isDarkMode ? Colors.secondary : Colors.lable },
+                      localStyles.petName,
+                      { color: isDarkMode ? Colors.secondary : Colors.active,paddingTop: 10 },
                     ]}
                   >
-                    {vaccination.vaccination_name}
+                    {petName}
                   </Text>
-                  <View style={localStyles.boxContainer}>
-                    <BoxItem
-                      label="Vaccinated On"
-                      value={
-                        vaccination.vaccinated_date === "Invalid date"
-                          ? "N/A"
-                          : vaccination.vaccinated_date
-                      }
-                      bgColor="#D9F3F7"
-                      textColor="#53A2B1"
-                    />
-                    <BoxItem
-                      label="Next Due On"
-                      value={vaccination.vaccination_next_date}
-                      bgColor="#FDD9E1"
-                      textColor="#E56789"
-                    />
-                  </View>
                 </View>
-              ))}
-            </View>
-          ))}
+
+                {groupedVaccines[petName].map((vaccination) => (
+                  <View
+                    key={vaccination.id}
+                    style={localStyles.vaccinationContainer}
+                  >
+                    <Text
+                      style={[
+                        localStyles.vaccinationTitle,
+                        { color: isDarkMode ? Colors.secondary : Colors.lable },
+                      ]}
+                    >
+                      {vaccination.vaccination_name}
+                    </Text>
+                    <View style={localStyles.boxContainer}>
+                      <BoxItem
+                        label="Vaccinated On"
+                        value={
+                          vaccination.vaccinated_date === "Invalid date"
+                            ? "N/A"
+                            : vaccination.vaccinated_date
+                        }
+                        bgColor="#D9F3F7"
+                        textColor="#53A2B1"
+                      />
+                      <BoxItem
+                        label="Next Due On"
+                        value={vaccination.vaccination_next_date}
+                        bgColor="#FDD9E1"
+                        textColor="#E56789"
+                      />
+                    </View>
+                  </View>
+                ))}
+              </View>
+            );
+          })}
         </View>
       </ScrollView>
     </SafeAreaView>
