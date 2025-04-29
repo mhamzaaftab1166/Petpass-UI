@@ -204,7 +204,7 @@ const createStyles = (isDarkMode) => {
     },
     card: {
       flexDirection: "row",
-      height: 110,
+      height: 120,
       backgroundColor: background,
       borderRadius: 12,
       marginBottom: 16,
@@ -217,7 +217,7 @@ const createStyles = (isDarkMode) => {
       borderColor: Colors.border,
     },
     left: {
-      width: "35%",
+      width: "40%",
       justifyContent: "center",
       alignItems: "flex-start",
       padding: 12,
@@ -247,7 +247,7 @@ const createStyles = (isDarkMode) => {
       marginTop: 2,
     },
     divider: {
-      width: 1,
+      width: 2,
       backgroundColor: Colors.border,
       marginVertical: 12,
     },
