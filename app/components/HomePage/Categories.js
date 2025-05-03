@@ -87,7 +87,7 @@ const Categories = () => {
         <CategoryItem
           imageSource={require("../../../assets/images/home/events.png")}
           title="Future Events"
-          routing="/GeneralScreens/events/EventsList"
+          routing="/GeneralScreens/Home/events/EventsList"
         />
         <View style={{ margin: 8 }}></View>
         <CategoryItem

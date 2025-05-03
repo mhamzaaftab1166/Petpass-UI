@@ -17,12 +17,16 @@ import {
 } from "react-native";
 import Icon from "react-native-vector-icons/Ionicons";
 import { router, useFocusEffect, useLocalSearchParams } from "expo-router";
-import { useTheme } from "../../helper/themeProvider";
-import { Colors } from "../../theme/color";
-import style from "../../theme/style";
-import eventsService from "../../services/eventsService";
-import { formatFullDateRange, formatTimeRange } from "../../utils/generalUtils";
-import AppSkeleton from "../../components/AppSkeleton";
+import { useTheme } from "../../../helper/themeProvider";
+import { Colors } from "../../../theme/color";
+import style from "../../../theme/style";
+import eventsService from "../../../services/eventsService";
+import {
+  formatFullDateRange,
+  formatTimeRange,
+} from "../../../utils/generalUtils";
+import EventDetailsSkelton from "../../../components/Skeltons/EventDetailsSkelton";
+import { useUserStore } from "../../../store/useStore";
 
 const { width: SCREEN_WIDTH } = Dimensions.get("window");
 const SIDE_PADDING = SCREEN_WIDTH * 0.05;
@@ -34,10 +38,11 @@ export default function EventDetails() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [event, setEvent] = useState({});
+  const [isJoined, setIsJoined] = useState(false);
+  const { user } = useUserStore();
 
   const [currentIndex, setCurrentIndex] = useState(0);
   const scrollRef = useRef(null);
-
   const styles = useMemo(() => createStyles(isDarkMode), [isDarkMode]);
 
   useFocusEffect(
@@ -55,6 +60,12 @@ export default function EventDetails() {
       })();
     }, [id])
   );
+
+  useEffect(() => {
+    if (event?.isJoined) {
+      setIsJoined(event?.isJoined);
+    }
+  }, [event?.isJoined]);
 
   const imgs = event?.gallery_images || [];
   const sliderImages = imgs.length > 0 ? [...imgs, imgs[0]] : [];
@@ -75,7 +86,7 @@ export default function EventDetails() {
         setTimeout(() => {
           scrollRef.current?.scrollTo({ x: 0, animated: false });
           setCurrentIndex(0);
-        }, 300); 
+        }, 300);
       } else {
         setCurrentIndex(next);
       }
@@ -84,46 +95,48 @@ export default function EventDetails() {
     return () => clearInterval(timer);
   }, [currentIndex, sliderImages]);
 
-
   if (loading) {
-    return (
-      <SafeAreaView style={styles.container}>
-        <ScrollView contentContainerStyle={styles.scroll}>
-          <AppSkeleton width={SCREEN_WIDTH} height={BANNER_HEIGHT} />
-          <View style={{ paddingHorizontal: SIDE_PADDING, marginTop: 20 }}>
-            <View
-              style={{
-                flexDirection: "row",
-                justifyContent: "space-between",
-              }}
-            >
-              <AppSkeleton width={100} height={20} />
-              <AppSkeleton width={100} height={20} />
-            </View>
-            <AppSkeleton width="100%" height={100} style={{ marginTop: 20 }} />
-          </View>
-          <View style={{ paddingHorizontal: SIDE_PADDING, marginTop: 20 }}>
-            <AppSkeleton width="100%" height={80} />
-          </View>
-          <View style={{ paddingHorizontal: SIDE_PADDING, marginTop: 20 }}>
-            <View
-              style={{ flexDirection: "row", justifyContent: "space-between" }}
-            >
-              <AppSkeleton width="48%" height={40} />
-              <AppSkeleton width="48%" height={40} />
-            </View>
-          </View>
-          <View style={styles.actions}>
-            <AppSkeleton width="48%" height={40} />
-            <AppSkeleton width="48%" height={40} />
-          </View>
-        </ScrollView>
-      </SafeAreaView>
-    );
+    return <EventDetailsSkelton styles={styles} />;
   }
 
   const timeLabel = formatTimeRange(event?.start_time, event?.end_time);
   const dateLabel = formatFullDateRange(event?.start_date, event?.end_date);
+
+  const handleJoin = async (eventId) => {
+    const prev = isJoined;
+    setIsJoined(true);
+    try {
+      await eventsService.eventJoin(eventId);
+      const res = await eventsService.getUpcommingDetail(id);
+      setEvent(res?.upcoming_event);
+    } catch (error) {
+      console.log("Join failed:", error);
+      setIsJoined(prev);
+    }
+  };
+
+  const handleCancelJoin = async (eventId, joinerId) => {
+    const prev = isJoined;
+    setIsJoined(false);
+    try {
+      await eventsService.cacnelJoin(eventId, joinerId);
+      const res = await eventsService.getUpcommingDetail(id);
+      setEvent(res?.upcoming_event);
+    } catch (error) {
+      console.log("Cancel Join failed:", error);
+      setIsJoined(prev);
+    }
+  };
+
+  const onPressJoin = () => {
+    if (isJoined) {
+      const joinerId = event?.joiners?.find((j) => j.user_id === user?.id);
+      console.log(joinerId);
+      if (joinerId?.id && event.id) handleCancelJoin(event.id, joinerId?.id);
+    } else {
+      if (event.id) handleJoin(event.id);
+    }
+  };
 
   return (
     <SafeAreaView style={styles.container}>
@@ -193,9 +206,12 @@ export default function EventDetails() {
 
         {/* Actions */}
         <View style={styles.actions}>
-          <TouchableOpacity style={styles.joinBtn}>
-            <Text style={styles.joinText}>Join</Text>
+          <TouchableOpacity style={styles.joinBtn} onPress={onPressJoin}>
+            <Text style={styles.joinText}>
+              {isJoined ? "Cancel Join" : "Join"}
+            </Text>
           </TouchableOpacity>
+
           <TouchableOpacity style={styles.contactBtn}>
             <Text style={styles.contactText}>Contact</Text>
           </TouchableOpacity>

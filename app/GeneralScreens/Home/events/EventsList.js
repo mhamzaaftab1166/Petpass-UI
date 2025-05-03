@@ -11,60 +11,22 @@ import {
 import Icon from "react-native-vector-icons/Ionicons";
 import { AppBar } from "@react-native-material/core";
 import { router, useFocusEffect } from "expo-router";
-import { useTheme } from "../../helper/themeProvider";
-import { Colors } from "../../theme/color";
-import style from "../../theme/style";
-import eventsService from "../../services/eventsService";
+import { useTheme } from "../../../helper/themeProvider";
+import { Colors } from "../../../theme/color";
+import style from "../../../theme/style";
+import eventsService from "../../../services/eventsService";
 import {
   formatDateRange,
   formatDayRange,
   formatMonthRange,
   formatTimeRange,
-} from "../../utils/generalUtils";
-import AppSkeleton from "../../components/AppSkeleton";
-import NoItem from "../../components/NoItem/NoItem";
+} from "../../../utils/generalUtils";
+import AppSkeleton from "../../../components/AppSkeleton";
+import NoItem from "../../../components/NoItem/NoItem";
 
 const { width: SCREEN_WIDTH } = Dimensions.get("window");
 
 const PILL_COLORS = ["#FF6B6B", "#FFD166", "#4D96FF", "#9C27B0", "#00BFA5"];
-
-const DUMMY_EVENTS = [
-  {
-    day: "Monday",
-    month: "September",
-    dateNum: "25th",
-    title: "Official Professional Preparation Days",
-    time: "2:00 – 3:00 PM",
-  },
-  {
-    day: "Tuesday",
-    month: "September",
-    dateNum: "26th",
-    title: "Parents and Teacher's Association Meet",
-    time: "9:00 – 10:00 AM",
-  },
-  {
-    day: "Wednesday",
-    month: "September",
-    dateNum: "27th",
-    title: "Parents' Conference Professional Development",
-    time: "10:00 – 11:00 AM",
-  },
-  {
-    day: "Thursday",
-    month: "September",
-    dateNum: "28th",
-    title: "Gradeschool Quiz Bee Event",
-    time: "2:00 – 3:00 PM",
-  },
-  {
-    day: "Friday",
-    month: "September",
-    dateNum: "29th",
-    title: "Teacher's Thanksgiving Event",
-    time: "3:00 – 5:00 PM",
-  },
-];
 
 export default function Events() {
   const { isDarkMode } = useTheme();
@@ -92,7 +54,7 @@ export default function Events() {
 
   const handlePress = ({ id }) => {
     router.push({
-      pathname: "/GeneralScreens/events/EventDetail",
+      pathname: "/GeneralScreens/Home/events/EventDetail",
       params: { id },
     });
   };
