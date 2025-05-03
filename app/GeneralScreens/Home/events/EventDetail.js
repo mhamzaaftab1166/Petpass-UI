@@ -14,6 +14,9 @@ import {
   Text,
   TouchableOpacity,
   Dimensions,
+  Modal,
+  Linking,
+  ActivityIndicator,
 } from "react-native";
 import Icon from "react-native-vector-icons/Ionicons";
 import { router, useFocusEffect, useLocalSearchParams } from "expo-router";
@@ -33,12 +36,15 @@ const SIDE_PADDING = SCREEN_WIDTH * 0.05;
 const BANNER_HEIGHT = 240;
 
 export default function EventDetails() {
-  const { id } = useLocalSearchParams();
-  const { isDarkMode } = useTheme();
+  const [showContactModal, setShowContactModal] = useState(false);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [event, setEvent] = useState({});
   const [isJoined, setIsJoined] = useState(false);
+  const [callLoading, setCallLoading] = useState(false);
+  const [emailLoading, setEmailLoading] = useState(false);
+  const { id } = useLocalSearchParams();
+  const { isDarkMode } = useTheme();
   const { user } = useUserStore();
 
   const [currentIndex, setCurrentIndex] = useState(0);
@@ -131,7 +137,6 @@ export default function EventDetails() {
   const onPressJoin = () => {
     if (isJoined) {
       const joinerId = event?.joiners?.find((j) => j.user_id === user?.id);
-      console.log(joinerId);
       if (joinerId?.id && event.id) handleCancelJoin(event.id, joinerId?.id);
     } else {
       if (event.id) handleJoin(event.id);
@@ -206,15 +211,106 @@ export default function EventDetails() {
 
         {/* Actions */}
         <View style={styles.actions}>
-          <TouchableOpacity style={styles.joinBtn} onPress={onPressJoin}>
-            <Text style={styles.joinText}>
+          <TouchableOpacity
+            style={[
+              styles.joinBtn,
+              isJoined
+                ? {
+                    backgroundColor: "",
+                    borderColor: Colors.primary,
+                    borderWidth: 1,
+                  }
+                : null,
+            ]}
+            onPress={onPressJoin}
+          >
+            <Text
+              style={[
+                styles.joinText,
+                {
+                  color: isJoined ? Colors.primary : Colors.secondary,
+                },
+              ]}
+            >
               {isJoined ? "Cancel Join" : "Join"}
             </Text>
           </TouchableOpacity>
 
-          <TouchableOpacity style={styles.contactBtn}>
+          <TouchableOpacity
+            style={styles.contactBtn}
+            onPress={() => setShowContactModal(true)}
+          >
             <Text style={styles.contactText}>Contact</Text>
           </TouchableOpacity>
+          <Modal
+            visible={showContactModal}
+            transparent
+            animationType="fade"
+            onRequestClose={() => setShowContactModal(false)}
+          >
+            <View style={styles.modalOverlay}>
+              <View style={styles.modalContainer}>
+                <Text style={styles.modalHeader}>Contact Options</Text>
+
+                <TouchableOpacity
+                  style={[styles.modalButton, callLoading && { opacity: 0.6 }]}
+                  disabled={callLoading}
+                  onPress={async () => {
+                    setCallLoading(true);
+                    try {
+                      await Linking.openURL(
+                        `tel:${event.contact_details.contact_number}`
+                      );
+                    } finally {
+                      setCallLoading(false);
+                    }
+                  }}
+                >
+                  {callLoading ? (
+                    <ActivityIndicator color={Colors.secondary} size="small" />
+                  ) : (
+                    <Text style={styles.modalButtonText}>Call</Text>
+                  )}
+                </TouchableOpacity>
+
+                <TouchableOpacity
+                  style={[
+                    styles.modalButton,
+                    { marginTop: 12 },
+                    emailLoading && { opacity: 0.6 },
+                  ]}
+                  disabled={emailLoading}
+                  onPress={async () => {
+                    setEmailLoading(true);
+                    try {
+                      await Linking.openURL(
+                        `mailto:${event.contact_details.email}`
+                      );
+                    } finally {
+                      setEmailLoading(false);
+                    }
+                  }}
+                >
+                  {emailLoading ? (
+                    <ActivityIndicator color={Colors.secondary} size="small" />
+                  ) : (
+                    <Text style={styles.modalButtonText}>Email</Text>
+                  )}
+                </TouchableOpacity>
+
+                <TouchableOpacity
+                  style={[styles.modalButton, styles.closeButton]}
+                  onPress={() => setShowContactModal(false)}
+                >
+                  <Text
+                    style={[styles.modalButtonText, { color: Colors.primary }]}
+                  >
+                    Close
+                  </Text>
+                </TouchableOpacity>
+              </View>
+            </View>
+          </Modal>
         </View>
       </ScrollView>
     </SafeAreaView>
@@ -224,6 +320,7 @@ export default function EventDetails() {
 const createStyles = (dark) => {
   const bg = dark ? Colors.dark : Colors.secondary;
   const cardBg = dark ? Colors.dark : Colors.secondary;
+  const modalBg = dark ? Colors.light : Colors.secondary;
   const textPrimary = dark ? Colors.secondary : Colors.lable;
   const textSecondary = dark ? Colors.secondary : Colors.active;
   const borderColor = dark ? Colors.border : "rgba(0,0,0,0.05)";
@@ -310,6 +407,50 @@ const createStyles = (dark) => {
       fontFamily: "Avenir-Bold",
       fontSize: 16,
       color: Colors.primary,
+    },
+    modalOverlay: {
+      flex: 1,
+      backgroundColor: "rgba(0,0,0,0.4)",
+      justifyContent: "center",
+      alignItems: "center",
+      padding: 20,
+    },
+    modalContainer: {
+      width: "100%",
+      maxWidth: 320,
+      backgroundColor: modalBg,
+      borderRadius: 16,
+      paddingVertical: 24,
+      paddingHorizontal: 20,
+      shadowColor: "#000",
+      shadowOpacity: 0.2,
+      shadowRadius: 10,
+      elevation: 8,
+    },
+    modalHeader: {
+      fontFamily: "Avenir-Bold",
+      fontSize: 18,
+      textAlign: "center",
+      marginBottom: 16,
+      color: dark ? Colors.primary : Colors.primary,
+    },
+    modalButton: {
+      width: "100%",
+      paddingVertical: 12,
+      borderRadius: 12,
+      backgroundColor: Colors.primary,
+      alignItems: "center",
+    },
+    modalButtonText: {
+      fontFamily: "Avenir-Bold",
+      fontSize: 16,
+      color: Colors.secondary,
+    },
+    closeButton: {
+      backgroundColor: "transparent",
+      borderWidth: 1,
+      borderColor: Colors.primary,
+      marginTop: 16,
     },
   });
 };
