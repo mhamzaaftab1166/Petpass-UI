@@ -269,12 +269,6 @@ export default function AboutEdit() {
                   pickerName={"Pet Profile Picture"}
                 />
               </View>
-              <AppFormPicker
-                setState={(selected) => setSelectedPetType(selected.value)}
-                items={petTypes}
-                name={"pet_type"}
-                placeholder={"PET TYPE"}
-              />
 
               <AppFormField
                 name={"pet_name"}
@@ -284,9 +278,21 @@ export default function AboutEdit() {
               />
 
               <AppFormPicker
+                setState={(selected) => setSelectedPetType(selected.value)}
+                items={petTypes}
+                name={"pet_type"}
+                placeholder={"PET TYPE"}
+              />
+
+              <AppFormPicker
                 items={petBreeds}
                 name={"pet_breed"}
                 placeholder={"PET BREED"}
+              />
+              <AppFormPicker
+                items={petColors}
+                name={"color"}
+                placeholder={"COLOUR"}
               />
 
               <AppFormRoleSelector roles={roles} name={"gender"} />
@@ -294,11 +300,6 @@ export default function AboutEdit() {
               <AppFormDatePicker
                 name="date_of_birth"
                 placeholder="SELECT BIRTHDATE"
-              />
-              <AppFormPicker
-                items={petColors}
-                name={"color"}
-                placeholder={"COLOUR"}
               />
               <AppFormPicker
                 items={petaddresses}
