@@ -4,7 +4,6 @@ import {
   SafeAreaView,
   Dimensions,
   TouchableOpacity,
-  TextInput,
   Image,
   ScrollView,
   KeyboardAvoidingView,
@@ -12,7 +11,6 @@ import {
   StyleSheet,
 } from "react-native";
 import React, { useState } from "react";
-import Icon from "react-native-vector-icons/Ionicons";
 import { Colors } from "../theme/color";
 import style from "../theme/style";
 import { useRouter } from "expo-router";

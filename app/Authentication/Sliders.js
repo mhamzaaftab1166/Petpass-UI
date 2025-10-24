@@ -1,11 +1,17 @@
 import React, { useEffect, useState, useCallback, useRef } from "react";
-import { View, SafeAreaView, FlatList, Dimensions } from "react-native";
+import {
+  View,
+  SafeAreaView,
+  FlatList,
+  Dimensions,
+  ActivityIndicator,
+  StyleSheet,
+} from "react-native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useRouter } from "expo-router";
 import { sliders } from "../constants/slidersConstant";
 import IntroItem from "../components/IntroItem/IntroItem";
 import AppButton from "../components/AppButton/AppButton";
-import style from "../theme/style";
 import { Colors } from "../theme/color";
 import { useTheme } from "../helper/themeProvider";
 
@@ -19,25 +25,35 @@ export default function Sliders() {
   const [currentSlideIndex, setCurrentSlideIndex] = useState(0);
   const [showSlider, setShowSlider] = useState(null);
 
+  // Check if user has seen onboarding
   useEffect(() => {
-    async function checkOnboarding() {
+    const checkOnboarding = async () => {
+      console.log("called on boarding");
       try {
         const seen = await AsyncStorage.getItem("hasSeenOnboarding");
-        if (seen === "true") {
-          setShowSlider(false);
-          router.replace("/Authentication/Login");
-        } else {
-          setShowSlider(true);
-        }
+        /// on boarding call error
+        // if (seen === "true") {
+        //   setShowSlider(false);
+        // } else {
+        //   setShowSlider(true);
+        // }
+        router.replace("/Authentication/Login");
       } catch (err) {
-        console.error(err);
+        console.error("Error checking onboarding:", err);
         setShowSlider(true);
       }
-    }
+    };
     checkOnboarding();
   }, [router]);
 
-  if (showSlider === null) return null;
+  // Prevent rendering until AsyncStorage check is complete
+  if (showSlider === null) {
+    return (
+      <View style={styles.loadingContainer}>
+        <ActivityIndicator size="large" color={Colors.primary} />
+      </View>
+    );
+  }
 
   const updateCurrentSlideIndex = (e) => {
     const offsetX = e.nativeEvent.contentOffset.x;
@@ -50,32 +66,24 @@ export default function Sliders() {
       await AsyncStorage.setItem("hasSeenOnboarding", "true");
       router.replace("/Authentication/Login");
     } catch (err) {
-      console.error(err);
+      console.error("Error completing onboarding:", err);
     }
   }, [router]);
 
-  const Footer = () => (
+  const renderFooter = () => (
     <View
-      style={{
-        paddingHorizontal: 20,
-        paddingVertical: 20,
-        backgroundColor: isDarkMode ? Colors.active : Colors.secondary,
-      }}
+      style={[
+        styles.footerContainer,
+        { backgroundColor: isDarkMode ? Colors.active : Colors.secondary },
+      ]}
     >
-      <View style={{ flexDirection: "row", alignSelf: "center" }}>
+      <View style={styles.indicatorContainer}>
         {sliders.map((_, i) => (
           <View
             key={i}
             style={[
-              style.indicator,
-              currentSlideIndex === i && {
-                borderColor: Colors.primary,
-                borderWidth: 1,
-                paddingHorizontal: 12,
-                borderRadius: 10,
-                backgroundColor: Colors.primary,
-                alignItems: "center",
-              },
+              styles.indicator,
+              currentSlideIndex === i && styles.activeIndicator,
             ]}
           />
         ))}
@@ -85,7 +93,7 @@ export default function Sliders() {
         <AppButton
           title="Get Started"
           onPress={completeOnboarding}
-          style={style}
+          style={styles.button}
           paddingVertical={10}
         />
       )}
@@ -107,7 +115,39 @@ export default function Sliders() {
         keyExtractor={(item) => item.id}
         onMomentumScrollEnd={updateCurrentSlideIndex}
       />
-      <Footer />
+      {/* {renderFooter()} */}
     </SafeAreaView>
   );
 }
+
+const styles = StyleSheet.create({
+  loadingContainer: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  footerContainer: {
+    paddingHorizontal: 20,
+    paddingVertical: 20,
+  },
+  indicatorContainer: {
+    flexDirection: "row",
+    alignSelf: "center",
+  },
+  indicator: {
+    width: 10,
+    height: 10,
+    borderRadius: 5,
+    backgroundColor: "#ccc",
+    marginHorizontal: 5,
+  },
+  activeIndicator: {
+    borderColor: Colors.primary,
+    borderWidth: 1,
+    paddingHorizontal: 12,
+    borderRadius: 10,
+    backgroundColor: Colors.primary,
+    alignItems: "center",
+  },
+  button: {},
+});
