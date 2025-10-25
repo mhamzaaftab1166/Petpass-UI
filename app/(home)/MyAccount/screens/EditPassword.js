@@ -1,7 +1,6 @@
 import {
   View,
   TouchableOpacity,
-  SafeAreaView,
   KeyboardAvoidingView,
   Platform,
 } from "react-native";
@@ -19,6 +18,7 @@ import SubmitButton from "../../../components/forms/SubmitButton";
 import { useTheme } from "../../../helper/themeProvider";
 import userService from "../../../services/userService";
 import Loader from "../../../components/Loader/Loader";
+import { SafeAreaView } from "react-native-safe-area-context";
 
 const validationSchema = Yup.object({
   current_password: Yup.string().required().label("Current Password"),

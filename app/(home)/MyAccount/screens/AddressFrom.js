@@ -1,9 +1,6 @@
 import {
   View,
-  Text,
-  SafeAreaView,
   TouchableOpacity,
-  TextInput,
   ScrollView,
   KeyboardAvoidingView,
   Platform,
@@ -28,6 +25,7 @@ import useUserStore from "../../../store/useUserStore";
 import useAddressStore from "../../../store/useAddressStore";
 import { getCitiesByCountry, getCountries } from "../../../utils/getRegions";
 import AppMapLocationPicker from "../../../components/forms/AppLocationPicker";
+import { SafeAreaView } from "react-native-safe-area-context";
 
 const validationSchema = Yup.object({
   full_name: Yup.string().required().min(2).max(50),

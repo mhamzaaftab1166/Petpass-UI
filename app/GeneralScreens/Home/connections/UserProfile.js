@@ -1,7 +1,6 @@
 import React, { useCallback, useState } from "react";
 import {
   View,
-  SafeAreaView,
   TouchableOpacity,
   StyleSheet,
   Image,
@@ -19,6 +18,7 @@ import profilePlaceholder from "../../../../assets/images/profilePlaceHolder.png
 import PetListingItem from "../../../components/PetListingItem/PetListingItem";
 import connectionService from "../../../services/connectionService";
 import AppSkeleton from "../../../components/AppSkeleton";
+import { SafeAreaView } from "react-native-safe-area-context";
 
 const userData = {
   fullName: "M Hamza Aftab",

@@ -4,7 +4,6 @@ import { Colors } from "../../theme/color";
 import petEdit from "../../../assets/images/pets/passport.png";
 import { useTheme } from "../../helper/themeProvider";
 import { Ionicons } from "@expo/vector-icons";
-import { WebView } from "react-native-webview";
 
 const Passport = ({ pet, router }) => {
   const { isDarkMode } = useTheme();

@@ -7,7 +7,6 @@ import React, {
 } from "react";
 import {
   View,
-  SafeAreaView,
   ScrollView,
   StyleSheet,
   Image,
@@ -30,6 +29,7 @@ import {
 } from "../../../utils/generalUtils";
 import EventDetailsSkelton from "../../../components/Skeltons/EventDetailsSkelton";
 import { useUserStore } from "../../../store/useStore";
+import { SafeAreaView } from "react-native-safe-area-context";
 
 const { width: SCREEN_WIDTH } = Dimensions.get("window");
 const SIDE_PADDING = SCREEN_WIDTH * 0.05;

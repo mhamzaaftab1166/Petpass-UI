@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from "react";
 import {
-  SafeAreaView,
   ScrollView,
   RefreshControl,
   View,
@@ -17,6 +16,7 @@ import profilePicPlaceholder from "../../../../assets/images/profilePlaceHolder.
 import NoItem from "../../../components/NoItem/NoItem";
 import connectionService from "../../../services/connectionService";
 import { useUserStore } from "../../../store/useStore";
+import { SafeAreaView } from "react-native-safe-area-context";
 
 export default function AddConnections({
   onFilterPress,

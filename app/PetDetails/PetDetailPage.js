@@ -1,7 +1,6 @@
 import React, { useCallback, useEffect, useRef, useState } from "react";
 import {
   Dimensions,
-  SafeAreaView,
   ScrollView,
   StatusBar,
   View,
@@ -18,13 +17,13 @@ import PhotoGallery from "../components/PetDetailsComponents/PetGallery";
 import VideoGallery from "../components/PetDetailsComponents/VideosGallery";
 import VaccinationDetail from "../components/PetDetailsComponents/VaccinationDetail";
 import { usePetStore } from "../store/useStore";
-import Loader from "../components/Loader/Loader";
 import Passport from "../components/PetDetailsComponents/Passport";
 import ProfileCompletionBar from "../components/PetDetailsComponents/ProfileCompletionBar";
 import { PetDetailSkeleton } from "../components/SkeletonCards/PetDetailSkeleton";
 import * as MediaLibrary from "expo-media-library";
 import ViewShot, { captureRef, captureScreen } from "react-native-view-shot";
 import AppAlert from "../components/AppAlert/index";
+import { SafeAreaView } from "react-native-safe-area-context";
 
 const width = Dimensions.get("screen").width;
 const height = Dimensions.get("screen").height;

@@ -1,7 +1,6 @@
 import {
   View,
   Text,
-  SafeAreaView,
   Dimensions,
   TouchableOpacity,
   Image,
@@ -31,6 +30,7 @@ import AppSkeleton from "../../components/AppSkeleton";
 import Icon from "react-native-vector-icons/Ionicons";
 import { unregisterIndieDevice } from "native-notify";
 import notificationData from "../../constants/notification";
+import { SafeAreaView } from "react-native-safe-area-context";
 
 const { width, height } = Dimensions.get("screen");
 

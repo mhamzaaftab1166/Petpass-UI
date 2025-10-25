@@ -5,12 +5,12 @@ import {
   Text,
   ImageBackground,
   TouchableOpacity,
-  SafeAreaView,
   StatusBar,
   Dimensions,
 } from "react-native";
 import { Colors } from "../../theme/color";
 import style from "../../theme/style";
+import { SafeAreaView } from "react-native-safe-area-context";
 
 const { width, height } = Dimensions.get("screen");
 

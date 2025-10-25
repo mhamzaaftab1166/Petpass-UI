@@ -1,7 +1,6 @@
 import React, { useCallback, useState } from "react";
 import {
   View,
-  SafeAreaView,
   TouchableOpacity,
   ScrollView,
   Text,
@@ -15,9 +14,9 @@ import { AppBar } from "@react-native-material/core";
 import { useTheme } from "../helper/themeProvider";
 import { router, useFocusEffect } from "expo-router";
 import petService from "../services/petServices";
-import Loader from "../components/Loader/Loader";
 import BoxItem from "../components/BoxItem/BoxItem";
 import AppSkeleton from "../components/AppSkeleton";
+import { SafeAreaView } from "react-native-safe-area-context";
 
 export default function PetVaccinations() {
   const { isDarkMode } = useTheme();

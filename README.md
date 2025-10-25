@@ -48,3 +48,17 @@ Join our community of developers creating universal apps.
 
 - [Expo on GitHub](https://github.com/expo/expo): View our open source platform and contribute.
 - [Discord community](https://chat.expo.dev): Chat with Expo users and ask questions.
+-------------------------------------------------------------------------------------------------------
+
+
+# Author: M. Affan
+# Agenda: Expo upgrade to 54
+
+Node Js Version: 20.19.4
+React Js Version: 19.0.1
+
+
+# Known code errors within libraries:
+
+1. Native Notify (remove subscription issues)
+2. Expo Router (remove subscription issues)

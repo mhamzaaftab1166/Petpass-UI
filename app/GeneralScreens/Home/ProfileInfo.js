@@ -1,6 +1,5 @@
 import {
   View,
-  SafeAreaView,
   TouchableOpacity,
   KeyboardAvoidingView,
   Platform,
@@ -29,6 +28,7 @@ import { getFirstName } from "../../utils/getFirstName";
 import owner from "../../../assets/images/authentication/d3.png";
 import breeder from "../../../assets/images/authentication/breeder.png";
 import shop from "../../../assets/images/authentication/d2.png";
+import { SafeAreaView } from "react-native-safe-area-context";
 
 const validationSchema = Yup.object({
   username: Yup.string().required().label("Username"),

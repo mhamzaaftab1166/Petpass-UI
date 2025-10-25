@@ -2,13 +2,11 @@ import {
   View,
   Text,
   ScrollView,
-  SafeAreaView,
   TouchableOpacity,
-  ActivityIndicator,
   Dimensions,
   Image,
 } from "react-native";
-import React, { useCallback, useState, useEffect } from "react";
+import React, { useCallback, useState } from "react";
 import { useFocusEffect, useLocalSearchParams, useRouter } from "expo-router";
 import style from "../../theme/style";
 import { Colors } from "../../theme/color";
@@ -18,6 +16,7 @@ import homeService from "../../services/homeService";
 import Loader from "../../components/Loader/Loader";
 import { formatTipDate } from "../../utils/generalUtils";
 import { useTheme } from "../../helper/themeProvider";
+import { SafeAreaView } from "react-native-safe-area-context";
 
 const width = Dimensions.get("screen").width;
 const height = Dimensions.get("screen").height;

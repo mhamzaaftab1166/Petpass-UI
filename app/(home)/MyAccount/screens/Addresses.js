@@ -2,7 +2,6 @@ import React, { useEffect, useState } from "react";
 import {
   View,
   Text,
-  SafeAreaView,
   Dimensions,
   TouchableOpacity,
   StyleSheet,
@@ -21,6 +20,7 @@ import Loader from "../../../components/Loader/Loader";
 import addressService from "../../../services/addressService";
 import NoItem from "../../../components/NoItem/NoItem";
 import AppAlert from "../../../components/AppAlert/index";
+import { SafeAreaView } from "react-native-safe-area-context";
 
 const width = Dimensions.get("screen").width;
 const height = Dimensions.get("screen").height;
@@ -90,7 +90,10 @@ export default function Address() {
           centerTitle={true}
           elevation={0}
           leading={
-            <TouchableOpacity onPress={() => router.replace("MyAccount")}>
+            <TouchableOpacity onPress={() => {
+              console.log("reouter replacing");
+              router.replace("MyAccount");
+            }}>
               <Icon
                 name="chevron-back"
                 color={isDarkMode ? Colors.secondary : Colors.active}
@@ -98,15 +101,6 @@ export default function Address() {
               />
             </TouchableOpacity>
           }
-          // trailing={
-          //   <TouchableOpacity
-          //     onPress={() => router.push("/MyAccount/screens/AddressFrom")}
-          //     style={styles.addAddressContainer}
-          //   >
-          //     <Text style={styles.addAddressText}>Add Address</Text>
-          //     <Icon name="add" color={Colors.primary} size={22} />
-          //   </TouchableOpacity>
-          // }
         />
         {address.length === 0 ? (
           <>
@@ -244,7 +238,7 @@ export default function Address() {
       </View>
 
       {/* Confirmation Alert */}
-      <AppAlert
+      {/* <AppAlert
         showAlert={deleteAlertVisible}
         showProgress={false}
         title="Confirm Delete"
@@ -261,7 +255,7 @@ export default function Address() {
           deleteAddress(selectedAddressId);
           setDeleteAlertVisible(false);
         }}
-      />
+      /> */}
     </SafeAreaView>
   );
 }

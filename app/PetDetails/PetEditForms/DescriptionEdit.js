@@ -1,7 +1,5 @@
 import {
   View,
-  SafeAreaView,
-  Dimensions,
   ScrollView,
   KeyboardAvoidingView,
   Platform,
@@ -10,7 +8,6 @@ import {
 import React, { useState } from "react";
 import { Colors } from "../../theme/color";
 import style from "../../theme/style";
-import AppTitle from "../../components/AppTitle/AppTitle";
 import AppForm from "../../components/forms/AppForm";
 import Icon from "react-native-vector-icons/Ionicons";
 import * as Yup from "yup";
@@ -22,6 +19,7 @@ import { router, useLocalSearchParams, useRouter } from "expo-router";
 import petServices from "../../services/petServices";
 import Loader from "../../components/Loader/Loader";
 import { AppBar } from "@react-native-material/core";
+import { SafeAreaView } from "react-native-safe-area-context";
 
 const validationSchema = Yup.object({
   description: Yup.string().required().label("Description"),

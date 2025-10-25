@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from "react";
 import {
-  SafeAreaView,
   ScrollView,
   View,
   Text,
@@ -20,6 +19,7 @@ import { Entypo } from "@expo/vector-icons"; // for 3-dot icon
 import NoItem from "../../../components/NoItem/NoItem";
 import connectionService from "../../../services/connectionService";
 import { router } from "expo-router";
+import { SafeAreaView } from "react-native-safe-area-context";
 
 export default function Connected({ connects = [], onUpdate }) {
   const [refreshing, setRefreshing] = useState(false);

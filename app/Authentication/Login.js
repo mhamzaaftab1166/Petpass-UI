@@ -1,10 +1,8 @@
 import {
   View,
   Text,
-  SafeAreaView,
   Dimensions,
   TouchableOpacity,
-  TextInput,
   Image,
   ScrollView,
   KeyboardAvoidingView,
@@ -12,7 +10,6 @@ import {
   StyleSheet,
 } from "react-native";
 import React, { useState } from "react";
-import Icon from "react-native-vector-icons/Ionicons";
 import { Colors } from "../theme/color";
 import style from "../theme/style";
 import { useRouter } from "expo-router";
@@ -32,6 +29,7 @@ import Checkbox from "expo-checkbox";
 import { useTheme } from "../helper/themeProvider";
 import { registerIndieID, unregisterIndieDevice } from "native-notify";
 import notificationData from "../constants/notification";
+import { SafeAreaView } from "react-native-safe-area-context";
 
 const width = Dimensions.get("screen").width;
 const height = Dimensions.get("screen").height;
@@ -93,7 +91,7 @@ export default function Login() {
         <View style={{ flex: 1, marginHorizontal: 20 }}>
           <ScrollView showsVerticalScrollIndicator={false}>
             <AppForm
-              initialValues={{ email: "", password: "" }}
+              initialValues={{ email: "affanshery@gmail.com", password: "Iknowyou125!" }}
               onSubmit={handleSubmit}
               validationSchema={validationSchema}
             >
