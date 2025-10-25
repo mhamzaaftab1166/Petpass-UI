@@ -76,17 +76,18 @@ export default function TabLayout() {
   return (
     <>
       {showAlert && (
-        <AppAlert
-          showAlert={showAlert}
-          title="Session Expired!"
-          message="Your session has expired. Please log in again."
-          closeOnTouchOutside={false}
-          closeOnHardwareBackPress={false}
-          showConfirmButton
-          confirmText="Got It"
-          confirmButtonColor={Colors.primary}
-          onConfirmPressed={handleLogout}
-        />
+        <></>
+        // <AppAlert
+        //   showAlert={showAlert}
+        //   title="Session Expired!"
+        //   message="Your session has expired. Please log in again."
+        //   closeOnTouchOutside={false}
+        //   closeOnHardwareBackPress={false}
+        //   showConfirmButton
+        //   confirmText="Got It"
+        //   confirmButtonColor={Colors.primary}
+        //   onConfirmPressed={handleLogout}
+        // />
       )}
       <Tabs
         screenOptions={{

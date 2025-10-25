@@ -1,7 +1,6 @@
 import React, { useEffect, useState, useCallback, useRef } from "react";
 import {
   View,
-  SafeAreaView,
   FlatList,
   Dimensions,
   ActivityIndicator,
@@ -14,6 +13,7 @@ import IntroItem from "../components/IntroItem/IntroItem";
 import AppButton from "../components/AppButton/AppButton";
 import { Colors } from "../theme/color";
 import { useTheme } from "../helper/themeProvider";
+import { SafeAreaView } from "react-native-safe-area-context";
 
 const { width } = Dimensions.get("screen");
 

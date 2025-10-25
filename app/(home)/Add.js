@@ -1,6 +1,5 @@
 import {
   View,
-  SafeAreaView,
   TouchableOpacity,
   KeyboardAvoidingView,
   Platform,
@@ -31,6 +30,7 @@ import OnSuccess from "../components/OnSuccess/OnSuccess";
 import petServices from "../services/petServices";
 import AutoUpdateFields from "../components/forms/AutoUpdate";
 import { useUserStore } from "../store/useStore";
+import { SafeAreaView } from "react-native-safe-area-context"
 
 const validationSchema = Yup.object({
   pet_profile_picture: Yup.string().required().label("Pet Profile Image"),
@@ -65,6 +65,7 @@ export default function Add() {
   const [selectedPetBreedType, setSelectedPetBreedType] = useState("");
   const [petAddresses, setPetAddresses] = useState([]);
   const [petColor, setPetColor] = useState("");
+  
   const roles = {
     isOne: true,
     data: [
@@ -126,7 +127,6 @@ export default function Add() {
      setIsLoading(false);
    }
  };
-
 
  useFocusEffect(
    useCallback(() => {

@@ -13,7 +13,7 @@ const getStoredToken = async () => {
 export const _axios = async (method, url, body, contentType) => {  
   try {
     const token = await getStoredToken(); 
-       
+    
     const response = await axios({
       headers: {
         "Content-Type": contentType || "application/json",
@@ -23,6 +23,7 @@ export const _axios = async (method, url, body, contentType) => {
       url: config.baseUrl + url,
       data: body,
     });
+    console.log(response);
 
     return response.data;
   } catch (err) {

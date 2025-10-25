@@ -1,7 +1,5 @@
 import {
   View,
-  SafeAreaView,
-  Dimensions,
   ScrollView,
   KeyboardAvoidingView,
   Platform,
@@ -10,20 +8,18 @@ import {
 import React, { useState } from "react";
 import { Colors } from "../../theme/color";
 import style from "../../theme/style";
-import AppTitle from "../../components/AppTitle/AppTitle";
 import AppForm from "../../components/forms/AppForm";
 import * as Yup from "yup";
-import AppFormField from "../../components/forms/AppFormFeild";
 import Icon from "react-native-vector-icons/Ionicons";
 import SubmitButton from "../../components/forms/SubmitButton";
 import AppErrorMessage from "../../components/forms/AppErrorMessage";
 import { useTheme } from "../../helper/themeProvider";
-import { router, useLocalSearchParams, useRouter } from "expo-router";
+import { router, useLocalSearchParams } from "expo-router";
 import AppFormImagePicker from "../../components/forms/AppFormGeneralImagesPicker";
 import Loader from "../../components/Loader/Loader";
 import petServices from "../../services/petServices";
-import { convertImageToBase64 } from "../../utils/generalUtils";
 import { AppBar } from "@react-native-material/core";
+import { SafeAreaView } from "react-native-safe-area-context";
 
 export default function PetAddPhotos() {
   const { isDarkMode } = useTheme();

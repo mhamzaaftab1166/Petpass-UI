@@ -1,16 +1,15 @@
 import {
   View,
-  SafeAreaView,
   Dimensions,
   TouchableOpacity,
   Text,
   StyleSheet,
 } from "react-native";
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useCallback, useState } from "react";
 import { AppBar } from "@react-native-material/core";
 import { Colors } from "../../theme/color";
 import style from "../../theme/style";
-import { useRouter } from "expo-router";
+import { useNavigation, useRouter } from "expo-router";
 import { useTheme } from "../../helper/themeProvider";
 import Icon from "react-native-vector-icons/Ionicons";
 import PetListingItem from "../../components/PetListingItem/PetListingItem";
@@ -23,6 +22,7 @@ import AppAlert from "../../components/AppAlert/index";
 import NoItem from "../../components/NoItem/NoItem";
 import { useFocusEffect } from "expo-router";
 import PetListingSkeletonCard from "../../components/SkeletonCards/PetListingCards";
+import { SafeAreaView } from "react-native-safe-area-context";
 
 const { width, height } = Dimensions.get("screen");
 
@@ -35,6 +35,7 @@ export default function MyPets({ isDelete = true }) {
   const [showAlert, setShowAlert] = useState(false);
   const [selectedPetId, setSelectedPetId] = useState(null);
   const router = useRouter();
+  const navigation = useNavigation();
   const { isDarkMode } = useTheme();
 
   useFocusEffect(
@@ -118,7 +119,10 @@ export default function MyPets({ isDelete = true }) {
           centerTitle={true}
           elevation={0}
           leading={
-            <TouchableOpacity onPress={() => router.back()}>
+            <TouchableOpacity onPress={() => {
+              console.log("Going back with navigation");
+              navigation.goBack();
+            }}>
               <Icon
                 name="chevron-back"
                 color={isDarkMode ? Colors.secondary : Colors.active}
@@ -152,7 +156,7 @@ export default function MyPets({ isDelete = true }) {
           </>
         ) : pets?.length > 0 ? (
           <SwipeListView
-            data={pets}
+            data={pets ? pets : []}
             renderItem={renderItem}
             renderHiddenItem={isDelete ? renderHiddenItem : null}
             rightOpenValue={-75}
@@ -162,7 +166,7 @@ export default function MyPets({ isDelete = true }) {
           <NoItem title={"Pet List"} />
         )}
       </View>
-      <AppAlert
+      {/* <AppAlert
         showAlert={showAlert}
         title="Are you sure?"
         message="Do you really want to delete this pet?"
@@ -175,7 +179,7 @@ export default function MyPets({ isDelete = true }) {
         confirmButtonColor="red"
         onCancelPressed={() => setShowAlert(false)}
         onConfirmPressed={() => handleDeletePet(selectedPetId)}
-      />
+      /> */}
     </SafeAreaView>
   );
 }

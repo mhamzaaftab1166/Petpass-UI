@@ -1,6 +1,5 @@
 import {
   View,
-  SafeAreaView,
   TouchableOpacity,
   KeyboardAvoidingView,
   Platform,
@@ -29,6 +28,7 @@ import {getFirstName} from "../../../utils/getFirstName"
 import owner from "../../../../assets/images/authentication/d3.png";
 import breeder from "../../../../assets/images/authentication/breeder.png";
 import shop from "../../../../assets/images/authentication/d2.png";
+import { SafeAreaView } from "react-native-safe-area-context";
 
 const validationSchema = Yup.object({
   username: Yup.string().required().label("Username"),
@@ -64,7 +64,7 @@ export default function AccountInfo() {
     username,
   }) => {
     
-    const phoneParts = phone_number.split(" ");
+    const phoneParts = phone_number?.split(" ");
     const countryCode = phoneParts[0];
     const phoneNumber = phoneParts.slice(1).join("");
     const formData = new FormData();
@@ -161,7 +161,7 @@ export default function AccountInfo() {
             centerTitle={true}
             elevation={0}
             leading={
-              <TouchableOpacity onPress={() => router.back()}>
+              <TouchableOpacity onPress={()=>router.back()}>
                 <Icon
                   name="chevron-back"
                   color={isDarkMode ? Colors.secondary : Colors.active}

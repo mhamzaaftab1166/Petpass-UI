@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import {
-  SafeAreaView,
   Dimensions,
   TouchableOpacity,
   Image,
@@ -30,6 +29,7 @@ import { useTheme } from "../helper/themeProvider";
 import owner from "../../assets/images/authentication/d3.png";
 import breeder from "../../assets/images/authentication/breeder.png";
 import shop from "../../assets/images/authentication/d2.png";
+import { SafeAreaView } from "react-native-safe-area-context";
 
 const width = Dimensions.get("screen").width;
 const height = Dimensions.get("screen").height;
@@ -111,10 +111,10 @@ export default function Signup() {
           <AppTitle title={"Sign Up"} style={style} />
           <AppForm
             initialValues={{
-              email: "",
-              password: "",
-              username: "",
-              phone_number: "",
+              email: "affanshery@gmail.com",
+              password: "Iknowyou125!",
+              username: "affan",
+              phone_number: "+971 1231235",
               // profile_types: [],
             }}
             onSubmit={(values) => handleSubmit(values)}

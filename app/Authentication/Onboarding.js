@@ -1,9 +1,7 @@
 import {
   View,
   Text,
-  SafeAreaView,
   Dimensions,
-  TouchableOpacity,
   StatusBar,
   ImageBackground,
 } from "react-native";
@@ -12,6 +10,7 @@ import { useRouter } from "expo-router";
 import style from "../theme/style";
 import { Colors } from "../theme/color";
 import AppButton from "../components/AppButton/AppButton";
+import { SafeAreaView } from "react-native-safe-area-context";
 
 const width = Dimensions.get("screen").width;
 const height = Dimensions.get("screen").height;

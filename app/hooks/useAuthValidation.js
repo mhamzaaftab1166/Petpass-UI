@@ -56,7 +56,7 @@ export default function useAuthValidation() {
 
         const isValid = await authService.validateToken();
 
-        if (isValid.message === "Valid token") {
+        if (isValid?.message === "Valid token") {
           setShowAlert(false);
         }
       } catch (error) {

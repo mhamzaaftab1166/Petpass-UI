@@ -1,6 +1,5 @@
 import {
   View,
-  SafeAreaView,
   Dimensions,
   TouchableOpacity,
   Text,
@@ -23,6 +22,7 @@ import AppAlert from "../../components/AppAlert/index";
 import NoItem from "../../components/NoItem/NoItem";
 import { useFocusEffect } from "expo-router";
 import PetListingSkeletonCard from "../../components/SkeletonCards/PetListingCards";
+import { SafeAreaView } from "react-native-safe-area-context"
 
 const { width, height } = Dimensions.get("screen");
 

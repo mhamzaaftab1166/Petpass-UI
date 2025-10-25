@@ -1,7 +1,6 @@
 import {
   View,
   ScrollView,
-  SafeAreaView,
   TouchableOpacity,
   Text,
   Dimensions,
@@ -15,9 +14,9 @@ import { AppBar } from "@react-native-material/core";
 import { useTheme } from "../../helper/themeProvider";
 import { router, useFocusEffect } from "expo-router";
 import homeService from "../../services/homeService";
-import Loader from "../../components/Loader/Loader";
 import AppSkeleton from "../../components/AppSkeleton";
 import NoItem from "../../components/NoItem/NoItem";
+import { SafeAreaView } from "react-native-safe-area-context";
 
 const width = Dimensions.get("screen").width;
 const height = Dimensions.get("screen").height;

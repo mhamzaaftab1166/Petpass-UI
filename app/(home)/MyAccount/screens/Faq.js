@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import {
-  SafeAreaView,
   Dimensions,
   StyleSheet,
   TouchableOpacity,
@@ -16,6 +15,7 @@ import style from "../../../theme/style";
 import { useRouter } from "expo-router";
 import { useTheme } from "../../../helper/themeProvider";
 import { AppBar } from "@react-native-material/core";
+import { SafeAreaView } from "react-native-safe-area-context";
 import Icon from "react-native-vector-icons/Ionicons";
 
 const width = Dimensions.get("screen").width;

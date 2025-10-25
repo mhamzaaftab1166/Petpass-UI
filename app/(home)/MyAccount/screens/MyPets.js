@@ -1,6 +1,5 @@
 import {
   View,
-  SafeAreaView,
   Dimensions,
   TouchableOpacity,
   Text,
@@ -19,10 +18,10 @@ import { usePetStore } from "../../../store/useStore";
 import Loader from "../../../components/Loader/Loader";
 import petServices from "../../../services/petServices";
 import AppErrorMessage from "../../../components/forms/AppErrorMessage";
-import AppAlert from "../../../components/AppAlert/index";
 import NoItem from "../../../components/NoItem/NoItem";
 import { useFocusEffect } from "expo-router";
 import PetListingSkeletonCard from "../../../components/SkeletonCards/PetListingCards";
+import { SafeAreaView } from "react-native-safe-area-context";
 
 const { width, height } = Dimensions.get("screen");
 
@@ -119,7 +118,10 @@ export default function MyPets({ isDelete = true }) {
           centerTitle={true}
           elevation={0}
           leading={
-            <TouchableOpacity onPress={() => router.back()}>
+            <TouchableOpacity onPress={() => {
+              console.log("Going back with router");
+              router.back()
+            }}>
               <Icon
                 name="chevron-back"
                 color={isDarkMode ? Colors.secondary : Colors.active}
@@ -162,7 +164,7 @@ export default function MyPets({ isDelete = true }) {
           <NoItem title={"Pet List"} />
         )}
       </View>
-      <AppAlert
+      {/* <AppAlert
         showAlert={showAlert}
         title="Are you sure?"
         message="Do you really want to delete this pet?"
@@ -175,7 +177,7 @@ export default function MyPets({ isDelete = true }) {
         confirmButtonColor="red"
         onCancelPressed={() => setShowAlert(false)}
         onConfirmPressed={() => handleDeletePet(selectedPetId)}
-      />
+      /> */}
     </SafeAreaView>
   );
 }

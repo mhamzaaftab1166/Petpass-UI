@@ -1,7 +1,6 @@
 import React, { useCallback, useState, useMemo } from "react";
 import {
   View,
-  SafeAreaView,
   TouchableOpacity,
   ScrollView,
   Text,
@@ -23,6 +22,7 @@ import {
 } from "../../../utils/generalUtils";
 import AppSkeleton from "../../../components/AppSkeleton";
 import NoItem from "../../../components/NoItem/NoItem";
+import { SafeAreaView } from "react-native-safe-area-context";
 
 const { width: SCREEN_WIDTH } = Dimensions.get("window");
 

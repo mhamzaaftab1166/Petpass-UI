@@ -1,7 +1,5 @@
 import {
   View,
-  SafeAreaView,
-  Dimensions,
   ScrollView,
   KeyboardAvoidingView,
   Platform,
@@ -29,6 +27,7 @@ import Checkbox from "expo-checkbox";
 import Loader from "../../components/Loader/Loader";
 import petServices from "../../services/petServices";
 import { AppBar } from "@react-native-material/core";
+import { SafeAreaView } from "react-native-safe-area-context";
 
 const today = new Date();
 today.setHours(0, 0, 0, 0);

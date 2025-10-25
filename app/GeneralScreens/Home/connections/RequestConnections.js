@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from "react";
 import {
-  SafeAreaView,
   ScrollView,
   View,
   Text,
@@ -15,6 +14,7 @@ import { useTheme } from "../../../helper/themeProvider";
 import ProfilePlaceholer from "../../../../assets/images/profilePlaceHolder.png";
 import NoItem from "../../../components/NoItem/NoItem";
 import connectionService from "../../../services/connectionService";
+import { SafeAreaView } from "react-native-safe-area-context";
 
 export default function AddConnections({ requests = [], onUpdate }) {
   console.log(requests, "requests");  

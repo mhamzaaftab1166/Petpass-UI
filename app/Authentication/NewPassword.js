@@ -1,6 +1,5 @@
 import {
   View,
-  SafeAreaView,
   Dimensions,
   ScrollView,
   KeyboardAvoidingView,
@@ -19,6 +18,7 @@ import * as Yup from "yup";
 import authService from "../services/authService";
 import Loader from "../components/Loader/Loader";
 import { useTheme } from "../helper/themeProvider";
+import { SafeAreaView } from "react-native-safe-area-context";
 
 const width = Dimensions.get("screen").width;
 const height = Dimensions.get("screen").height;

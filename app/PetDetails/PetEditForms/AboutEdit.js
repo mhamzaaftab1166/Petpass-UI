@@ -1,7 +1,5 @@
 import {
   View,
-  SafeAreaView,
-  Dimensions,
   ScrollView,
   KeyboardAvoidingView,
   Platform,
@@ -10,7 +8,6 @@ import {
 import React, { useEffect, useState } from "react";
 import { Colors } from "../../theme/color";
 import style from "../../theme/style";
-import AppTitle from "../../components/AppTitle/AppTitle";
 import Icon from "react-native-vector-icons/Ionicons";
 import AppForm from "../../components/forms/AppForm";
 import * as Yup from "yup";
@@ -27,14 +24,14 @@ import maleLight from "../../../assets/images/pets/maleLight.png";
 import AppFormRangeField from "../../components/forms/AppFormRangeFeild";
 import AppFormImagePicker from "../../components/forms/AppFormImagePicker";
 import Loader from "../../components/Loader/Loader";
-import { convertImageToBase64 } from "../../utils/generalUtils";
 import petServices from "../../services/petServices";
 import { AppBar } from "@react-native-material/core";
-import AutoUpdateFields from "../../components/forms/AutoUpdate";
 import ResetBreedColorOnTypeChange from "../../components/forms/PetBreedTypeColorAutoUpdate";
 import { useUserStore } from "../../store/useStore";
 import { petActiveness, petNuetered } from "../../constants/pet";
 import usePetSelections from "../../hooks/usePetSelections";
+import { SafeAreaView } from "react-native-safe-area-context";
+
 const validationSchema = Yup.object({
   pet_type: Yup.object().required().label("Pet Type"),
   pet_name: Yup.string().required().min(3).max(15).label("Pet Name"),

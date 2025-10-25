@@ -1,6 +1,5 @@
 import {
   View,
-  SafeAreaView,
   Dimensions,
   ScrollView,
   KeyboardAvoidingView,
@@ -12,7 +11,6 @@ import React, { useState } from "react";
 import { Colors } from "../../theme/color";
 import style from "../../theme/style";
 import { useLocalSearchParams, useRouter } from "expo-router";
-import AppTitle from "../../components/AppTitle/AppTitle";
 import AppForm from "../../components/forms/AppForm";
 import * as Yup from "yup";
 import SubmitButton from "../../components/forms/SubmitButton";
@@ -24,6 +22,7 @@ import * as FileSystem from "expo-file-system";
 import Loader from "../../components/Loader/Loader";
 import { AppBar } from "@react-native-material/core";
 import Icon from "react-native-vector-icons/Ionicons";
+import { SafeAreaView } from "react-native-safe-area-context";
 
 const width = Dimensions.get("screen").width;
 const height = Dimensions.get("screen").height;
