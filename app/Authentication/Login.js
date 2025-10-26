@@ -47,17 +47,21 @@ export default function Login() {
   const [isLoading, setIsLoading] = useState(false);
   const [rememberMe, setRememberMe] = useState(false);
 
-  const handleSubmit = async (userInfo) => { 
+  const handleSubmit = async (userInfo) => {
     try {
       setIsLoading(true);
       const data = await authService.login(userInfo);
-      
+
       if (data?.message === AuthenticationSuccess.loginSuccess) {
         await storeage.storeAppData(
-          localStorageConst.JWTUSER,  data?.accessToken
+          localStorageConst.JWTUSER,
+          data?.accessToken
         );
-        await storeage.storeAppData(localStorageConst.REMEMBER, rememberMe)
-        await storeage.storeAppData(localStorageConst.REFRESHTOKEN, rememberMe ? data?.refreshToken  : null)
+        await storeage.storeAppData(localStorageConst.REMEMBER, rememberMe);
+        await storeage.storeAppData(
+          localStorageConst.REFRESHTOKEN,
+          rememberMe ? data?.refreshToken : null
+        );
       }
       registerIndieID(
         String(data?.user?.id),
@@ -65,8 +69,8 @@ export default function Login() {
         notificationData.appToken
       );
       setToken(data?.accessToken);
-      setRefreshToken(data?.refreshToken)
-      setRemember(rememberMe)
+      setRefreshToken(data?.refreshToken);
+      setRemember(rememberMe);
       router.dismissTo("(home)");
     } catch (error) {
       setErrorVisible(true);
@@ -80,7 +84,10 @@ export default function Login() {
     <SafeAreaView
       style={[
         style.area,
-        { backgroundColor: isDarkMode ? Colors.active : Colors.secondary, paddingTop: 10 },
+        {
+          backgroundColor: isDarkMode ? Colors.active : Colors.secondary,
+          paddingTop: 10,
+        },
       ]}
     >
       <KeyboardAvoidingView
@@ -91,7 +98,7 @@ export default function Login() {
         <View style={{ flex: 1, marginHorizontal: 20 }}>
           <ScrollView showsVerticalScrollIndicator={false}>
             <AppForm
-              initialValues={{ email: "affanshery@gmail.com", password: "Iknowyou125!" }}
+              initialValues={{ email: "", password: "" }}
               onSubmit={handleSubmit}
               validationSchema={validationSchema}
             >
@@ -122,19 +129,29 @@ export default function Login() {
               >
                 <View style={{ flexDirection: "row", alignItems: "center" }}>
                   <Checkbox
-                  style={styles.checkbox}
+                    style={styles.checkbox}
                     value={rememberMe}
                     onValueChange={setRememberMe}
                     color={rememberMe ? Colors?.primary : Colors?.border}
                   />
-                  <Text style={[style.r14, { color: isDarkMode? Colors.secondary : Colors.disable }]}>
+                  <Text
+                    style={[
+                      style.r14,
+                      { color: isDarkMode ? Colors.secondary : Colors.disable },
+                    ]}
+                  >
                     Remember Me
                   </Text>
                 </View>
                 <TouchableOpacity
                   onPress={() => router.push("/Authentication/ForgotPassword")}
                 >
-                  <Text style={[style.r14, { color: isDarkMode? Colors.secondary : Colors.disable }]}>
+                  <Text
+                    style={[
+                      style.r14,
+                      { color: isDarkMode ? Colors.secondary : Colors.disable },
+                    ]}
+                  >
                     Forgot Password?
                   </Text>
                 </TouchableOpacity>
@@ -145,7 +162,10 @@ export default function Login() {
             <Text
               style={[
                 style.r14,
-                { color: isDarkMode? Colors.secondary : Colors.disable, textAlign: "center" },
+                {
+                  color: isDarkMode ? Colors.secondary : Colors.disable,
+                  textAlign: "center",
+                },
               ]}
             >
               Contact with
@@ -193,7 +213,12 @@ export default function Login() {
                 marginTop: 50,
               }}
             >
-              <Text style={[style.r14, { color: isDarkMode? Colors.secondary : Colors.lable }]}>
+              <Text
+                style={[
+                  style.r14,
+                  { color: isDarkMode ? Colors.secondary : Colors.lable },
+                ]}
+              >
                 Don't have an account?
               </Text>
               <TouchableOpacity
@@ -216,6 +241,6 @@ const styles = StyleSheet.create({
   checkbox: {
     margin: 6,
     borderRadius: 10,
-    fontFamily: "Avenir-bold"
-  }
+    fontFamily: "Avenir-bold",
+  },
 });

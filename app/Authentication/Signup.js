@@ -38,7 +38,14 @@ const validationSchema = Yup.object({
   username: Yup.string().required().label("FULLNAME"),
   email: Yup.string().required().email().label("Email"),
   password: Yup.string().required().min(4).label("Password"),
-  phone_number: Yup.string().required().min(8).max(15).label("Phone"),
+  phone_number: Yup.string()
+    .required("Phone number is required")
+    .matches(
+      /^\+971\s?[0-9]{9}$/,
+      "Enter a valid UAE phone number (e.g., +971501234567)"
+    )
+    .label("Phone"),
+
   // profile_types: Yup.array().of(Yup.string().required()).min(1).label("Role"),
 });
 
@@ -111,10 +118,10 @@ export default function Signup() {
           <AppTitle title={"Sign Up"} style={style} />
           <AppForm
             initialValues={{
-              email: "affanshery@gmail.com",
-              password: "Iknowyou125!",
-              username: "affan",
-              phone_number: "+971 1231235",
+              email: "",
+              password: "",
+              username: "",
+              phone_number: "",
               // profile_types: [],
             }}
             onSubmit={(values) => handleSubmit(values)}
