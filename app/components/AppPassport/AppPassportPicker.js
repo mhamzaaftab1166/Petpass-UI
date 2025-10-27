@@ -6,14 +6,13 @@ import {
   TouchableOpacity,
   Text,
   Pressable,
-  ActivityIndicator,
+  Linking,
 } from "react-native";
 import * as ImagePicker from "expo-image-picker";
 import * as DocumentPicker from "expo-document-picker";
-import * as FileSystem from "expo-file-system"; // Import FileSystem for size checking
+import { File } from "expo-file-system";
 import { Colors } from "../../theme/color";
 import AppAlert from "../AppAlert/index";
-import { Linking } from "react-native";
 
 const AppPassportPicker = ({
   passportUri,
@@ -24,9 +23,7 @@ const AppPassportPicker = ({
   const [hasCameraPermission, setHasCameraPermission] = useState(null);
   const [permissionAlertVisible, setPermissionAlertVisible] = useState(false);
   const [permissionMessage, setPermissionMessage] = useState("");
-  const [isLoading, setIsLoading] = useState(false); // Loader state
-
-  // New states for file size error alert
+  const [isLoading, setIsLoading] = useState(false);
   const [sizeAlertVisible, setSizeAlertVisible] = useState(false);
   const [sizeAlertMessage, setSizeAlertMessage] = useState("");
 
@@ -69,18 +66,33 @@ const AppPassportPicker = ({
     }
   };
 
-  // Function to check file size (returns true if size is less than 2MB)
   const checkFileSize = async (uri) => {
     try {
-      const fileInfo = await FileSystem.getInfoAsync(uri);
-      // 2 MB = 2 * 1024 * 1024 bytes
-      if (fileInfo.size && fileInfo.size > 2 * 1024 * 1024) {
-        return false;
+      if (File && typeof File.fromUri === "function") {
+        const file = await File.fromUri(uri);
+        const info = await file.info();
+        const size = info?.size ?? info?.length ?? null;
+        if (size !== null) {
+          return size <= 2 * 1024 * 1024;
+        }
+        return true;
+      } else if (File && typeof File === "function") {
+        const file = new File(uri);
+        const info = await file.info();
+        const size = info?.size ?? info?.length ?? null;
+        if (size !== null) {
+          return size <= 2 * 1024 * 1024;
+        }
+        return true;
+      } else {
+        setSizeAlertMessage(
+          "Please upgrade expo-file-system to enable file size validation."
+        );
+        setSizeAlertVisible(true);
+        return true;
       }
-      return true;
     } catch (error) {
       console.error("Error checking file size", error);
-      // In case of error, let the file pass (or handle accordingly)
       return true;
     }
   };
@@ -95,8 +107,17 @@ const AppPassportPicker = ({
         mediaTypes: ImagePicker.MediaTypeOptions.Images,
         quality: 0.5,
       });
-      if (!result.canceled) {
+      if (!result.canceled && result.assets && result.assets.length > 0) {
         const uri = result.assets[0].uri;
+        const isValidSize = await checkFileSize(uri);
+        if (!isValidSize) {
+          setSizeAlertMessage("Image/document should be less than 2 MB");
+          setSizeAlertVisible(true);
+          return;
+        }
+        onSelectPassport(uri);
+      } else if (result.uri) {
+        const uri = result.uri;
         const isValidSize = await checkFileSize(uri);
         if (!isValidSize) {
           setSizeAlertMessage("Image/document should be less than 2 MB");
@@ -120,8 +141,17 @@ const AppPassportPicker = ({
         mediaTypes: ImagePicker.MediaTypeOptions.Images,
         quality: 0.5,
       });
-      if (!result.canceled) {
+      if (!result.canceled && result.assets && result.assets.length > 0) {
         const uri = result.assets[0].uri;
+        const isValidSize = await checkFileSize(uri);
+        if (!isValidSize) {
+          setSizeAlertMessage("Image/document should be less than 2 MB");
+          setSizeAlertVisible(true);
+          return;
+        }
+        onSelectPassport(uri);
+      } else if (result.uri) {
+        const uri = result.uri;
         const isValidSize = await checkFileSize(uri);
         if (!isValidSize) {
           setSizeAlertMessage("Image/document should be less than 2 MB");
@@ -142,9 +172,12 @@ const AppPassportPicker = ({
         type: "*/*",
         copyToCacheDirectory: false,
       });
-      console.log("DocumentPicker result:", result);
-      if (!result.canceled && result.assets && result.assets.length > 0) {
-        const fileUri = result.assets[0].uri;
+      if (
+        (result.type && result.type === "success" && result.uri) ||
+        result.uri ||
+        (result.assets && result.assets.length > 0)
+      ) {
+        const fileUri = result.uri ?? (result.assets && result.assets[0].uri);
         const isValidSize = await checkFileSize(fileUri);
         if (!isValidSize) {
           setSizeAlertMessage("Image/document should be less than 2 MB");
@@ -192,7 +225,6 @@ const AppPassportPicker = ({
         </Pressable>
       </View>
 
-      {/* Permission Alert */}
       {permissionAlertVisible && (
         <AppAlert
           showAlert={permissionAlertVisible}
@@ -211,7 +243,6 @@ const AppPassportPicker = ({
         />
       )}
 
-      {/* File Size Error Alert */}
       {sizeAlertVisible && (
         <AppAlert
           showAlert={sizeAlertVisible}
@@ -232,9 +263,7 @@ const AppPassportPicker = ({
 };
 
 const styles = StyleSheet.create({
-  center: {
-    alignItems: "center",
-  },
+  center: { alignItems: "center" },
   container: {
     backgroundColor: Colors.unSelect,
     borderRadius: 10,
@@ -245,20 +274,13 @@ const styles = StyleSheet.create({
     overflow: "hidden",
     marginTop: 30,
   },
-  image: {
-    width: "100%",
-    height: "100%",
-  },
+  image: { width: "100%", height: "100%" },
   placeholderText: {
     color: Colors.placeholder || "#aaa",
     fontSize: 14,
-    fontFamily: "Avenir-Regular"
+    fontFamily: "Avenir-Regular",
   },
-  titleText: {
-    fontSize: 16,
-    fontFamily: "Avenir-Bold",
-    color: Colors.primary,
-  },
+  titleText: { fontSize: 16, fontFamily: "Avenir-Bold", color: Colors.primary },
   buttonContainer: {
     flexDirection: "row",
     justifyContent: "center",
@@ -281,9 +303,7 @@ const styles = StyleSheet.create({
     textAlign: "center",
     fontFamily: "Avenir-Regular",
   },
-  loaderContainer: {
-    marginTop: 10,
-  },
+  loaderContainer: { marginTop: 10 },
 });
 
 export default AppPassportPicker;

@@ -6,7 +6,7 @@ import authService from "../services/authService";
 import { localStorageConst } from "../constants/storageConstant";
 import { useAlertStore } from "../store/useStore";
 import { unregisterIndieDevice } from "native-notify";
-import notificationData from "../constants/notification"
+import notificationData from "../constants/notification";
 
 export default function useAuthValidation() {
   const router = useRouter();

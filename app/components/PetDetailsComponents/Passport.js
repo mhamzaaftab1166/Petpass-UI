@@ -10,7 +10,6 @@ const Passport = ({ pet, router }) => {
   const [modalVisible, setModalVisible] = useState(false);
 
   const passportUrl = pet?.pet_passport?.passport;
-  
   const isImage = passportUrl?.match(/\.(jpeg|jpg|png)$/i);
 
   return (

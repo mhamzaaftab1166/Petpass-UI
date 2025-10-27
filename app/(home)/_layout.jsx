@@ -7,7 +7,7 @@ import { MaterialCommunityIcons, Ionicons, Feather } from "@expo/vector-icons";
 import { Colors } from "../theme/color";
 import { useTheme } from "../helper/themeProvider";
 import { useAlertStore } from "../store/useStore";
-import  useAuthValidation  from "../hooks/useAuthValidation";
+import useAuthValidation from "../hooks/useAuthValidation";
 import AppAlert from "../components/AppAlert/index";
 
 const AnimatedTabIcon = ({ focused, children }) => {
@@ -71,8 +71,7 @@ export default function TabLayout() {
   const { isDarkMode } = useTheme();
   const { token, handleLogout } = useAuthValidation();
   const { showAlert } = useAlertStore();
-  console.log(showAlert);
-  
+
   return (
     <>
       {showAlert && (

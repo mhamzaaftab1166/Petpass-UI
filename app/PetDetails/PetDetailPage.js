@@ -1,10 +1,5 @@
 import React, { useCallback, useEffect, useRef, useState } from "react";
-import {
-  Dimensions,
-  ScrollView,
-  StatusBar,
-  View,
-} from "react-native";
+import { ScrollView, StatusBar, View } from "react-native";
 import { useRouter, useLocalSearchParams, useFocusEffect } from "expo-router";
 import style from "../theme/style";
 import { Colors } from "../theme/color";
@@ -21,12 +16,9 @@ import Passport from "../components/PetDetailsComponents/Passport";
 import ProfileCompletionBar from "../components/PetDetailsComponents/ProfileCompletionBar";
 import { PetDetailSkeleton } from "../components/SkeletonCards/PetDetailSkeleton";
 import * as MediaLibrary from "expo-media-library";
-import ViewShot, { captureRef, captureScreen } from "react-native-view-shot";
+import ViewShot, { captureRef } from "react-native-view-shot";
 import AppAlert from "../components/AppAlert/index";
 import { SafeAreaView } from "react-native-safe-area-context";
-
-const width = Dimensions.get("screen").width;
-const height = Dimensions.get("screen").height;
 
 export default function PetDetailPage() {
   const scrollViewRef = useRef();
@@ -34,10 +26,8 @@ export default function PetDetailPage() {
   const { pet, loading, fetchPetById, fetchPublicPetById, clearPets } =
     usePetStore();
   const { id, userId, isPublic, home } = useLocalSearchParams();
-
   const { isDarkMode } = useTheme();
   const router = useRouter();
-
   const [showDownloadAlert, setShowDownloadAlert] = useState(false);
   const [alertMessage, setAlertMessage] = useState("");
   const [showMessageAlert, setShowMessageAlert] = useState(false);
@@ -58,6 +48,7 @@ export default function PetDetailPage() {
       return () => clearPets();
     }, [id])
   );
+
   const handleUpdate = () => {
     if (isPublic) {
       fetchPublicPetById(id, userId, { showLoading: false });
@@ -78,17 +69,16 @@ export default function PetDetailPage() {
       setShowMessageAlert(true);
       return;
     }
+
     try {
       const uri = await captureRef(scrollViewRef.current, {
-        format: "jpeg",
+        format: "jpg",
         quality: 0.8,
       });
-      console.log("Image saved to", uri);
       await MediaLibrary.createAssetAsync(uri);
       setAlertMessage("Image saved to your gallery!");
       setShowMessageAlert(true);
     } catch (error) {
-      console.error("Snapshot failed", error);
       setAlertMessage("Snapshot failed. Please try again.");
       setShowMessageAlert(true);
     }
@@ -106,7 +96,7 @@ export default function PetDetailPage() {
       <StatusBar backgroundColor="transparent" translucent={true} />
       <View>
         <ScrollView showsVerticalScrollIndicator={false}>
-          <ViewShot captureMode="mount" ref={scrollViewRef}>
+          <ViewShot ref={scrollViewRef}>
             <Banner
               pet={pet}
               router={router}
@@ -142,7 +132,7 @@ export default function PetDetailPage() {
                   style.divider,
                   { marginTop: isPublic ? 0 : 20, marginBottom: 10 },
                 ]}
-              ></View>
+              />
               <Bio pet={pet} router={router} />
               <About pet={pet} router={router} isEdit={!isPublic} />
               <Description
@@ -163,17 +153,14 @@ export default function PetDetailPage() {
                 router={router}
                 videos={pet?.pet_gallery?.video}
               />
-
               <VaccinationDetail pet={pet} router={router} isEdit={!isPublic} />
-
               {!isPublic && <Passport pet={pet} router={router} />}
             </View>
-            {isPublic && <View style={{ marginBottom: 20 }}></View>}
+            {isPublic && <View style={{ marginBottom: 20 }} />}
           </ViewShot>
         </ScrollView>
       </View>
 
-      {/* Custom Alert for Download Confirmation */}
       <AppAlert
         showAlert={showDownloadAlert}
         showProgress={false}
@@ -189,6 +176,7 @@ export default function PetDetailPage() {
         onCancelPressed={() => setShowDownloadAlert(false)}
         onConfirmPressed={onDownloadConfirm}
       />
+
       <AppAlert
         showAlert={showMessageAlert}
         showProgress={false}

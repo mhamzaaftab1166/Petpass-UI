@@ -30,15 +30,15 @@ const Banner = ({
   like = false,
   onUpdate,
 }) => {
-
- const { activeLike, handleLike, localHeartCount,localSuperLikeCount } = usePetLike({
-   petId: pet?.id,
-   initialLike: like,
-   initialSuperLike: superLike,
-   onUpdate,
-   heartCount,
-   superLikeCount,
- });
+  const { activeLike, handleLike, localHeartCount, localSuperLikeCount } =
+    usePetLike({
+      petId: pet?.id,
+      initialLike: like,
+      initialSuperLike: superLike,
+      onUpdate,
+      heartCount,
+      superLikeCount,
+    });
 
   return (
     <View>
@@ -90,7 +90,7 @@ const Banner = ({
               type="FontAwesome"
               name="heart"
               size={25}
-              color={Colors.secondary} 
+              color={Colors.secondary}
               activeColor="#FF69B4"
               alreadyActive={activeLike === "like"}
               onPress={() => handleLike("like")}
@@ -151,7 +151,7 @@ const styles = StyleSheet.create({
   iconContainer: {
     flexDirection: "row",
     alignItems: "center",
-    gap:10
+    gap: 10,
   },
   icon: {
     opacity: 0.9,

@@ -1,3 +1,4 @@
+// app/screens/PetPassportDetails.js
 import {
   View,
   Dimensions,
@@ -18,7 +19,7 @@ import AppErrorMessage from "../../components/forms/AppErrorMessage";
 import AppFormPassportPicker from "../../components/forms/AppFormPassportPicker";
 import { useTheme } from "../../helper/themeProvider";
 import petServices from "../../services/petServices";
-import * as FileSystem from "expo-file-system";
+import { File } from "expo-file-system";
 import Loader from "../../components/Loader/Loader";
 import { AppBar } from "@react-native-material/core";
 import Icon from "react-native-vector-icons/Ionicons";
@@ -26,11 +27,12 @@ import { SafeAreaView } from "react-native-safe-area-context";
 
 const width = Dimensions.get("screen").width;
 const height = Dimensions.get("screen").height;
+
 const validationSchema = Yup.object({
   passport: Yup.string().required(),
 });
 
-export default function Login() {
+export default function PetPassportDetails() {
   const router = useRouter();
   const { isDarkMode } = useTheme();
   const [error, setError] = useState();
@@ -40,8 +42,7 @@ export default function Login() {
   const petData = pet ? JSON.parse(pet) : null;
 
   const getMimeType = (uri) => {
-    const extension = uri.split(".").pop().toLowerCase();
-  
+    const extension = (uri || "").split(".").pop().toLowerCase();
     const mimeTypes = {
       pdf: "application/pdf",
       jpg: "image/jpeg",
@@ -52,56 +53,97 @@ export default function Login() {
       doc: "application/msword",
       docx: "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
     };
-  
     return mimeTypes[extension] || "application/octet-stream";
+  };
+
+  const resolveFileUriAndInfo = async (incomingUri) => {
+    if (!incomingUri) {
+      throw new Error("No file URI provided");
+    }
+    try {
+      let fileInstance = null;
+      if (typeof File.fromUri === "function") {
+        fileInstance = await File.fromUri(incomingUri);
+      } else {
+        fileInstance = new File(incomingUri);
+      }
+      if (!fileInstance || typeof fileInstance.info !== "function") {
+        throw new Error(
+          "The runtime File API does not expose `.info()`. Please upgrade expo-file-system."
+        );
+      }
+      const info = await fileInstance.info();
+      const exists =
+        typeof info.exists === "boolean"
+          ? info.exists
+          : info.exists !== undefined
+          ? Boolean(info.exists)
+          : true;
+      if (!exists) {
+        throw new Error("File does not exist at the provided URI.");
+      }
+      const resolvedUri = info.uri || incomingUri;
+      return { uri: resolvedUri, info };
+    } catch (err) {
+      throw new Error(
+        `Unable to read file info using the modern File API. Ensure your expo-file-system version supports File/Directory APIs. Underlying error: ${err.message}`
+      );
+    }
   };
 
   const handleSubmit = async (info) => {
     const { passport } = info;
-    console.log(passport, "pass");
-  
     try {
       const formData = new FormData();
-  
       formData.append("pet_id", petData?.id);
       formData.append("pet_passport_id", petData?.pet_passport?.id || null);
-  
+
       if (passport) {
         let fileUri = passport;
-  
-        // ✅ Fix for content:// URIs (Android)
-        if (passport.startsWith("content://")) {
-          const fileInfo = await FileSystem.getInfoAsync(passport);
-          if (!fileInfo.exists) {
-            throw new Error("File does not exist at the provided URI.");
+
+        if (
+          passport.startsWith("content://") ||
+          passport.startsWith("file://")
+        ) {
+          const resolved = await resolveFileUriAndInfo(passport);
+          fileUri = resolved.uri;
+        } else {
+          try {
+            const resolved = await resolveFileUriAndInfo(passport);
+            fileUri = resolved.uri;
+          } catch (e) {
+            console.warn(
+              "Could not fully resolve file info; continuing with provided URI. Error:",
+              e.message
+            );
           }
-          fileUri = fileInfo.uri;
         }
-  
+
         const mimeType = getMimeType(fileUri);
-        const fileType = mimeType.split("/").pop(); // Get file extension from MIME
-  
+        const fileType = mimeType.split("/").pop();
+
         formData.append("passport", {
           uri: Platform.OS === "ios" ? fileUri.replace("file://", "") : fileUri,
           name: `passport.${fileType}`,
           type: mimeType,
         });
       }
-  
-      console.log("🚀 FormData Ready:");
-      for (let pair of formData.entries()) {
-        console.log(pair[0], ":", pair[1]);
-      }
-  
+
       setIsLoading(true);
       const res = await petServices.addPassport(formData);
-      if (res.message === "Pet Passport saved successfully.") {
+      if (res?.message === "Pet Passport saved successfully.") {
         setIsLoading(false);
         router.replace(`/PetDetails/PetDetailPage?id=${petData?.id}`);
+      } else {
+        if (res?.message) {
+          throw new Error(res.message);
+        } else {
+          throw new Error("Unexpected response from server while uploading.");
+        }
       }
     } catch (error) {
       setErrorVisible(true);
-      setError(error.message);
+      setError(error.message || String(error));
     } finally {
       setIsLoading(false);
     }
@@ -140,7 +182,7 @@ export default function Login() {
                 <TouchableOpacity
                   onPress={() =>
                     router.replace(
-                      `/PetDetails/PetDetailPage?id=${petData?.id})`
+                      `/PetDetails/PetDetailPage?id=${petData?.id}`
                     )
                   }
                 >
