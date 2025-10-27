@@ -119,10 +119,12 @@ export default function MyPets({ isDelete = true }) {
           centerTitle={true}
           elevation={0}
           leading={
-            <TouchableOpacity onPress={() => {
-              console.log("Going back with navigation");
-              navigation.goBack();
-            }}>
+            <TouchableOpacity
+              onPress={() => {
+                console.log("Going back with navigation");
+                navigation.goBack();
+              }}
+            >
               <Icon
                 name="chevron-back"
                 color={isDarkMode ? Colors.secondary : Colors.active}
@@ -166,7 +168,7 @@ export default function MyPets({ isDelete = true }) {
           <NoItem title={"Pet List"} />
         )}
       </View>
-      {/* <AppAlert
+      <AppAlert
         showAlert={showAlert}
         title="Are you sure?"
         message="Do you really want to delete this pet?"
@@ -179,7 +181,7 @@ export default function MyPets({ isDelete = true }) {
         confirmButtonColor="red"
         onCancelPressed={() => setShowAlert(false)}
         onConfirmPressed={() => handleDeletePet(selectedPetId)}
-      /> */}
+      />
     </SafeAreaView>
   );
 }

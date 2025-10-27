@@ -33,7 +33,13 @@ const validationSchema = Yup.object({
   city: Yup.object().required(),
   address_type: Yup.object().required(),
   country: Yup.object().required(),
-  phone_number: Yup.string().required().min(8).max(15).label("Phone"),
+  phone_number: Yup.string()
+    .required("Phone number is required")
+    .matches(
+      /^\+971\s?[0-9]{9}$/,
+      "Enter a valid UAE phone number (e.g., +971501234567)"
+    )
+    .label("Phone"),
   location_url: Yup.string().required().label("Pin Location"),
 });
 

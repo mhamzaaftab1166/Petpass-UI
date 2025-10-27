@@ -35,7 +35,7 @@ const width = Dimensions.get("screen").width;
 const height = Dimensions.get("screen").height;
 const validationSchema = Yup.object({
   email: Yup.string().required().email().label("Email"),
-  password: Yup.string().required().min(4).label("Password"),
+  password: Yup.string().required().label("Password"),
 });
 
 export default function Login() {
