@@ -42,9 +42,9 @@ const petOptions = [
   { id: 6, name: "Pet-Walking", type: "pet_walking_area" },
   { id: 7, name: "Pet-Friendly Hotels", type: "pet_friendly_hotels" },
 ];
- const handlePermissionRequest = async () => {
-    await Linking.openSettings();
-  };
+const handlePermissionRequest = async () => {
+  await Linking.openSettings();
+};
 
 const Map = () => {
   const { isDarkMode } = useTheme();
@@ -62,7 +62,7 @@ const Map = () => {
   const [selectedOptions, setSelectedOptions] = useState([]);
 
   const params = useLocalSearchParams();
-  const filter = params.filter ? JSON.parse(params.filter) : {};
+  const filter = params?.filter ? JSON.parse(params?.filter) : {};
   const filterValue = filter.filterValue;
 
   useEffect(() => {
